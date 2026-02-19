@@ -1,0 +1,30 @@
+---
+description: MatchVaga domain concepts and feature vocabulary
+alwaysApply: true
+---
+
+# MatchVaga Domain
+
+## Core Concepts
+
+| Term | Definition |
+|------|------------|
+| **Resume** | User's CV/curriculum — input document to analyze |
+| **Job Description** | Target role posting — defines required skills and criteria |
+| **Gap Analysis** | Comparison identifying missing skills between resume and job |
+| **Optimized Document** | PDF/DOCX tailored to the job, incorporating suggested improvements |
+
+## Feature Vocabulary
+
+- **Upload** — Resume and/or job description (file or paste)
+- **Analyze** — Run gap analysis between resume and job
+- **Skills Match** — Present matched vs missing skills
+- **Optimize** — Generate improved resume/document
+- **Export** — Download as PDF or DOCX
+
+## Naming Conventions
+
+- Use `resume` (not CV/curriculum) for the user's document
+- Use `jobDescription` or `job` for the target role
+- Use `gapAnalysis` or `analysis` for the comparison result
+- Use `optimizedResume` or `optimizedDocument` for the output

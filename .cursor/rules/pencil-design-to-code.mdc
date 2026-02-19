@@ -1,0 +1,40 @@
+---
+description: Implementing designs from design.pen using Pencil MCP
+globs: design.pen,src/**/*.tsx,src/**/*.css
+alwaysApply: false
+---
+
+# Pencil Design-to-Code
+
+## Design Source
+
+- **File**: `design.pen`
+- **Access**: Use Pencil MCP tools only — do NOT use Read/Grep on `.pen` files
+
+## Workflow
+
+1. **Read design**: `batch_get` with `nodeIds` or `patterns` to extract structure
+2. **Extract variables**: `get_variables` for colors, spacing, typography
+3. **Implement**: Use existing `@/components/ui` primitives; extend only when needed
+4. **Validate**: `get_screenshot` to compare implementation vs design
+
+## Implementation Rules
+
+- Use **Tailwind classes only** — no inline styles for layout, colors, typography
+- Use **CSS variables** from `globals.css` (e.g. `bg-primary`, `text-muted-foreground`)
+- Match **exact labels, icons, spacing** from the design
+- Prefer **existing components** — update, don't duplicate
+- Use **lucide-react** for icons (project standard)
+
+## Layout Mapping
+
+| Design | Tailwind |
+|--------|----------|
+| `fill_container` (flex child) | `flex-1` |
+| `fill_container` (height) | `h-full` |
+| `fit_content` | `w-fit` or `h-fit` |
+| Fixed dimensions | `w-[Npx]`, `h-[Npx]` |
+
+## Selected Design Nodes (Reference)
+
+When working with `design.pen`, these node IDs may be relevant: `55DWv`, `5VL1k`, `7zeNj`, `LhFN0`, `1HOkd`, `Q2V3b`, `NSCj1`, `IRaer`, `O1Wyr`, `p7bbW`, `uNLT7`, `iwgi0`, `VMYPi`.

@@ -1,0 +1,38 @@
+---
+description: React component and logic separation patterns
+globs: src/**/*.tsx,src/**/*.ts
+alwaysApply: false
+---
+
+# React Patterns
+
+## Separation of Concerns
+
+- **UI components**: Presentational only; receive data via props
+- **Logic**: Custom hooks (`useAuth`, `useGapAnalysis`) or services
+- **No business logic** inside JSX beyond simple conditionals
+
+## Component Structure
+
+```tsx
+// ✅ Props interface, named export
+interface ResumeUploadProps {
+  onUpload: (file: File) => void;
+  isUploading?: boolean;
+}
+
+export function ResumeUpload({ onUpload, isUploading }: ResumeUploadProps) {
+  return (/* ... */);
+}
+```
+
+## Hooks for Logic
+
+- API calls, validation, state machines → custom hooks
+- Colocate in `src/hooks/` or feature folders
+
+## Performance
+
+- `useMemo` for expensive computations
+- `useCallback` for stable callbacks passed to children
+- Minimize prop drilling; prefer composition or context

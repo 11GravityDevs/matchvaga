@@ -1,0 +1,58 @@
+---
+description: MatchVaga project overview and core context
+alwaysApply: true
+---
+
+# MatchVaga Project Overview
+
+## Product
+
+**MatchVaga** is a SaaS platform that:
+1. **Analyzes the gap** between a user's resume and a job description
+2. **Identifies missing skills** required for the target role
+3. **Generates an optimized document** (PDF/DOCX) tailored to the job
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| Framework | Next.js 16 (App Router) |
+| React | React 19 |
+| Styling | Tailwind CSS v4 |
+| UI Components | shadcn/ui (radix-vega style), Base UI, Radix UI |
+| Icons | lucide-react |
+| Utils | clsx, tailwind-merge, class-variance-authority |
+
+## Project Structure
+
+```
+src/
+├── app/           # App Router pages, layout, globals
+├── components/    # Feature components + ui/ (shadcn primitives)
+├── lib/           # Utilities (cn, etc.)
+└── hooks/         # Custom hooks (per components.json aliases)
+```
+
+## Path Aliases
+
+- `@/components` — Components
+- `@/components/ui` — shadcn UI primitives
+- `@/lib` — Lib utilities
+- `@/lib/utils` — cn() helper
+- `@/hooks` — Custom hooks
+
+## Design Source
+
+Designs live in `design.pen`. Use Pencil MCP tools to read and implement from `.pen` files.
+
+## Keeping Rules Updated
+
+When the project changes, update these rules accordingly:
+
+| Change | Update |
+|--------|--------|
+| New important library | Add to Tech Stack table; update `tech-stack-conventions.mdc` if it affects patterns |
+| New folder in `src/` | Add to Project Structure; update path aliases if new |
+| New path alias | Add to Path Aliases; update `components.json` reference |
+| New domain concept | Add to `matchvaga-domain.mdc` |
+| New design file or workflow | Update `pencil-design-to-code.mdc` |

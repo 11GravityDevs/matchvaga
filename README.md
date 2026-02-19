@@ -1,36 +1,85 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MatchVaga
+
+Analyze the gap between your resume and job descriptions. Identify missing skills and generate an optimized document tailored to each vacancy.
+
+## What It Does
+
+MatchVaga helps job seekers:
+
+- **Compare** their curriculum vitae against vacancy requirements
+- **Identify** skill gaps and missing qualifications
+- **Generate** an optimized document aligned with the job description
+
+## Tech Stack
+
+- **Framework:** Next.js 16 (App Router)
+- **UI:** React 19, Tailwind CSS v4, shadcn/ui (Radix, Base UI)
+- **Language:** TypeScript (strict mode)
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 20+
+- npm, yarn, or pnpm
+
+### Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Clone the repository
+git clone <repository-url>
+cd matchvaga-frontend
+
+# Install dependencies
+
+yarn install
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Development
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+yarn dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Learn More
+### Build
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+yarn build
+yarn start
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+src/
+├── app/           # Next.js App Router (pages, layout)
+├── components/    # UI components (shadcn/ui)
+└── lib/           # Utilities and shared logic
+```
 
-## Deploy on Vercel
+## Scripts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Command       | Description                    |
+| ------------- | ------------------------------ |
+| `dev`         | Start development server       |
+| `build`       | Build for production           |
+| `start`       | Start production server        |
+| `lint`        | Run ESLint                     |
+| `format`      | Format code with Prettier      |
+| `check-types` | Check TypeScript typing errors |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Pre-commit
+
+Husky runs a pre-commit hook that:
+
+1. **lint-staged** — Formats and lints staged files (Prettier + ESLint)
+2. **tsc --noEmit** — Type-checks the project
+
+The commit is blocked if there are ESLint or TypeScript errors.
+
+## License
+
+Private project.
