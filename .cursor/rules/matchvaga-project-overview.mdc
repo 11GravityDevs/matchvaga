@@ -27,19 +27,42 @@ alwaysApply: true
 
 ```
 src/
-├── app/           # App Router pages, layout, globals
+├── app/           # App Router pages, layouts, route groups
 ├── components/    # Feature components + ui/ (shadcn primitives)
+├── contexts/      # React Context providers
+├── hooks/         # Custom hooks (logic layer)
 ├── lib/           # Utilities (cn, etc.)
-└── hooks/         # Custom hooks (per components.json aliases)
+└── types/         # Shared TypeScript interfaces
 ```
+
+## Route Architecture
+
+| Route Group | Layout | Purpose |
+|-------------|--------|---------|
+| `(auth)/` | Full-screen, brand primary override | Login (email → token flow) |
+| `(legal)/` | Minimal `bg-background` wrapper | Privacy policy, Terms of service |
+| `onboarding/` | Top bar + step indicator | Resume upload → verify flow |
+| `dashboard/` | *(TBD — sidebar layout)* | Main app after onboarding |
+
+Route groups `(auth)` and `(legal)` use parenthesized folders to share layouts without affecting the URL.
 
 ## Path Aliases
 
 - `@/components` — Components
 - `@/components/ui` — shadcn UI primitives
+- `@/contexts` — Context providers
+- `@/hooks` — Custom hooks
 - `@/lib` — Lib utilities
 - `@/lib/utils` — cn() helper
-- `@/hooks` — Custom hooks
+- `@/types` — Shared type definitions
+
+## DX Tooling
+
+| Tool | Purpose |
+|------|---------|
+| **Husky** + **lint-staged** | Pre-commit: ESLint fix + Prettier format |
+| **Prettier** + `prettier-plugin-tailwindcss` | Auto-format; Tailwind class sorting |
+| **ESLint** + `eslint-config-next` | Linting with Next.js rules |
 
 ## Design Source
 
@@ -51,8 +74,12 @@ When the project changes, update these rules accordingly:
 
 | Change | Update |
 |--------|--------|
-| New important library | Add to Tech Stack table; update `tech-stack-conventions.mdc` if it affects patterns |
+| New important library | Add to Tech Stack table |
 | New folder in `src/` | Add to Project Structure; update path aliases if new |
 | New path alias | Add to Path Aliases; update `components.json` reference |
+| New route group or flow | Add to Route Architecture |
 | New domain concept | Add to `matchvaga-domain.mdc` |
 | New design file or workflow | Update `pencil-design-to-code.mdc` |
+| New design components or tokens | Update `design-system.mdc` and `globals.css` |
+| App Router patterns, loading/error | See `nextjs-app-router.mdc` |
+| React purity, hooks, Thinking in React | See `react-rules.mdc` |

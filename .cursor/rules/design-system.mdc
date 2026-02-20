@@ -1,0 +1,235 @@
+---
+description: MatchVaga design system — design.pen components, tokens, and UI/UX principles
+globs: design.pen,src/**/*.tsx,src/**/*.css
+alwaysApply: false
+---
+
+# MatchVaga Design System
+
+Design source: `design.pen`. Use Pencil MCP tools to read `.pen` files. See `pencil-design-to-code.mdc` for implementation workflow.
+
+---
+
+## 1. Component Catalog
+
+### Design → Code Mapping
+
+| Design Component | Node ID | Code Implementation | Notes |
+|------------------|---------|---------------------|------|
+| **Button/Primary** | `o9PMm` | `Button` variant `default` | Main CTA; padding 12×16, radius 8 |
+| **Button/Outline** | `k0bhb` | `Button` variant `outline` | Secondary actions; shadow-sm |
+| **Button/Ghost** | `LNxFY` | `Button` variant `ghost` | Tertiary, inline actions |
+| **Card** | `itnfe` | `Card` + `CardHeader` | Slots: header, content, actions |
+| **Input Field** | `eJKjS` | `Field` + `FieldLabel` + `Input` | Label above input; gap 6 |
+| **KPI Card** | `isJY5` | Custom or `Card` + metric layout | Accent bar, label, value, icon |
+| **Sidebar** | `xlPb4` | Custom layout | Width 256px; padding 8; gap 16 |
+| **Sidebar Brand** | `KDjAJ` | Custom | Logo + "MatchVaga"; padding 12×8 |
+| **Sidebar Nav Item/Default** | `oCTl8` | Custom nav item | `text-sidebar-foreground`; icon 16px |
+| **Sidebar Nav Item/Active** | `i5M0C` | Custom nav item | `bg-accent-brand-light`; `border-l-2 border-primary` |
+| **Sidebar Section Title** | `qUrQP` | Custom | `text-muted-foreground`; `text-xs font-medium`; padding 8 |
+| **Sidebar Pro Upgrade** | `wZ7oe` | Custom | Gradient primary→ring; CTA "Saiba Mais" |
+| **Sidebar Footer** | `kcJbU` | Custom | Avatar + name + email + chevron |
+
+### Button Hierarchy (UX)
+
+| Priority | Variant | Use For |
+|----------|---------|---------|
+| 1 | Primary | Main action (Save, Submit, Nova Análise) |
+| 2 | Outline | Secondary, Cancel, Back |
+| 3 | Ghost | Inline, tertiary actions |
+| 4 | Destructive | Delete, Remove |
+
+One primary action per section. Right-align actions in cards/modals; left-align in toolbars.
+
+### Card Slots
+
+| Slot | Content | Padding |
+|------|---------|---------|
+| Header | Title (22px, bold) + description (14px, muted) | 28px |
+| Content | Main body | 28px |
+| Actions | Buttons | 24px |
+
+---
+
+## 2. Design Tokens
+
+### Color Tokens (design.pen → globals.css → Tailwind)
+
+| Token | Usage | Tailwind |
+|-------|-------|----------|
+| `--primary` | Primary actions, brand, active nav | `bg-primary`, `text-primary` |
+| `--primary-foreground` | Text on primary | `text-primary-foreground` |
+| `--secondary` | Secondary surfaces | `bg-secondary` |
+| `--muted` | Subtle backgrounds | `bg-muted` |
+| `--muted-foreground` | Secondary text, placeholders | `text-muted-foreground` |
+| `--accent` | Hover states | `bg-accent` |
+| `--accent-brand` | Brand accent (blue) | `bg-accent-brand` |
+| `--accent-brand-light` | Active nav background | `bg-accent-brand-light` |
+| `--accent-success` | Success states | `bg-accent-success` |
+| `--destructive` | Danger actions | `bg-destructive`, `text-destructive` |
+| `--foreground` | Primary text | `text-foreground` |
+| `--background` | Page background | `bg-background` |
+| `--card` | Card surfaces | `bg-card` |
+| `--border` | Borders, dividers | `border-border` |
+| `--input` | Input borders | `border-input` |
+| `--ring` | Focus rings | `ring-ring` |
+| `--sidebar` | Sidebar background | `bg-sidebar` |
+| `--sidebar-foreground` | Sidebar text | `text-sidebar-foreground` |
+| `--sidebar-primary` | Sidebar brand | `text-sidebar-primary` |
+| `--sidebar-border` | Sidebar divider | `border-sidebar-border` |
+
+**Note:** Design.pen has themes (Accent, Base, Mode). Code uses Light/Dark only. `--primary` is neutral (shadcn default). Brand accent uses `--accent-brand` (blue `#2563eb`) and `--accent-brand-light` (`#dbeafe`).
+
+### Typography Scale
+
+| Role | Size | Weight | Line Height | Tailwind |
+|------|------|--------|-------------|----------|
+| Card title | 22px | 700 | 1.3 | `text-[22px] font-bold leading-[1.3]` |
+| Brand / Section | 16px | 700 | — | `text-base font-bold` |
+| Body / Label | 14px | 500 | 1.43 | `text-sm font-medium` |
+| Body | 14px | 400 | 1.43 | `text-sm` |
+| Small / CTA | 13px | 600 | — | `text-[13px] font-semibold` |
+| Caption / Section | 12px | 500 | 1.33 | `text-xs font-medium` |
+| Caption | 12px | 400 | 1.67 | `text-xs` |
+| KPI value | 32px | 600 | — | `text-[32px] font-semibold` |
+
+**Font:** Inter (loaded via `next/font/google` in layout). Use `font-sans` or `var(--font-sans)`.
+
+### Spacing Scale
+
+| Value | Context | Tailwind |
+|-------|---------|----------|
+| 4px | Tight gaps (label + value) | `gap-1` |
+| 6px | Form label + input | `gap-1.5` |
+| 8px | Nav items, buttons | `gap-2`, `p-2` |
+| 12px | Button groups | `gap-3` |
+| 16px | Sidebar items, sections | `gap-4`, `p-4` |
+| 20px | Card content | `gap-5` |
+| 24px | Section spacing | `gap-6`, `p-6` |
+| 28px | Card padding | `p-7` |
+
+### Border Radius
+
+| Size | Value | Context | Tailwind |
+|------|-------|---------|----------|
+| xs | 2px | Section titles | `rounded-[2px]` |
+| sm | 6px | Nav items, buttons | `rounded-md` |
+| md | 8px | Buttons, inputs, KPI | `rounded-lg` |
+| lg | 12px | Cards, Pro upgrade | `rounded-xl` |
+
+Base `--radius: 0.625rem` (10px). Use `rounded-lg` for cards, `rounded-md` for buttons.
+
+### Shadows
+
+| Design | Shadow | Tailwind |
+|--------|--------|----------|
+| Card | blur 3px, 1px offset; blur 24px, 8px offset | `shadow-xs` (shadcn) |
+| KPI Card | blur 1.75px, 1px offset | `shadow-sm` |
+| Button Outline | blur 2px, 1px offset | `shadow-xs` |
+
+---
+
+## 3. Layout Dimensions
+
+| Element | Width | Height |
+|---------|-------|--------|
+| Sidebar | 256px | `h-full` |
+| KPI Card | 300px | `fit_content` |
+| Input Field | 300px | `fit_content` |
+| Card | 400px (default) | `fit_content` |
+| Screen | 1440px (design) | 900px (design) |
+
+Use `flex-1` for `fill_container`; `w-full` for full-width containers.
+
+---
+
+## 4. Icons
+
+- **Library:** lucide-react (project standard)
+- **Size:** 16px (nav, buttons), 24px (KPI, Pro upgrade)
+- **Color:** `text-muted-foreground` (default), `text-primary` (active)
+
+**Common icons:** `layout-dashboard`, `file-text`, `search`, `file-search`, `trending-up`, `zap`, `chevrons-up-down`, `chevron-right`.
+
+---
+
+## 5. UI/UX Principles
+
+### Visual Hierarchy
+
+- One primary focal point per section
+- Use size, weight, and color to establish importance
+- Primary actions visually dominant
+
+### Accessibility
+
+- WCAG AA contrast for text and interactive elements
+- Focus rings visible (`focus-visible:ring-2 focus-visible:ring-ring`)
+- Touch targets ≥ 44×44px for buttons
+- Use semantic HTML (`button`, `label`, `fieldset`)
+
+### Content Density
+
+- Avoid overcrowding; keep breathing room
+- Cards: one primary idea per card
+- Tables: 4–7 columns typically
+
+### Consistency
+
+- Use design tokens only; never hardcode hex values
+- Use spacing scale; avoid arbitrary values
+- Maintain vertical rhythm between sections
+
+### Error & Loading States
+
+- Use `text-destructive` for errors
+- Use `FieldError` for form validation
+- Provide loading feedback for async actions
+
+### Responsive Behavior
+
+- Sidebar: 256px fixed; collapse to icon-only on mobile (if implemented)
+- Content: `flex-1` to fill available space
+- Use `min-h-0` on flex children that scroll
+
+---
+
+## 6. Project-Specific Components
+
+| Component | Location | Purpose |
+|-----------|----------|---------|
+| **Sidebar Pro Upgrade** | `design.pen` → custom | Upsell CTA in sidebar; gradient |
+| **KPI Card** | `design.pen` → custom | Metric display with label, value, icon |
+| **Sidebar Brand** | `design.pen` → custom | MatchVaga logo + name |
+
+Implement these when building dashboard/sidebar. Use `batch_get` for node structure.
+
+---
+
+## 7. shadcn / Tailwind v4 Conventions
+
+### shadcn / Radix
+
+- Import from `@/components/ui/*` — Button, Card, Field, Input, Select, etc.
+- Use `Field` + `FieldLabel` + `Input`/`Select` for forms
+- Use `cn()` from `@/lib/utils` for conditional classes
+- Prefer composition over custom wrappers
+
+### Tailwind v4
+
+- `@import "tailwindcss"` in globals.css (no `@tailwind` directives)
+- Use design tokens: `bg-primary`, `text-muted-foreground`, `border-border`
+- Use `@theme inline` for mapping CSS vars to Tailwind
+- Fonts: utility classes in `@layer base`, not CSS vars for font stacks
+
+---
+
+## 8. Rule Integration
+
+| Rule | Relationship |
+|------|--------------|
+| `pencil-design-to-code.mdc` | Workflow; design.pen → code |
+| `matchvaga-project-overview.mdc` | Project context |
+| `react-rules.mdc` | Component patterns, hooks |
+
+When adding design components or changing tokens, update this rule and `globals.css` accordingly.

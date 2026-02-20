@@ -1,6 +1,6 @@
 ---
 description: Implementing designs from design.pen using Pencil MCP
-globs: design.pen,src/**/*.tsx,src/**/*.css
+globs: design.pen
 alwaysApply: false
 ---
 
@@ -10,6 +10,7 @@ alwaysApply: false
 
 - **File**: `design.pen`
 - **Access**: Use Pencil MCP tools only — do NOT use Read/Grep on `.pen` files
+- **Design system**: See `design-system.mdc` for component catalog, tokens, typography, and spacing
 
 ## Workflow
 
@@ -35,6 +36,6 @@ alwaysApply: false
 | `fit_content` | `w-fit` or `h-fit` |
 | Fixed dimensions | `w-[Npx]`, `h-[Npx]` |
 
-## Selected Design Nodes (Reference)
+## Discovering Design Nodes
 
-When working with `design.pen`, these node IDs may be relevant: `55DWv`, `5VL1k`, `7zeNj`, `LhFN0`, `1HOkd`, `Q2V3b`, `NSCj1`, `IRaer`, `O1Wyr`, `p7bbW`, `uNLT7`, `iwgi0`, `VMYPi`.
+Use `batch_get` with `patterns` (e.g. component names, screen titles) to discover relevant nodes dynamically. Avoid hardcoding node IDs in rules — they change as the design evolves.

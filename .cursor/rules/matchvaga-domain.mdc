@@ -1,6 +1,7 @@
 ---
 description: MatchVaga domain concepts and feature vocabulary
-alwaysApply: true
+globs: src/**/*.ts,src/**/*.tsx
+alwaysApply: false
 ---
 
 # MatchVaga Domain

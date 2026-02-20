@@ -1,0 +1,145 @@
+---
+description: Next.js App Router patterns, Server/Client Components, file conventions, and common pitfalls
+globs: src/app/**/*
+alwaysApply: false
+---
+
+# Next.js App Router
+
+Reference: [Next.js Docs](https://nextjs.org/docs), [Vercel: Common App Router Mistakes](https://vercel.com/blog/common-mistakes-with-the-next-js-app-router-and-how-to-fix-them)
+
+---
+
+## Server vs Client Components
+
+| Use Server Components for | Use Client Components for |
+|---------------------------|---------------------------|
+| Data fetching (DB, APIs) | `useState`, `useEffect`, hooks |
+| API keys, secrets (never exposed) | Event handlers (`onClick`, etc.) |
+| Reducing client JS bundle | Browser APIs (localStorage, geolocation) |
+| Progressive streaming | React Context consumers |
+
+**Rule:** Prefer Server Components by default. Add `"use client"` only when needed. Keep the client boundary as low as possible—isolate interactive parts into leaf components.
+
+**Composition:** Children of a Client Component can be Server Components. Pass them as `children` or slots.
+
+```tsx
+// ✅ Page stays Server Component; interactive part is Client
+export default function Page() {
+  return (
+    <section>
+      <h1>Title</h1>
+      <ClientCounter />
+    </section>
+  );
+}
+```
+
+---
+
+## File Conventions
+
+| File | Purpose |
+|------|---------|
+| `loading.tsx` | Instant loading UI (Suspense fallback). Server Component by default. Wraps `page.tsx` and children. Use `Loading` from `@/components/ui/loading`. |
+| `error.tsx` | Error boundary. **Must** be Client Component (`'use client'`). Props: `error`, `reset()`. Use `error.digest` for server logs. |
+| `layout.tsx` | Shared UI; persists during navigation. |
+| `page.tsx` | Route page. |
+| `template.tsx` | Re-mounts on navigation (unlike layout). |
+
+**loading.tsx example:**
+```tsx
+import { Loading } from "@/components/ui/loading";
+
+export default function RouteLoading() {
+  return <Loading />;
+}
+```
+
+**error.tsx example:**
+```tsx
+"use client";
+
+import { useEffect } from "react";
+import { Button } from "@/components/ui/button";
+
+export default function Error({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
+  useEffect(() => {
+    console.error(error);
+  }, [error]);
+
+  return (
+    <div>
+      <h2>Algo deu errado</h2>
+      <Button onClick={reset}>Tentar novamente</Button>
+    </div>
+  );
+}
+```
+
+---
+
+## Common Mistakes to Avoid
+
+### 1. Route Handlers from Server Components
+**Don't:** Fetch your own Route Handler from a Server Component.
+```tsx
+// ❌ Unnecessary network hop
+const res = await fetch("/api/data");
+```
+**Do:** Call the logic directly or fetch external APIs.
+```tsx
+// ✅
+const data = await getData();
+// or
+const data = await fetch("https://api.example.com/data");
+```
+
+### 2. Route Handlers with Client Components
+**Don't:** Create Route Handlers just for Client Component fetches.
+**Do:** Use [Server Actions](https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations) from Client Components (forms or event handlers).
+
+### 3. Suspense Placement
+**Do:** Place `Suspense` *above* the async component that fetches.
+```tsx
+// ✅
+<Suspense fallback={<Loading />}>
+  <AsyncDataComponent />
+</Suspense>
+```
+
+### 4. Request Data in Server Components
+Use `searchParams`, `params`, `headers()`, `cookies()`—not client hooks—in Server Components.
+
+### 5. Context Providers
+Make providers separate Client Components. Import and wrap in `layout.tsx`. This keeps Server Components below the provider.
+
+### 6. Revalidate After Mutations
+Call `revalidatePath()` or `revalidateTag()` after Server Actions that mutate data.
+
+### 7. Redirects
+Handle `redirect()` **outside** try/catch. It throws internally. For Client Components, call `redirect` from a Server Action, not from an event handler.
+
+---
+
+## Data Fetching
+
+- **Server Components:** `await` fetch or DB calls directly in the component.
+- **Streaming:** Use `Suspense` to stream; show `Loading` while async work runs.
+- **Caching:** GET Route Handlers and `fetch` are cached by default. Use `dynamic` or `revalidate` when needed.
+
+---
+
+## Learn More
+
+- [Server and Client Components](https://nextjs.org/docs/app/building-your-application/rendering/composition-patterns)
+- [loading.js](https://nextjs.org/docs/app/api-reference/file-conventions/loading)
+- [error.js](https://nextjs.org/docs/app/api-reference/file-conventions/error)
+- [React Server Components](https://react.dev/reference/rsc/server-components)
+- [Rules of React](https://react.dev/reference/rules)
