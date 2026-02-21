@@ -11,9 +11,9 @@ import {
   SECTION_ITEM_LABEL_CLASS,
   SECTION_TITLE_CLASS,
   SUB_LABEL_CLASS,
-} from "./verify-content";
+} from "@/components/shared/resume-form-constants";
 
-interface VerifyExperienceProps {
+interface ResumeFormExperienceProps {
   experience: ExperienceEntry[];
   updateExperience: (index: number, updates: Partial<ExperienceEntry>) => void;
   addExperience: () => void;
@@ -21,13 +21,13 @@ interface VerifyExperienceProps {
   isSaving?: boolean;
 }
 
-export function VerifyExperience({
+export function ResumeFormExperience({
   experience,
   updateExperience,
   addExperience,
   removeExperience,
   isSaving,
-}: VerifyExperienceProps) {
+}: ResumeFormExperienceProps) {
   return (
     <div className="flex flex-col gap-4">
       <h3 className={SECTION_TITLE_CLASS}>Experiência</h3>

@@ -23,9 +23,9 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { label: "Nova Análise", href: "/dashboard/nova-analise", icon: Search },
+  { label: "Nova Análise", href: "/dashboard/new-analysis", icon: Search },
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Meu Currículo", href: "/dashboard/curriculo", icon: FileText },
+  { label: "Meu Currículo", href: "/dashboard/resume", icon: FileText },
 ];
 
 export function Sidebar() {

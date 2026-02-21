@@ -14,7 +14,7 @@ export function LoginContent() {
       <LoginHero />
       {step === "email" ? (
         <LoginFormCard
-          title="Bem-vindo de volta"
+          title="Seja bem-vindo"
           description="Insira seu email para continuar"
         >
           <LoginEmailForm onSubmit={submitEmail} isPending={isPending} />

@@ -4,19 +4,19 @@ import { useEffect, useRef, useState } from "react";
 import { Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { SECTION_TITLE_CLASS } from "./verify-content";
+import { SECTION_TITLE_CLASS } from "@/components/shared/resume-form-constants";
 
-interface VerifySkillsProps {
+interface ResumeFormSkillsProps {
   skills: string[];
   onChange: (skills: string[]) => void;
   isSaving?: boolean;
 }
 
-export function VerifySkills({
+export function ResumeFormSkills({
   skills,
   onChange,
   isSaving,
-}: VerifySkillsProps) {
+}: ResumeFormSkillsProps) {
   const [isAddingSkill, setIsAddingSkill] = useState(false);
   const [newSkill, setNewSkill] = useState("");
   const skillInputRef = useRef<HTMLInputElement>(null);

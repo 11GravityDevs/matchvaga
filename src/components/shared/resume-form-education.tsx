@@ -18,7 +18,7 @@ import {
   SECTION_ITEM_LABEL_CLASS,
   SECTION_TITLE_CLASS,
   SUB_LABEL_CLASS,
-} from "./verify-content";
+} from "@/components/shared/resume-form-constants";
 
 const EDUCATION_LEVELS = [
   "Ensino Fundamental",
@@ -33,7 +33,7 @@ const EDUCATION_LEVELS = [
   "Doutorado",
 ] as const;
 
-interface VerifyEducationProps {
+interface ResumeFormEducationProps {
   education: EducationEntry[];
   updateEducation: (index: number, updates: Partial<EducationEntry>) => void;
   addEducation: () => void;
@@ -41,13 +41,13 @@ interface VerifyEducationProps {
   isSaving?: boolean;
 }
 
-export function VerifyEducation({
+export function ResumeFormEducation({
   education,
   updateEducation,
   addEducation,
   removeEducation,
   isSaving,
-}: VerifyEducationProps) {
+}: ResumeFormEducationProps) {
   return (
     <div className="flex flex-col gap-4">
       <h3 className={SECTION_TITLE_CLASS}>Formação</h3>

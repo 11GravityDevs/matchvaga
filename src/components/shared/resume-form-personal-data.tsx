@@ -3,9 +3,12 @@
 import { Input } from "@/components/ui/input";
 import { FormField } from "@/components/shared/form-field";
 import type { ResumeData } from "@/types/resume";
-import { INPUT_CLASS, SECTION_TITLE_CLASS } from "./verify-content";
+import {
+  INPUT_CLASS,
+  SECTION_TITLE_CLASS,
+} from "@/components/shared/resume-form-constants";
 
-interface VerifyPersonalDataProps {
+interface ResumeFormPersonalDataProps {
   data: Pick<
     ResumeData,
     "fullName" | "email" | "location" | "phone" | "linkedin" | "github"
@@ -17,11 +20,11 @@ interface VerifyPersonalDataProps {
   isSaving?: boolean;
 }
 
-export function VerifyPersonalData({
+export function ResumeFormPersonalData({
   data,
   updateField,
   isSaving,
-}: VerifyPersonalDataProps) {
+}: ResumeFormPersonalDataProps) {
   return (
     <div className="flex flex-col gap-4">
       <h3 className={SECTION_TITLE_CLASS}>Dados pessoais</h3>
