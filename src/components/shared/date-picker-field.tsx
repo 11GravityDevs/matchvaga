@@ -91,7 +91,7 @@ export function DatePickerField({
           </Button>
         </PopoverTrigger>
         <PopoverContent
-          className="w-auto overflow-hidden rounded-xl border border-border p-0 shadow-md ring-0"
+          className="w-auto overflow-hidden rounded-xl border border-border p-0 ring-0"
           align="start"
         >
           <Calendar

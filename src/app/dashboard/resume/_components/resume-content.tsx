@@ -8,6 +8,7 @@ import {
   PAGE_SUBTITLE_CLASS,
   PAGE_TITLE_CLASS,
   SECTION_GAP,
+  W_CONTENT,
 } from "@/constants/design-tokens";
 import { W_FORM } from "@/constants/design-tokens";
 
@@ -49,7 +50,7 @@ export function ResumeContent() {
           Falha ao salvar. Tente novamente.
         </div>
       )}
-      <div className={`flex flex-col gap-1 ${W_FORM}`}>
+      <div className={`flex flex-col gap-1 ${W_CONTENT}`}>
         <h1 className={PAGE_TITLE_CLASS}>Edite seu currículo</h1>
         <p className={PAGE_SUBTITLE_CLASS}>
           Atualize suas informações e salve as alterações.

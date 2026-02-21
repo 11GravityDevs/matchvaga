@@ -13,7 +13,7 @@ export function OnboardingTopBar({ className }: OnboardingTopBarProps) {
   return (
     <header
       className={cn(
-        "flex h-16 w-full items-center justify-between border-b border-border bg-card px-8 shadow-(--shadow-top-bar)",
+        "flex h-16 w-full items-center justify-between border-b border-border bg-card px-8",
         className
       )}
     >

@@ -19,7 +19,7 @@ export default function NotFound() {
             404
           </p>
 
-          <div className="absolute top-1/2 flex size-20 -translate-y-1/2 items-center justify-center rounded-2xl border border-border bg-card shadow-xs">
+          <div className="absolute top-1/2 flex size-20 -translate-y-1/2 items-center justify-center rounded-2xl border border-border bg-card">
             <SearchX className="size-8 text-accent-brand" />
           </div>
         </div>

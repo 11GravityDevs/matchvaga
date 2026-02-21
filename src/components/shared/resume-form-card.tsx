@@ -11,6 +11,7 @@ import {
   CARD_DESCRIPTION_CLASS,
   CARD_TITLE_CLASS,
   SECTION_TITLE_CLASS,
+  W_CONTENT,
   W_FORM,
 } from "@/constants/design-tokens";
 import { Textarea } from "@/components/ui/textarea";
@@ -67,9 +68,7 @@ export function ResumeFormCard({
   hideHeader = false,
 }: ResumeFormCardProps) {
   return (
-    <div
-      className={`rounded-xl border border-border bg-card shadow-(--shadow-card) ${W_FORM}`}
-    >
+    <div className={`rounded-xl border border-border bg-card ${W_CONTENT}`}>
       {!hideHeader && (
         <div className="flex flex-col gap-1 p-7">
           <h2 className={CARD_TITLE_CLASS}>{headerTitle}</h2>

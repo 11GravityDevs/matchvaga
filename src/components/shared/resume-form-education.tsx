@@ -76,7 +76,7 @@ export function ResumeFormEducation({
               />
             </FormField>
 
-            <div className="flex gap-3">
+            <div className="flex gap-8">
               <FormField
                 label="Nível"
                 htmlFor={`edu-level-${eduIndex}`}
@@ -131,7 +131,7 @@ export function ResumeFormEducation({
               </FormField>
             </div>
 
-            <div className="flex gap-3">
+            <div className="flex gap-8">
               <DatePickerField
                 id={`edu-start-${eduIndex}`}
                 label="Data de início"

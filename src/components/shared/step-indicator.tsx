@@ -43,8 +43,7 @@ export function StepIndicator({
             <div
               className={cn(
                 "flex items-center gap-1.5 rounded-full px-4 py-1.5",
-                isActive &&
-                  "bg-accent-brand font-semibold text-white shadow-[0_2px_8px_rgba(37,99,235,0.2)]",
+                isActive && "bg-accent-brand font-semibold text-white",
                 isPast &&
                   "border border-accent-brand-light bg-muted text-foreground",
                 !isActive &&

@@ -75,9 +75,7 @@ export function UploadContent() {
   }, []);
 
   return (
-    <div
-      className={`rounded-xl border border-border bg-card shadow-(--shadow-card) ${W_FORM}`}
-    >
+    <div className={`rounded-xl border border-border bg-card ${W_FORM}`}>
       <div className="flex flex-col gap-1 px-7 pt-7">
         <h2 className={CARD_TITLE_CLASS}>Upload do Curriculo</h2>
         <p className={CARD_DESCRIPTION_CLASS}>
@@ -114,7 +112,7 @@ export function UploadContent() {
           />
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-secondary">
             {isUploading ? (
-              <Loader2 className="h-7 w-7 animate-spin text-muted-foreground" />
+              <Loader2 className="h-7 w-7 animate-spin text-accent-brand" />
             ) : selectedFile ? (
               <Check className="h-7 w-7 text-accent-success" />
             ) : (
@@ -132,7 +130,7 @@ export function UploadContent() {
               <button
                 type="button"
                 onClick={handleBrowseClick}
-                className="cursor-pointer rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground shadow-(--shadow-button) transition-colors hover:bg-muted"
+                className="cursor-pointer rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
               >
                 Selecionar outro arquivo
               </button>
@@ -149,7 +147,7 @@ export function UploadContent() {
               <button
                 type="button"
                 onClick={handleBrowseClick}
-                className="cursor-pointer rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground shadow-(--shadow-button) transition-colors hover:bg-muted"
+                className="cursor-pointer rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
               >
                 Selecionar arquivo
               </button>

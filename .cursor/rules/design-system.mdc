@@ -122,13 +122,9 @@ One primary action per section. Right-align actions in cards/modals; left-align 
 
 Base `--radius: 0.625rem` (10px). Use `rounded-lg` for cards, `rounded-md` for buttons.
 
-### Shadows
+### No Shadows
 
-| Design | Shadow | Tailwind |
-|--------|--------|----------|
-| Card | blur 3px, 1px offset; blur 24px, 8px offset | `shadow-xs` (shadcn) |
-| KPI Card | blur 1.75px, 1px offset | `shadow-sm` |
-| Button Outline | blur 2px, 1px offset | `shadow-xs` |
+Shadows are not used. Cards and surfaces use a flat pattern: `rounded-xl border border-border bg-card`. Only the page background (`bg-background`) is non-white; cards are white (`bg-card`).
 
 ---
 

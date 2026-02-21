@@ -58,7 +58,7 @@ export function KpiCard({
   const tokens = KPI_VARIANTS[variant];
 
   return (
-    <div className="flex flex-1 flex-col overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+    <div className="flex flex-1 flex-col overflow-hidden rounded-xl border border-border bg-card">
       {/* Accent bar */}
       <div
         className={cn("h-0.5 w-full", !accentColor && tokens.accent)}

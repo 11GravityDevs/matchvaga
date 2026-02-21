@@ -60,7 +60,7 @@ export function AnalysisHistoryTable({
 
       {/* Table Card */}
       <div
-        className={`flex flex-1 flex-col overflow-hidden ${CARD_RADIUS} border border-border bg-card shadow-xs`}
+        className={`flex flex-1 flex-col overflow-hidden ${CARD_RADIUS} border border-border bg-card`}
       >
         {/* Header Row */}
         <div className="flex w-full items-center border-b border-border bg-muted/50">
@@ -154,7 +154,11 @@ export function AnalysisHistoryTable({
             <div
               className={`flex shrink-0 items-center justify-center p-4 ${W_ACTION}`}
             >
-              <Button size="xs">
+              <Button
+                size="xs"
+                className="text-accent-brand hover:text-accent-brand-hover"
+                variant="ghost"
+              >
                 <Download />
                 Baixar
               </Button>

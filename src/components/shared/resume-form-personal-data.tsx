@@ -28,7 +28,7 @@ export function ResumeFormPersonalData({
   return (
     <div className="flex flex-col gap-4">
       <h3 className={SECTION_TITLE_CLASS}>Dados pessoais</h3>
-      <div className="flex gap-4">
+      <div className="flex gap-8">
         <FormField label="Nome completo" htmlFor="fullName" className="flex-1">
           <Input
             id="fullName"
@@ -49,7 +49,7 @@ export function ResumeFormPersonalData({
           />
         </FormField>
       </div>
-      <div className="flex gap-4">
+      <div className="flex gap-8">
         <FormField label="Local" htmlFor="location" className="flex-1">
           <Input
             id="location"
@@ -69,7 +69,7 @@ export function ResumeFormPersonalData({
           />
         </FormField>
       </div>
-      <div className="flex gap-4">
+      <div className="flex gap-8">
         <FormField
           label="LinkedIn (opcional)"
           htmlFor="linkedin"

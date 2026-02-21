@@ -4030,8 +4030,8 @@
     {
       "type": "frame",
       "id": "isJY5",
-      "x": 318,
-      "y": 1276,
+      "x": 6990,
+      "y": -116,
       "name": "component/KPI Card",
       "reusable": true,
       "clip": true,
@@ -8994,8 +8994,8 @@
     {
       "type": "frame",
       "id": "oCTl8",
-      "x": -596,
-      "y": 1002,
+      "x": 6076,
+      "y": -390,
       "name": "component/Sidebar Nav Item/Default",
       "reusable": true,
       "width": 240,
@@ -9101,8 +9101,8 @@
     {
       "type": "frame",
       "id": "i5M0C",
-      "x": -596,
-      "y": 1066,
+      "x": 6076,
+      "y": -326,
       "name": "component/Sidebar Nav Item/Active",
       "reusable": true,
       "width": 240,
@@ -9212,8 +9212,8 @@
     {
       "type": "frame",
       "id": "o9PMm",
-      "x": -300,
-      "y": 1002,
+      "x": 6372,
+      "y": -390,
       "name": "component/Button/Primary",
       "reusable": true,
       "fill": "$--primary",
@@ -9271,8 +9271,8 @@
     {
       "type": "frame",
       "id": "k0bhb",
-      "x": -150,
-      "y": 1002,
+      "x": 6522,
+      "y": -390,
       "name": "component/Button/Outline",
       "reusable": true,
       "fill": "$--background",
@@ -9345,8 +9345,8 @@
     {
       "type": "frame",
       "id": "LNxFY",
-      "x": -10,
-      "y": 1002,
+      "x": 6662,
+      "y": -390,
       "name": "component/Button/Ghost",
       "reusable": true,
       "cornerRadius": 8,
@@ -9403,8 +9403,8 @@
     {
       "type": "frame",
       "id": "eJKjS",
-      "x": -596,
-      "y": 1126,
+      "x": 6076,
+      "y": -266,
       "name": "component/Input Field",
       "reusable": true,
       "width": 300,
@@ -9486,8 +9486,8 @@
     {
       "type": "frame",
       "id": "itnfe",
-      "x": -200,
-      "y": 1126,
+      "x": 6472,
+      "y": -266,
       "name": "component/Card",
       "reusable": true,
       "width": 400,
@@ -9598,8 +9598,8 @@
     {
       "type": "frame",
       "id": "wZ7oe",
-      "x": -73,
-      "y": 1338,
+      "x": 6599,
+      "y": -54,
       "name": "component/Sidebar Pro Upgrade",
       "reusable": true,
       "width": 240,
@@ -9691,8 +9691,8 @@
     {
       "type": "frame",
       "id": "qUrQP",
-      "x": 160,
-      "y": 1126,
+      "x": 6832,
+      "y": -266,
       "name": "component/Sidebar Section Title",
       "reusable": true,
       "width": 240,
@@ -9723,8 +9723,8 @@
     {
       "type": "frame",
       "id": "kcJbU",
-      "x": 420,
-      "y": 1002,
+      "x": 7092,
+      "y": -390,
       "name": "component/Sidebar Footer",
       "reusable": true,
       "width": 240,
@@ -9840,8 +9840,8 @@
     {
       "type": "frame",
       "id": "KDjAJ",
-      "x": 420,
-      "y": 1126,
+      "x": 7092,
+      "y": -266,
       "name": "component/Sidebar Brand",
       "reusable": true,
       "width": 240,
@@ -9891,8 +9891,8 @@
     {
       "type": "frame",
       "id": "xlPb4",
-      "x": 700,
-      "y": 1002,
+      "x": 7372,
+      "y": -390,
       "name": "component/Sidebar",
       "reusable": true,
       "clip": true,
@@ -11450,6 +11450,3640 @@
                           ]
                         }
                       ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "oxaoQ",
+      "x": -596,
+      "y": 4126,
+      "name": "Landing Page",
+      "clip": true,
+      "width": 1440,
+      "fill": "$--background",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "EMAvQ",
+          "name": "Header",
+          "width": "fill_container",
+          "fill": "$--background",
+          "padding": [
+            16,
+            64
+          ],
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "ysCbh",
+              "name": "Logo",
+              "gap": 10,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "rFdx9",
+                  "name": "LogoMark",
+                  "width": 32,
+                  "height": 32,
+                  "fill": "$--primary",
+                  "cornerRadius": 8,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "zk6u7",
+                      "x": 7,
+                      "y": 7,
+                      "name": "logoIcon",
+                      "width": 18,
+                      "height": 18,
+                      "iconFontName": "briefcase",
+                      "iconFontFamily": "lucide",
+                      "fill": "$--primary-foreground"
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "w5KiJ",
+                  "name": "logoText",
+                  "fill": "$--foreground",
+                  "content": "MatchVaga",
+                  "fontFamily": "Inter",
+                  "fontSize": 20,
+                  "fontWeight": "700"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "4HbSu",
+              "name": "NavLinks",
+              "gap": 32,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "QVWWC",
+                  "name": "nav1",
+                  "fill": "$--muted-foreground",
+                  "content": "Recursos",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "text",
+                  "id": "teSWb",
+                  "name": "nav2",
+                  "fill": "$--muted-foreground",
+                  "content": "Como Funciona",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "text",
+                  "id": "x1FPG",
+                  "name": "nav3",
+                  "fill": "$--muted-foreground",
+                  "content": "Preços",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "text",
+                  "id": "Q1VNF",
+                  "name": "nav4",
+                  "fill": "$--muted-foreground",
+                  "content": "FAQ",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "500"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "9kbeh",
+              "name": "HeaderActions",
+              "gap": 12,
+              "alignItems": "center",
+              "children": [
+                {
+                  "id": "Zt4td",
+                  "type": "ref",
+                  "ref": "LNxFY",
+                  "name": "loginBtn",
+                  "descendants": {
+                    "IOGuB": {
+                      "content": "Entrar",
+                      "fill": "$--foreground"
+                    }
+                  }
+                },
+                {
+                  "id": "m36tv",
+                  "type": "ref",
+                  "ref": "o9PMm",
+                  "name": "ctaBtn",
+                  "descendants": {
+                    "rtgD8": {
+                      "content": "Começar Grátis"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "F83xH",
+          "name": "Hero",
+          "width": "fill_container",
+          "fill": "$--background",
+          "layout": "vertical",
+          "gap": 48,
+          "padding": [
+            80,
+            64,
+            60,
+            64
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "MdItC",
+              "name": "HeroBadge",
+              "fill": "$--accent-brand-light",
+              "cornerRadius": 100,
+              "gap": 8,
+              "padding": [
+                8,
+                16
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "If4wP",
+                  "name": "badgeIcon",
+                  "width": 14,
+                  "height": 14,
+                  "iconFontName": "sparkles",
+                  "iconFontFamily": "lucide",
+                  "fill": "$--accent-brand"
+                },
+                {
+                  "type": "text",
+                  "id": "zZCYZ",
+                  "name": "badgeText",
+                  "fill": "$--accent-brand",
+                  "content": "Plataforma #1 para candidatos no Brasil",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "ODCft",
+              "name": "HeroText",
+              "width": 800,
+              "layout": "vertical",
+              "gap": 20,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "DLsvr",
+                  "name": "headline",
+                  "fill": "$--foreground",
+                  "textGrowth": "fixed-width",
+                  "width": 800,
+                  "content": "Pare de se candidatar.\nComece a ser chamado.",
+                  "lineHeight": 1.15,
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 52,
+                  "fontWeight": "800",
+                  "letterSpacing": -1.5
+                },
+                {
+                  "type": "text",
+                  "id": "GkWmA",
+                  "name": "subheadline",
+                  "fill": "$--muted-foreground",
+                  "textGrowth": "fixed-width",
+                  "width": 640,
+                  "content": "O MatchVaga adapta seu currículo automaticamente para cada vaga, otimiza para ATS e gera mensagens de apresentação — tudo em segundos.",
+                  "lineHeight": 1.6,
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 18
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "5xSis",
+              "name": "HeroCTAs",
+              "gap": 16,
+              "alignItems": "center",
+              "children": [
+                {
+                  "id": "aY8Oq",
+                  "type": "ref",
+                  "ref": "o9PMm",
+                  "padding": [
+                    14,
+                    28
+                  ],
+                  "name": "primaryCta",
+                  "descendants": {
+                    "vynbS": {
+                      "enabled": true
+                    },
+                    "rWBfg": {
+                      "iconFontName": "zap"
+                    },
+                    "rtgD8": {
+                      "content": "Começar Grátis — Sem Cartão",
+                      "fontSize": 16
+                    }
+                  }
+                },
+                {
+                  "id": "V7sSo",
+                  "type": "ref",
+                  "ref": "k0bhb",
+                  "padding": [
+                    14,
+                    28
+                  ],
+                  "name": "secondaryCta",
+                  "descendants": {
+                    "Xswnw": {
+                      "enabled": true
+                    },
+                    "sv6Rn": {
+                      "iconFontName": "play"
+                    },
+                    "XYKjR": {
+                      "content": "Ver Como Funciona",
+                      "fontSize": 16
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "BUAtH",
+              "name": "ScreenshotWrapper",
+              "width": 1100,
+              "layout": "vertical",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "o5wTz",
+                  "name": "ProductScreenshot",
+                  "width": "fill_container",
+                  "height": 620,
+                  "fill": "$--card",
+                  "cornerRadius": 12,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$--border"
+                  },
+                  "effect": [
+                    {
+                      "type": "shadow",
+                      "shadowType": "outer",
+                      "color": "#0000001A",
+                      "offset": {
+                        "x": 0,
+                        "y": 24
+                      },
+                      "blur": 48,
+                      "spread": -12
+                    },
+                    {
+                      "type": "shadow",
+                      "shadowType": "outer",
+                      "color": "#0000000D",
+                      "offset": {
+                        "x": 0,
+                        "y": 4
+                      },
+                      "blur": 8
+                    }
+                  ],
+                  "layout": "vertical",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ph2Ok",
+                      "name": "screenshotLabel",
+                      "fill": "$--muted-foreground",
+                      "content": "Screenshot placeholder",
+                      "fontFamily": "Inter",
+                      "fontSize": 16,
+                      "fontWeight": "500"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "XJiiK",
+              "name": "TrustRow",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 20,
+              "padding": [
+                24,
+                0,
+                0,
+                0
+              ],
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "MPn3i",
+                  "name": "trustLabel",
+                  "fill": "$--muted-foreground",
+                  "content": "Mais de 12.000 candidatos já usam o MatchVaga",
+                  "fontFamily": "Inter",
+                  "fontSize": 14,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "frame",
+                  "id": "MUWEq",
+                  "name": "TrustLogos",
+                  "width": "fill_container",
+                  "gap": 40,
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "gohRu",
+                      "name": "tl1",
+                      "fill": "#D0D0D0",
+                      "content": "LinkedIn",
+                      "fontFamily": "Inter",
+                      "fontSize": 18,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "FhOIH",
+                      "name": "tl2",
+                      "fill": "#D0D0D0",
+                      "content": "Gupy",
+                      "fontFamily": "Inter",
+                      "fontSize": 18,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "IEYmm",
+                      "name": "tl3",
+                      "fill": "#D0D0D0",
+                      "content": "Catho",
+                      "fontFamily": "Inter",
+                      "fontSize": 18,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "IofB1",
+                      "name": "tl4",
+                      "fill": "#D0D0D0",
+                      "content": "Indeed",
+                      "fontFamily": "Inter",
+                      "fontSize": 18,
+                      "fontWeight": "700"
+                    },
+                    {
+                      "type": "text",
+                      "id": "d4jDj",
+                      "name": "tl5",
+                      "fill": "#D0D0D0",
+                      "content": "Vagas.com",
+                      "fontFamily": "Inter",
+                      "fontSize": 18,
+                      "fontWeight": "700"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "19sC9",
+          "name": "How It Works",
+          "width": "fill_container",
+          "fill": "#F8FAFC",
+          "layout": "vertical",
+          "gap": 56,
+          "padding": [
+            80,
+            64
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "98VMZ",
+              "name": "SectionHeader",
+              "width": 600,
+              "layout": "vertical",
+              "gap": 16,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "PzKgW",
+                  "name": "howBadge",
+                  "cornerRadius": 100,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$--border"
+                  },
+                  "gap": 6,
+                  "padding": [
+                    6,
+                    14
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "y66gb",
+                      "name": "howBadgeText",
+                      "fill": "$--accent-brand",
+                      "content": "COMO FUNCIONA",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "600",
+                      "letterSpacing": 1
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "szUjl",
+                  "name": "howTitle",
+                  "fill": "$--foreground",
+                  "textGrowth": "fixed-width",
+                  "width": 600,
+                  "content": "Três passos para a vaga dos seus sonhos",
+                  "lineHeight": 1.2,
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 36,
+                  "fontWeight": "700",
+                  "letterSpacing": -0.8
+                },
+                {
+                  "type": "text",
+                  "id": "Wz5tm",
+                  "name": "howDesc",
+                  "fill": "$--muted-foreground",
+                  "textGrowth": "fixed-width",
+                  "width": 500,
+                  "content": "De upload do currículo até candidatura otimizada em menos de 2 minutos.",
+                  "lineHeight": 1.5,
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 16
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "4x3Ri",
+              "name": "StepsRow",
+              "width": "fill_container",
+              "gap": 32,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "slEzr",
+                  "name": "Step1",
+                  "width": "fill_container",
+                  "fill": "$--card",
+                  "cornerRadius": 12,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$--border"
+                  },
+                  "layout": "vertical",
+                  "gap": 20,
+                  "padding": 32,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "itlOc",
+                      "name": "step1Num",
+                      "width": 44,
+                      "height": 44,
+                      "fill": "$--accent-brand-light",
+                      "cornerRadius": 10,
+                      "layout": "vertical",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "L6flG",
+                          "name": "step1NumText",
+                          "fill": "$--accent-brand",
+                          "content": "1",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "icon_font",
+                      "id": "rZCZZ",
+                      "name": "step1Icon",
+                      "width": 28,
+                      "height": 28,
+                      "iconFontName": "upload",
+                      "iconFontFamily": "lucide",
+                      "fill": "$--accent-brand"
+                    },
+                    {
+                      "type": "text",
+                      "id": "YN3Ye",
+                      "name": "step1Title",
+                      "fill": "$--foreground",
+                      "content": "Suba seu currículo",
+                      "fontFamily": "Inter",
+                      "fontSize": 20,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "qr7zR",
+                      "name": "step1Desc",
+                      "fill": "$--muted-foreground",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Faça upload do seu currículo ou perfil LinkedIn. Nossa IA analisa suas competências, experiências e formação.",
+                      "lineHeight": 1.6,
+                      "fontFamily": "Inter",
+                      "fontSize": 14
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "WTDWs",
+                  "name": "Step2",
+                  "width": "fill_container",
+                  "fill": "$--card",
+                  "cornerRadius": 12,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$--border"
+                  },
+                  "layout": "vertical",
+                  "gap": 20,
+                  "padding": 32,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "3kCD9",
+                      "name": "step2Num",
+                      "width": 44,
+                      "height": 44,
+                      "fill": "$--accent-brand-light",
+                      "cornerRadius": 10,
+                      "layout": "vertical",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "wFjbG",
+                          "name": "step2NumText",
+                          "fill": "$--accent-brand",
+                          "content": "2",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "icon_font",
+                      "id": "e3fEb",
+                      "name": "step2Icon",
+                      "width": 28,
+                      "height": 28,
+                      "iconFontName": "scan-search",
+                      "iconFontFamily": "lucide",
+                      "fill": "$--accent-brand"
+                    },
+                    {
+                      "type": "text",
+                      "id": "SAAvj",
+                      "name": "step2Title",
+                      "fill": "$--foreground",
+                      "content": "Cole a vaga desejada",
+                      "fontFamily": "Inter",
+                      "fontSize": 20,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "Ggroh",
+                      "name": "step2Desc",
+                      "fill": "$--muted-foreground",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Cole o link ou descrição da vaga. A IA identifica palavras-chave, requisitos e competências que o ATS procura.",
+                      "lineHeight": 1.6,
+                      "fontFamily": "Inter",
+                      "fontSize": 14
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "KgvhG",
+                  "name": "Step3",
+                  "width": "fill_container",
+                  "fill": "$--card",
+                  "cornerRadius": 12,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$--border"
+                  },
+                  "layout": "vertical",
+                  "gap": 20,
+                  "padding": 32,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "xqfJg",
+                      "name": "step3Num",
+                      "width": 44,
+                      "height": 44,
+                      "fill": "$--accent-brand-light",
+                      "cornerRadius": 10,
+                      "layout": "vertical",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "KtfHn",
+                          "name": "step3NumText",
+                          "fill": "$--accent-brand",
+                          "content": "3",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "icon_font",
+                      "id": "62eve",
+                      "name": "step3Icon",
+                      "width": 28,
+                      "height": 28,
+                      "iconFontName": "file-check",
+                      "iconFontFamily": "lucide",
+                      "fill": "$--accent-brand"
+                    },
+                    {
+                      "type": "text",
+                      "id": "BlVuK",
+                      "name": "step3Title",
+                      "fill": "$--foreground",
+                      "content": "Receba tudo pronto",
+                      "fontFamily": "Inter",
+                      "fontSize": 20,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "kwwzR",
+                      "name": "step3Desc",
+                      "fill": "$--muted-foreground",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Em segundos, receba currículo adaptado, carta de apresentação e mensagem de abordagem — tudo otimizado para ATS.",
+                      "lineHeight": 1.6,
+                      "fontFamily": "Inter",
+                      "fontSize": 14
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "IBGTG",
+          "name": "Core Features",
+          "width": "fill_container",
+          "fill": "$--background",
+          "layout": "vertical",
+          "gap": 64,
+          "padding": [
+            80,
+            64
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "L5ChJ",
+              "name": "FeatHeader",
+              "width": 640,
+              "layout": "vertical",
+              "gap": 16,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Sr60I",
+                  "name": "featBadge",
+                  "cornerRadius": 100,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$--border"
+                  },
+                  "gap": 6,
+                  "padding": [
+                    6,
+                    14
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "M0fEJ",
+                      "name": "featBadgeText",
+                      "fill": "$--accent-brand",
+                      "content": "RECURSOS",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "600",
+                      "letterSpacing": 1
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "f9cQd",
+                  "name": "featTitle",
+                  "fill": "$--foreground",
+                  "textGrowth": "fixed-width",
+                  "width": 640,
+                  "content": "Tudo que você precisa para se destacar",
+                  "lineHeight": 1.2,
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 36,
+                  "fontWeight": "700",
+                  "letterSpacing": -0.8
+                },
+                {
+                  "type": "text",
+                  "id": "nGJ5b",
+                  "name": "featDesc",
+                  "fill": "$--muted-foreground",
+                  "textGrowth": "fixed-width",
+                  "width": 540,
+                  "content": "Ferramentas inteligentes que transformam sua busca por emprego em um processo eficiente e estratégico.",
+                  "lineHeight": 1.5,
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 16
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "gJo0f",
+              "name": "Feature1",
+              "width": "fill_container",
+              "gap": 48,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Pe3BY",
+                  "name": "feat1Text",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "bPZAX",
+                      "name": "feat1Tag",
+                      "fill": "$--accent-brand-light",
+                      "cornerRadius": 6,
+                      "gap": 6,
+                      "padding": [
+                        4,
+                        10
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "vQP5P",
+                          "name": "feat1TagIcon",
+                          "width": 14,
+                          "height": 14,
+                          "iconFontName": "file-text",
+                          "iconFontFamily": "lucide",
+                          "fill": "$--accent-brand"
+                        },
+                        {
+                          "type": "text",
+                          "id": "NxFgr",
+                          "name": "feat1TagText",
+                          "fill": "$--accent-brand",
+                          "content": "Currículo Inteligente",
+                          "fontFamily": "Inter",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "aGPKW",
+                      "name": "feat1Title",
+                      "fill": "$--foreground",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Currículo adaptado automaticamente para cada vaga",
+                      "lineHeight": 1.3,
+                      "fontFamily": "Inter",
+                      "fontSize": 28,
+                      "fontWeight": "700",
+                      "letterSpacing": -0.5
+                    },
+                    {
+                      "type": "text",
+                      "id": "8A5nj",
+                      "name": "feat1Desc",
+                      "fill": "$--muted-foreground",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Nossa IA reorganiza, reescreve e otimiza seu currículo com as palavras-chave certas para cada vaga. Aumente suas chances de passar pelo ATS e impressionar recrutadores.",
+                      "lineHeight": 1.6,
+                      "fontFamily": "Inter",
+                      "fontSize": 16
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "rnoN2",
+                  "name": "Feat1Screenshot",
+                  "width": "fill_container",
+                  "height": 360,
+                  "fill": "#F1F5F9",
+                  "cornerRadius": 12,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$--border"
+                  },
+                  "layout": "vertical",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "cS5iY",
+                      "name": "feat1SsLabel",
+                      "fill": "$--muted-foreground",
+                      "content": "Screenshot placeholder",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "500"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "52OjG",
+              "name": "Feature2",
+              "width": "fill_container",
+              "gap": 48,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "UyF4E",
+                  "name": "Feat2Screenshot",
+                  "width": "fill_container",
+                  "height": 360,
+                  "fill": "#F1F5F9",
+                  "cornerRadius": 12,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$--border"
+                  },
+                  "layout": "vertical",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "vljtA",
+                      "name": "feat2SsLabel",
+                      "fill": "$--muted-foreground",
+                      "content": "Screenshot placeholder",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "500"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "kQi6Z",
+                  "name": "feat2Text",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "xNJ3D",
+                      "name": "feat2Tag",
+                      "fill": "#DCFCE7",
+                      "cornerRadius": 6,
+                      "gap": 6,
+                      "padding": [
+                        4,
+                        10
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "mV1LB",
+                          "name": "feat2TagIcon",
+                          "width": 14,
+                          "height": 14,
+                          "iconFontName": "chart-bar",
+                          "iconFontFamily": "lucide",
+                          "fill": "$--accent-success"
+                        },
+                        {
+                          "type": "text",
+                          "id": "QX8O2",
+                          "name": "feat2TagText",
+                          "fill": "$--accent-success",
+                          "content": "Análise de Gap",
+                          "fontFamily": "Inter",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "Do2vM",
+                      "name": "feat2Title",
+                      "fill": "$--foreground",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Saiba exatamente o que falta no seu perfil",
+                      "lineHeight": 1.3,
+                      "fontFamily": "Inter",
+                      "fontSize": 28,
+                      "fontWeight": "700",
+                      "letterSpacing": -0.5
+                    },
+                    {
+                      "type": "text",
+                      "id": "JhKw3",
+                      "name": "feat2Desc",
+                      "fill": "$--muted-foreground",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Comparamos seu currículo com a vaga e mostramos gaps de competências, experiência e formação — com sugestões práticas de como preenchê-los.",
+                      "lineHeight": 1.6,
+                      "fontFamily": "Inter",
+                      "fontSize": 16
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "eMny3",
+              "name": "Feature3",
+              "width": "fill_container",
+              "gap": 48,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "l2LNO",
+                  "name": "feat3Text",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "bfrxy",
+                      "name": "feat3Tag",
+                      "fill": "#FEF3C7",
+                      "cornerRadius": 6,
+                      "gap": 6,
+                      "padding": [
+                        4,
+                        10
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "7BOkO",
+                          "name": "feat3TagIcon",
+                          "width": 14,
+                          "height": 14,
+                          "iconFontName": "mail",
+                          "iconFontFamily": "lucide",
+                          "fill": "$--warning"
+                        },
+                        {
+                          "type": "text",
+                          "id": "IG4Do",
+                          "name": "feat3TagText",
+                          "fill": "$--warning",
+                          "content": "Mensagens de Abordagem",
+                          "fontFamily": "Inter",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "KAcsJ",
+                      "name": "feat3Title",
+                      "fill": "$--foreground",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Mensagens que abrem portas e geram respostas",
+                      "lineHeight": 1.3,
+                      "fontFamily": "Inter",
+                      "fontSize": 28,
+                      "fontWeight": "700",
+                      "letterSpacing": -0.5
+                    },
+                    {
+                      "type": "text",
+                      "id": "PM7qw",
+                      "name": "feat3Desc",
+                      "fill": "$--muted-foreground",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Gere mensagens personalizadas para recrutadores no LinkedIn, e-mails de apresentação e follow-ups que demonstram seu valor único para a posição.",
+                      "lineHeight": 1.6,
+                      "fontFamily": "Inter",
+                      "fontSize": 16
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "LtJnm",
+                  "name": "Feat3Screenshot",
+                  "width": "fill_container",
+                  "height": 360,
+                  "fill": "#F1F5F9",
+                  "cornerRadius": 12,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$--border"
+                  },
+                  "layout": "vertical",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "8TTT4",
+                      "name": "feat3SsLabel",
+                      "fill": "$--muted-foreground",
+                      "content": "Screenshot placeholder",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "500"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "idhGU",
+          "name": "Secondary Features",
+          "width": "fill_container",
+          "fill": "#F8FAFC",
+          "layout": "vertical",
+          "gap": 48,
+          "padding": [
+            80,
+            64
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "riZVY",
+              "name": "secFeatHeader",
+              "width": 600,
+              "layout": "vertical",
+              "gap": 16,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "nxzC5",
+                  "name": "secFeatTitle",
+                  "fill": "$--foreground",
+                  "textGrowth": "fixed-width",
+                  "width": 600,
+                  "content": "E muito mais para acelerar sua busca",
+                  "lineHeight": 1.2,
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 36,
+                  "fontWeight": "700",
+                  "letterSpacing": -0.8
+                },
+                {
+                  "type": "text",
+                  "id": "TFOcu",
+                  "name": "secFeatDesc",
+                  "fill": "$--muted-foreground",
+                  "content": "Cada detalhe pensado para maximizar suas chances de conseguir a vaga.",
+                  "lineHeight": 1.5,
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 16
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "AIX8J",
+              "name": "FeatGrid",
+              "width": "fill_container",
+              "gap": 24,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "JTVL7",
+                  "name": "col1",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "C3P4K",
+                      "name": "g1",
+                      "width": "fill_container",
+                      "fill": "$--card",
+                      "cornerRadius": 12,
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 1,
+                        "fill": "$--border"
+                      },
+                      "layout": "vertical",
+                      "gap": 16,
+                      "padding": 28,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "UvAg1",
+                          "name": "g1Ic",
+                          "width": 44,
+                          "height": 44,
+                          "fill": "$--accent-brand-light",
+                          "cornerRadius": 10,
+                          "layout": "vertical",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "Xjpc6",
+                              "name": "g1IcI",
+                              "width": 22,
+                              "height": 22,
+                              "iconFontName": "shield-check",
+                              "iconFontFamily": "lucide",
+                              "fill": "$--accent-brand"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "c4yvz",
+                          "name": "g1T",
+                          "fill": "$--foreground",
+                          "content": "Otimização ATS",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "ob7oT",
+                          "name": "g1D",
+                          "fill": "$--muted-foreground",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Cada currículo é otimizado para passar pelos filtros de Applicant Tracking Systems.",
+                          "lineHeight": 1.6,
+                          "fontFamily": "Inter",
+                          "fontSize": 14
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "6zNE8",
+                      "name": "g4",
+                      "width": "fill_container",
+                      "fill": "$--card",
+                      "cornerRadius": 12,
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 1,
+                        "fill": "$--border"
+                      },
+                      "layout": "vertical",
+                      "gap": 16,
+                      "padding": 28,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "cPjt3",
+                          "name": "g4Ic",
+                          "width": 44,
+                          "height": 44,
+                          "fill": "#EDE9FE",
+                          "cornerRadius": 10,
+                          "layout": "vertical",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "SqgmJ",
+                              "name": "g4IcI",
+                              "width": 22,
+                              "height": 22,
+                              "iconFontName": "layout-template",
+                              "iconFontFamily": "lucide",
+                              "fill": "#7C3AED"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "GoAQl",
+                          "name": "g4T",
+                          "fill": "$--foreground",
+                          "content": "Múltiplos Formatos",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "46txk",
+                          "name": "g4D",
+                          "fill": "$--muted-foreground",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Exporte em PDF, DOCX ou copie direto para plataformas de candidatura.",
+                          "lineHeight": 1.6,
+                          "fontFamily": "Inter",
+                          "fontSize": 14
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "T4lUC",
+                  "name": "col2",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "Qu7fv",
+                      "name": "g2",
+                      "width": "fill_container",
+                      "fill": "$--card",
+                      "cornerRadius": 12,
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 1,
+                        "fill": "$--border"
+                      },
+                      "layout": "vertical",
+                      "gap": 16,
+                      "padding": 28,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "GFyKV",
+                          "name": "g2Ic",
+                          "width": 44,
+                          "height": 44,
+                          "fill": "#DCFCE7",
+                          "cornerRadius": 10,
+                          "layout": "vertical",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "8rbLT",
+                              "name": "g2IcI",
+                              "width": 22,
+                              "height": 22,
+                              "iconFontName": "languages",
+                              "iconFontFamily": "lucide",
+                              "fill": "$--accent-success"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "EC82y",
+                          "name": "g2T",
+                          "fill": "$--foreground",
+                          "content": "Multilíngue",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "ROEqo",
+                          "name": "g2D",
+                          "fill": "$--muted-foreground",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Gere currículos e mensagens em português, inglês, espanhol e outros idiomas.",
+                          "lineHeight": 1.6,
+                          "fontFamily": "Inter",
+                          "fontSize": 14
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "yYr6m",
+                      "name": "g5",
+                      "width": "fill_container",
+                      "fill": "$--card",
+                      "cornerRadius": 12,
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 1,
+                        "fill": "$--border"
+                      },
+                      "layout": "vertical",
+                      "gap": 16,
+                      "padding": 28,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "YoNwa",
+                          "name": "g5Ic",
+                          "width": 44,
+                          "height": 44,
+                          "fill": "#FCE7F3",
+                          "cornerRadius": 10,
+                          "layout": "vertical",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "e02cA",
+                              "name": "g5IcI",
+                              "width": 22,
+                              "height": 22,
+                              "iconFontName": "history",
+                              "iconFontFamily": "lucide",
+                              "fill": "#DB2777"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "uqhfm",
+                          "name": "g5T",
+                          "fill": "$--foreground",
+                          "content": "Histórico Completo",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "n7v7k",
+                          "name": "g5D",
+                          "fill": "$--muted-foreground",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Acompanhe todas suas candidaturas, versões de currículo e análises em um só lugar.",
+                          "lineHeight": 1.6,
+                          "fontFamily": "Inter",
+                          "fontSize": 14
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "VbzAI",
+                  "name": "col3",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "dcdgm",
+                      "name": "g3",
+                      "width": "fill_container",
+                      "fill": "$--card",
+                      "cornerRadius": 12,
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 1,
+                        "fill": "$--border"
+                      },
+                      "layout": "vertical",
+                      "gap": 16,
+                      "padding": 28,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "pRqd9",
+                          "name": "g3Ic",
+                          "width": 44,
+                          "height": 44,
+                          "fill": "#FEF3C7",
+                          "cornerRadius": 10,
+                          "layout": "vertical",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "vNb6B",
+                              "name": "g3IcI",
+                              "width": 22,
+                              "height": 22,
+                              "iconFontName": "timer",
+                              "iconFontFamily": "lucide",
+                              "fill": "$--warning"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "FjZMS",
+                          "name": "g3T",
+                          "fill": "$--foreground",
+                          "content": "Economia de Tempo",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "rXCfG",
+                          "name": "g3D",
+                          "fill": "$--muted-foreground",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Reduza horas de trabalho manual para menos de 2 minutos por candidatura.",
+                          "lineHeight": 1.6,
+                          "fontFamily": "Inter",
+                          "fontSize": 14
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "DUdlR",
+                      "name": "g6",
+                      "width": "fill_container",
+                      "fill": "$--card",
+                      "cornerRadius": 12,
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 1,
+                        "fill": "$--border"
+                      },
+                      "layout": "vertical",
+                      "gap": 16,
+                      "padding": 28,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "m29VD",
+                          "name": "g6Ic",
+                          "width": 44,
+                          "height": 44,
+                          "fill": "#FEE2E2",
+                          "cornerRadius": 10,
+                          "layout": "vertical",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "FcE1u",
+                              "name": "g6IcI",
+                              "width": 22,
+                              "height": 22,
+                              "iconFontName": "lock",
+                              "iconFontFamily": "lucide",
+                              "fill": "#DC2626"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "vnDkN",
+                          "name": "g6T",
+                          "fill": "$--foreground",
+                          "content": "Privacidade Total",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "OTikm",
+                          "name": "g6D",
+                          "fill": "$--muted-foreground",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Seus dados são criptografados e nunca compartilhados com terceiros.",
+                          "lineHeight": 1.6,
+                          "fontFamily": "Inter",
+                          "fontSize": 14
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "lUZ8o",
+          "name": "Social Proof",
+          "width": "fill_container",
+          "fill": "$--background",
+          "layout": "vertical",
+          "gap": 56,
+          "padding": [
+            80,
+            64
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "qKyJn",
+              "name": "StatsRow",
+              "width": "fill_container",
+              "justifyContent": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "GATqF",
+                  "name": "stat1",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "padding": [
+                    24,
+                    0
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "8wbNM",
+                      "name": "stat1Val",
+                      "fill": "$--accent-brand",
+                      "content": "12.000+",
+                      "fontFamily": "Inter",
+                      "fontSize": 40,
+                      "fontWeight": "800",
+                      "letterSpacing": -1
+                    },
+                    {
+                      "type": "text",
+                      "id": "llEp7",
+                      "name": "stat1Label",
+                      "fill": "$--muted-foreground",
+                      "content": "Candidatos ativos",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "500"
+                    }
+                  ]
+                },
+                {
+                  "type": "rectangle",
+                  "id": "Yh82B",
+                  "name": "divider1",
+                  "fill": "$--border",
+                  "width": 1,
+                  "height": 64
+                },
+                {
+                  "type": "frame",
+                  "id": "JUDlt",
+                  "name": "stat2",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "padding": [
+                    24,
+                    0
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "LDIRW",
+                      "name": "stat2Val",
+                      "fill": "$--accent-brand",
+                      "content": "85%",
+                      "fontFamily": "Inter",
+                      "fontSize": 40,
+                      "fontWeight": "800",
+                      "letterSpacing": -1
+                    },
+                    {
+                      "type": "text",
+                      "id": "g0Rg6",
+                      "name": "stat2Label",
+                      "fill": "$--muted-foreground",
+                      "content": "Taxa de aprovação ATS",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "500"
+                    }
+                  ]
+                },
+                {
+                  "type": "rectangle",
+                  "id": "wPJNK",
+                  "name": "divider2",
+                  "fill": "$--border",
+                  "width": 1,
+                  "height": 64
+                },
+                {
+                  "type": "frame",
+                  "id": "sxQ3w",
+                  "name": "stat3",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "padding": [
+                    24,
+                    0
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "JOV2d",
+                      "name": "stat3Val",
+                      "fill": "$--accent-brand",
+                      "content": "3x",
+                      "fontFamily": "Inter",
+                      "fontSize": 40,
+                      "fontWeight": "800",
+                      "letterSpacing": -1
+                    },
+                    {
+                      "type": "text",
+                      "id": "WcsxB",
+                      "name": "stat3Label",
+                      "fill": "$--muted-foreground",
+                      "content": "Mais entrevistas",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "500"
+                    }
+                  ]
+                },
+                {
+                  "type": "rectangle",
+                  "id": "sCy0K",
+                  "name": "divider3",
+                  "fill": "$--border",
+                  "width": 1,
+                  "height": 64
+                },
+                {
+                  "type": "frame",
+                  "id": "cFRVI",
+                  "name": "stat4",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 4,
+                  "padding": [
+                    24,
+                    0
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "uby29",
+                      "name": "stat4Val",
+                      "fill": "$--accent-brand",
+                      "content": "< 2min",
+                      "fontFamily": "Inter",
+                      "fontSize": 40,
+                      "fontWeight": "800",
+                      "letterSpacing": -1
+                    },
+                    {
+                      "type": "text",
+                      "id": "WOy06",
+                      "name": "stat4Label",
+                      "fill": "$--muted-foreground",
+                      "content": "Por candidatura",
+                      "fontFamily": "Inter",
+                      "fontSize": 14,
+                      "fontWeight": "500"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "p904O",
+              "name": "Testimonials",
+              "width": "fill_container",
+              "gap": 24,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Jj4C8",
+                  "name": "t1",
+                  "width": "fill_container",
+                  "fill": "$--card",
+                  "cornerRadius": 12,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$--border"
+                  },
+                  "layout": "vertical",
+                  "gap": 20,
+                  "padding": 28,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "coqXj",
+                      "name": "t1Stars",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "u2bYu",
+                          "name": "t1s1",
+                          "width": 18,
+                          "height": 18,
+                          "iconFontName": "star",
+                          "iconFontFamily": "lucide",
+                          "fill": "#FACC15"
+                        },
+                        {
+                          "type": "icon_font",
+                          "id": "owkMk",
+                          "name": "t1s2",
+                          "width": 18,
+                          "height": 18,
+                          "iconFontName": "star",
+                          "iconFontFamily": "lucide",
+                          "fill": "#FACC15"
+                        },
+                        {
+                          "type": "icon_font",
+                          "id": "WHaXU",
+                          "name": "t1s3",
+                          "width": 18,
+                          "height": 18,
+                          "iconFontName": "star",
+                          "iconFontFamily": "lucide",
+                          "fill": "#FACC15"
+                        },
+                        {
+                          "type": "icon_font",
+                          "id": "PIfmi",
+                          "name": "t1s4",
+                          "width": 18,
+                          "height": 18,
+                          "iconFontName": "star",
+                          "iconFontFamily": "lucide",
+                          "fill": "#FACC15"
+                        },
+                        {
+                          "type": "icon_font",
+                          "id": "pYeBD",
+                          "name": "t1s5",
+                          "width": 18,
+                          "height": 18,
+                          "iconFontName": "star",
+                          "iconFontFamily": "lucide",
+                          "fill": "#FACC15"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "2LA3K",
+                      "name": "t1Quote",
+                      "fill": "$--foreground",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "“Em 2 semanas usando o MatchVaga, consegui 4 entrevistas. Antes, passava horas adaptando meu currículo manualmente e quase nunca recebia retorno.”",
+                      "lineHeight": 1.6,
+                      "fontFamily": "Inter",
+                      "fontSize": 15
+                    },
+                    {
+                      "type": "frame",
+                      "id": "8dopj",
+                      "name": "t1Author",
+                      "gap": 12,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "Dk5MY",
+                          "name": "t1Avatar",
+                          "width": 40,
+                          "height": 40,
+                          "fill": "$--accent-brand",
+                          "cornerRadius": 100,
+                          "layout": "vertical",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "u0JYC",
+                              "name": "t1Initials",
+                              "fill": "$--primary-foreground",
+                              "content": "MC",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "600"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ZMVNq",
+                          "name": "t1Info",
+                          "layout": "vertical",
+                          "gap": 2,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "bK57d",
+                              "name": "t1Name",
+                              "fill": "$--foreground",
+                              "content": "Marina Costa",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "text",
+                              "id": "fpAR0",
+                              "name": "t1Role",
+                              "fill": "$--muted-foreground",
+                              "content": "Analista de Marketing, São Paulo",
+                              "fontFamily": "Inter",
+                              "fontSize": 13
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "R9ZXU",
+                  "name": "t2",
+                  "width": "fill_container",
+                  "fill": "$--card",
+                  "cornerRadius": 12,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$--border"
+                  },
+                  "layout": "vertical",
+                  "gap": 20,
+                  "padding": 28,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "sCRD3",
+                      "name": "t2Stars",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "9xhak",
+                          "name": "t2s1",
+                          "width": 18,
+                          "height": 18,
+                          "iconFontName": "star",
+                          "iconFontFamily": "lucide",
+                          "fill": "#FACC15"
+                        },
+                        {
+                          "type": "icon_font",
+                          "id": "ULiaf",
+                          "name": "t2s2",
+                          "width": 18,
+                          "height": 18,
+                          "iconFontName": "star",
+                          "iconFontFamily": "lucide",
+                          "fill": "#FACC15"
+                        },
+                        {
+                          "type": "icon_font",
+                          "id": "2NrSK",
+                          "name": "t2s3",
+                          "width": 18,
+                          "height": 18,
+                          "iconFontName": "star",
+                          "iconFontFamily": "lucide",
+                          "fill": "#FACC15"
+                        },
+                        {
+                          "type": "icon_font",
+                          "id": "PLmZt",
+                          "name": "t2s4",
+                          "width": 18,
+                          "height": 18,
+                          "iconFontName": "star",
+                          "iconFontFamily": "lucide",
+                          "fill": "#FACC15"
+                        },
+                        {
+                          "type": "icon_font",
+                          "id": "k6TW5",
+                          "name": "t2s5",
+                          "width": 18,
+                          "height": 18,
+                          "iconFontName": "star",
+                          "iconFontFamily": "lucide",
+                          "fill": "#FACC15"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "XPNQG",
+                      "name": "t2Quote",
+                      "fill": "$--foreground",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "“A análise de gap mudou minha vida. Descobri que faltava uma certificação específica no meu currículo — consegui a vaga depois de adicioná-la.”",
+                      "lineHeight": 1.6,
+                      "fontFamily": "Inter",
+                      "fontSize": 15
+                    },
+                    {
+                      "type": "frame",
+                      "id": "HQmij",
+                      "name": "t2Author",
+                      "gap": 12,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "w7gaG",
+                          "name": "t2Avatar",
+                          "width": 40,
+                          "height": 40,
+                          "fill": "$--accent-success",
+                          "cornerRadius": 100,
+                          "layout": "vertical",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "2o8uB",
+                              "name": "t2Init",
+                              "fill": "$--primary-foreground",
+                              "content": "RS",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "600"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "1tQw4",
+                          "name": "t2Info",
+                          "layout": "vertical",
+                          "gap": 2,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ubBEZ",
+                              "name": "t2Name",
+                              "fill": "$--foreground",
+                              "content": "Rafael Santos",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ifvhe",
+                              "name": "t2Role",
+                              "fill": "$--muted-foreground",
+                              "content": "Desenvolvedor Full Stack, Belo Horizonte",
+                              "fontFamily": "Inter",
+                              "fontSize": 13
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "hDdjS",
+                  "name": "t3",
+                  "width": "fill_container",
+                  "fill": "$--card",
+                  "cornerRadius": 12,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$--border"
+                  },
+                  "layout": "vertical",
+                  "gap": 20,
+                  "padding": 28,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "v4CSA",
+                      "name": "t3Stars",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "3kfXc",
+                          "name": "t3s1",
+                          "width": 18,
+                          "height": 18,
+                          "iconFontName": "star",
+                          "iconFontFamily": "lucide",
+                          "fill": "#FACC15"
+                        },
+                        {
+                          "type": "icon_font",
+                          "id": "qhkrc",
+                          "name": "t3s2",
+                          "width": 18,
+                          "height": 18,
+                          "iconFontName": "star",
+                          "iconFontFamily": "lucide",
+                          "fill": "#FACC15"
+                        },
+                        {
+                          "type": "icon_font",
+                          "id": "R0jIO",
+                          "name": "t3s3",
+                          "width": 18,
+                          "height": 18,
+                          "iconFontName": "star",
+                          "iconFontFamily": "lucide",
+                          "fill": "#FACC15"
+                        },
+                        {
+                          "type": "icon_font",
+                          "id": "Xfmie",
+                          "name": "t3s4",
+                          "width": 18,
+                          "height": 18,
+                          "iconFontName": "star",
+                          "iconFontFamily": "lucide",
+                          "fill": "#FACC15"
+                        },
+                        {
+                          "type": "icon_font",
+                          "id": "6omhs",
+                          "name": "t3s5",
+                          "width": 18,
+                          "height": 18,
+                          "iconFontName": "star",
+                          "iconFontFamily": "lucide",
+                          "fill": "#FACC15"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "qYMd5",
+                      "name": "t3Quote",
+                      "fill": "$--foreground",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "“As mensagens de abordagem são incríveis. Recebi respostas de recrutadores em menos de 24 horas. Parece que foi escrito sob medida.”",
+                      "lineHeight": 1.6,
+                      "fontFamily": "Inter",
+                      "fontSize": 15
+                    },
+                    {
+                      "type": "frame",
+                      "id": "PhEhY",
+                      "name": "t3Author",
+                      "gap": 12,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "LJdbU",
+                          "name": "t3Avatar",
+                          "width": 40,
+                          "height": 40,
+                          "fill": "$--warning",
+                          "cornerRadius": 100,
+                          "layout": "vertical",
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "jzIhA",
+                              "name": "t3Init",
+                              "fill": "$--primary-foreground",
+                              "content": "JO",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "600"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "hEsDR",
+                          "name": "t3Info",
+                          "layout": "vertical",
+                          "gap": 2,
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "I5m6j",
+                              "name": "t3Name",
+                              "fill": "$--foreground",
+                              "content": "Juliana Oliveira",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "600"
+                            },
+                            {
+                              "type": "text",
+                              "id": "IjKq1",
+                              "name": "t3Role",
+                              "fill": "$--muted-foreground",
+                              "content": "Product Designer, Rio de Janeiro",
+                              "fontFamily": "Inter",
+                              "fontSize": 13
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "7UtrY",
+          "name": "Pricing",
+          "width": "fill_container",
+          "fill": "#F8FAFC",
+          "layout": "vertical",
+          "gap": 48,
+          "padding": [
+            80,
+            64
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "VHMAY",
+              "name": "pricingHeader",
+              "width": 600,
+              "layout": "vertical",
+              "gap": 16,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "eskdZ",
+                  "name": "pricingBadge",
+                  "cornerRadius": 100,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$--border"
+                  },
+                  "padding": [
+                    6,
+                    14
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "PgjmE",
+                      "name": "pricingBadgeText",
+                      "fill": "$--accent-brand",
+                      "content": "PREÇOS",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "600",
+                      "letterSpacing": 1
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "qekEU",
+                  "name": "pricingTitle",
+                  "fill": "$--foreground",
+                  "textGrowth": "fixed-width",
+                  "width": 600,
+                  "content": "Planos que cabem no seu bolso",
+                  "lineHeight": 1.2,
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 36,
+                  "fontWeight": "700",
+                  "letterSpacing": -0.8
+                },
+                {
+                  "type": "text",
+                  "id": "34BnR",
+                  "name": "pricingDesc",
+                  "fill": "$--muted-foreground",
+                  "content": "Comece grátis. Faça upgrade quando estiver pronto.",
+                  "lineHeight": 1.5,
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 16
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "bZ9kk",
+              "name": "PricingCards",
+              "width": "fill_container",
+              "gap": 24,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "ERnZh",
+                  "name": "FreePlan",
+                  "width": "fill_container",
+                  "fill": "$--card",
+                  "cornerRadius": 12,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$--border"
+                  },
+                  "layout": "vertical",
+                  "gap": 24,
+                  "padding": 32,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "7sViV",
+                      "name": "freeHeader",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "6DPj2",
+                          "name": "freeName",
+                          "fill": "$--foreground",
+                          "content": "Grátis",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "AK2LZ",
+                          "name": "freeDesc",
+                          "fill": "$--muted-foreground",
+                          "content": "Para começar a explorar",
+                          "fontFamily": "Inter",
+                          "fontSize": 14
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "u5kaB",
+                      "name": "freePriceRow",
+                      "gap": 4,
+                      "alignItems": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "kok9U",
+                          "name": "freePrice",
+                          "fill": "$--foreground",
+                          "content": "R$ 0",
+                          "fontFamily": "Inter",
+                          "fontSize": 36,
+                          "fontWeight": "800",
+                          "letterSpacing": -1
+                        },
+                        {
+                          "type": "text",
+                          "id": "GBgwD",
+                          "name": "freePer",
+                          "fill": "$--muted-foreground",
+                          "content": "/mês",
+                          "fontFamily": "Inter",
+                          "fontSize": 14
+                        }
+                      ]
+                    },
+                    {
+                      "type": "rectangle",
+                      "id": "uG7i7",
+                      "name": "freeDivider",
+                      "fill": "$--border",
+                      "width": "fill_container",
+                      "height": 1
+                    },
+                    {
+                      "type": "frame",
+                      "id": "h96eH",
+                      "name": "freeFeats",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 14,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "8qPDG",
+                          "name": "ff1",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "a3tws",
+                              "name": "ff1Ic",
+                              "width": 16,
+                              "height": 16,
+                              "iconFontName": "check",
+                              "iconFontFamily": "lucide",
+                              "fill": "$--accent-success"
+                            },
+                            {
+                              "type": "text",
+                              "id": "XC2Fb",
+                              "name": "ff1T",
+                              "fill": "$--foreground",
+                              "content": "3 análises por mês",
+                              "fontFamily": "Inter",
+                              "fontSize": 14
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "Xfspt",
+                          "name": "ff2",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "DgOea",
+                              "name": "ff2Ic",
+                              "width": 16,
+                              "height": 16,
+                              "iconFontName": "check",
+                              "iconFontFamily": "lucide",
+                              "fill": "$--accent-success"
+                            },
+                            {
+                              "type": "text",
+                              "id": "Wb4v8",
+                              "name": "ff2T",
+                              "fill": "$--foreground",
+                              "content": "Currículo adaptado básico",
+                              "fontFamily": "Inter",
+                              "fontSize": 14
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "YNAWd",
+                          "name": "ff3",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "XQHiP",
+                              "name": "ff3Ic",
+                              "width": 16,
+                              "height": 16,
+                              "iconFontName": "check",
+                              "iconFontFamily": "lucide",
+                              "fill": "$--accent-success"
+                            },
+                            {
+                              "type": "text",
+                              "id": "2jn6y",
+                              "name": "ff3T",
+                              "fill": "$--foreground",
+                              "content": "Score ATS",
+                              "fontFamily": "Inter",
+                              "fontSize": 14
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "YEsRx",
+                          "name": "ff4",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "BiwCU",
+                              "name": "ff4Ic",
+                              "width": 16,
+                              "height": 16,
+                              "iconFontName": "check",
+                              "iconFontFamily": "lucide",
+                              "fill": "$--accent-success"
+                            },
+                            {
+                              "type": "text",
+                              "id": "qmriz",
+                              "name": "ff4T",
+                              "fill": "$--foreground",
+                              "content": "1 mensagem de abordagem",
+                              "fontFamily": "Inter",
+                              "fontSize": 14
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "id": "xixQM",
+                      "type": "ref",
+                      "ref": "k0bhb",
+                      "width": "fill_container",
+                      "justifyContent": "center",
+                      "padding": [
+                        14,
+                        28
+                      ],
+                      "name": "freeBtn",
+                      "descendants": {
+                        "XYKjR": {
+                          "content": "Começar Grátis",
+                          "fontSize": 15
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "hnDX0",
+                  "name": "ProPlan",
+                  "width": "fill_container",
+                  "fill": "$--card",
+                  "cornerRadius": 12,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 2,
+                    "fill": "$--accent-brand"
+                  },
+                  "layout": "vertical",
+                  "gap": 24,
+                  "padding": 32,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "eiif3",
+                      "name": "proPopular",
+                      "fill": "$--accent-brand",
+                      "cornerRadius": 100,
+                      "padding": [
+                        4,
+                        12
+                      ],
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "wlYEQ",
+                          "name": "proPopText",
+                          "fill": "$--primary-foreground",
+                          "content": "MAIS POPULAR",
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "700",
+                          "letterSpacing": 0.5
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "9lfRV",
+                      "name": "proHeader",
+                      "layout": "vertical",
+                      "gap": 8,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "wE1l8",
+                          "name": "proName",
+                          "fill": "$--foreground",
+                          "content": "Profissional",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "whp79",
+                          "name": "proDesc",
+                          "fill": "$--muted-foreground",
+                          "content": "Para quem leva a busca a sério",
+                          "fontFamily": "Inter",
+                          "fontSize": 14
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "jtgdO",
+                      "name": "proPriceRow",
+                      "gap": 4,
+                      "alignItems": "end",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "dm3xf",
+                          "name": "proPrice",
+                          "fill": "$--foreground",
+                          "content": "R$ 29",
+                          "fontFamily": "Inter",
+                          "fontSize": 36,
+                          "fontWeight": "800",
+                          "letterSpacing": -1
+                        },
+                        {
+                          "type": "text",
+                          "id": "vFZQf",
+                          "name": "proPer",
+                          "fill": "$--muted-foreground",
+                          "content": "/mês",
+                          "fontFamily": "Inter",
+                          "fontSize": 14
+                        }
+                      ]
+                    },
+                    {
+                      "type": "rectangle",
+                      "id": "SV8rM",
+                      "name": "proDivider",
+                      "fill": "$--border",
+                      "width": "fill_container",
+                      "height": 1
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ZCgvF",
+                      "name": "proFeats",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 14,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "PZPow",
+                          "name": "pf1",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "vsDmC",
+                              "name": "pf1Ic",
+                              "width": 16,
+                              "height": 16,
+                              "iconFontName": "check",
+                              "iconFontFamily": "lucide",
+                              "fill": "$--accent-success"
+                            },
+                            {
+                              "type": "text",
+                              "id": "zIFaf",
+                              "name": "pf1T",
+                              "fill": "$--foreground",
+                              "content": "Análises ilimitadas",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "600"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "DGYuH",
+                          "name": "pf2",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "8ct2u",
+                              "name": "pf2Ic",
+                              "width": 16,
+                              "height": 16,
+                              "iconFontName": "check",
+                              "iconFontFamily": "lucide",
+                              "fill": "$--accent-success"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ykgtq",
+                              "name": "pf2T",
+                              "fill": "$--foreground",
+                              "content": "Currículo + carta de apresentação",
+                              "fontFamily": "Inter",
+                              "fontSize": 14
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "hdihw",
+                          "name": "pf3",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "0J4bP",
+                              "name": "pf3Ic",
+                              "width": 16,
+                              "height": 16,
+                              "iconFontName": "check",
+                              "iconFontFamily": "lucide",
+                              "fill": "$--accent-success"
+                            },
+                            {
+                              "type": "text",
+                              "id": "DBBSk",
+                              "name": "pf3T",
+                              "fill": "$--foreground",
+                              "content": "Mensagens de abordagem ilimitadas",
+                              "fontFamily": "Inter",
+                              "fontSize": 14
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ue3Nw",
+                          "name": "pf4",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "dVS8w",
+                              "name": "pf4Ic",
+                              "width": 16,
+                              "height": 16,
+                              "iconFontName": "check",
+                              "iconFontFamily": "lucide",
+                              "fill": "$--accent-success"
+                            },
+                            {
+                              "type": "text",
+                              "id": "B9AdK",
+                              "name": "pf4T",
+                              "fill": "$--foreground",
+                              "content": "Análise de gap detalhada",
+                              "fontFamily": "Inter",
+                              "fontSize": 14
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "9lufm",
+                          "name": "pf5",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "zPWUk",
+                              "name": "pf5Ic",
+                              "width": 16,
+                              "height": 16,
+                              "iconFontName": "check",
+                              "iconFontFamily": "lucide",
+                              "fill": "$--accent-success"
+                            },
+                            {
+                              "type": "text",
+                              "id": "EOLA8",
+                              "name": "pf5T",
+                              "fill": "$--foreground",
+                              "content": "Exportação PDF e DOCX",
+                              "fontFamily": "Inter",
+                              "fontSize": 14
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "PgUCl",
+                          "name": "pf6",
+                          "gap": 10,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "uREzy",
+                              "name": "pf6Ic",
+                              "width": 16,
+                              "height": 16,
+                              "iconFontName": "check",
+                              "iconFontFamily": "lucide",
+                              "fill": "$--accent-success"
+                            },
+                            {
+                              "type": "text",
+                              "id": "m1cVz",
+                              "name": "pf6T",
+                              "fill": "$--foreground",
+                              "content": "Suporte prioritário",
+                              "fontFamily": "Inter",
+                              "fontSize": 14
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "id": "qp5c0",
+                      "type": "ref",
+                      "ref": "o9PMm",
+                      "width": "fill_container",
+                      "justifyContent": "center",
+                      "padding": [
+                        14,
+                        28
+                      ],
+                      "name": "proBtn",
+                      "descendants": {
+                        "rtgD8": {
+                          "content": "Começar Agora",
+                          "fontSize": 15
+                        }
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "1RnLd",
+          "name": "FAQ",
+          "width": "fill_container",
+          "fill": "$--background",
+          "layout": "vertical",
+          "gap": 48,
+          "padding": [
+            80,
+            64
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "49rBc",
+              "name": "faqHeader",
+              "width": 600,
+              "layout": "vertical",
+              "gap": 16,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "48K3u",
+                  "name": "faqBadge",
+                  "cornerRadius": 100,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "$--border"
+                  },
+                  "padding": [
+                    6,
+                    14
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "aALij",
+                      "name": "faqBadgeText",
+                      "fill": "$--accent-brand",
+                      "content": "FAQ",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "600",
+                      "letterSpacing": 1
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "iHWgy",
+                  "name": "faqTitle",
+                  "fill": "$--foreground",
+                  "content": "Perguntas frequentes",
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 36,
+                  "fontWeight": "700",
+                  "letterSpacing": -0.8
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "MU62N",
+              "name": "FAQList",
+              "width": 800,
+              "layout": "vertical",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "NgTz6",
+                  "name": "faq1",
+                  "width": "fill_container",
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": {
+                      "bottom": 1
+                    },
+                    "fill": "$--border"
+                  },
+                  "padding": [
+                    24,
+                    0
+                  ],
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Y1kyN",
+                      "name": "faq1Q",
+                      "fill": "$--foreground",
+                      "content": "Preciso de experiência técnica para usar o MatchVaga?",
+                      "fontFamily": "Inter",
+                      "fontSize": 16,
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "icon_font",
+                      "id": "CT0d2",
+                      "name": "faq1Ic",
+                      "width": 20,
+                      "height": 20,
+                      "iconFontName": "chevron-down",
+                      "iconFontFamily": "lucide",
+                      "fill": "$--muted-foreground"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Ix5tr",
+                  "name": "faq2",
+                  "width": "fill_container",
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": {
+                      "bottom": 1
+                    },
+                    "fill": "$--border"
+                  },
+                  "padding": [
+                    24,
+                    0
+                  ],
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "0Xy0i",
+                      "name": "faq2Q",
+                      "fill": "$--foreground",
+                      "content": "Como funciona a otimização ATS?",
+                      "fontFamily": "Inter",
+                      "fontSize": 16,
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "icon_font",
+                      "id": "UHQXa",
+                      "name": "faq2Ic",
+                      "width": 20,
+                      "height": 20,
+                      "iconFontName": "chevron-down",
+                      "iconFontFamily": "lucide",
+                      "fill": "$--muted-foreground"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "GU0E8",
+                  "name": "faq3",
+                  "width": "fill_container",
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": {
+                      "bottom": 1
+                    },
+                    "fill": "$--border"
+                  },
+                  "padding": [
+                    24,
+                    0
+                  ],
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "GohA8",
+                      "name": "faq3Q",
+                      "fill": "$--foreground",
+                      "content": "Posso cancelar meu plano a qualquer momento?",
+                      "fontFamily": "Inter",
+                      "fontSize": 16,
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "icon_font",
+                      "id": "wPdeS",
+                      "name": "faq3Ic",
+                      "width": 20,
+                      "height": 20,
+                      "iconFontName": "chevron-down",
+                      "iconFontFamily": "lucide",
+                      "fill": "$--muted-foreground"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "KPWeg",
+                  "name": "faq4",
+                  "width": "fill_container",
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": {
+                      "bottom": 1
+                    },
+                    "fill": "$--border"
+                  },
+                  "padding": [
+                    24,
+                    0
+                  ],
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "M89u9",
+                      "name": "faq4Q",
+                      "fill": "$--foreground",
+                      "content": "Meus dados estão seguros?",
+                      "fontFamily": "Inter",
+                      "fontSize": 16,
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "icon_font",
+                      "id": "okRsF",
+                      "name": "faq4Ic",
+                      "width": 20,
+                      "height": 20,
+                      "iconFontName": "chevron-down",
+                      "iconFontFamily": "lucide",
+                      "fill": "$--muted-foreground"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "OrJxi",
+                  "name": "faq5",
+                  "width": "fill_container",
+                  "padding": [
+                    24,
+                    0
+                  ],
+                  "justifyContent": "space_between",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "QnIJZ",
+                      "name": "faq5Q",
+                      "fill": "$--foreground",
+                      "content": "O MatchVaga funciona para vagas internacionais?",
+                      "fontFamily": "Inter",
+                      "fontSize": 16,
+                      "fontWeight": "500"
+                    },
+                    {
+                      "type": "icon_font",
+                      "id": "SAPk5",
+                      "name": "faq5Ic",
+                      "width": 20,
+                      "height": 20,
+                      "iconFontName": "chevron-down",
+                      "iconFontFamily": "lucide",
+                      "fill": "$--muted-foreground"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "dGQAF",
+          "name": "Final CTA",
+          "width": "fill_container",
+          "fill": {
+            "type": "gradient",
+            "gradientType": "linear",
+            "enabled": true,
+            "rotation": 150,
+            "size": {
+              "height": 1
+            },
+            "colors": [
+              {
+                "color": "#1E3A8A",
+                "position": 0
+              },
+              {
+                "color": "#2563EB",
+                "position": 0.6
+              },
+              {
+                "color": "#3B82F6",
+                "position": 1
+              }
+            ]
+          },
+          "layout": "vertical",
+          "gap": 32,
+          "padding": [
+            80,
+            64
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "XHDxS",
+              "name": "ctaTitle",
+              "fill": "#FFFFFF",
+              "textGrowth": "fixed-width",
+              "width": 700,
+              "content": "Pronto para ser chamado\npara mais entrevistas?",
+              "lineHeight": 1.2,
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 40,
+              "fontWeight": "700",
+              "letterSpacing": -1
+            },
+            {
+              "type": "text",
+              "id": "RlnIW",
+              "name": "ctaSubtitle",
+              "fill": "#FFFFFFCC",
+              "textGrowth": "fixed-width",
+              "width": 560,
+              "content": "Junte-se a mais de 12.000 candidatos que já transformaram sua busca por emprego.",
+              "lineHeight": 1.5,
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 18
+            },
+            {
+              "type": "frame",
+              "id": "oBKLh",
+              "name": "ctaButtons",
+              "gap": 16,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "hYd1L",
+                  "name": "ctaMainBtn",
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 8,
+                  "gap": 8,
+                  "padding": [
+                    16,
+                    32
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "mIEFV",
+                      "name": "ctaMainIc",
+                      "width": 18,
+                      "height": 18,
+                      "iconFontName": "zap",
+                      "iconFontFamily": "lucide",
+                      "fill": "$--accent-brand"
+                    },
+                    {
+                      "type": "text",
+                      "id": "xkhBS",
+                      "name": "ctaMainText",
+                      "fill": "$--accent-brand",
+                      "content": "Começar Grátis — Sem Cartão",
+                      "fontFamily": "Inter",
+                      "fontSize": 16,
+                      "fontWeight": "600"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "lRQOn",
+              "name": "ctaTrust",
+              "fill": "#FFFFFF99",
+              "content": "Sem cartão de crédito  •  Cancele quando quiser  •  Setup em 30 segundos",
+              "fontFamily": "Inter",
+              "fontSize": 13
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "9mMed",
+          "name": "Footer",
+          "width": "fill_container",
+          "fill": "#0F172A",
+          "layout": "vertical",
+          "gap": 48,
+          "padding": [
+            64,
+            64,
+            32,
+            64
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "pg5uF",
+              "name": "footerTop",
+              "width": "fill_container",
+              "gap": 64,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "3d4U4",
+                  "name": "footerBrand",
+                  "width": 320,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "nZbWS",
+                      "name": "fbLogo",
+                      "gap": 10,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "91sMs",
+                          "name": "fbMark",
+                          "width": 28,
+                          "height": 28,
+                          "fill": "$--accent-brand",
+                          "cornerRadius": 6,
+                          "layout": "none",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "8FoE8",
+                              "x": 6,
+                              "y": 6,
+                              "name": "fbMarkIc",
+                              "width": 16,
+                              "height": 16,
+                              "iconFontName": "briefcase",
+                              "iconFontFamily": "lucide",
+                              "fill": "#FFFFFF"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "Usuuo",
+                          "name": "fbName",
+                          "fill": "#FFFFFF",
+                          "content": "MatchVaga",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "r5mvK",
+                      "name": "fbDesc",
+                      "fill": "#94A3B8",
+                      "textGrowth": "fixed-width",
+                      "width": 280,
+                      "content": "A plataforma inteligente que transforma sua busca por emprego com IA.",
+                      "lineHeight": 1.6,
+                      "fontFamily": "Inter",
+                      "fontSize": 14
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "eV1GX",
+                  "name": "footerCol1",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 16,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "qIv8k",
+                      "name": "fc1Title",
+                      "fill": "#FFFFFF",
+                      "content": "Produto",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "600",
+                      "letterSpacing": 0.5
+                    },
+                    {
+                      "type": "text",
+                      "id": "YoRs6",
+                      "name": "fc1L1",
+                      "fill": "#94A3B8",
+                      "content": "Recursos",
+                      "fontFamily": "Inter",
+                      "fontSize": 14
+                    },
+                    {
+                      "type": "text",
+                      "id": "7M7aL",
+                      "name": "fc1L2",
+                      "fill": "#94A3B8",
+                      "content": "Preços",
+                      "fontFamily": "Inter",
+                      "fontSize": 14
+                    },
+                    {
+                      "type": "text",
+                      "id": "GmVMC",
+                      "name": "fc1L3",
+                      "fill": "#94A3B8",
+                      "content": "Como Funciona",
+                      "fontFamily": "Inter",
+                      "fontSize": 14
+                    },
+                    {
+                      "type": "text",
+                      "id": "tewMu",
+                      "name": "fc1L4",
+                      "fill": "#94A3B8",
+                      "content": "Changelog",
+                      "fontFamily": "Inter",
+                      "fontSize": 14
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "F1uPV",
+                  "name": "footerCol2",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 16,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "zTixQ",
+                      "name": "fc2Title",
+                      "fill": "#FFFFFF",
+                      "content": "Empresa",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "600",
+                      "letterSpacing": 0.5
+                    },
+                    {
+                      "type": "text",
+                      "id": "1gH1P",
+                      "name": "fc2L1",
+                      "fill": "#94A3B8",
+                      "content": "Sobre",
+                      "fontFamily": "Inter",
+                      "fontSize": 14
+                    },
+                    {
+                      "type": "text",
+                      "id": "tch5s",
+                      "name": "fc2L2",
+                      "fill": "#94A3B8",
+                      "content": "Blog",
+                      "fontFamily": "Inter",
+                      "fontSize": 14
+                    },
+                    {
+                      "type": "text",
+                      "id": "YbLvU",
+                      "name": "fc2L3",
+                      "fill": "#94A3B8",
+                      "content": "Carreiras",
+                      "fontFamily": "Inter",
+                      "fontSize": 14
+                    },
+                    {
+                      "type": "text",
+                      "id": "iCWlz",
+                      "name": "fc2L4",
+                      "fill": "#94A3B8",
+                      "content": "Contato",
+                      "fontFamily": "Inter",
+                      "fontSize": 14
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "6HHaA",
+                  "name": "footerCol3",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 16,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "098Ig",
+                      "name": "fc3Title",
+                      "fill": "#FFFFFF",
+                      "content": "Legal",
+                      "fontFamily": "Inter",
+                      "fontSize": 13,
+                      "fontWeight": "600",
+                      "letterSpacing": 0.5
+                    },
+                    {
+                      "type": "text",
+                      "id": "eXKJC",
+                      "name": "fc3L1",
+                      "fill": "#94A3B8",
+                      "content": "Termos de Serviço",
+                      "fontFamily": "Inter",
+                      "fontSize": 14
+                    },
+                    {
+                      "type": "text",
+                      "id": "ZECyj",
+                      "name": "fc3L2",
+                      "fill": "#94A3B8",
+                      "content": "Política de Privacidade",
+                      "fontFamily": "Inter",
+                      "fontSize": 14
+                    },
+                    {
+                      "type": "text",
+                      "id": "uPVPz",
+                      "name": "fc3L3",
+                      "fill": "#94A3B8",
+                      "content": "Cookies",
+                      "fontFamily": "Inter",
+                      "fontSize": 14
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "rectangle",
+              "id": "ZjHMO",
+              "name": "footerDivider",
+              "fill": "#1E293B",
+              "width": "fill_container",
+              "height": 1
+            },
+            {
+              "type": "frame",
+              "id": "8M9ZA",
+              "name": "footerBottom",
+              "width": "fill_container",
+              "justifyContent": "space_between",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "4KT56",
+                  "name": "footerCopy",
+                  "fill": "#64748B",
+                  "content": "© 2026 MatchVaga. Todos os direitos reservados.",
+                  "fontFamily": "Inter",
+                  "fontSize": 13
+                },
+                {
+                  "type": "frame",
+                  "id": "3QcOE",
+                  "name": "footerSocial",
+                  "gap": 16,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "pgkR2",
+                      "name": "fsLinkedin",
+                      "width": 18,
+                      "height": 18,
+                      "iconFontName": "linkedin",
+                      "iconFontFamily": "lucide",
+                      "fill": "#64748B"
+                    },
+                    {
+                      "type": "icon_font",
+                      "id": "7so79",
+                      "name": "fsTwitter",
+                      "width": 18,
+                      "height": 18,
+                      "iconFontName": "twitter",
+                      "iconFontFamily": "lucide",
+                      "fill": "#64748B"
+                    },
+                    {
+                      "type": "icon_font",
+                      "id": "wyd1x",
+                      "name": "fsInstagram",
+                      "width": 18,
+                      "height": 18,
+                      "iconFontName": "instagram",
+                      "iconFontFamily": "lucide",
+                      "fill": "#64748B"
                     }
                   ]
                 }

@@ -45,7 +45,7 @@ export function StepGapAnalysis() {
 
   return (
     <div
-      className={`flex flex-1 flex-col gap-4 overflow-hidden ${PAGE_PADDING}`}
+      className={`flex flex-1 flex-col gap-10 overflow-hidden ${PAGE_PADDING}`}
     >
       {/* Header strip */}
       <div className={`flex flex-1 flex-col ${SECTION_GAP}`}>
@@ -61,7 +61,7 @@ export function StepGapAnalysis() {
         <div className={`flex min-h-0 flex-1 overflow-hidden ${COLUMN_GAP}`}>
           {/* Left column — Skills selection */}
           <div
-            className={`flex flex-1 flex-col overflow-hidden border border-border bg-card ${CARD_RADIUS} shadow-[0_4px_16px_-2px_rgba(0,0,0,0.05),0_2px_6px_-2px_rgba(0,0,0,0.04)]`}
+            className={`flex flex-1 flex-col overflow-hidden border border-border bg-card ${CARD_RADIUS}`}
           >
             {/* Card header */}
             <div
@@ -132,7 +132,7 @@ export function StepGapAnalysis() {
 
           {/* Right column — Score */}
           <div
-            className={`flex shrink-0 flex-col overflow-hidden border border-border bg-card ${CARD_RADIUS} ${W_COLUMN} shadow-[0_4px_16px_-2px_rgba(0,0,0,0.05),0_2px_6px_-2px_rgba(0,0,0,0.04)]`}
+            className={`flex shrink-0 flex-col overflow-hidden border border-border bg-card ${CARD_RADIUS} ${W_COLUMN}`}
           >
             <div
               className={`flex flex-1 flex-col items-center gap-4 overflow-auto ${CARD_CONTENT_PADDING}`}
@@ -230,9 +230,9 @@ export function StepGapAnalysis() {
         </Button>
 
         <Button
-          size="lg"
+          size="brand"
           onClick={() => setStep(3)}
-          className="gap-1.5 rounded-lg bg-accent-brand px-7 py-3 text-base font-bold shadow-(--shadow-accent-brand) hover:bg-accent-brand-hover"
+          className="gap-1.5 rounded-lg bg-accent-brand px-7 py-3 text-base font-bold hover:bg-accent-brand-hover"
         >
           <Sparkles className="h-4 w-4" />
           Gerar Currículo Otimizado

@@ -100,7 +100,7 @@ export const TEXT_SCORE = "text-[44px] leading-none font-bold text-foreground";
 
 /** Hero title — 48px */
 export const TEXT_HERO =
-  "text-[48px] leading-[1.1] font-bold tracking-[-0.5px]";
+  "text-[42px] leading-[1.1] font-bold tracking-[-0.5px]";
 
 /** Badge/caption small — 11px */
 export const TEXT_BADGE = "text-[11px] leading-[1.33] font-semibold";
@@ -115,8 +115,8 @@ export const CARD_CONTENT_PADDING = "p-7";
 /** Card border radius */
 export const CARD_RADIUS = "rounded-xl";
 
-/** Card shadow */
-export const CARD_SHADOW = "shadow-xs";
+/** Canonical card base: rounded, bordered, white background (no shadow) */
+export const CARD_BASE = "rounded-xl border border-border bg-card";
 
 /** Table/cell padding */
 export const TABLE_CELL_PADDING = "p-4";

@@ -54,7 +54,7 @@ export function LoginHero() {
       <div className="relative z-10 flex flex-1 flex-col justify-center px-12 pr-[15%] pl-[10%]">
         <div
           className={cn(
-            "absolute top-[22%] right-[12%] flex items-center gap-4 rounded-2xl bg-card px-5 py-4 shadow-xs",
+            "absolute top-[22%] right-[12%] flex items-center gap-4 rounded-2xl bg-card px-5 py-4",
             "animate-balance"
           )}
         >
@@ -73,14 +73,12 @@ export function LoginHero() {
 
         <div className="flex flex-col gap-5 text-left">
           <h1 className={`${MAX_W_HERO_TITLE} ${TEXT_HERO} text-white`}>
-            Seu currículo,
-            <br />
-            otimizado por IA.
+            Seu currículo otimizado para a sua vaga dos sonhos.
           </h1>
           <p
             className={`${MAX_W_HERO_DESC} text-base leading-relaxed font-normal text-white/80`}
           >
-            Aumente suas chances com análise inteligente de vagas e adaptação
+            Aumente suas chances com a análise inteligente de vagas e adaptação
             automática do seu currículo.
           </p>
         </div>

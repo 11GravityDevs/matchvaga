@@ -9,7 +9,6 @@ import {
   CARD_CONTENT_PADDING,
   CARD_HEADER_PADDING,
   CARD_RADIUS,
-  CARD_SHADOW,
   CARD_TITLE_CLASS,
   COLUMN_GAP,
   PAGE_PADDING,
@@ -68,7 +67,7 @@ export function StepPreviewExport() {
         <div className={`flex min-h-0 flex-1 overflow-hidden ${COLUMN_GAP}`}>
           {/* Left — Document preview */}
           <div
-            className={`flex flex-1 flex-col overflow-hidden border border-border bg-card ${CARD_RADIUS} ${CARD_SHADOW}`}
+            className={`flex flex-1 flex-col overflow-hidden border border-border bg-card ${CARD_RADIUS}`}
           >
             {/* Doc header */}
             <div
@@ -135,7 +134,7 @@ export function StepPreviewExport() {
 
           {/* Right — Refinement chat */}
           <div
-            className={`flex shrink-0 flex-col overflow-hidden border border-border bg-card ${CARD_RADIUS} ${CARD_SHADOW} ${W_COLUMN}`}
+            className={`flex shrink-0 flex-col overflow-hidden border border-border bg-card ${CARD_RADIUS} ${W_COLUMN}`}
           >
             {/* Chat header */}
             <div
@@ -228,11 +227,11 @@ export function StepPreviewExport() {
         </Button>
 
         <div className="flex items-center gap-3">
-          <Button size="lg" variant="outline" className="gap-1.5 shadow-xs">
+          <Button size="brand" variant="outline" className="gap-1.5">
             <FileText className="h-4 w-4" />
             Download PDF
           </Button>
-          <Button size="lg">
+          <Button size="brand">
             <Download className="h-4 w-4" />
             Download DOCX
           </Button>

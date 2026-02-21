@@ -21,7 +21,7 @@ export function DashboardHeader({ userName = "Jon" }: DashboardHeaderProps) {
         </p>
       </div>
       <Link href="/dashboard/new-analysis">
-        <Button size="lg" className="gap-1.5 shadow-sm">
+        <Button size="lg" className="gap-1.5">
           <Plus className="h-4 w-4" />
           Nova Análise
         </Button>

@@ -50,7 +50,7 @@ export function LoginFormCard({
           </span>
         </div>
 
-        <Card className="w-full rounded-xl border border-border shadow-xs">
+        <Card className="w-full rounded-xl border border-border">
           <CardHeader className="gap-1 pb-0">
             <CardTitle className={CARD_TITLE_CLASS}>{title}</CardTitle>
             <CardDescription className={CARD_DESCRIPTION_CLASS}>

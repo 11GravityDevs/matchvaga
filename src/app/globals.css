@@ -57,7 +57,7 @@
   --width-form: 900px;
   --width-content: 1100px;
   --width-sidebar: 280px;
-  --width-column: 380px;
+  --width-column: 450px;
 }
 
 :root {
@@ -101,14 +101,6 @@
   --accent-low-light: #fef2f2;
   --accent-low-border: #fecaca;
   --accent-low-text: #b91c1c;
-  --shadow-card:
-    0 1px 3px rgba(0, 0, 0, 0.1), 0 8px 24px -4px rgba(0, 0, 0, 0.05);
-  --shadow-top-bar: 0 2px 4px rgba(0, 0, 0, 0.06);
-  --shadow-button: 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-accent-brand: 0 4px 12px
-    color-mix(in srgb, var(--accent-brand) 25% transparent);
-  --shadow-accent-brand-sm: 0 2px 4px
-    color-mix(in srgb, var(--accent-brand) 20% transparent);
   --surface-subtle: #f8fafc;
   --font-geist-mono: ui-monospace, monospace;
 

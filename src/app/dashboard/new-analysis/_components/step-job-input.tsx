@@ -8,7 +8,6 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   CARD_CONTENT_PADDING,
   CARD_RADIUS,
-  CARD_SHADOW,
   MAX_W_CONTENT,
   PAGE_PADDING,
   PAGE_SUBTITLE_CLASS,
@@ -42,7 +41,7 @@ export function StepJobInput() {
 
       {/* Job Description Card */}
       <div
-        className={`flex min-h-0 flex-1 flex-col overflow-hidden border border-border bg-card ${CARD_RADIUS} ${CARD_SHADOW}`}
+        className={`flex min-h-0 flex-1 flex-col overflow-hidden border border-border bg-card ${CARD_RADIUS}`}
       >
         <div
           className={`flex min-h-0 flex-1 flex-col gap-5 overflow-auto ${CARD_CONTENT_PADDING}`}
@@ -80,10 +79,10 @@ export function StepJobInput() {
 
       <div className="flex justify-end">
         <Button
-          size="lg"
+          size="brand"
           disabled={!canAnalyze}
           onClick={() => setStep(2)}
-          className="gap-1.5 shadow-(--shadow-accent-brand-sm)"
+          className="gap-1.5"
         >
           <Sparkles className="h-4 w-4" />
           Analisar currículo
