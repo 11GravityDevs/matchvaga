@@ -164,7 +164,7 @@ export function VerifyEducation({
                 variant="destructive"
                 size="sm"
                 onClick={() => removeEducation(eduIndex)}
-                className="w-fit gap-1.5 bg-destructive text-[13px] text-white hover:bg-destructive/90"
+                className="w-fit gap-1.5 bg-destructive text-[13px] text-primary-foreground hover:bg-destructive/90"
               >
                 <Trash2 className="h-4 w-4" />
                 Remover
@@ -178,7 +178,7 @@ export function VerifyEducation({
         type="button"
         size="sm"
         onClick={addEducation}
-        className="w-fit gap-1.5 bg-accent-brand text-[13px] text-white hover:bg-accent-brand/90"
+        className="w-fit gap-1.5 bg-accent-brand text-[13px] text-primary-foreground hover:bg-accent-brand-hover"
       >
         <Plus className="h-4 w-4" />
         Adicionar formação

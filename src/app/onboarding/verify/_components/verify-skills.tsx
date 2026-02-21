@@ -48,15 +48,15 @@ export function VerifySkills({
             {skills.map((skill, index) => (
               <span
                 key={`${skill}-${index}`}
-                className="flex items-center gap-1.5 rounded-full border border-[#BFDBFE] bg-[#EFF6FF] px-2.5 py-1.5"
+                className="flex items-center gap-1.5 rounded-full border border-accent-brand-light bg-accent-brand-light/50 px-2.5 py-1.5"
               >
-                <span className="text-[13px] font-medium text-[#2563EB]">
+                <span className="text-[13px] font-medium text-accent-brand">
                   {skill}
                 </span>
                 <button
                   type="button"
                   onClick={() => removeSkill(index)}
-                  className="flex shrink-0 cursor-pointer items-center justify-center text-[#2563EB] hover:text-[#1D4ED8]"
+                  className="flex shrink-0 cursor-pointer items-center justify-center text-accent-brand hover:text-accent-brand-hover"
                   aria-label={`Remover ${skill}`}
                 >
                   <X className="h-3.5 w-3.5" />
@@ -99,7 +99,7 @@ export function VerifySkills({
             type="button"
             size="sm"
             onClick={() => setIsAddingSkill(true)}
-            className="w-fit gap-1.5 bg-accent-brand text-[13px] text-white hover:bg-accent-brand/90"
+            className="w-fit gap-1.5 bg-accent-brand text-[13px] text-primary-foreground hover:bg-accent-brand-hover"
           >
             <Plus className="h-4 w-4" />
             Adicionar habilidades

@@ -7,15 +7,15 @@ export function LoginHero() {
     <div
       className={cn(
         "relative flex min-h-screen w-1/2 flex-col overflow-hidden",
-        "bg-linear-to-br from-blue-900 via-accent-brand to-blue-500"
+        "bg-linear-to-br from-accent-brand-dark via-accent-brand to-accent-brand-end"
       )}
     >
       <div
-        className="absolute -top-16 -left-20 h-[300px] w-[300px] rounded-full border border-white/10 bg-blue-500/20"
+        className="absolute -top-16 -left-20 h-[300px] w-[300px] rounded-full border border-white/10 bg-accent-brand-end/20"
         aria-hidden
       />
       <div
-        className="absolute top-[600px] right-[100px] h-[200px] w-[200px] rounded-full border border-white/10 bg-blue-700/20"
+        className="absolute top-[600px] right-[100px] h-[200px] w-[200px] rounded-full border border-white/10 bg-accent-brand-hover/20"
         aria-hidden
       />
       <div

@@ -36,14 +36,14 @@ export function StepIndicator({
             <div
               className={cn(
                 "flex items-center gap-1 rounded-2xl px-3.5 py-1.5",
-                isActive && "bg-[#2563EB] text-white",
-                isPast && "bg-[#F1F5F9] text-[#1E293B]",
-                !isActive && !isPast && "bg-[#F1F5F9] text-[#94A3B8]"
+                isActive && "bg-accent-brand text-primary-foreground",
+                isPast && "bg-muted text-foreground",
+                !isActive && !isPast && "bg-muted text-muted-foreground"
               )}
             >
               {isPast ? (
                 <>
-                  <Check className="h-3.5 w-3.5 shrink-0 text-[#10B981]" />
+                  <Check className="h-3.5 w-3.5 shrink-0 text-accent-success" />
                   <span className="text-[13px] font-medium">{step.label}</span>
                 </>
               ) : (
@@ -58,7 +58,7 @@ export function StepIndicator({
               )}
             </div>
             {index < steps.length - 1 && (
-              <div className="h-px w-6 bg-[#CBD5E1]" aria-hidden />
+              <div className="h-px w-6 bg-border" aria-hidden />
             )}
           </div>
         );

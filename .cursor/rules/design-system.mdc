@@ -64,6 +64,7 @@ One primary action per section. Right-align actions in cards/modals; left-align 
 | `--muted-foreground` | Secondary text, placeholders | `text-muted-foreground` |
 | `--accent` | Hover states | `bg-accent` |
 | `--accent-brand` | Brand accent (blue) | `bg-accent-brand` |
+| `--accent-brand-hover` | Brand accent hover state | `hover:bg-accent-brand-hover` |
 | `--accent-brand-light` | Active nav background | `bg-accent-brand-light` |
 | `--accent-success` | Success states | `bg-accent-success` |
 | `--destructive` | Danger actions | `bg-destructive`, `text-destructive` |
@@ -78,7 +79,7 @@ One primary action per section. Right-align actions in cards/modals; left-align 
 | `--sidebar-primary` | Sidebar brand | `text-sidebar-primary` |
 | `--sidebar-border` | Sidebar divider | `border-sidebar-border` |
 
-**Note:** Design.pen has themes (Accent, Base, Mode). Code uses Light/Dark only. `--primary` is neutral (shadcn default). Brand accent uses `--accent-brand` (blue `#2563eb`) and `--accent-brand-light` (`#dbeafe`).
+**Note:** Design.pen has themes (Accent, Base, Mode). Code uses Light/Dark only. `--primary` is neutral (shadcn default). Brand accent uses `--accent-brand` (blue `#2563eb`), `--accent-brand-hover` (`#1d4ed8`) for hover states, and `--accent-brand-light` (`#dbeafe`).
 
 ### Typography Scale
 

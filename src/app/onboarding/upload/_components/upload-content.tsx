@@ -57,12 +57,12 @@ export function UploadContent() {
   }, []);
 
   return (
-    <div className="w-[632px] rounded-xl border border-[#E2E8F0] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.1),0_8px_24px_-4px_rgba(0,0,0,0.05)]">
+    <div className="w-[632px] rounded-xl border border-border bg-card shadow-[var(--shadow-card)]">
       <div className="flex flex-col gap-1 px-7 pt-7">
-        <h2 className="text-[22px] leading-[1.3] font-bold text-[#1E293B]">
+        <h2 className="text-[22px] leading-[1.3] font-bold text-foreground">
           Upload do Curriculo
         </h2>
-        <p className="text-sm leading-[1.4] text-[#64748B]">
+        <p className="text-sm leading-[1.4] text-muted-foreground">
           Envie seu curriculo para começar
         </p>
       </div>
@@ -114,7 +114,7 @@ export function UploadContent() {
               <button
                 type="button"
                 onClick={handleBrowseClick}
-                className="cursor-pointer rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-colors hover:bg-muted"
+                className="cursor-pointer rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground shadow-[var(--shadow-button)] transition-colors hover:bg-muted"
               >
                 Selecionar outro arquivo
               </button>
@@ -131,7 +131,7 @@ export function UploadContent() {
               <button
                 type="button"
                 onClick={handleBrowseClick}
-                className="cursor-pointer rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-colors hover:bg-muted"
+                className="cursor-pointer rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground shadow-[var(--shadow-button)] transition-colors hover:bg-muted"
               >
                 Selecionar arquivo
               </button>
@@ -144,7 +144,7 @@ export function UploadContent() {
             type="button"
             onClick={() => void analyze()}
             disabled={!selectedFile || isUploading}
-            className="cursor-pointer rounded-lg bg-[#2563EB] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#1D4ED8] disabled:cursor-not-allowed disabled:opacity-50"
+            className="cursor-pointer rounded-lg bg-accent-brand px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-accent-brand-hover disabled:cursor-not-allowed disabled:opacity-50"
           >
             Continuar
           </button>

@@ -124,7 +124,7 @@ export function VerifyExperience({
                   updateExperience(expIndex, { description: e.target.value })
                 }
                 disabled={isSaving}
-                className="h-[80px] w-full resize-none rounded-md border border-input bg-background px-3 py-2 text-sm text-[#1E293B] shadow-none transition-[color,box-shadow] outline-none placeholder:text-muted-foreground focus-visible:border-accent-brand focus-visible:ring-1 focus-visible:ring-accent-brand/30 disabled:cursor-not-allowed disabled:opacity-50"
+                className="h-[80px] w-full resize-none rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground shadow-none transition-[color,box-shadow] outline-none placeholder:text-muted-foreground focus-visible:border-accent-brand focus-visible:ring-1 focus-visible:ring-accent-brand/30 disabled:cursor-not-allowed disabled:opacity-50"
               />
             </FormField>
           </div>
@@ -135,7 +135,7 @@ export function VerifyExperience({
                 variant="destructive"
                 size="sm"
                 onClick={() => removeExperience(expIndex)}
-                className="w-fit gap-1.5 bg-destructive text-[13px] text-white hover:bg-destructive/90"
+                className="w-fit gap-1.5 bg-destructive text-[13px] text-primary-foreground hover:bg-destructive/90"
               >
                 <Trash2 className="h-4 w-4" />
                 Remover
@@ -149,7 +149,7 @@ export function VerifyExperience({
         type="button"
         size="sm"
         onClick={addExperience}
-        className="w-fit gap-1.5 bg-accent-brand text-[13px] text-white hover:bg-accent-brand/90"
+        className="w-fit gap-1.5 bg-accent-brand text-[13px] text-primary-foreground hover:bg-accent-brand-hover"
       >
         <Plus className="h-4 w-4" />
         Adicionar experiência

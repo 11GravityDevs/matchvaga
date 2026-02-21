@@ -14,9 +14,9 @@ import { VerifyExperience } from "./verify-experience";
 import { VerifyEducation } from "./verify-education";
 import { VerifySkills } from "./verify-skills";
 
-export const SECTION_TITLE_CLASS = "text-[20px] font-bold text-[#1E293B]";
-export const SECTION_ITEM_LABEL_CLASS = "text-[15px] font-bold text-[#1E293B]";
-export const SUB_LABEL_CLASS = "text-xs font-medium text-[#1E293B]";
+export const SECTION_TITLE_CLASS = "text-[20px] font-bold text-foreground";
+export const SECTION_ITEM_LABEL_CLASS = "text-[15px] font-bold text-foreground";
+export const SUB_LABEL_CLASS = "text-xs font-medium text-foreground";
 export const INPUT_CLASS =
   "h-9 bg-background px-3 shadow-none focus-visible:border-accent-brand focus-visible:ring-1 focus-visible:ring-accent-brand/30";
 
@@ -128,13 +128,13 @@ export function VerifyContent() {
   }, [data]);
 
   return (
-    <div className="w-[706px] rounded-xl border border-[#E2E8F0] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.1),0_8px_24px_-4px_rgba(0,0,0,0.05)]">
+    <div className="w-[706px] rounded-xl border border-border bg-card shadow-[var(--shadow-card)]">
       {/* Header */}
       <div className="flex flex-col gap-1 px-7 pt-7">
-        <h2 className="text-[24px] leading-[1.3] font-bold text-[#1E293B]">
+        <h2 className="text-[24px] leading-[1.3] font-bold text-foreground">
           Verifique seus dados
         </h2>
-        <p className="text-sm leading-[1.4] text-[#64748B]">
+        <p className="text-sm leading-[1.4] text-muted-foreground">
           Revisamos e extraimos as informações do seu currículo. Confira e edite
           se necessário.
         </p>
@@ -156,7 +156,7 @@ export function VerifyContent() {
             value={data.summary}
             onChange={(e) => handleSummaryChange(e.target.value)}
             disabled={isSaving}
-            className="h-[100px] w-full resize-none rounded-md border border-input bg-background px-3 py-2 text-[13px] leading-normal text-[#1E293B] shadow-none transition-[color,box-shadow] outline-none placeholder:text-muted-foreground focus-visible:border-accent-brand focus-visible:ring-1 focus-visible:ring-accent-brand/30 disabled:cursor-not-allowed disabled:opacity-50"
+            className="h-[100px] w-full resize-none rounded-md border border-input bg-background px-3 py-2 text-[13px] leading-normal text-foreground shadow-none transition-[color,box-shadow] outline-none placeholder:text-muted-foreground focus-visible:border-accent-brand focus-visible:ring-1 focus-visible:ring-accent-brand/30 disabled:cursor-not-allowed disabled:opacity-50"
           />
         </div>
 
@@ -188,7 +188,7 @@ export function VerifyContent() {
             type="button"
             onClick={continueToDashboard}
             disabled={isSaving || !isFormValid}
-            className="cursor-pointer rounded-lg bg-[#2563EB] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#1D4ED8] disabled:cursor-not-allowed disabled:opacity-50"
+            className="cursor-pointer rounded-lg bg-accent-brand px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-accent-brand-hover disabled:cursor-not-allowed disabled:opacity-50"
           >
             Continuar
           </button>
