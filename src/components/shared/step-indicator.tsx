@@ -1,6 +1,10 @@
 import { Check } from "lucide-react";
 
 import { cn } from "@/utils/style";
+import {
+  TEXT_SMALL_MEDIUM,
+  TEXT_SMALL_SEMIBOLD,
+} from "@/constants/design-tokens";
 
 export interface StepIndicatorStep {
   id: string;
@@ -20,7 +24,7 @@ export function StepIndicator({
 }: StepIndicatorProps) {
   return (
     <div
-      className={cn("flex items-center justify-center gap-2", className)}
+      className={cn("flex items-center gap-2", className)}
       role="progressbar"
       aria-valuenow={currentStepIndex + 1}
       aria-valuemin={1}
@@ -33,33 +37,32 @@ export function StepIndicator({
 
         return (
           <div key={step.id} className="flex items-center gap-2">
+            {index > 0 && (
+              <div className="h-px w-8 shrink-0 bg-border" aria-hidden />
+            )}
             <div
               className={cn(
-                "flex items-center gap-1 rounded-2xl px-3.5 py-1.5",
-                isActive && "bg-accent-brand text-primary-foreground",
-                isPast && "bg-muted text-foreground",
-                !isActive && !isPast && "bg-muted text-muted-foreground"
+                "flex items-center gap-1.5 rounded-full px-4 py-1.5",
+                isActive &&
+                  "bg-accent-brand font-semibold text-white shadow-[0_2px_8px_rgba(37,99,235,0.2)]",
+                isPast &&
+                  "border border-accent-brand-light bg-muted text-foreground",
+                !isActive &&
+                  !isPast &&
+                  "border border-border bg-muted text-muted-foreground"
               )}
             >
-              {isPast ? (
-                <>
-                  <Check className="h-3.5 w-3.5 shrink-0 text-accent-success" />
-                  <span className="text-[13px] font-medium">{step.label}</span>
-                </>
-              ) : (
-                <span
-                  className={cn(
-                    "text-[13px]",
-                    isActive ? "font-semibold" : "font-medium"
-                  )}
-                >
-                  {index + 1}. {step.label}
-                </span>
+              {isPast && (
+                <Check className="h-3.5 w-3.5 shrink-0 text-accent-success" />
               )}
+              <span
+                className={cn(
+                  isActive ? TEXT_SMALL_SEMIBOLD : TEXT_SMALL_MEDIUM
+                )}
+              >
+                {isActive ? `${index + 1}. ${step.label}` : step.label}
+              </span>
             </div>
-            {index < steps.length - 1 && (
-              <div className="h-px w-6 bg-border" aria-hidden />
-            )}
           </div>
         );
       })}

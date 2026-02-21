@@ -3,20 +3,11 @@
 import { useCallback, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export type LoginStep = "email" | "token";
+import { parseLoginStepFromSearchParams, type LoginStep } from "@/utils/url";
+
+export type { LoginStep };
 
 const VALID_STEPS: readonly LoginStep[] = ["email", "token"] as const;
-
-function parseLoginStepFromSearchParams(
-  searchParams: URLSearchParams
-): LoginStep {
-  const step = searchParams.get("step");
-  if (step === "email" || step === "token") {
-    return step;
-  }
-
-  return "email";
-}
 
 export function useLoginStep(): {
   step: LoginStep;

@@ -1,5 +1,12 @@
 import { BarChart3, MessageSquare, Sparkles } from "lucide-react";
 
+import {
+  MAX_W_HERO_DESC,
+  MAX_W_HERO_TITLE,
+  TEXT_HERO,
+  TEXT_SMALL_MEDIUM,
+  TEXT_SMALL_SEMIBOLD,
+} from "@/constants/design-tokens";
 import { cn } from "@/utils/style";
 
 export function LoginHero() {
@@ -11,15 +18,23 @@ export function LoginHero() {
       )}
     >
       <div
-        className="absolute -top-16 -left-20 h-[300px] w-[300px] rounded-full border border-white/10 bg-accent-brand-end/20"
+        className="absolute -top-16 -left-20 size-72 rounded-full border border-white/10 bg-accent-brand-end/20"
         aria-hidden
       />
       <div
-        className="absolute top-[600px] right-[100px] h-[200px] w-[200px] rounded-full border border-white/10 bg-accent-brand-hover/20"
+        className="absolute size-48 rounded-full border border-white/10 bg-accent-brand-hover/20"
+        style={{
+          top: "var(--top-hero-circle-2)",
+          right: "var(--right-hero-circle-2)",
+        }}
         aria-hidden
       />
       <div
-        className="absolute top-[200px] right-[50px] h-[120px] w-[120px] rounded-full bg-accent-success/15"
+        className="absolute size-32 rounded-full bg-accent-success/15"
+        style={{
+          top: "var(--top-hero-circle-3)",
+          right: "var(--right-hero-circle-3)",
+        }}
         aria-hidden
       />
 
@@ -43,11 +58,11 @@ export function LoginHero() {
             "animate-balance"
           )}
         >
-          <div className="flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-[26px] bg-accent-success">
+          <div className="flex size-14 shrink-0 items-center justify-center rounded-full bg-accent-success">
             <span className="text-lg font-bold text-white">92</span>
           </div>
           <div className="flex flex-col gap-0.5">
-            <span className="text-[13px] font-semibold text-foreground">
+            <span className={`${TEXT_SMALL_SEMIBOLD} text-foreground`}>
               Pontuação ATS
             </span>
             <span className="text-xs font-normal text-accent-success">
@@ -57,12 +72,14 @@ export function LoginHero() {
         </div>
 
         <div className="flex flex-col gap-5 text-left">
-          <h1 className="max-w-[420px] text-[48px] leading-[1.1] font-bold tracking-[-0.5px] text-white">
+          <h1 className={`${MAX_W_HERO_TITLE} ${TEXT_HERO} text-white`}>
             Seu currículo,
             <br />
             otimizado por IA.
           </h1>
-          <p className="max-w-[340px] text-base leading-[1.6] font-normal text-white/80">
+          <p
+            className={`${MAX_W_HERO_DESC} text-base leading-relaxed font-normal text-white/80`}
+          >
             Aumente suas chances com análise inteligente de vagas e adaptação
             automática do seu currículo.
           </p>
@@ -73,7 +90,7 @@ export function LoginHero() {
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/20">
               <Sparkles className="h-5 w-5 text-white" />
             </div>
-            <span className="text-[13px] font-medium text-white/87">
+            <span className={`${TEXT_SMALL_MEDIUM} text-white/87`}>
               Currículo adaptado automaticamente
             </span>
           </div>
@@ -81,7 +98,7 @@ export function LoginHero() {
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/20">
               <BarChart3 className="h-5 w-5 text-white" />
             </div>
-            <span className="text-[13px] font-medium text-white/87">
+            <span className={`${TEXT_SMALL_MEDIUM} text-white/87`}>
               Análise detalhada de requisitos
             </span>
           </div>
@@ -89,7 +106,7 @@ export function LoginHero() {
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/20">
               <MessageSquare className="h-5 w-5 text-white" />
             </div>
-            <span className="text-[13px] font-medium text-white/87">
+            <span className={`${TEXT_SMALL_MEDIUM} text-white/87`}>
               Mensagens personalizadas para cada vaga
             </span>
           </div>

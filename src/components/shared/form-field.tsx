@@ -1,13 +1,14 @@
-import { cn } from "@/utils/style";
+import type { ReactNode } from "react";
 
-const DEFAULT_LABEL_CLASS = "text-[13px] font-medium text-foreground";
+import { cn } from "@/utils/style";
+import { FORM_LABEL_CLASS } from "@/constants/design-tokens";
 
 interface FormFieldProps {
   label: string;
   htmlFor: string;
   className?: string;
   labelClassName?: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export function FormField({
@@ -19,10 +20,7 @@ export function FormField({
 }: FormFieldProps) {
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
-      <label
-        htmlFor={htmlFor}
-        className={labelClassName ?? DEFAULT_LABEL_CLASS}
-      >
+      <label htmlFor={htmlFor} className={labelClassName ?? FORM_LABEL_CLASS}>
         {label}
       </label>
       {children}

@@ -11,6 +11,17 @@
   --color-accent-brand-dark: var(--accent-brand-dark);
   --color-accent-brand-end: var(--accent-brand-end);
   --color-accent-success: var(--accent-success);
+  --color-accent-success-light: var(--accent-success-light);
+  --color-accent-success-border: var(--accent-success-border);
+  --color-accent-success-text: var(--accent-success-text);
+  --color-accent-warning: var(--accent-warning);
+  --color-accent-warning-light: var(--accent-warning-light);
+  --color-accent-warning-border: var(--accent-warning-border);
+  --color-accent-warning-text: var(--accent-warning-text);
+  --color-accent-low: var(--accent-low);
+  --color-accent-low-light: var(--accent-low-light);
+  --color-accent-low-border: var(--accent-low-border);
+  --color-accent-low-text: var(--accent-low-text);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
@@ -42,6 +53,11 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
+
+  --width-form: 900px;
+  --width-content: 1100px;
+  --width-sidebar: 280px;
+  --width-column: 380px;
 }
 
 :root {
@@ -74,11 +90,42 @@
   --accent-brand-dark: #1e3a8a;
   --accent-brand-end: #3b82f6;
   --accent-success: #10b981;
+  --accent-success-light: #f0fdf4;
+  --accent-success-border: #bbf7d0;
+  --accent-success-text: #166534;
+  --accent-warning: #f59e0b;
+  --accent-warning-light: #fef3c7;
+  --accent-warning-border: #fde68a;
+  --accent-warning-text: #92400e;
+  --accent-low: #ef4444;
+  --accent-low-light: #fef2f2;
+  --accent-low-border: #fecaca;
+  --accent-low-text: #b91c1c;
   --shadow-card:
     0 1px 3px rgba(0, 0, 0, 0.1), 0 8px 24px -4px rgba(0, 0, 0, 0.05);
   --shadow-top-bar: 0 2px 4px rgba(0, 0, 0, 0.06);
   --shadow-button: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-accent-brand: 0 4px 12px
+    color-mix(in srgb, var(--accent-brand) 25% transparent);
+  --shadow-accent-brand-sm: 0 2px 4px
+    color-mix(in srgb, var(--accent-brand) 20% transparent);
+  --surface-subtle: #f8fafc;
   --font-geist-mono: ui-monospace, monospace;
+
+  /* Layout dimensions (also in @theme for utilities) */
+  --width-form: 900px;
+  --width-content: 1100px;
+  --width-sidebar: 280px;
+  --width-column: 380px;
+  --width-hero-title: 420px;
+  --width-hero-desc: 340px;
+  --width-login-form: 400px;
+
+  /* Login hero decorative positioning */
+  --top-hero-circle-2: 600px;
+  --right-hero-circle-2: 100px;
+  --top-hero-circle-3: 200px;
+  --right-hero-circle-3: 50px;
 }
 
 .dark {
@@ -107,6 +154,32 @@
   --accent-brand-hover: #3b82f6;
   --accent-brand-dark: #3b82f6;
   --accent-brand-end: #60a5fa;
+}
+
+/* Layout width utilities — design system */
+@utility w-form {
+  width: var(--width-form);
+}
+@utility w-content {
+  width: var(--width-content);
+}
+@utility max-w-content {
+  max-width: var(--width-content);
+}
+@utility w-sidebar {
+  width: var(--width-sidebar);
+}
+@utility w-column {
+  width: var(--width-column);
+}
+@utility max-w-hero-title {
+  max-width: var(--width-hero-title);
+}
+@utility max-w-hero-desc {
+  max-width: var(--width-hero-desc);
+}
+@utility max-w-login-form {
+  max-width: var(--width-login-form);
 }
 
 @layer base {

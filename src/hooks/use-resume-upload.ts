@@ -12,7 +12,7 @@ export interface UseResumeUploadReturn {
   setResumeContent: (content: string) => void;
   isUploading: boolean;
   selectedFile: SelectedFileInfo | null;
-  uploadFile: (file: File) => void;
+  uploadFile: (file: File) => Promise<void>;
   uploadFromPaste: (text: string) => void;
   analyze: () => Promise<void>;
 }
@@ -25,14 +25,21 @@ export function useResumeUpload(): UseResumeUploadReturn {
     isUploading,
     selectedFile,
     setSelectedFile,
+    setIsUploading,
   } = useOnboardingContext();
 
   const uploadFile = useCallback(
-    (file: File) => {
-      setSelectedFile({ name: file.name, size: file.size });
-      setResumeContent("");
+    async (file: File) => {
+      setIsUploading(true);
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 400));
+        setSelectedFile({ name: file.name, size: file.size });
+        setResumeContent("");
+      } finally {
+        setIsUploading(false);
+      }
     },
-    [setSelectedFile, setResumeContent]
+    [setIsUploading, setSelectedFile, setResumeContent]
   );
 
   const uploadFromPaste = useCallback(

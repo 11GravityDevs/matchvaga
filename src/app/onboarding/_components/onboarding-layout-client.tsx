@@ -2,19 +2,12 @@
 
 import { usePathname } from "next/navigation";
 
-import { OnboardingProvider } from "@/contexts/onboarding-context";
 import {
   StepIndicator,
   type StepIndicatorStep,
 } from "@/components/shared/step-indicator";
-
-export function getStepIndexFromPathname(
-  pathname: string,
-  stepPaths: readonly string[]
-): number {
-  const index = stepPaths.findIndex((path) => pathname.startsWith(path));
-  return index >= 0 ? index : 0;
-}
+import { OnboardingProvider } from "@/contexts/onboarding-context";
+import { getStepIndexFromPathname } from "@/utils/route";
 
 import { OnboardingTopBar } from "./onboarding-top-bar";
 
@@ -37,7 +30,7 @@ export function OnboardingLayoutClient({
     <OnboardingProvider>
       <main className="flex min-h-screen flex-col bg-background">
         <OnboardingTopBar />
-        <div className="flex flex-1 flex-col items-center justify-center gap-7 bg-[#F8FAFC] py-12">
+        <div className="flex flex-1 flex-col items-center justify-center gap-7 bg-[var(--surface-subtle)] py-12">
           <StepIndicator
             steps={ONBOARDING_STEPS}
             currentStepIndex={currentStepIndex}

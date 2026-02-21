@@ -5,6 +5,10 @@ import { useCallback, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Field, FieldContent, FieldLabel } from "@/components/ui/field";
 import {
+  TEXT_SMALL_LEADING,
+  TEXT_SMALL_SEMIBOLD,
+} from "@/constants/design-tokens";
+import {
   InputOTP,
   InputOTPGroup,
   InputOTPSlot,
@@ -27,15 +31,20 @@ export function LoginTokenForm({
   const [token, setToken] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isResending, setIsResending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (token.length !== OTP_LENGTH || isSubmitting || isPending) return;
 
+      setError(null);
       setIsSubmitting(true);
       try {
         await onSubmit(token);
+      } catch (e) {
+        console.error(e);
+        setError("Algo deu errado. Tente novamente.");
       } finally {
         setIsSubmitting(false);
       }
@@ -45,9 +54,13 @@ export function LoginTokenForm({
 
   const handleResend = useCallback(async () => {
     if (isResending) return;
+    setError(null);
     setIsResending(true);
     try {
       await onResend();
+    } catch (e) {
+      console.error(e);
+      setError("Falha ao reenviar. Tente novamente.");
     } finally {
       setIsResending(false);
     }
@@ -85,22 +98,34 @@ export function LoginTokenForm({
         </FieldContent>
       </Field>
 
-      <Button type="submit" disabled={isSubmitDisabled} className="h-11 w-full">
+      {error && <p className="text-sm text-destructive">{error}</p>}
+
+      <Button
+        type="submit"
+        disabled={isSubmitDisabled}
+        loading={isSubmitting || isPending}
+        className="h-11 w-full"
+      >
         Continuar
       </Button>
 
       <div className="flex items-center justify-center gap-1">
-        <span className="text-[13px] font-normal text-muted-foreground">
+        <span
+          className={`${TEXT_SMALL_LEADING} font-normal text-muted-foreground`}
+        >
           Não recebeu o código?
         </span>
-        <button
+        <Button
           type="button"
+          variant="link"
+          size="default"
           onClick={handleResend}
           disabled={isResending || isDisabled}
-          className="cursor-pointer text-[13px] font-semibold text-primary hover:underline disabled:opacity-50"
+          loading={isResending}
+          className={`h-auto cursor-pointer p-0 text-primary hover:underline disabled:opacity-50 ${TEXT_SMALL_SEMIBOLD}`}
         >
           Reenviar
-        </button>
+        </Button>
       </div>
     </form>
   );

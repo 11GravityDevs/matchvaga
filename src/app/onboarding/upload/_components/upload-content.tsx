@@ -1,17 +1,35 @@
 "use client";
 
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 
 import { Check, Loader2, Upload } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
+import {
+  CARD_TITLE_CLASS,
+  CARD_DESCRIPTION_CLASS,
+  TEXT_SMALL,
+  W_FORM,
+} from "@/constants/design-tokens";
 import { useResumeUpload } from "@/hooks/use-resume-upload";
 import { formatFileSize } from "@/utils/file";
 import { cn } from "@/utils/style";
 
 export function UploadContent() {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
   const { isUploading, selectedFile, uploadFile, uploadFromPaste, analyze } =
     useResumeUpload();
+
+  const handleAnalyze = useCallback(async () => {
+    if (!selectedFile || isUploading) return;
+    setIsAnalyzing(true);
+    try {
+      await analyze();
+    } finally {
+      setIsAnalyzing(false);
+    }
+  }, [selectedFile, isUploading, analyze]);
 
   const handleFileChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,12 +75,12 @@ export function UploadContent() {
   }, []);
 
   return (
-    <div className="w-[632px] rounded-xl border border-border bg-card shadow-[var(--shadow-card)]">
+    <div
+      className={`rounded-xl border border-border bg-card shadow-(--shadow-card) ${W_FORM}`}
+    >
       <div className="flex flex-col gap-1 px-7 pt-7">
-        <h2 className="text-[22px] leading-[1.3] font-bold text-foreground">
-          Upload do Curriculo
-        </h2>
-        <p className="text-sm leading-[1.4] text-muted-foreground">
+        <h2 className={CARD_TITLE_CLASS}>Upload do Curriculo</h2>
+        <p className={CARD_DESCRIPTION_CLASS}>
           Envie seu curriculo para começar
         </p>
       </div>
@@ -70,7 +88,7 @@ export function UploadContent() {
       <div className="flex flex-col gap-6 p-7">
         <div
           className={cn(
-            "flex h-[304px] cursor-pointer flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed border-border bg-card transition-colors",
+            "flex min-h-80 cursor-pointer flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed border-border bg-card transition-colors",
             "hover:border-accent-brand/50 hover:bg-muted/20"
           )}
           onPaste={handlePaste}
@@ -114,7 +132,7 @@ export function UploadContent() {
               <button
                 type="button"
                 onClick={handleBrowseClick}
-                className="cursor-pointer rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground shadow-[var(--shadow-button)] transition-colors hover:bg-muted"
+                className="cursor-pointer rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground shadow-(--shadow-button) transition-colors hover:bg-muted"
               >
                 Selecionar outro arquivo
               </button>
@@ -127,11 +145,11 @@ export function UploadContent() {
               <p className="text-center text-sm text-muted-foreground">
                 Suportamos PDF e DOCX
               </p>
-              <p className="text-[13px] text-muted-foreground">ou</p>
+              <p className={`${TEXT_SMALL} text-muted-foreground`}>ou</p>
               <button
                 type="button"
                 onClick={handleBrowseClick}
-                className="cursor-pointer rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground shadow-[var(--shadow-button)] transition-colors hover:bg-muted"
+                className="cursor-pointer rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground shadow-(--shadow-button) transition-colors hover:bg-muted"
               >
                 Selecionar arquivo
               </button>
@@ -140,14 +158,17 @@ export function UploadContent() {
         </div>
 
         <div className="flex justify-end">
-          <button
+          <Button
             type="button"
-            onClick={() => void analyze()}
+            onClick={handleAnalyze}
             disabled={!selectedFile || isUploading}
-            className="cursor-pointer rounded-lg bg-accent-brand px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-accent-brand-hover disabled:cursor-not-allowed disabled:opacity-50"
+            loading={isAnalyzing}
+            variant="brand"
+            size="brand"
+            className="rounded-lg"
           >
             Continuar
-          </button>
+          </Button>
         </div>
       </div>
     </div>

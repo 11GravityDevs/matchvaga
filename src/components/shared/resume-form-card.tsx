@@ -5,7 +5,15 @@ import type {
   ExperienceEntry,
   ResumeData,
 } from "@/types/resume";
-import { SECTION_TITLE_CLASS } from "@/components/shared/resume-form-constants";
+
+import { Button } from "@/components/ui/button";
+import {
+  CARD_DESCRIPTION_CLASS,
+  CARD_TITLE_CLASS,
+  SECTION_TITLE_CLASS,
+  W_FORM,
+} from "@/constants/design-tokens";
+import { Textarea } from "@/components/ui/textarea";
 import { ResumeFormPersonalData } from "@/components/shared/resume-form-personal-data";
 import { ResumeFormSkills } from "@/components/shared/resume-form-skills";
 import { ResumeFormEducation } from "@/components/shared/resume-form-education";
@@ -15,6 +23,7 @@ export interface ResumeFormCardPrimaryAction {
   label: string;
   onClick: () => void;
   disabled: boolean;
+  loading?: boolean;
 }
 
 export interface ResumeFormCardProps {
@@ -58,15 +67,13 @@ export function ResumeFormCard({
   hideHeader = false,
 }: ResumeFormCardProps) {
   return (
-    <div className="w-[706px] rounded-xl border border-border bg-card shadow-(--shadow-card)">
+    <div
+      className={`rounded-xl border border-border bg-card shadow-(--shadow-card) ${W_FORM}`}
+    >
       {!hideHeader && (
-        <div className="flex flex-col gap-1 px-7 pt-7">
-          <h2 className="text-[24px] leading-[1.3] font-bold text-foreground">
-            {headerTitle}
-          </h2>
-          <p className="text-sm leading-[1.4] text-muted-foreground">
-            {headerSubtitle}
-          </p>
+        <div className="flex flex-col gap-1 p-7">
+          <h2 className={CARD_TITLE_CLASS}>{headerTitle}</h2>
+          <p className={CARD_DESCRIPTION_CLASS}>{headerSubtitle}</p>
         </div>
       )}
 
@@ -81,12 +88,13 @@ export function ResumeFormCard({
 
         <div className="flex flex-col gap-4">
           <h3 className={SECTION_TITLE_CLASS}>Resumo profissional</h3>
-          <textarea
+          <Textarea
             id="summary"
             value={data.summary}
             onChange={(e) => handleSummaryChange(e.target.value)}
             disabled={isSaving}
-            className="h-[100px] w-full resize-none rounded-md border border-input bg-background px-3 py-2 text-[13px] leading-normal text-foreground shadow-none transition-[color,box-shadow] outline-none placeholder:text-muted-foreground focus-visible:border-accent-brand focus-visible:ring-1 focus-visible:ring-accent-brand/30 disabled:cursor-not-allowed disabled:opacity-50"
+            variant="form"
+            className="w-full"
           />
         </div>
 
@@ -113,14 +121,17 @@ export function ResumeFormCard({
         />
 
         <div className="flex justify-end">
-          <button
+          <Button
             type="button"
             onClick={primaryAction.onClick}
             disabled={primaryAction.disabled}
-            className="cursor-pointer rounded-lg bg-accent-brand px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-accent-brand-hover disabled:cursor-not-allowed disabled:opacity-50"
+            loading={primaryAction.loading}
+            variant="brand"
+            size="brand"
+            className="rounded-lg"
           >
             {primaryAction.label}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

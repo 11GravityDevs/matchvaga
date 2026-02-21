@@ -1,6 +1,12 @@
 import { Download } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import {
+  CARD_RADIUS,
+  SECTION_HEADER_CLASS,
+  TABLE_CELL_PADDING,
+} from "@/constants/design-tokens";
+import { TEXT_CAPTION_LEADING, W_ACTION } from "@/constants/design-tokens";
 
 type FilterType = "todos" | "recentes" | "score-alto";
 
@@ -37,9 +43,7 @@ export function AnalysisHistoryTable({
     <div className="flex flex-1 flex-col gap-4">
       {/* Section Header - outside card */}
       <div className="flex w-full items-center justify-between">
-        <h2 className="text-lg font-semibold text-foreground">
-          Histórico de Análises
-        </h2>
+        <h2 className={SECTION_HEADER_CLASS}>Histórico de Análises</h2>
         <div className="flex items-center gap-2">
           {filters.map((f) => (
             <Button
@@ -55,35 +59,39 @@ export function AnalysisHistoryTable({
       </div>
 
       {/* Table Card */}
-      <div className="flex flex-1 flex-col overflow-hidden rounded-lg border border-border bg-card shadow-xs">
+      <div
+        className={`flex flex-1 flex-col overflow-hidden ${CARD_RADIUS} border border-border bg-card shadow-xs`}
+      >
         {/* Header Row */}
         <div className="flex w-full items-center border-b border-border bg-muted/50">
-          <div className="flex min-w-0 flex-[1.5] items-center gap-2 border-b-0 p-3">
-            <span className="truncate text-sm leading-[1.43] text-muted-foreground">
+          <div
+            className={`flex min-w-0 flex-[1.5] items-center gap-2 border-b-0 ${TABLE_CELL_PADDING}`}
+          >
+            <span className="truncate text-sm leading-snug text-muted-foreground">
               Cargo
             </span>
           </div>
-          <div className="flex min-w-0 flex-1 items-center gap-2 p-3">
-            <span className="truncate text-sm leading-[1.43] text-muted-foreground">
+          <div className="flex min-w-0 flex-1 items-center gap-2 p-4">
+            <span className="truncate text-sm leading-snug text-muted-foreground">
               Empresa
             </span>
           </div>
-          <div className="flex min-w-0 flex-1 items-center gap-2 p-3">
-            <span className="truncate text-sm leading-[1.43] text-muted-foreground">
+          <div className="flex min-w-0 flex-1 items-center gap-2 p-4">
+            <span className="truncate text-sm leading-snug text-muted-foreground">
               Data
             </span>
           </div>
-          <div className="flex min-w-0 flex-1 items-center gap-2 p-3">
-            <span className="truncate text-sm leading-[1.43] text-muted-foreground">
+          <div className="flex min-w-0 flex-1 items-center gap-2 p-4">
+            <span className="truncate text-sm leading-snug text-muted-foreground">
               Antes
             </span>
           </div>
-          <div className="flex min-w-0 flex-1 items-center gap-2 p-3">
-            <span className="truncate text-sm leading-[1.43] text-muted-foreground">
+          <div className="flex min-w-0 flex-1 items-center gap-2 p-4">
+            <span className="truncate text-sm leading-snug text-muted-foreground">
               Depois
             </span>
           </div>
-          <div className="flex w-[100px] shrink-0 p-3" />
+          <div className={`flex shrink-0 p-4 ${W_ACTION}`} />
         </div>
 
         {/* Data Rows */}
@@ -93,7 +101,7 @@ export function AnalysisHistoryTable({
             className="flex w-full items-center border-b border-border last:border-b-0"
           >
             {/* Role + Logo */}
-            <div className="flex min-w-0 flex-[1.5] items-center gap-2 border-r border-border p-3">
+            <div className="flex min-w-0 flex-[1.5] items-center gap-2 border-r border-border p-4">
               <div
                 className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-xs font-bold"
                 style={{
@@ -109,23 +117,23 @@ export function AnalysisHistoryTable({
             </div>
 
             {/* Company */}
-            <div className="flex min-w-0 flex-1 items-center gap-2 border-r border-border p-3">
+            <div className="flex min-w-0 flex-1 items-center gap-2 border-r border-border p-4">
               <span className="truncate text-sm text-foreground">
                 {row.company}
               </span>
             </div>
 
             {/* Date */}
-            <div className="flex min-w-0 flex-1 items-center gap-2 border-r border-border p-3">
+            <div className="flex min-w-0 flex-1 items-center gap-2 border-r border-border p-4">
               <span className="truncate text-sm text-muted-foreground">
                 {row.date}
               </span>
             </div>
 
             {/* Before */}
-            <div className="flex min-w-0 flex-1 items-center gap-2 border-r border-border p-3">
+            <div className="flex min-w-0 flex-1 items-center gap-2 border-r border-border p-4">
               <span
-                className="rounded-full px-2 py-0.5 text-xs leading-[1.33] font-semibold text-primary-foreground"
+                className={`rounded-full px-2 py-0.5 text-primary-foreground ${TEXT_CAPTION_LEADING} font-semibold`}
                 style={{ backgroundColor: row.beforeColor }}
               >
                 {row.before}
@@ -133,9 +141,9 @@ export function AnalysisHistoryTable({
             </div>
 
             {/* After */}
-            <div className="flex min-w-0 flex-1 items-center gap-2 p-3">
+            <div className="flex min-w-0 flex-1 items-center gap-2 p-4">
               <span
-                className="rounded-full px-2 py-0.5 text-xs leading-[1.33] font-semibold text-primary-foreground"
+                className={`rounded-full px-2 py-0.5 text-primary-foreground ${TEXT_CAPTION_LEADING} font-semibold`}
                 style={{ backgroundColor: row.afterColor }}
               >
                 {row.after}
@@ -143,7 +151,9 @@ export function AnalysisHistoryTable({
             </div>
 
             {/* Action */}
-            <div className="flex w-[100px] shrink-0 items-center justify-center p-3">
+            <div
+              className={`flex shrink-0 items-center justify-center p-4 ${W_ACTION}`}
+            >
               <Button size="xs">
                 <Download />
                 Baixar

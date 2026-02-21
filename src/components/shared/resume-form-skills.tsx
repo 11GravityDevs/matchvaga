@@ -5,6 +5,7 @@ import { Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SECTION_TITLE_CLASS } from "@/components/shared/resume-form-constants";
+import { TEXT_SMALL, TEXT_SMALL_MEDIUM } from "@/constants/design-tokens";
 
 interface ResumeFormSkillsProps {
   skills: string[];
@@ -50,7 +51,7 @@ export function ResumeFormSkills({
                 key={`${skill}-${index}`}
                 className="flex items-center gap-1.5 rounded-full border border-accent-brand-light bg-accent-brand-light/50 px-2.5 py-1.5"
               >
-                <span className="text-[13px] font-medium text-accent-brand">
+                <span className={`${TEXT_SMALL_MEDIUM} text-accent-brand`}>
                   {skill}
                 </span>
                 <button
@@ -99,7 +100,7 @@ export function ResumeFormSkills({
             type="button"
             size="sm"
             onClick={() => setIsAddingSkill(true)}
-            className="w-fit gap-1.5 bg-accent-brand text-[13px] text-primary-foreground hover:bg-accent-brand-hover"
+            className={`w-fit gap-1.5 bg-accent-brand text-primary-foreground hover:bg-accent-brand-hover ${TEXT_SMALL}`}
           >
             <Plus className="h-4 w-4" />
             Adicionar habilidades

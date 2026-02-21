@@ -16,6 +16,7 @@ interface LoginEmailFormProps {
 export function LoginEmailForm({ onSubmit, isPending }: LoginEmailFormProps) {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const isEmailValid = useMemo(() => isValidEmail(email), [email]);
   const isDisabled = isSubmitting || isPending;
@@ -26,9 +27,13 @@ export function LoginEmailForm({ onSubmit, isPending }: LoginEmailFormProps) {
       e.preventDefault();
       if (!isEmailValid || isDisabled) return;
 
+      setError(null);
       setIsSubmitting(true);
       try {
         await onSubmit(email.trim());
+      } catch (e) {
+        console.error(e);
+        setError("Algo deu errado. Tente novamente.");
       } finally {
         setIsSubmitting(false);
       }
@@ -57,7 +62,14 @@ export function LoginEmailForm({ onSubmit, isPending }: LoginEmailFormProps) {
         </FieldContent>
       </Field>
 
-      <Button type="submit" disabled={isSubmitDisabled} className="h-11 w-full">
+      {error && <p className="text-sm text-destructive">{error}</p>}
+
+      <Button
+        type="submit"
+        disabled={isSubmitDisabled}
+        loading={isSubmitting || isPending}
+        className="h-11 w-full"
+      >
         Continuar
       </Button>
 

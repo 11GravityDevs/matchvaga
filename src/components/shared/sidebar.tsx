@@ -4,7 +4,6 @@ import type { ComponentType } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  FileSearch,
   LayoutDashboard,
   FileText,
   Zap,
@@ -12,9 +11,10 @@ import {
   ChevronsUpDown,
 } from "lucide-react";
 
-import { BrandName } from "@/components/shared/brand-name";
+import { Logo } from "@/components/shared/logo";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/utils/style";
+import { TEXT_CAPTION_LEADING, W_SIDEBAR } from "@/constants/design-tokens";
 
 interface NavItem {
   label: string;
@@ -32,18 +32,19 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="flex h-full w-[280px] shrink-0 flex-col gap-4 border-r border-sidebar-border bg-sidebar p-2">
+    <aside
+      className={`flex h-full shrink-0 flex-col gap-4 border-r border-sidebar-border bg-sidebar p-2 ${W_SIDEBAR}`}
+    >
       {/* Brand */}
-      <div className="flex items-center gap-2 px-2 py-3">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent-brand">
-          <FileSearch className="h-4 w-4 text-primary-foreground" />
-        </div>
-        <BrandName className="text-base font-bold text-sidebar-foreground" />
+      <div className="px-2 py-3">
+        <Logo textClassName="text-sidebar-foreground" />
       </div>
 
       {/* Nav */}
       <div className="flex flex-1 flex-col gap-1 px-1">
-        <p className="px-2 py-2 text-xs leading-[1.33] font-medium tracking-wide text-muted-foreground uppercase">
+        <p
+          className={`px-2 py-2 font-medium tracking-wide text-muted-foreground uppercase ${TEXT_CAPTION_LEADING}`}
+        >
           MENU
         </p>
         {navItems.map((item) => {
@@ -56,7 +57,7 @@ export function Sidebar() {
               className={cn(
                 "flex items-center justify-between gap-2 rounded-md px-2 py-1.5 text-sm transition-colors",
                 isActive
-                  ? "border-l-2 border-accent-brand bg-accent-brand-light pl-[6px] font-semibold text-accent-brand"
+                  ? "border-l-2 border-accent-brand bg-accent-brand-light pl-1.5 font-semibold text-accent-brand"
                   : "font-normal text-sidebar-foreground hover:bg-sidebar-accent"
               )}
             >
@@ -100,10 +101,10 @@ export function Sidebar() {
             <span className="text-sm font-semibold text-foreground">JD</span>
           </div>
           <div className="flex flex-col justify-center">
-            <span className="text-sm leading-[1.43] font-medium text-sidebar-foreground">
+            <span className="text-sm leading-snug font-medium text-sidebar-foreground">
               Jon Doe
             </span>
-            <span className="text-xs leading-[1.67] text-sidebar-foreground">
+            <span className="text-xs leading-relaxed text-sidebar-foreground">
               joe@acmecorp.com
             </span>
           </div>

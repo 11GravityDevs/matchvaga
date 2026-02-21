@@ -1,0 +1,34 @@
+---
+description: Tailwind — no arbitrary values for spacing, typography, layout
+globs: src/**/*.tsx,src/**/*.css
+alwaysApply: false
+---
+
+# No Arbitrary Tailwind Values
+
+Never use Tailwind arbitrary values `[value]` for spacing, typography, or layout.
+
+## Use Design Tokens
+
+Import from `@/constants/design-tokens`:
+
+- **Layout:** `W_FORM`, `W_CONTENT`, `W_SIDEBAR`, `W_COLUMN`, `W_ACTION`
+- **Typography:** `PAGE_TITLE_CLASS`, `CARD_TITLE_CLASS`, `TEXT_SMALL`, `TEXT_SMALL_MEDIUM`, `TEXT_SMALL_SEMIBOLD`, `TEXT_SMALL_LEADING`, `TEXT_CAPTION_LEADING`, `TEXT_KPI`, `TEXT_SCORE`, `TEXT_HERO`, `TEXT_BADGE`
+- **Spacing:** `PAGE_PADDING`, `SECTION_GAP`, `CARD_CONTENT_PADDING`, `CARD_HEADER_PADDING`, `TIP_BANNER_PADDING`, `FOOTER_PADDING`
+- **Radius:** `CARD_RADIUS`, `RADIUS_SM`, `RADIUS_MD`, `RADIUS_LG`
+
+## Allowed
+
+- Standard Tailwind scale: `gap-1`–`gap-12`, `p-1`–`p-12`, `rounded-md`, `rounded-lg`, `rounded-xl`
+- Theme utilities: `w-form`, `w-content`, `w-sidebar`, `w-column`, `max-w-hero-title`, `max-w-hero-desc`, `max-w-login-form`
+- Design token constants from `@/constants/design-tokens`
+
+## Forbidden
+
+- `p-[13px]`, `w-[900px]`, `text-[22px]`, `rounded-[10px]`, `h-[304px]`, `max-w-[420px]`
+- Any `[value]` for spacing, typography, width, height, or radius
+
+## Exceptions
+
+- shadcn/Radix component internals (e.g. `rounded-[min(var(--radius-md),8px)]`)
+- Complex asymmetric radius (e.g. chat bubbles) — prefer `rounded-xl rounded-bl-md` over `rounded-[12px_12px_12px_4px]`

@@ -3,6 +3,7 @@ import { TrendingUp, TriangleAlert, CircleCheck } from "lucide-react";
 import { DashboardHeader } from "./_components/dashboard-header";
 import { AnalysisHistoryTable } from "./_components/analysis-history-table";
 import { KpiCard } from "@/components/shared/kpi-card";
+import { PAGE_PADDING, SECTION_GAP } from "@/constants/design-tokens";
 
 const analysisHistory = [
   {
@@ -10,8 +11,8 @@ const analysisHistory = [
     role: "Desenvolvedor Frontend",
     company: "Nubank",
     companyInitials: "N",
-    companyBg: "#7C3AED",
-    companyTextColor: "#FFFFFF",
+    companyBg: "var(--accent-brand)",
+    companyTextColor: "var(--primary-foreground)",
     date: "15 Fev 2026",
     before: "38%",
     beforeColor: "var(--destructive)",
@@ -23,8 +24,8 @@ const analysisHistory = [
     role: "Product Designer",
     company: "iFood",
     companyInitials: "iF",
-    companyBg: "#DC2626",
-    companyTextColor: "#FFFFFF",
+    companyBg: "var(--destructive)",
+    companyTextColor: "var(--primary-foreground)",
     date: "12 Fev 2026",
     before: "45%",
     beforeColor: "var(--destructive)",
@@ -36,8 +37,8 @@ const analysisHistory = [
     role: "Engenheiro de Dados",
     company: "Mercado Livre",
     companyInitials: "ML",
-    companyBg: "#FACC15",
-    companyTextColor: "#1E293B",
+    companyBg: "var(--accent-warning)",
+    companyTextColor: "var(--accent-warning-text)",
     date: "08 Fev 2026",
     before: "52%",
     beforeColor: "var(--destructive)",
@@ -48,7 +49,7 @@ const analysisHistory = [
 
 export default function DashboardPage() {
   return (
-    <div className="flex flex-1 flex-col gap-6 p-8">
+    <div className={`flex flex-1 flex-col ${SECTION_GAP} ${PAGE_PADDING}`}>
       <DashboardHeader />
 
       {/* KPI Row */}

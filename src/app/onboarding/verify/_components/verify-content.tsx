@@ -55,6 +55,7 @@ export function VerifyContent() {
         label: "Continuar",
         onClick: continueToDashboard,
         disabled: isSaving || !isFormValid,
+        loading: isSaving,
       }}
     />
   );

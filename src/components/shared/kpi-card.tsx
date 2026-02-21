@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
+
 import { cn } from "@/utils/style";
+import { TEXT_BADGE, TEXT_KPI } from "@/constants/design-tokens";
 
 const KPI_VARIANTS = {
   primary: {
@@ -56,27 +58,26 @@ export function KpiCard({
   const tokens = KPI_VARIANTS[variant];
 
   return (
-    <div className="flex flex-1 flex-col overflow-hidden rounded-lg border border-border bg-card shadow-sm">
+    <div className="flex flex-1 flex-col overflow-hidden rounded-xl border border-border bg-card shadow-sm">
       {/* Accent bar */}
       <div
-        className={cn("h-[3px] w-full", !accentColor && tokens.accent)}
+        className={cn("h-0.5 w-full", !accentColor && tokens.accent)}
         style={accentColor ? { backgroundColor: accentColor } : undefined}
       />
 
-      {/* Content */}
-      <div className="flex items-center justify-between gap-1 px-6 py-5">
+      {/* Content — p-7 (28px) per design system */}
+      <div className="flex items-center justify-between gap-1 p-7">
         <div className="flex flex-col gap-1">
           <span className="text-sm font-medium text-muted-foreground">
             {label}
           </span>
           <div className="flex items-end gap-2">
-            <span className="text-[32px] leading-none font-semibold text-foreground">
-              {value}
-            </span>
+            <span className={TEXT_KPI}>{value}</span>
             {badge && (
               <span
                 className={cn(
-                  "mb-0.5 rounded-full px-2 py-0.5 text-[11px] leading-[1.33] font-semibold text-primary-foreground",
+                  "mb-0.5 rounded-full px-2 py-0.5 text-primary-foreground",
+                  TEXT_BADGE,
                   !badge.color && tokens.badge
                 )}
                 style={

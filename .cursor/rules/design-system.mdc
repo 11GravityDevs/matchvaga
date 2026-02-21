@@ -109,6 +109,8 @@ One primary action per section. Right-align actions in cards/modals; left-align 
 | 24px | Section spacing | `gap-6`, `p-6` |
 | 28px | Card padding | `p-7` |
 
+**Forbidden:** `p-[Xpx]`, `gap-[Xpx]`, `m-[Xpx]`, etc. Use the scale above.
+
 ### Border Radius
 
 | Size | Value | Context | Tailwind |
@@ -180,6 +182,16 @@ Use `flex-1` for `fill_container`; `w-full` for full-width containers.
 - Use design tokens only; never hardcode hex values
 - Use spacing scale; avoid arbitrary values
 - Maintain vertical rhythm between sections
+
+### No Arbitrary Values
+
+**Do NOT use arbitrary values** in Tailwind classes (e.g. `p-[13px]`, `w-[900px]`, `text-[22px]`, `rounded-[10px]`).
+
+- **Spacing:** Use only the spacing scale: `gap-1` through `gap-12`, `p-1` through `p-12`, `m-*`, etc.
+- **Typography:** Use design tokens from `@/constants/design-tokens` (e.g. `PAGE_TITLE_CLASS`, `TEXT_SMALL`, `CARD_TITLE_CLASS`).
+- **Layout:** Use `w-form`, `w-content`, `w-sidebar`, `w-column` from theme or `@/constants/design-tokens`.
+- **Radius:** Use `rounded-sm`, `rounded-md`, `rounded-lg`, `rounded-xl` only.
+- **Exceptions:** Third-party UI (shadcn) internals may use arbitrary values; avoid adding new ones.
 
 ### Error & Loading States
 

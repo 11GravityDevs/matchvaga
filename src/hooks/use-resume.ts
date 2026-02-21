@@ -46,14 +46,19 @@ const MOCK_RESUME_DATA: ResumeData = {
 export function useResume(): UseResumeReturn {
   const [resumeData, setResumeData] = useState<ResumeData>(MOCK_RESUME_DATA);
   const [isLoading] = useState(false);
-  const [error] = useState<Error | null>(null);
+  const [error, setError] = useState<Error | null>(null);
   const [isSaving, setIsSaving] = useState(false);
 
   const save = useCallback(async (data: ResumeData) => {
+    setError(null);
     setIsSaving(true);
     try {
       // TODO: Call API to save resume
       setResumeData(data);
+    } catch (e) {
+      const err = e instanceof Error ? e : new Error("Falha ao salvar");
+      setError(err);
+      throw e;
     } finally {
       setIsSaving(false);
     }

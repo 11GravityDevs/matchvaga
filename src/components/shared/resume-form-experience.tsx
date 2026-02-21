@@ -12,6 +12,7 @@ import {
   SECTION_TITLE_CLASS,
   SUB_LABEL_CLASS,
 } from "@/components/shared/resume-form-constants";
+import { TEXT_SMALL } from "@/constants/design-tokens";
 
 interface ResumeFormExperienceProps {
   experience: ExperienceEntry[];
@@ -124,7 +125,7 @@ export function ResumeFormExperience({
                   updateExperience(expIndex, { description: e.target.value })
                 }
                 disabled={isSaving}
-                className="h-[80px] w-full resize-none rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground shadow-none transition-[color,box-shadow] outline-none placeholder:text-muted-foreground focus-visible:border-accent-brand focus-visible:ring-1 focus-visible:ring-accent-brand/30 disabled:cursor-not-allowed disabled:opacity-50"
+                className="h-20 w-full resize-none rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground shadow-none transition-[color,box-shadow] outline-none placeholder:text-muted-foreground focus-visible:border-accent-brand focus-visible:ring-1 focus-visible:ring-accent-brand/30 disabled:cursor-not-allowed disabled:opacity-50"
               />
             </FormField>
           </div>
@@ -135,7 +136,7 @@ export function ResumeFormExperience({
                 variant="destructive"
                 size="sm"
                 onClick={() => removeExperience(expIndex)}
-                className="w-fit gap-1.5 bg-destructive text-[13px] text-primary-foreground hover:bg-destructive/90"
+                className={`w-fit gap-1.5 bg-destructive text-primary-foreground hover:bg-destructive/90 ${TEXT_SMALL}`}
               >
                 <Trash2 className="h-4 w-4" />
                 Remover
@@ -149,7 +150,7 @@ export function ResumeFormExperience({
         type="button"
         size="sm"
         onClick={addExperience}
-        className="w-fit gap-1.5 bg-accent-brand text-[13px] text-primary-foreground hover:bg-accent-brand-hover"
+        className={`w-fit gap-1.5 bg-accent-brand text-primary-foreground hover:bg-accent-brand-hover ${TEXT_SMALL}`}
       >
         <Plus className="h-4 w-4" />
         Adicionar experiência
