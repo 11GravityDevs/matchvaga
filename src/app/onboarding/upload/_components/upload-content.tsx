@@ -1,0 +1,155 @@
+"use client";
+
+import { useCallback, useRef } from "react";
+
+import { Check, Loader2, Upload } from "lucide-react";
+
+import { useResumeUpload } from "@/hooks/use-resume-upload";
+import { formatFileSize } from "@/utils/file";
+import { cn } from "@/utils/style";
+
+export function UploadContent() {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const { isUploading, selectedFile, uploadFile, uploadFromPaste, analyze } =
+    useResumeUpload();
+
+  const handleFileChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (file) {
+        void uploadFile(file);
+      }
+      e.target.value = "";
+    },
+    [uploadFile]
+  );
+
+  const handlePaste = useCallback(
+    (e: React.ClipboardEvent<HTMLDivElement>) => {
+      const text = e.clipboardData.getData("text");
+      if (text) {
+        e.preventDefault();
+        uploadFromPaste(text);
+      }
+    },
+    [uploadFromPaste]
+  );
+
+  const handleDrop = useCallback(
+    (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault();
+      const file = e.dataTransfer.files?.[0];
+      if (file) {
+        void uploadFile(file);
+      }
+    },
+    [uploadFile]
+  );
+
+  const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "copy";
+  }, []);
+
+  const handleBrowseClick = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    inputRef.current?.click();
+  }, []);
+
+  return (
+    <div className="w-[632px] rounded-xl border border-[#E2E8F0] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.1),0_8px_24px_-4px_rgba(0,0,0,0.05)]">
+      <div className="flex flex-col gap-1 px-7 pt-7">
+        <h2 className="text-[22px] leading-[1.3] font-bold text-[#1E293B]">
+          Upload do Curriculo
+        </h2>
+        <p className="text-sm leading-[1.4] text-[#64748B]">
+          Envie seu curriculo para começar
+        </p>
+      </div>
+
+      <div className="flex flex-col gap-6 p-7">
+        <div
+          className={cn(
+            "flex h-[304px] cursor-pointer flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed border-border bg-card transition-colors",
+            "hover:border-accent-brand/50 hover:bg-muted/20"
+          )}
+          onPaste={handlePaste}
+          onDrop={handleDrop}
+          onDragOver={handleDragOver}
+          tabIndex={0}
+          role="button"
+          onClick={() => inputRef.current?.click()}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              inputRef.current?.click();
+            }
+          }}
+        >
+          <input
+            ref={inputRef}
+            type="file"
+            accept=".txt,.pdf,.doc,.docx"
+            onChange={handleFileChange}
+            className="sr-only"
+            aria-label="Selecionar arquivo do curriculo"
+          />
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-secondary">
+            {isUploading ? (
+              <Loader2 className="h-7 w-7 animate-spin text-muted-foreground" />
+            ) : selectedFile ? (
+              <Check className="h-7 w-7 text-accent-success" />
+            ) : (
+              <Upload className="h-7 w-7 text-muted-foreground" />
+            )}
+          </div>
+          {selectedFile && !isUploading ? (
+            <>
+              <p className="text-center text-lg font-semibold text-foreground">
+                {selectedFile.name}
+              </p>
+              <p className="text-center text-sm text-muted-foreground">
+                {formatFileSize(selectedFile.size)}
+              </p>
+              <button
+                type="button"
+                onClick={handleBrowseClick}
+                className="cursor-pointer rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-colors hover:bg-muted"
+              >
+                Selecionar outro arquivo
+              </button>
+            </>
+          ) : (
+            <>
+              <p className="text-center text-lg font-semibold text-foreground">
+                Arraste seu curriculo aqui
+              </p>
+              <p className="text-center text-sm text-muted-foreground">
+                Suportamos PDF e DOCX
+              </p>
+              <p className="text-[13px] text-muted-foreground">ou</p>
+              <button
+                type="button"
+                onClick={handleBrowseClick}
+                className="cursor-pointer rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-colors hover:bg-muted"
+              >
+                Selecionar arquivo
+              </button>
+            </>
+          )}
+        </div>
+
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={() => void analyze()}
+            disabled={!selectedFile || isUploading}
+            className="cursor-pointer rounded-lg bg-[#2563EB] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#1D4ED8] disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            Continuar
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -1,8 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import { ArrowLeft } from "lucide-react";
 
-export const metadata = {
+import { BrandName } from "@/components/shared/brand-name";
+
+export const metadata: Metadata = {
   title: "Termos de Serviço | MatchVaga",
   description:
     "Termos de Serviço do MatchVaga - plataforma de análise e otimização de currículos.",
@@ -34,10 +37,10 @@ export default function TermosDeServicoPage() {
             1. Aceitação dos Termos
           </h2>
           <p className="text-muted-foreground">
-            Ao acessar ou utilizar o MatchVaga (&quot;Plataforma&quot;), você
-            concorda em cumprir e estar vinculado a estes Termos de Serviço. Se
-            você não concordar com qualquer parte destes termos, não deverá
-            utilizar nossos serviços.
+            Ao acessar ou utilizar o <BrandName /> (&quot;Plataforma&quot;),
+            você concorda em cumprir e estar vinculado a estes Termos de
+            Serviço. Se você não concordar com qualquer parte destes termos, não
+            deverá utilizar nossos serviços.
           </p>
         </section>
 
@@ -46,9 +49,9 @@ export default function TermosDeServicoPage() {
             2. Descrição do Serviço
           </h2>
           <p className="text-muted-foreground">
-            O MatchVaga é uma plataforma SaaS que oferece: (a) análise da lacuna
-            entre seu currículo e descrições de vagas; (b) identificação de
-            competências faltantes para o cargo desejado; (c) geração de
+            O <BrandName /> é uma plataforma SaaS que oferece: (a) análise da
+            lacuna entre seu currículo e descrições de vagas; (b) identificação
+            de competências faltantes para o cargo desejado; (c) geração de
             documentos otimizados (PDF/DOCX) adaptados à vaga. Os serviços são
             prestados &quot;como estão&quot;, sujeitos à disponibilidade e às
             limitações técnicas.
@@ -87,8 +90,8 @@ export default function TermosDeServicoPage() {
           </h2>
           <p className="text-muted-foreground">
             A Plataforma, incluindo sua interface, algoritmos e marca, é de
-            propriedade do MatchVaga. Os currículos e documentos que você envia
-            permanecem de sua propriedade. Ao utilizar o serviço, você nos
+            propriedade do <BrandName />. Os currículos e documentos que você
+            envia permanecem de sua propriedade. Ao utilizar o serviço, você nos
             concede uma licença limitada para processar seus dados
             exclusivamente para fornecer e melhorar os serviços, conforme
             descrito em nossa Política de Privacidade.
@@ -100,7 +103,7 @@ export default function TermosDeServicoPage() {
             6. Limitação de Responsabilidade
           </h2>
           <p className="text-muted-foreground">
-            O MatchVaga não garante resultados específicos de emprego ou
+            O <BrandName /> não garante resultados específicos de emprego ou
             aprovação em processos seletivos. A análise é baseada em algoritmos
             e pode conter imprecisões. Na máxima extensão permitida por lei, não
             seremos responsáveis por danos indiretos, incidentais ou

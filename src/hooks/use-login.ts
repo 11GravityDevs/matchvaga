@@ -7,11 +7,14 @@ export type LoginStep = "email" | "token";
 
 const VALID_STEPS: readonly LoginStep[] = ["email", "token"] as const;
 
-function parseStepFromSearchParams(searchParams: URLSearchParams): LoginStep {
+function parseLoginStepFromSearchParams(
+  searchParams: URLSearchParams
+): LoginStep {
   const step = searchParams.get("step");
   if (step === "email" || step === "token") {
     return step;
   }
+
   return "email";
 }
 
@@ -24,7 +27,7 @@ export function useLoginStep(): {
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
 
-  const step = parseStepFromSearchParams(searchParams);
+  const step = parseLoginStepFromSearchParams(searchParams);
 
   const setStep = useCallback(
     (newStep: LoginStep) => {
@@ -56,7 +59,7 @@ export function useLogin(): UseLoginReturn {
   const router = useRouter();
 
   const submitEmail = useCallback(
-    async (email: string, _rememberMe?: boolean) => {
+    async (_email: string, _rememberMe?: boolean) => {
       // TODO: Call API to send magic link / OTP
       // For now, just advance to token step
       setStep("token");
@@ -65,7 +68,7 @@ export function useLogin(): UseLoginReturn {
   );
 
   const submitToken = useCallback(
-    async (token: string) => {
+    async (_token: string) => {
       // TODO: Call API to verify token
       // For now, redirect to dashboard
       router.push("/onboarding/upload");

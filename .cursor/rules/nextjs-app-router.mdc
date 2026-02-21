@@ -85,6 +85,32 @@ export default function Error({
 
 ---
 
+## Page Pattern (Client-Heavy Routes)
+
+For pages that need client logic (hooks, event handlers, Context consumers):
+
+1. **Keep `page.tsx` as a Server Component** — no `"use client"`.
+2. **Use `*Content` as the client entry point** — put hooks and interactivity in `app/<route>/_components/<feature>-content.tsx`. The page always imports and renders `*Content`.
+3. **Put hooks in the Content component** — avoid thin wrappers that only pass hook results as props to a single child. If Content would do nothing but call a hook and pass props to one child, put the hook directly in Content and render the UI there.
+4. **Wrap in Suspense** — use `<Suspense fallback={<Loading />}>` for streaming and loading states.
+
+```tsx
+// page.tsx (Server Component)
+import { Suspense } from "react";
+import { VerifyContent } from "./_components/verify-content";
+import { Loading } from "@/components/ui/loading";
+
+export default function VerifyPage() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <VerifyContent />
+    </Suspense>
+  );
+}
+```
+
+---
+
 ## Common Mistakes to Avoid
 
 ### 1. Route Handlers from Server Components

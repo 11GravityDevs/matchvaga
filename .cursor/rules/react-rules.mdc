@@ -26,6 +26,8 @@ export function ResumeUpload({ onUpload, isUploading }: ResumeUploadProps) {
 - **UI components**: Presentational only; receive data via props
 - **Logic**: Custom hooks (`useLogin`, `useResumeUpload`) or services — not inside JSX
 - **Hooks location**: `src/hooks/` or colocated in feature folders
+- **Utils**: Pure functions (format, validate, parse) → `src/utils/<domain>.ts` — never inside components
+- **File Size Limit**: Maximum **300 lines**. If a file exceeds this limit, extract code into custom hooks or smaller components colocated in the same directory.
 
 ---
 
@@ -91,13 +93,13 @@ if (!condition) return null;
 
 ## Purity checklist
 
-| In render | Use instead |
-|-----------|-------------|
-| `fetch()` | `useEffect` or Server Component `await` |
-| `document.title = x` | `useEffect` |
-| `new Date()`, `Math.random()` | `useState` + `useEffect` or event handler |
-| Mutating props/state | New values, setters |
-| Mutating objects passed to JSX | Create new objects before passing |
+| In render                      | Use instead                               |
+| ------------------------------ | ----------------------------------------- |
+| `fetch()`                      | `useEffect` or Server Component `await`   |
+| `document.title = x`           | `useEffect`                               |
+| `new Date()`, `Math.random()`  | `useState` + `useEffect` or event handler |
+| Mutating props/state           | New values, setters                       |
+| Mutating objects passed to JSX | Create new objects before passing         |
 
 ---
 

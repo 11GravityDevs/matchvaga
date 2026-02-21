@@ -1,0 +1,31 @@
+import Link from "next/link";
+
+import { FileSearch } from "lucide-react";
+
+import { BrandName } from "@/components/shared/brand-name";
+import { cn } from "@/utils/style";
+
+interface OnboardingTopBarProps {
+  className?: string;
+}
+
+export function OnboardingTopBar({ className }: OnboardingTopBarProps) {
+  return (
+    <header
+      className={cn(
+        "flex h-16 w-full items-center justify-between border-b border-border bg-white px-8 shadow-[0_2px_4px_rgba(0,0,0,0.06)]",
+        className
+      )}
+    >
+      <Link
+        href="/"
+        className="flex items-center gap-2 text-foreground no-underline hover:opacity-90"
+      >
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent-brand">
+          <FileSearch className="h-4 w-4 text-white" />
+        </div>
+        <BrandName className="text-lg font-bold" />
+      </Link>
+    </header>
+  );
+}

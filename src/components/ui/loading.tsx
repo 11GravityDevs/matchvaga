@@ -1,6 +1,6 @@
 import { cva, type VariantProps } from "class-variance-authority";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/style";
 
 const loadingVariants = cva("flex w-full items-center justify-center", {
   variants: {
@@ -42,7 +42,7 @@ export function Loading({
     >
       <div
         className={cn(
-          "animate-spin rounded-full border-primary border-t-transparent",
+          "animate-spin rounded-full border-accent-brand border-t-transparent",
           spinnerSizes[size]
         )}
         aria-hidden

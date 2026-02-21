@@ -1,9 +1,9 @@
 "use client";
 
-import { LoginEmailForm } from "@/components/auth/login-email-form";
-import { LoginFormCard } from "@/components/auth/login-form-card";
-import { LoginHero } from "@/components/auth/login-hero";
-import { LoginTokenForm } from "@/components/auth/login-token-form";
+import { LoginEmailForm } from "./login-email-form";
+import { LoginFormCard } from "./login-form-card";
+import { LoginHero } from "./login-hero";
+import { LoginTokenForm } from "./login-token-form";
 import { useLogin } from "@/hooks/use-login";
 
 export function LoginContent() {

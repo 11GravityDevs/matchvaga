@@ -1,6 +1,6 @@
 import { BarChart3, MessageSquare, Sparkles } from "lucide-react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/style";
 
 export function LoginHero() {
   return (
@@ -40,7 +40,7 @@ export function LoginHero() {
         <div
           className={cn(
             "absolute top-[22%] right-[12%] flex items-center gap-4 rounded-2xl bg-card px-5 py-4 shadow-xs",
-            "-rotate-2"
+            "animate-balance"
           )}
         >
           <div className="flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-[26px] bg-accent-success">

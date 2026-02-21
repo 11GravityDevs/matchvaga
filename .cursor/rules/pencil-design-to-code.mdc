@@ -8,7 +8,7 @@ alwaysApply: false
 
 ## Design Source
 
-- **File**: `design.pen`
+- **File**: `design.pen` (project root)
 - **Access**: Use Pencil MCP tools only — do NOT use Read/Grep on `.pen` files
 - **Design system**: See `design-system.mdc` for component catalog, tokens, typography, and spacing
 

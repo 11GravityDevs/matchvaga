@@ -115,3 +115,17 @@
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes balance {
+  0%,
+  100% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+}
+
+.animate-balance {
+  animation: balance 4s ease-in-out infinite;
+}

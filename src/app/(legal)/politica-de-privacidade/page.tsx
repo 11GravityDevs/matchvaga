@@ -1,8 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import { ArrowLeft } from "lucide-react";
 
-export const metadata = {
+import { BrandName } from "@/components/shared/brand-name";
+
+export const metadata: Metadata = {
   title: "Política de Privacidade | MatchVaga",
   description:
     "Política de Privacidade do MatchVaga - como tratamos seus dados pessoais.",
@@ -34,11 +37,11 @@ export default function PoliticaDePrivacidadePage() {
             1. Introdução
           </h2>
           <p className="text-muted-foreground">
-            O MatchVaga (&quot;nós&quot;, &quot;nosso&quot;) está comprometido
-            com a proteção da sua privacidade. Esta Política descreve como
-            coletamos, usamos, armazenamos e protegemos suas informações
-            pessoais quando você utiliza nossa plataforma de análise e
-            otimização de currículos.
+            O <BrandName /> (&quot;nós&quot;, &quot;nosso&quot;) está
+            comprometido com a proteção da sua privacidade. Esta Política
+            descreve como coletamos, usamos, armazenamos e protegemos suas
+            informações pessoais quando você utiliza nossa plataforma de análise
+            e otimização de currículos.
           </p>
         </section>
 

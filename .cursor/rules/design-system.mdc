@@ -198,11 +198,14 @@ Use `flex-1` for `fill_container`; `w-full` for full-width containers.
 
 | Component | Location | Purpose |
 |-----------|----------|---------|
+| **BrandName** | `@/components/shared/brand-name` | MatchVaga branding (logo + name) |
+| **FormField** | `@/components/shared/form-field` | Label + input wrapper; reusable across forms |
+| **StepIndicator** | `@/components/shared/step-indicator` | Onboarding step progress (used in onboarding layout) |
 | **Sidebar Pro Upgrade** | `design.pen` → custom | Upsell CTA in sidebar; gradient |
 | **KPI Card** | `design.pen` → custom | Metric display with label, value, icon |
-| **Sidebar Brand** | `design.pen` → custom | MatchVaga logo + name |
+| **Sidebar Brand** | `design.pen` → custom; uses BrandName | MatchVaga logo + name |
 
-Implement these when building dashboard/sidebar. Use `batch_get` for node structure.
+Implement these when building dashboard/sidebar. StepIndicator is used in onboarding flow. Use `batch_get` for design.pen node structure.
 
 ---
 
@@ -212,7 +215,7 @@ Implement these when building dashboard/sidebar. Use `batch_get` for node struct
 
 - Import from `@/components/ui/*` — Button, Card, Field, Input, Select, etc.
 - Use `Field` + `FieldLabel` + `Input`/`Select` for forms
-- Use `cn()` from `@/lib/utils` for conditional classes
+- Use `cn()` from `@/utils/style` for conditional classes
 - Prefer composition over custom wrappers
 
 ### Tailwind v4

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import { BrandName } from "@/components/shared/brand-name";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -23,7 +24,7 @@ export default function Page() {
         <CardHeader>
           <CardTitle>
             <h1 className="text-base leading-normal font-medium group-data-[size=sm]/card:text-sm">
-              MatchVaga
+              <BrandName />
             </h1>
           </CardTitle>
           <CardDescription>

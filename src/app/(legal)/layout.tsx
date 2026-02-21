@@ -3,5 +3,5 @@ export default function LegalLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <div className="min-h-screen bg-background">{children}</div>;
+  return <main className="min-h-screen bg-background">{children}</main>;
 }

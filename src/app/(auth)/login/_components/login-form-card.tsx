@@ -1,6 +1,7 @@
 import { FileSearch } from "lucide-react";
 import Link from "next/link";
 
+import { BrandName } from "@/components/shared/brand-name";
 import {
   Card,
   CardContent,
@@ -8,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/style";
 
 interface LoginFormCardProps {
   title: string;
@@ -32,12 +33,10 @@ export function LoginFormCard({
     >
       <div className="flex w-full max-w-[400px] flex-col items-center gap-7">
         <div className="flex flex-col items-center gap-1">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary">
-            <FileSearch className="h-6 w-6 text-primary-foreground" />
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent-brand">
+            <FileSearch className="h-6 w-6 text-white" />
           </div>
-          <span className="text-2xl font-bold tracking-[-0.5px] text-foreground">
-            MatchVaga
-          </span>
+          <BrandName className="text-2xl font-bold tracking-[-0.5px]" />
           <span className="text-sm font-normal text-muted-foreground">
             Otimização Inteligente de Currículos
           </span>
@@ -52,6 +51,7 @@ export function LoginFormCard({
               {description}
             </CardDescription>
           </CardHeader>
+
           <CardContent className="flex flex-col gap-6 pt-6">
             {children}
           </CardContent>
