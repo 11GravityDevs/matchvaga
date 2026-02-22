@@ -1,0 +1,46 @@
+---
+description: TypeScript strict mode — no any, explicit types, named exports
+globs: src/**/*.ts,src/**/*.tsx
+alwaysApply: false
+---
+
+# TypeScript Standards
+
+## Strict Mode
+
+- **No `any`** — Use `unknown` with type guards when type is uncertain.
+- **Explicit prop interfaces** — Define `interface Props` for component props.
+- **Named exports** — Prefer `export const foo` over `export default`.
+
+## Examples
+
+```ts
+// ❌ Bad
+function parse(data: any) {
+  return data.value;
+}
+
+// ✅ Good
+function parse(data: unknown): { value: string } {
+  if (typeof data === "object" && data !== null && "value" in data) {
+    return { value: String((data as { value: unknown }).value) };
+  }
+  throw new Error("Invalid data");
+}
+```
+
+```tsx
+// ❌ Bad
+export default function Card({ title }: { title: string }) {
+  return <div>{title}</div>;
+}
+
+// ✅ Good
+interface CardProps {
+  title: string;
+}
+
+export function Card({ title }: CardProps) {
+  return <div>{title}</div>;
+}
+```

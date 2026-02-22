@@ -85,6 +85,17 @@ export default function Error({
 
 ---
 
+## Route Handlers
+
+Use Route Handlers (`route.ts` in `app/<route>/`) for:
+- Webhooks (external services calling your API)
+- External callbacks (OAuth, payment providers)
+- Public API endpoints consumed by third parties
+
+**Prefer Server Actions** for app-internal mutations (forms, button clicks). Do not create Route Handlers solely for Client Component fetches—use Server Actions instead.
+
+---
+
 ## Page Pattern (Client-Heavy Routes)
 
 For pages that need client logic (hooks, event handlers, Context consumers):

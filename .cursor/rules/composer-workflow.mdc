@@ -1,0 +1,24 @@
+---
+description: Composer plan-first workflow, @-mentions, and multi-file editing
+alwaysApply: true
+---
+
+# Composer Workflow
+
+## Plan Before Act
+
+For tasks spanning **3+ files**, output a concise plan before editing:
+- List files to create or modify
+- Summarize key changes per file
+- User may approve or refine the plan before implementation
+
+## Context Provision
+
+- **@-mentions:** Use for known files that must change. Let the agent search for the rest.
+- **Avoid attaching 8+ irrelevant files** — wastes tokens and dilutes focus.
+- Prefer "With Codebase" for discovery; use @-mentions for explicit scope.
+
+## Multi-File Awareness
+
+- Break large requests into features rather than asking for an entire flow at once.
+- Review diffs before accepting changes.

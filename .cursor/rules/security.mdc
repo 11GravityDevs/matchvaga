@@ -1,0 +1,33 @@
+---
+description: Security — API keys, env vars, Supabase client usage
+globs: src/**/*.ts,src/**/*.tsx,src/lib/**
+alwaysApply: false
+---
+
+# Security
+
+## API Keys and Secrets
+
+- **Never hardcode** API keys, secrets, or tokens in source code.
+- Use environment variables. Add to `.env.local` (gitignored); document in `.env.example`.
+
+## Environment Variables
+
+- **NEXT_PUBLIC_** — Only for values safe to expose to the client (e.g. Supabase URL, publishable key).
+- **Never** prefix server-only secrets (service role key, API keys) with `NEXT_PUBLIC_`.
+
+```ts
+// ✅ Good: client-safe vars
+const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+
+// ❌ Bad: secret exposed to client
+const key = process.env.NEXT_PUBLIC_SERVICE_ROLE_KEY;
+```
+
+## Supabase Client
+
+- **Client-side:** Use `createClient()` from `@/lib/supabase/client` — uses publishable (anon) key.
+- **Server-side:** Use `createClient()` from `@/lib/supabase/server` — RLS applies; cookies for auth.
+- **Never** import the service role key in client code or expose it via `NEXT_PUBLIC_`.
+
+See `@/lib/supabase/client.ts` and `@/lib/supabase/server.ts` for the canonical setup.

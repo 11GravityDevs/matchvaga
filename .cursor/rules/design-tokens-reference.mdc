@@ -1,0 +1,121 @@
+---
+description: Design tokens — colors, typography, spacing, radius; use @/constants/design-tokens
+globs: design.pen,src/**/*.css
+alwaysApply: false
+---
+
+# Design Tokens Reference
+
+Use constants from `@/constants/design-tokens` for typography, spacing, and layout. See `tailwind-no-arbitrary.mdc` — no arbitrary values in components.
+
+---
+
+## Color Tokens (design.pen → globals.css → Tailwind)
+
+| Token | Usage | Tailwind |
+|-------|-------|----------|
+| `--primary` | Primary actions, brand, active nav | `bg-primary`, `text-primary` |
+| `--primary-foreground` | Text on primary | `text-primary-foreground` |
+| `--secondary` | Secondary surfaces | `bg-secondary` |
+| `--muted` | Subtle backgrounds | `bg-muted` |
+| `--muted-foreground` | Secondary text, placeholders | `text-muted-foreground` |
+| `--accent` | Hover states | `bg-accent` |
+| `--accent-brand` | Brand accent (blue) | `bg-accent-brand` |
+| `--accent-brand-hover` | Brand accent hover | `hover:bg-accent-brand-hover` |
+| `--accent-brand-light` | Active nav background | `bg-accent-brand-light` |
+| `--accent-success` | Success states | `bg-accent-success` |
+| `--destructive` | Danger actions | `bg-destructive`, `text-destructive` |
+| `--foreground` | Primary text | `text-foreground` |
+| `--background` | Page background | `bg-background` |
+| `--card` | Card surfaces | `bg-card` |
+| `--border` | Borders, dividers | `border-border` |
+| `--input` | Input borders | `border-input` |
+| `--ring` | Focus rings | `ring-ring` |
+| `--sidebar` | Sidebar background | `bg-sidebar` |
+| `--sidebar-foreground` | Sidebar text | `text-sidebar-foreground` |
+| `--sidebar-primary` | Sidebar brand | `text-sidebar-primary` |
+| `--sidebar-border` | Sidebar divider | `border-sidebar-border` |
+
+**Note:** Use design tokens only; never hardcode hex values. Brand accent: `--accent-brand` (#2563eb), `--accent-brand-hover` (#1d4ed8), `--accent-brand-light` (#dbeafe).
+
+```tsx
+// ✅ Good: design tokens
+<div className="bg-primary text-primary-foreground" />
+<div className="bg-accent-brand hover:bg-accent-brand-hover" />
+
+// ❌ Bad: hardcoded values
+<div className="bg-[#2563eb] text-white" />
+```
+
+---
+
+## Typography Scale
+
+Import from `@/constants/design-tokens`: `PAGE_TITLE_CLASS`, `CARD_TITLE_CLASS`, `TEXT_SMALL`, `TEXT_KPI`, etc.
+
+| Role | Tailwind (via constants) |
+|------|---------------------------|
+| Card title | `CARD_TITLE_CLASS` (22px, bold) |
+| Brand / Section | `text-base font-bold` |
+| Body / Label | `text-sm font-medium` |
+| Small / CTA | `TEXT_SMALL_SEMIBOLD` |
+| Caption | `text-xs` |
+| KPI value | `TEXT_KPI` (32px) |
+
+**Font:** Inter via `next/font/google`. Use `font-sans` or `var(--font-sans)`.
+
+---
+
+## Spacing Scale
+
+| Value | Context | Tailwind |
+|-------|---------|----------|
+| 4px | Tight gaps | `gap-1` |
+| 6px | Form label + input | `gap-1.5` |
+| 8px | Nav items, buttons | `gap-2`, `p-2` |
+| 12px | Button groups | `gap-3` |
+| 16px | Sidebar items | `gap-4`, `p-4` |
+| 20px | Card content | `gap-5` |
+| 24px | Section spacing | `gap-6`, `p-6` |
+| 28px | Card padding | `p-7` |
+
+**Forbidden:** `p-[Xpx]`, `gap-[Xpx]`, `m-[Xpx]`. Use the scale above.
+
+---
+
+## Border Radius
+
+| Size | Context | Tailwind |
+|------|---------|----------|
+| xs | Section titles | `rounded-[2px]` |
+| sm | Nav items, buttons | `rounded-md` |
+| md | Buttons, inputs | `rounded-lg` |
+| lg | Cards | `rounded-xl` |
+
+Use `RADIUS_SM`, `RADIUS_MD`, `RADIUS_LG`, `CARD_RADIUS` from `@/constants/design-tokens`.
+
+---
+
+## No Shadows
+
+Cards and surfaces: `rounded-xl border border-border bg-card`. No shadows.
+
+---
+
+## Layout Dimensions
+
+| Element | Width | Tailwind |
+|---------|-------|----------|
+| Sidebar | 256px | `W_SIDEBAR` / `w-sidebar` |
+| Form / Card | 300–400px | `W_FORM`, `W_COLUMN` |
+| Content | 1100px | `MAX_W_CONTENT` |
+
+Use `flex-1` for fill; `w-full` for full-width.
+
+---
+
+## Tailwind v4
+
+- `@import "tailwindcss"` in globals.css (no `@tailwind` directives)
+- Use `@theme inline` for mapping CSS vars to Tailwind
+- Fonts: utility classes in `@layer base`

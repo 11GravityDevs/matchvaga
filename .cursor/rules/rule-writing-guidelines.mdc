@@ -1,0 +1,42 @@
+---
+description: Internal standards for writing and editing Cursor rules
+alwaysApply: false
+---
+
+# Rule Writing Guidelines
+
+Standards for editing `.cursor/rules/*.mdc`. See `matchvaga-project-overview.mdc` "Keeping Rules Updated" for when to update each rule.
+
+## Instruction Style
+
+- **Imperative, minimal:** Use "Do X", "Never Y", "Use Z from @/path". Avoid long prose.
+- **One idea per bullet:** No compound sentences.
+- **No redundancy:** If rule A references rule B, do not repeat B's content.
+
+## Examples
+
+- **When:** For non-obvious constraints (purity, arbitrary values, security).
+- **Format:** Use ✅/❌ code blocks. One good, one bad—max 5 lines each.
+- **Where:** Inline in the rule, not a separate "Examples" section unless many.
+
+## Scoping
+
+| Use Case | Setting | Example |
+|----------|---------|---------|
+| Foundational context | alwaysApply: true | matchvaga-project-overview, colocation, composer-workflow |
+| Domain-specific | globs: path | nextjs-app-router (src/app/**), tailwind-no-arbitrary |
+| Task-triggered | globs: broad | check-before-add (src/**/*.ts) |
+| Design-only | globs: design.pen | pencil-design-to-code |
+
+**Guideline:** Prefer glob-scoped over always-apply when the rule applies only to specific file types.
+
+## Cross-References
+
+- Use `See rule-name.mdc` for related rules.
+- Use `@/path` for code references.
+- Avoid circular references (A → B → A).
+
+## File Size
+
+- **Target:** <100 lines per rule. <50 for focused rules.
+- **Max:** 150 lines. If larger, split into multiple rules.

@@ -38,11 +38,7 @@ src/
 └── types/         # Shared TypeScript interfaces
 ```
 
-**Component colocation:**
-- Route-specific components → `app/<route>/_components/` (e.g. `(auth)/login/_components/`, `onboarding/upload/_components/`, `onboarding/_components/` for layout-level). Import with relative path: `./_components/...`
-- Shared complex components → `components/shared/` (e.g. brand-name, step-indicator, form-field)
-- UI primitives → `components/ui/`
-- **One component per file** — Avoid multiple components in the same file. If a component is reusable across screens (e.g. form fields, layout wrappers), extract it to `components/shared/`.
+**Component colocation:** See `colocation.mdc`.
 
 **Utils, constants, hooks:** See `colocation.mdc` for placement. See `constants.mdc` for constants-specific rules. See `check-before-add.mdc` before adding new ones.
 
@@ -98,6 +94,8 @@ When the project changes, update these rules accordingly:
 | New route group or flow | Add to Route Architecture |
 | New domain concept | Add to `matchvaga-domain.mdc` |
 | New design file or workflow | Update `pencil-design-to-code.mdc` |
-| New design components or tokens | Update `design-system.mdc` and `globals.css` |
+| New design components or tokens | Update `design-tokens-reference.mdc`, `design-components.mdc`, and `globals.css` / `design-tokens.ts` |
+| New security surface | Update `security.mdc` |
 | App Router patterns, loading/error | See `nextjs-app-router.mdc` |
 | React purity, hooks, Thinking in React | See `react-rules.mdc` |
+| Editing rules | See `rule-writing-guidelines.mdc` |
