@@ -1,6 +1,7 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { useCallback } from "react";
+import { usePathname, useRouter } from "next/navigation";
 
 import {
   StepIndicator,
@@ -24,13 +25,30 @@ export function OnboardingLayoutClient({
   children: React.ReactNode;
 }>) {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleSkip = useCallback(() => {
+    router.push("/onboarding/upload");
+  }, [router]);
+
+  if (pathname.startsWith("/onboarding/preview")) {
+    return (
+      <main className="flex min-h-screen flex-col bg-background">
+        <OnboardingTopBar showSkipButton onSkip={handleSkip} />
+        <div className="flex flex-1 flex-col items-center justify-center gap-8 bg-(--surface-subtle) px-12 py-12">
+          {children}
+        </div>
+      </main>
+    );
+  }
+
   const currentStepIndex = getStepIndexFromPathname(pathname, STEP_PATHS);
 
   return (
     <OnboardingProvider>
       <main className="flex min-h-screen flex-col bg-background">
         <OnboardingTopBar />
-        <div className="flex flex-1 flex-col items-center justify-center gap-7 bg-[var(--surface-subtle)] py-12">
+        <div className="flex flex-1 flex-col items-center justify-center gap-7 bg-(--surface-subtle) py-12">
           <StepIndicator
             steps={ONBOARDING_STEPS}
             currentStepIndex={currentStepIndex}

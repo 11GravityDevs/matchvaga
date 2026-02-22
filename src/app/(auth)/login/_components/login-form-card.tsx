@@ -69,14 +69,14 @@ export function LoginFormCard({
           Ao continuar, você concorda com nossos{" "}
           <Link
             href="/termos-de-servico"
-            className="underline underline-offset-2 hover:text-foreground"
+            className="text-accent-brand hover:text-accent-brand-hover"
           >
             Termos de Serviço
           </Link>{" "}
           e{" "}
           <Link
             href="/politica-de-privacidade"
-            className="underline underline-offset-2 hover:text-foreground"
+            className="text-accent-brand hover:text-accent-brand-hover"
           >
             Política de Privacidade
           </Link>

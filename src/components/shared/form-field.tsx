@@ -8,6 +8,7 @@ interface FormFieldProps {
   htmlFor: string;
   className?: string;
   labelClassName?: string;
+  error?: string;
   children: ReactNode;
 }
 
@@ -16,6 +17,7 @@ export function FormField({
   htmlFor,
   className,
   labelClassName,
+  error,
   children,
 }: FormFieldProps) {
   return (
@@ -24,6 +26,11 @@ export function FormField({
         {label}
       </label>
       {children}
+      {error && (
+        <p className="text-sm text-destructive" role="alert">
+          {error}
+        </p>
+      )}
     </div>
   );
 }

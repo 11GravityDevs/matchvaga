@@ -7,9 +7,17 @@ import { cn } from "@/utils/style";
 
 interface OnboardingTopBarProps {
   className?: string;
+  showSkipButton?: boolean;
+  onSkip?: () => void;
 }
 
-export function OnboardingTopBar({ className }: OnboardingTopBarProps) {
+export function OnboardingTopBar({
+  className,
+  showSkipButton = false,
+  onSkip,
+}: OnboardingTopBarProps) {
+  const shouldShowSkip = showSkipButton && typeof onSkip === "function";
+
   return (
     <header
       className={cn(
@@ -26,6 +34,15 @@ export function OnboardingTopBar({ className }: OnboardingTopBarProps) {
         </div>
         <BrandName className="text-lg font-bold" />
       </Link>
+      {shouldShowSkip && (
+        <button
+          type="button"
+          onClick={onSkip}
+          className="cursor-pointer text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+        >
+          Pular
+        </button>
+      )}
     </header>
   );
 }

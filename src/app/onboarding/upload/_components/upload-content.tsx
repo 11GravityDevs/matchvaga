@@ -144,13 +144,9 @@ export function UploadContent() {
                 Suportamos PDF e DOCX
               </p>
               <p className={`${TEXT_SMALL} text-muted-foreground`}>ou</p>
-              <button
-                type="button"
-                onClick={handleBrowseClick}
-                className="cursor-pointer rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
-              >
+              <Button variant="secondary" size="lg" onClick={handleBrowseClick}>
                 Selecionar arquivo
-              </button>
+              </Button>
             </>
           )}
         </div>

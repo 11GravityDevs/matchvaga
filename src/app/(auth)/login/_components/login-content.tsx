@@ -1,13 +1,25 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
+
+import { LoginCheckEmail } from "./login-check-email";
 import { LoginEmailForm } from "./login-email-form";
 import { LoginFormCard } from "./login-form-card";
 import { LoginHero } from "./login-hero";
-import { LoginTokenForm } from "./login-token-form";
 import { useLogin } from "@/hooks/use-login";
 
 export function LoginContent() {
-  const { step, isPending, submitEmail, submitToken, resendToken } = useLogin();
+  const searchParams = useSearchParams();
+  const authError = searchParams.get("error") === "auth";
+  const {
+    step,
+    setStep,
+    isPending,
+    email,
+    submitEmail,
+    resendLink,
+    submitGoogle,
+  } = useLogin();
 
   return (
     <>
@@ -17,16 +29,25 @@ export function LoginContent() {
           title="Seja bem-vindo"
           description="Insira seu email para continuar"
         >
-          <LoginEmailForm onSubmit={submitEmail} isPending={isPending} />
+          <LoginEmailForm
+            onSubmit={submitEmail}
+            onGoogleClick={submitGoogle}
+            isPending={isPending}
+            initialError={
+              authError
+                ? "Falha na autenticação com Google. Tente novamente."
+                : undefined
+            }
+          />
         </LoginFormCard>
       ) : (
         <LoginFormCard
-          title="Verificação de Token"
-          description="Insira o código de 6 dígitos enviado ao seu email"
+          title="Verifique seu email"
+          description={`Clique no link enviado para autenticar automaticamente. Email: ${email}`}
         >
-          <LoginTokenForm
-            onSubmit={submitToken}
-            onResend={resendToken}
+          <LoginCheckEmail
+            onResend={resendLink}
+            onBack={() => setStep("email")}
             isPending={isPending}
           />
         </LoginFormCard>

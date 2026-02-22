@@ -34,6 +34,12 @@ export const MAX_W_HERO_DESC = "max-w-hero-desc";
 /** Max width for login form */
 export const MAX_W_LOGIN_FORM = "max-w-login-form";
 
+/** Max width for onboarding preview title: 480px */
+export const MAX_W_PREVIEW_TITLE = "max-w-preview-title";
+
+/** Max width for onboarding preview description: 460px */
+export const MAX_W_PREVIEW_DESC = "max-w-preview-desc";
+
 // ─── Page layout ───
 /** Page-level container padding */
 export const PAGE_PADDING = "px-10 py-12";

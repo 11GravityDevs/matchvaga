@@ -112,6 +112,8 @@
   --width-hero-title: 420px;
   --width-hero-desc: 340px;
   --width-login-form: 400px;
+  --width-preview-title: 480px;
+  --width-preview-desc: 460px;
 
   /* Login hero decorative positioning */
   --top-hero-circle-2: 600px;
@@ -172,6 +174,12 @@
 }
 @utility max-w-login-form {
   max-width: var(--width-login-form);
+}
+@utility max-w-preview-title {
+  max-width: var(--width-preview-title);
+}
+@utility max-w-preview-desc {
+  max-width: var(--width-preview-desc);
 }
 
 @layer base {

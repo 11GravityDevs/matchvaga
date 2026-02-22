@@ -3,11 +3,14 @@
 import { useCallback, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
+import { createClient } from "@/lib/supabase/client";
+import { translateAuthError } from "@/utils/auth";
 import { parseLoginStepFromSearchParams, type LoginStep } from "@/utils/url";
 
 export type { LoginStep };
 
-const VALID_STEPS: readonly LoginStep[] = ["email", "token"] as const;
+const VALID_STEPS: readonly LoginStep[] = ["email", "magic-link"] as const;
+export const LOGIN_EMAIL_STORAGE_KEY = "login-email";
 
 export function useLoginStep(): {
   step: LoginStep;
@@ -40,43 +43,87 @@ export interface UseLoginReturn {
   step: LoginStep;
   setStep: (step: LoginStep) => void;
   isPending: boolean;
+  email: string | null;
   submitEmail: (email: string, rememberMe?: boolean) => Promise<void>;
-  submitToken: (token: string) => Promise<void>;
-  resendToken: () => Promise<void>;
+  resendLink: () => Promise<void>;
+  submitGoogle: () => Promise<void>;
 }
 
 export function useLogin(): UseLoginReturn {
   const { step, setStep, isPending } = useLoginStep();
-  const router = useRouter();
+  const supabase = createClient();
 
   const submitEmail = useCallback(
-    async (_email: string, _rememberMe?: boolean) => {
-      // TODO: Call API to send magic link / OTP
-      // For now, just advance to token step
-      setStep("token");
+    async (email: string) => {
+      const trimmedEmail = email.trim();
+      const { error } = await supabase.auth.signInWithOtp({
+        email: trimmedEmail,
+        options: {
+          shouldCreateUser: true,
+          emailRedirectTo: `${window.location.origin}/auth/callback?next=/onboarding/upload`,
+        },
+      });
+
+      if (error) {
+        throw new Error(translateAuthError(error));
+      }
+
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem(LOGIN_EMAIL_STORAGE_KEY, trimmedEmail);
+      }
+      setStep("magic-link");
     },
-    [setStep]
+    [setStep, supabase.auth]
   );
 
-  const submitToken = useCallback(
-    async (_token: string) => {
-      // TODO: Call API to verify token
-      // For now, redirect to dashboard
-      router.push("/onboarding/upload");
-    },
-    [router]
-  );
+  const resendLink = useCallback(async () => {
+    const email =
+      typeof window !== "undefined"
+        ? sessionStorage.getItem(LOGIN_EMAIL_STORAGE_KEY)
+        : null;
 
-  const resendToken = useCallback(async () => {
-    // TODO: Call API to resend OTP
-  }, []);
+    if (!email) {
+      throw new Error("Sessão expirada. Volte e insira seu email novamente.");
+    }
+
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        shouldCreateUser: true,
+        emailRedirectTo: `${window.location.origin}/auth/callback?next=/onboarding/upload`,
+      },
+    });
+
+    if (error) {
+      throw new Error(translateAuthError(error));
+    }
+  }, [supabase.auth]);
+
+  const submitGoogle = useCallback(async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback?next=/onboarding/upload`,
+      },
+    });
+
+    if (error) {
+      throw new Error(translateAuthError(error));
+    }
+  }, [supabase.auth]);
+
+  const email =
+    step === "magic-link" && typeof window !== "undefined"
+      ? sessionStorage.getItem(LOGIN_EMAIL_STORAGE_KEY)
+      : null;
 
   return {
     step,
     setStep,
     isPending,
+    email,
     submitEmail,
-    submitToken,
-    resendToken,
+    resendLink,
+    submitGoogle,
   };
 }

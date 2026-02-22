@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Field, FieldContent, FieldLabel } from "@/components/ui/field";
@@ -10,17 +10,44 @@ import { isValidEmail } from "@/utils/validation";
 
 interface LoginEmailFormProps {
   onSubmit: (email: string, rememberMe?: boolean) => Promise<void>;
+  onGoogleClick: () => Promise<void>;
   isPending: boolean;
+  initialError?: string;
 }
 
-export function LoginEmailForm({ onSubmit, isPending }: LoginEmailFormProps) {
+export function LoginEmailForm({
+  onSubmit,
+  onGoogleClick,
+  isPending,
+  initialError,
+}: LoginEmailFormProps) {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [error, setError] = useState<string | null>(initialError ?? null);
+
+  useEffect(() => {
+    setError(initialError ?? null);
+  }, [initialError]);
 
   const isEmailValid = useMemo(() => isValidEmail(email), [email]);
-  const isDisabled = isSubmitting || isPending;
+  const isDisabled = isSubmitting || isPending || isGoogleLoading;
   const isSubmitDisabled = !isEmailValid || isDisabled;
+
+  const handleGoogleClick = useCallback(async () => {
+    setError(null);
+    setIsGoogleLoading(true);
+    try {
+      await onGoogleClick();
+    } catch (e) {
+      console.error(e);
+      setError(
+        e instanceof Error ? e.message : "Falha ao conectar com Google."
+      );
+    } finally {
+      setIsGoogleLoading(false);
+    }
+  }, [onGoogleClick]);
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -33,7 +60,9 @@ export function LoginEmailForm({ onSubmit, isPending }: LoginEmailFormProps) {
         await onSubmit(email.trim());
       } catch (e) {
         console.error(e);
-        setError("Algo deu errado. Tente novamente.");
+        setError(
+          e instanceof Error ? e.message : "Algo deu errado. Tente novamente."
+        );
       } finally {
         setIsSubmitting(false);
       }
@@ -47,7 +76,7 @@ export function LoginEmailForm({ onSubmit, isPending }: LoginEmailFormProps) {
         <FieldLabel className="text-sm font-medium text-foreground">
           E-mail
         </FieldLabel>
-        <FieldContent>
+        <FieldContent className="flex flex-col gap-1.5">
           <Input
             type="email"
             placeholder="seu@email.com"
@@ -59,10 +88,13 @@ export function LoginEmailForm({ onSubmit, isPending }: LoginEmailFormProps) {
             autoFocus
             className="h-11 rounded-lg px-3.5"
           />
+          {error && (
+            <p className="text-sm text-destructive" role="alert">
+              {error}
+            </p>
+          )}
         </FieldContent>
       </Field>
-
-      {error && <p className="text-sm text-destructive">{error}</p>}
 
       <Button
         type="submit"
@@ -79,7 +111,14 @@ export function LoginEmailForm({ onSubmit, isPending }: LoginEmailFormProps) {
         <div className="h-px flex-1 bg-border" />
       </div>
 
-      <Button type="button" variant="outline" className="h-11 w-full gap-2">
+      <Button
+        type="button"
+        variant="secondary"
+        className="h-11 w-full gap-2"
+        onClick={handleGoogleClick}
+        disabled={isDisabled}
+        loading={isGoogleLoading}
+      >
         <Image
           src="/google-logo.svg"
           alt=""

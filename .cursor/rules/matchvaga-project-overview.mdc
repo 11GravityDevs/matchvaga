@@ -18,6 +18,7 @@ alwaysApply: true
 |-------|------------|
 | Framework | Next.js 16 (App Router) |
 | React | React 19 |
+| Auth | Supabase Auth (email OTP, Google OAuth) |
 | Styling | Tailwind CSS v4 |
 | UI Components | shadcn/ui (radix-vega style), Base UI, Radix UI |
 | Icons | lucide-react |
@@ -31,6 +32,7 @@ src/
 ├── components/    # ui/ (shadcn primitives) + shared/ (cross-feature components)
 ├── contexts/     # React Context providers (e.g. onboarding-context)
 ├── hooks/         # Custom hooks (logic layer)
+├── lib/           # Supabase client (client.ts, server.ts)
 ├── utils/         # Utilities: tailwind.ts (cn), file.ts (formatFileSize, etc.)
 └── types/         # Shared TypeScript interfaces
 ```
@@ -58,12 +60,14 @@ Route groups `(auth)` and `(legal)` use parenthesized folders to share layouts w
 
 - `@/components` — Components (ui/, shared/)
 - `@/components/ui` — shadcn UI primitives
+- `@/lib/supabase` — Supabase client (client, server)
 - `@/components/shared` — Cross-feature components (e.g. brand)
 - `@/contexts` — Context providers
 - `@/hooks` — Custom hooks
 - `@/utils/style` — cn() helper (clsx + tailwind-merge)
 - `@/utils/file` — File utilities (formatFileSize, etc.)
 - `@/utils/validation` — Validation (isValidEmail, etc.)
+- `@/utils/auth` — Auth utilities (translateAuthError for Supabase errors)
 - `@/utils/url` — URL/search params parsing (parseLoginStepFromSearchParams, etc.)
 - `@/utils/route` — Route/path helpers (getStepIndexFromPathname, etc.)
 - `@/types` — Shared type definitions
