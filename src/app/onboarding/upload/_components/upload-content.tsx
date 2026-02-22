@@ -21,13 +21,19 @@ export function UploadContent() {
   const { isUploading, selectedFile, uploadFile, uploadFromPaste, analyze } =
     useResumeUpload();
 
+  const [analyzeError, setAnalyzeError] = useState<string | null>(null);
+
   const handleAnalyze = useCallback(async () => {
     if (!selectedFile || isUploading) return;
     setIsAnalyzing(true);
+    setAnalyzeError(null);
     try {
       await analyze();
-    } finally {
+    } catch (err) {
       setIsAnalyzing(false);
+      setAnalyzeError(
+        err instanceof Error ? err.message : "Erro ao processar currículo."
+      );
     }
   }, [selectedFile, isUploading, analyze]);
 
@@ -151,6 +157,11 @@ export function UploadContent() {
           )}
         </div>
 
+        {analyzeError && (
+          <p className="text-sm text-destructive" role="alert">
+            {analyzeError}
+          </p>
+        )}
         <div className="flex justify-end">
           <Button
             type="button"

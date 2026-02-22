@@ -2,6 +2,7 @@
 
 import { Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { FormField } from "@/components/shared/form-field";
 import { DatePickerField } from "@/components/shared/date-picker-field";
@@ -31,6 +32,8 @@ export function ResumeFormExperience({
   isSaving,
   experienceError,
 }: ResumeFormExperienceProps) {
+  const hasCurrentExperience = experience.some((exp) => exp.isCurrent);
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-1.5">
@@ -94,19 +97,41 @@ export function ResumeFormExperience({
                 labelClassName={SUB_LABEL_CLASS}
                 className="flex-1"
               />
-              <DatePickerField
-                id={`exp-end-${expIndex}`}
-                label="Data de término"
-                value={exp.endDate}
-                onChange={(value) =>
-                  updateExperience(expIndex, { endDate: value })
-                }
-                disabled={isSaving}
-                placeholder="Selecione a data de término"
-                labelClassName={SUB_LABEL_CLASS}
-                className="flex-1"
-              />
+              {!exp.isCurrent ? (
+                <DatePickerField
+                  id={`exp-end-${expIndex}`}
+                  label="Data de término"
+                  value={exp.endDate}
+                  onChange={(value) =>
+                    updateExperience(expIndex, { endDate: value })
+                  }
+                  disabled={isSaving}
+                  placeholder="Selecione a data de término"
+                  labelClassName={SUB_LABEL_CLASS}
+                  className="flex-1"
+                />
+              ) : (
+                <div className="flex-1" />
+              )}
             </div>
+            {(exp.isCurrent || !hasCurrentExperience) && (
+              <label className="flex cursor-pointer items-center gap-1 self-start">
+                <Checkbox
+                  className="cursor-pointer border-accent-brand data-[state=checked]:border-accent-brand data-[state=checked]:bg-accent-brand"
+                  checked={exp.isCurrent ?? false}
+                  onCheckedChange={(checked) =>
+                    updateExperience(expIndex, {
+                      isCurrent: checked === true,
+                      ...(checked === true ? { endDate: "" } : {}),
+                    })
+                  }
+                  disabled={isSaving}
+                />
+                <span className={`${TEXT_SMALL} text-accent-brand`}>
+                  Atualmente trabalho aqui
+                </span>
+              </label>
+            )}
             <FormField
               label="Local"
               htmlFor={`exp-location-${expIndex}`}

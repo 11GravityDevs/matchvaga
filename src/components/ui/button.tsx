@@ -68,7 +68,7 @@ function Button({
     loading && !asChild ? (
       <>
         <Loader2
-          className="size-4 animate-spin [&:not([class*='size-'])]:size-4"
+          className="mr-1 size-4 animate-spin [&:not([class*='size-'])]:size-4"
           aria-hidden
         />
         {childArray.length > 1 ? childArray.slice(1) : children}

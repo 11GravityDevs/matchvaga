@@ -2,6 +2,7 @@
 
 import { Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -51,6 +52,8 @@ export function ResumeFormEducation({
   isSaving,
   educationError,
 }: ResumeFormEducationProps) {
+  const hasCurrentEducation = education.some((edu) => edu.isCurrent);
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-1.5">
@@ -153,19 +156,43 @@ export function ResumeFormEducation({
                 labelClassName={SUB_LABEL_CLASS}
                 className="flex-1"
               />
-              <DatePickerField
-                id={`edu-date-${eduIndex}`}
-                label="Data de conclusão"
-                value={edu.completionDate}
-                onChange={(value) =>
-                  updateEducation(eduIndex, { completionDate: value })
-                }
-                disabled={isSaving}
-                placeholder="Selecione a data de conclusão"
-                labelClassName={SUB_LABEL_CLASS}
-                className="flex-1"
-              />
+
+              {!edu.isCurrent ? (
+                <DatePickerField
+                  id={`edu-date-${eduIndex}`}
+                  label="Data de conclusão"
+                  value={edu.completionDate}
+                  onChange={(value) =>
+                    updateEducation(eduIndex, { completionDate: value })
+                  }
+                  disabled={isSaving}
+                  placeholder="Selecione a data de conclusão"
+                  labelClassName={SUB_LABEL_CLASS}
+                  className="flex-1"
+                />
+              ) : (
+                <div className="flex-1" />
+              )}
             </div>
+
+            {(edu.isCurrent || !hasCurrentEducation) && (
+              <label className="flex cursor-pointer items-center gap-1 self-start">
+                <Checkbox
+                  className="cursor-pointer border-accent-brand data-[state=checked]:border-accent-brand data-[state=checked]:bg-accent-brand"
+                  checked={edu.isCurrent ?? false}
+                  onCheckedChange={(checked) =>
+                    updateEducation(eduIndex, {
+                      isCurrent: checked === true,
+                      ...(checked === true ? { completionDate: "" } : {}),
+                    })
+                  }
+                  disabled={isSaving}
+                />
+                <span className={`${TEXT_SMALL} text-accent-brand`}>
+                  Atualmente estudo aqui
+                </span>
+              </label>
+            )}
           </div>
           {education.length > 1 && (
             <div className="flex justify-end">

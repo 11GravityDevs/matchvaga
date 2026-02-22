@@ -14,7 +14,7 @@ alwaysApply: false
 ## Environment Variables
 
 - **NEXT_PUBLIC_** — Only for values safe to expose to the client (e.g. Supabase URL, publishable key).
-- **Never** prefix server-only secrets (service role key, API keys) with `NEXT_PUBLIC_`.
+- **Never** prefix server-only secrets (service role key, API keys, AI keys) with `NEXT_PUBLIC_`.
 
 ```ts
 // ✅ Good: client-safe vars
@@ -22,7 +22,17 @@ const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 
 // ❌ Bad: secret exposed to client
 const key = process.env.NEXT_PUBLIC_SERVICE_ROLE_KEY;
+const aiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
 ```
+
+## AI API Keys
+
+- Store AI provider keys in server-only env vars (never `NEXT_PUBLIC_`):
+  - `GOOGLE_AI_API_KEY` — Gemini 1.5 Flash (extraction)
+  - `OPENAI_API_KEY` — GPT-4o-mini (scoring, lateral chat)
+  - `ANTHROPIC_API_KEY` — Claude 3.5 Sonnet (synthesis)
+- All AI calls must run server-side (Server Actions, server utilities). Never call AI APIs from Client Components.
+- Document required keys in `.env.example`; never commit actual keys.
 
 ## Supabase Client
 

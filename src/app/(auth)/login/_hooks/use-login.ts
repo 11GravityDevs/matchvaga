@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import {
   ROUTE_AUTH_CALLBACK,
   ROUTE_LOGIN,
-  ROUTE_ONBOARDING_UPLOAD,
+  ROUTE_ONBOARDING_PREVIEW,
 } from "@/constants/routes";
 import { createClient } from "@/lib/supabase/client";
 import { translateAuthError } from "@/utils/auth";
@@ -68,7 +68,7 @@ export function useLogin(): UseLoginReturn {
         email: trimmedEmail,
         options: {
           shouldCreateUser: true,
-          emailRedirectTo: `${window.location.origin}${ROUTE_AUTH_CALLBACK}?next=${ROUTE_ONBOARDING_UPLOAD}`,
+          emailRedirectTo: `${window.location.origin}${ROUTE_AUTH_CALLBACK}?next=${ROUTE_ONBOARDING_PREVIEW}`,
         },
       });
 
@@ -98,7 +98,7 @@ export function useLogin(): UseLoginReturn {
       email,
       options: {
         shouldCreateUser: true,
-        emailRedirectTo: `${window.location.origin}${ROUTE_AUTH_CALLBACK}?next=${ROUTE_ONBOARDING_UPLOAD}`,
+        emailRedirectTo: `${window.location.origin}${ROUTE_AUTH_CALLBACK}?next=${ROUTE_ONBOARDING_PREVIEW}`,
       },
     });
 
@@ -111,7 +111,7 @@ export function useLogin(): UseLoginReturn {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}${ROUTE_AUTH_CALLBACK}?next=${ROUTE_ONBOARDING_UPLOAD}`,
+        redirectTo: `${window.location.origin}${ROUTE_AUTH_CALLBACK}?next=${ROUTE_ONBOARDING_PREVIEW}`,
       },
     });
 

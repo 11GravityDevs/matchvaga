@@ -19,6 +19,9 @@ alwaysApply: true
 | Framework | Next.js 16 (App Router) |
 | React | React 19 |
 | Auth | Supabase Auth (email OTP, Google OAuth) |
+| Backend | Server Actions, Supabase (Postgres + Storage) |
+| AI/LLM | Gemini 1.5 Flash (extraction), GPT-4o-mini (scoring, chat), Claude 3.5 Sonnet (synthesis) |
+| Validation | Zod |
 | Styling | Tailwind CSS v4 |
 | UI Components | shadcn/ui (radix-vega style), Base UI, Radix UI |
 | Icons | lucide-react |
@@ -28,12 +31,14 @@ alwaysApply: true
 
 ```
 src/
-├── app/           # App Router pages, layouts, route groups; route-specific in _components/, _utils/, _hooks/, _constants/, _contexts/
+├── app/           # App Router pages, layouts, route groups; route-specific in _components/, _utils/, _hooks/, _constants/, _contexts/, _actions/
+│   └── actions/   # Shared Server Actions (resume, job, analysis, document, chat)
 ├── components/    # ui/ (shadcn primitives) + shared/ (cross-feature components)
 ├── constants/     # Shared constants (auth, design-tokens, routes, etc.)
-├── contexts/     # Shared React Context providers
+├── contexts/      # React Context providers
 ├── hooks/         # Shared custom hooks (logic layer)
-├── lib/           # Supabase client (client.ts, server.ts)
+├── lib/           # Supabase client (client.ts, server.ts) + AI utilities (server-only)
+├── schemas/       # Zod schemas for Server Action validation
 ├── utils/         # Shared utilities (style, auth, etc.)
 └── types/         # Shared TypeScript interfaces
 ```
@@ -59,6 +64,7 @@ Route groups `(auth)` and `(legal)` use parenthesized folders to share layouts w
 - `@/constants` — Shared constants (auth, design-tokens, routes, etc.)
 - `@/components/ui` — shadcn UI primitives
 - `@/lib/supabase` — Supabase client (client, server)
+- `@/lib/ai` — AI prompts and client wrappers (server-only)
 - `@/components/shared` — Cross-feature components (e.g. brand)
 - `@/contexts` — Context providers
 - `@/hooks` — Custom hooks
@@ -93,9 +99,11 @@ When the project changes, update these rules accordingly:
 | New shared constant (2+ routes) | Add to `constants/<domain>.ts`; route-specific → `_constants/` |
 | New route group or flow | Add to Route Architecture |
 | New domain concept | Add to `matchvaga-domain.mdc` |
+| New AI flow or provider | Add to `matchvaga-domain.mdc`; document env vars in `security.mdc` |
 | New design file or workflow | Update `pencil-design-to-code.mdc` |
 | New design components or tokens | Update `design-tokens-reference.mdc`, `design-components.mdc`, and `globals.css` / `design-tokens.ts` |
 | New security surface | Update `security.mdc` |
+| New Server Action | Add to `app/actions/` or route `_actions/`; validate with Zod |
 | App Router patterns, loading/error | See `nextjs-app-router.mdc` |
 | React purity, hooks, Thinking in React | See `react-rules.mdc` |
 | Editing rules | See `rule-writing-guidelines.mdc` |

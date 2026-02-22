@@ -12,16 +12,28 @@ alwaysApply: false
 |------|------------|
 | **Resume** | User's CV/curriculum — input document to analyze |
 | **Job Description** | Target role posting — defines required skills and criteria |
-| **Gap Analysis** | Comparison identifying missing skills between resume and job |
-| **Optimized Document** | PDF/DOCX tailored to the job, incorporating suggested improvements |
+| **Gap Analysis** | AI-powered comparison (GPT-4o-mini) identifying missing skills; includes compatibility score (0–100) |
+| **Optimized Document** | PDF/DOCX tailored to the job, AI-generated on export (Claude 3.5 Sonnet) |
+| **Lateral Chat** | Sidebar/panel where user asks AI (GPT-4o-mini) to suggest or apply edits to the resume (e.g. rephrase summary, add skills) |
+
+## AI Model Strategy (MVP)
+
+| Flow | Model | Purpose |
+|------|-------|---------|
+| **Extraction** | Gemini 1.5 Flash | High volume, unstructured; lowest cost, 1M context |
+| **Scoring** | GPT-4o-mini | Reasoning, semantic matching; reliable at low cost |
+| **Synthesis** | Claude 3.5 Sonnet | High quality prose and formatting |
+| **Interaction** | GPT-4o-mini | Low latency, conversational chat |
 
 ## Feature Vocabulary
 
 - **Upload** — Resume and/or job description (file or paste)
-- **Analyze** — Run gap analysis between resume and job
-- **Skills Match** — Present matched vs missing skills
-- **Optimize** — Generate improved resume/document
-- **Export** — Download as PDF or DOCX
+- **Extract** — AI parses uploaded resume into structured `ResumeData`
+- **Analyze** — AI runs gap analysis (resume vs job); returns score, matched skills, missing skills
+- **Skills Match** — Present matched vs missing skills from analysis
+- **Optimize** — AI generates improved resume/document
+- **Export** — Download optimized PDF or DOCX
+- **Lateral Chat** — User converses with AI to get suggestions; AI can apply edits to resume
 
 ## Naming Conventions
 
@@ -29,3 +41,4 @@ alwaysApply: false
 - Use `jobDescription` or `job` for the target role
 - Use `gapAnalysis` or `analysis` for the comparison result
 - Use `optimizedResume` or `optimizedDocument` for the output
+- Use `lateralChat` or `chat` for the AI-assisted editing conversation

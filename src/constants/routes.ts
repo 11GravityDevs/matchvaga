@@ -9,7 +9,11 @@ export const ROUTE_DASHBOARD = "/dashboard";
 
 export const ROUTE_ONBOARDING = "/onboarding";
 
+export const ROUTE_ONBOARDING_PREVIEW = "/onboarding/preview";
+
 export const ROUTE_ONBOARDING_UPLOAD = "/onboarding/upload";
+
+export const ROUTE_ONBOARDING_VERIFY = "/onboarding/verify";
 
 export const ROUTE_AUTH_CALLBACK = "/auth/callback";
 

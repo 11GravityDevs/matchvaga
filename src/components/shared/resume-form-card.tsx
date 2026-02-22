@@ -22,7 +22,7 @@ import { ResumeFormExperience } from "@/components/shared/resume-form-experience
 
 export interface ResumeFormCardPrimaryAction {
   label: string;
-  onClick: () => void;
+  onClick: () => void | Promise<void>;
   disabled: boolean;
   loading?: boolean;
 }
@@ -81,6 +81,11 @@ export function ResumeFormCard({
       <div
         className={`flex flex-col gap-5 overflow-hidden p-7 ${hideHeader ? "" : "pt-0"}`}
       >
+        {validationErrors?.form && (
+          <p className="text-sm text-destructive" role="alert">
+            {validationErrors.form}
+          </p>
+        )}
         <ResumeFormPersonalData
           data={data}
           updateField={updateField}

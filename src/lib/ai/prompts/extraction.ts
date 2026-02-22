@@ -1,0 +1,1 @@
+export const RESUME_EXTRACTION_PROMPT = `Extract structured resume data from this document. Use empty strings for missing fields and empty arrays for missing lists. Extract all skills (technologies, tools, soft skills). For dates, prefer YYYY-MM when possible (e.g. "2022-01").`;

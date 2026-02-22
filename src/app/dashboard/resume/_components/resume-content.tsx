@@ -1,12 +1,14 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import Link from "next/link";
 import { useResume } from "../_hooks/use-resume";
 import {
   useResumeForm,
   type ResumeValidationErrors,
 } from "@/hooks/use-resume-form";
 import { ResumeFormCard } from "@/components/shared/resume-form-card";
+import { Loading } from "@/components/ui/loading";
 import {
   PAGE_PADDING,
   PAGE_SUBTITLE_CLASS,
@@ -15,10 +17,12 @@ import {
   W_CONTENT,
 } from "@/constants/design-tokens";
 import { W_FORM } from "@/constants/design-tokens";
+import { ROUTE_ONBOARDING_UPLOAD } from "@/constants/routes";
 import type { ResumeData } from "@/types/resume";
 
 export function ResumeContent() {
-  const { resumeData, save, isSaving, error } = useResume();
+  const { resumeData, isLoading, error, hasNoResume, save, isSaving } =
+    useResume();
   const [validationErrors, setValidationErrors] =
     useState<ResumeValidationErrors | null>(null);
 
@@ -112,6 +116,31 @@ export function ResumeContent() {
       // Error is set in useResume and displayed below
     }
   }, [data, isFormValid, getValidationErrors, save]);
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (hasNoResume) {
+    return (
+      <div
+        className={`flex w-full flex-col items-center overflow-auto ${SECTION_GAP} ${PAGE_PADDING}`}
+      >
+        <div className={`flex flex-col gap-1 ${W_CONTENT}`}>
+          <h1 className={PAGE_TITLE_CLASS}>Nenhum currículo encontrado</h1>
+          <p className={PAGE_SUBTITLE_CLASS}>
+            Faça o upload do seu currículo para começar a editá-lo.
+          </p>
+          <Link
+            href={ROUTE_ONBOARDING_UPLOAD}
+            className="text-primary underline hover:no-underline"
+          >
+            Ir para upload
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div

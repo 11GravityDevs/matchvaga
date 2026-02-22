@@ -5,6 +5,7 @@ export interface ExperienceEntry {
   endDate: string;
   location: string;
   description: string;
+  isCurrent?: boolean;
 }
 
 export interface EducationEntry {
@@ -13,6 +14,7 @@ export interface EducationEntry {
   level: string;
   startDate: string;
   completionDate: string;
+  isCurrent?: boolean;
 }
 
 export interface ResumeData {

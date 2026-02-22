@@ -10,6 +10,7 @@ import {
 } from "@/types/resume";
 
 export interface ResumeValidationErrors {
+  form?: string;
   fullName?: string;
   email?: string;
   location?: string;
@@ -57,12 +58,21 @@ export function useResumeForm({
 
   const updateExperience = useCallback(
     (index: number, updates: Partial<ExperienceEntry>) => {
-      setData((prev) => ({
-        ...prev,
-        experience: prev.experience.map((exp, i) =>
-          i === index ? { ...exp, ...updates } : exp
-        ),
-      }));
+      setData((prev) => {
+        const isSettingCurrent = updates.isCurrent === true;
+        return {
+          ...prev,
+          experience: prev.experience.map((exp, i) => {
+            if (i === index) {
+              return { ...exp, ...updates };
+            }
+            if (isSettingCurrent) {
+              return { ...exp, isCurrent: false };
+            }
+            return exp;
+          }),
+        };
+      });
     },
     []
   );
@@ -83,12 +93,21 @@ export function useResumeForm({
 
   const updateEducation = useCallback(
     (index: number, updates: Partial<EducationEntry>) => {
-      setData((prev) => ({
-        ...prev,
-        education: prev.education.map((edu, i) =>
-          i === index ? { ...edu, ...updates } : edu
-        ),
-      }));
+      setData((prev) => {
+        const isSettingCurrent = updates.isCurrent === true;
+        return {
+          ...prev,
+          education: prev.education.map((edu, i) => {
+            if (i === index) {
+              return { ...edu, ...updates };
+            }
+            if (isSettingCurrent) {
+              return { ...edu, isCurrent: false };
+            }
+            return edu;
+          }),
+        };
+      });
     },
     []
   );
@@ -114,32 +133,6 @@ export function useResumeForm({
     },
     [updateField, onSummarySync]
   );
-
-  const isFormValid = useMemo(() => {
-    const hasRequiredPersonalData =
-      data.fullName.trim() !== "" &&
-      data.email.trim() !== "" &&
-      data.location.trim() !== "" &&
-      data.phone.trim() !== "";
-    const hasSummary = data.summary.trim() !== "";
-    const hasSkills = data.skills.length > 0;
-    const hasValidExperience = data.experience.some(
-      (exp) => exp.company.trim() !== "" && exp.jobTitle.trim() !== ""
-    );
-    const hasValidEducation = data.education.some(
-      (edu) =>
-        edu.institution.trim() !== "" &&
-        edu.course.trim() !== "" &&
-        edu.level.trim() !== ""
-    );
-    return (
-      hasRequiredPersonalData &&
-      hasSummary &&
-      hasSkills &&
-      hasValidExperience &&
-      hasValidEducation
-    );
-  }, [data]);
 
   const getValidationErrors = useCallback(
     (formData: ResumeData): ResumeValidationErrors | null => {
@@ -169,21 +162,53 @@ export function useResumeForm({
       if (!hasValidExperience) {
         errors.experience =
           "Preencha pelo menos uma experiência com empresa e cargo";
+      } else {
+        const experiencesWithoutEndDate = formData.experience.filter(
+          (exp) => !exp.endDate?.trim()
+        );
+        const currentExperiences = formData.experience.filter(
+          (exp) => exp.isCurrent === true
+        );
+        if (experiencesWithoutEndDate.length > 1) {
+          errors.experience =
+            "Apenas uma experiência pode estar em andamento (sem data de término). Preencha a data de término das demais.";
+        } else if (
+          experiencesWithoutEndDate.some((exp) => exp.isCurrent !== true)
+        ) {
+          errors.experience =
+            "Preencha a data de término ou marque como experiência atual.";
+        } else if (currentExperiences.length > 1) {
+          errors.experience =
+            "Apenas uma experiência pode ser marcada como atual.";
+        }
       }
-      const hasValidEducation = formData.education.some(
-        (edu) =>
-          edu.institution.trim() !== "" &&
-          edu.course.trim() !== "" &&
-          edu.level.trim() !== ""
+
+      const educationsWithoutCompletionDate = formData.education.filter(
+        (edu) => !edu.completionDate?.trim()
       );
-      if (!hasValidEducation) {
+      const currentEducations = formData.education.filter(
+        (edu) => edu.isCurrent === true
+      );
+      if (educationsWithoutCompletionDate.length > 1) {
         errors.education =
-          "Preencha pelo menos uma formação com instituição, curso e nível";
+          "Apenas uma formação pode estar em andamento (sem data de conclusão). Preencha a data de conclusão das demais.";
+      } else if (
+        educationsWithoutCompletionDate.some((edu) => edu.isCurrent !== true)
+      ) {
+        errors.education =
+          "Preencha a data de conclusão ou marque como formação atual.";
+      } else if (currentEducations.length > 1) {
+        errors.education = "Apenas uma formação pode ser marcada como atual.";
       }
 
       return Object.keys(errors).length > 0 ? errors : null;
     },
     []
+  );
+
+  const isFormValid = useMemo(
+    () => getValidationErrors(data) === null,
+    [data, getValidationErrors]
   );
 
   return {

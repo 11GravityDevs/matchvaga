@@ -9,14 +9,16 @@ import {
 import type { ResumeData } from "@/types/resume";
 import { createEmptyEducation, createEmptyExperience } from "@/types/resume";
 import { ResumeFormCard } from "@/components/shared/resume-form-card";
+import { useOnboardingContext } from "../../_contexts/onboarding-context";
 
 export function VerifyContent() {
-  const { resumeContent, setResumeContent, isSaving, continueToDashboard } =
-    useResumeVerify();
+  const { resumeContent, setResumeContent, parsedData } =
+    useOnboardingContext();
+  const { isSaving, save, continueToDashboard } = useResumeVerify();
   const [validationErrors, setValidationErrors] =
     useState<ResumeValidationErrors | null>(null);
 
-  const initialData: ResumeData = {
+  const initialData: ResumeData = parsedData ?? {
     fullName: "",
     email: "",
     location: "",
@@ -108,14 +110,21 @@ export function VerifyContent() {
     [clearValidationOnChange, removeEducation]
   );
 
-  const handleContinue = useCallback(() => {
+  const handleContinue = useCallback(async () => {
     if (!isFormValid) {
       setValidationErrors(getValidationErrors(data) ?? null);
       return;
     }
     setValidationErrors(null);
-    continueToDashboard();
-  }, [data, isFormValid, getValidationErrors, continueToDashboard]);
+    try {
+      await save(data);
+      continueToDashboard();
+    } catch (err) {
+      setValidationErrors({
+        form: err instanceof Error ? err.message : "Erro ao salvar.",
+      });
+    }
+  }, [data, isFormValid, getValidationErrors, save, continueToDashboard]);
 
   return (
     <ResumeFormCard

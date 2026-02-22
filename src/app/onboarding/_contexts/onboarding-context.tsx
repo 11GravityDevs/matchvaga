@@ -1,10 +1,12 @@
 "use client";
 
 import { createContext, useContext, useState, type ReactNode } from "react";
+import type { ResumeData } from "@/types/resume";
 
 export interface SelectedFileInfo {
   name: string;
   size: number;
+  file: File;
 }
 
 interface OnboardingContextValue {
@@ -14,6 +16,10 @@ interface OnboardingContextValue {
   setIsUploading: (value: boolean) => void;
   selectedFile: SelectedFileInfo | null;
   setSelectedFile: (file: SelectedFileInfo | null) => void;
+  resumeId: string | null;
+  setResumeId: (id: string | null) => void;
+  parsedData: ResumeData | null;
+  setParsedData: (data: ResumeData | null) => void;
 }
 
 const OnboardingContext = createContext<OnboardingContextValue | null>(null);
@@ -24,6 +30,8 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
   const [selectedFile, setSelectedFile] = useState<SelectedFileInfo | null>(
     null
   );
+  const [resumeId, setResumeId] = useState<string | null>(null);
+  const [parsedData, setParsedData] = useState<ResumeData | null>(null);
 
   return (
     <OnboardingContext.Provider
@@ -34,6 +42,10 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
         setIsUploading,
         selectedFile,
         setSelectedFile,
+        resumeId,
+        setResumeId,
+        parsedData,
+        setParsedData,
       }}
     >
       {children}

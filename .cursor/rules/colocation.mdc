@@ -26,7 +26,8 @@ Create these folders under a route when code belongs only to that route:
 - `_hooks/` — Custom hooks used only in that route
 - `_constants/` — Constants used only in that route
 - `_contexts/` — React Context providers used only in that route
+- `_actions/` — Server Actions used only in that route (e.g. `dashboard/_actions/analysis.ts`)
 
-**Import:** Use relative paths: `./_hooks/use-login`, `../_utils/route`, `../../_contexts/onboarding-context` (no path aliases for route-local code).
+**Import:** Use relative paths: `./_hooks/use-login`, `../_utils/route`, `../../_contexts/onboarding-context` (no path aliases for route-local code). For shared Server Actions, use `@/app/actions/` or `src/app/actions/`.
 
 See `constants.mdc` for constants-specific placement. See `check-before-add.mdc` before adding new utils, constants, hooks, or components.

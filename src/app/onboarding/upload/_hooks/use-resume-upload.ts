@@ -3,6 +3,8 @@
 import { useCallback } from "react";
 import { useRouter } from "next/navigation";
 
+import { uploadResume } from "@/app/actions/resume";
+import { ROUTE_ONBOARDING_VERIFY } from "@/constants/routes";
 import {
   useOnboardingContext,
   type SelectedFileInfo,
@@ -13,7 +15,7 @@ export interface UseResumeUploadReturn {
   setResumeContent: (content: string) => void;
   isUploading: boolean;
   selectedFile: SelectedFileInfo | null;
-  uploadFile: (file: File) => Promise<void>;
+  uploadFile: (file: File) => void;
   uploadFromPaste: (text: string) => void;
   analyze: () => Promise<void>;
 }
@@ -27,36 +29,50 @@ export function useResumeUpload(): UseResumeUploadReturn {
     selectedFile,
     setSelectedFile,
     setIsUploading,
+    setResumeId,
+    setParsedData,
   } = useOnboardingContext();
 
   const uploadFile = useCallback(
-    async (file: File) => {
-      setIsUploading(true);
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 400));
-        setSelectedFile({ name: file.name, size: file.size });
-        setResumeContent("");
-      } finally {
-        setIsUploading(false);
-      }
+    (file: File) => {
+      setSelectedFile({ name: file.name, size: file.size, file });
+      setResumeContent("");
     },
-    [setIsUploading, setSelectedFile, setResumeContent]
+    [setSelectedFile, setResumeContent]
   );
 
   const uploadFromPaste = useCallback(
     (text: string) => {
       setResumeContent(text);
+      setSelectedFile(null);
     },
-    [setResumeContent]
+    [setResumeContent, setSelectedFile]
   );
 
   const analyze = useCallback(async () => {
-    if (!resumeContent.trim() && !selectedFile) return;
+    if (!selectedFile) return;
 
-    // TODO: Call API to analyze resume
-    // For now, navigate to verify step
-    router.push("/onboarding/verify");
-  }, [resumeContent, selectedFile, router]);
+    setIsUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", selectedFile.file);
+
+      const result = await uploadResume(formData);
+
+      if (!result.success) {
+        throw new Error(result.error ?? "Erro ao processar currículo.");
+      }
+
+      if (result.resumeId && result.parsedData) {
+        setResumeId(result.resumeId);
+        setParsedData(result.parsedData);
+        router.push(ROUTE_ONBOARDING_VERIFY);
+      }
+    } catch (error) {
+      setIsUploading(false);
+      throw error;
+    }
+  }, [selectedFile, setIsUploading, setResumeId, setParsedData, router]);
 
   return {
     resumeContent,

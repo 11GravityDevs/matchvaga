@@ -6,7 +6,7 @@ import {
   ROUTE_DASHBOARD,
   ROUTE_LOGIN,
   ROUTE_ONBOARDING,
-  ROUTE_ONBOARDING_UPLOAD,
+  ROUTE_ONBOARDING_PREVIEW,
 } from "@/constants/routes";
 
 const PROTECTED_PATH_PREFIXES = [ROUTE_DASHBOARD, ROUTE_ONBOARDING];
@@ -66,7 +66,7 @@ export async function proxy(request: NextRequest) {
 
   if (user && isGuestOnlyPath(request.nextUrl.pathname)) {
     const url = request.nextUrl.clone();
-    url.pathname = ROUTE_ONBOARDING_UPLOAD;
+    url.pathname = ROUTE_ONBOARDING_PREVIEW;
     return NextResponse.redirect(url);
   }
 
