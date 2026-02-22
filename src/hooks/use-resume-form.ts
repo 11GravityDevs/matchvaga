@@ -9,6 +9,17 @@ import {
   type ResumeData,
 } from "@/types/resume";
 
+export interface ResumeValidationErrors {
+  fullName?: string;
+  email?: string;
+  location?: string;
+  phone?: string;
+  summary?: string;
+  skills?: string;
+  experience?: string;
+  education?: string;
+}
+
 export interface UseResumeFormOptions {
   initialData: ResumeData;
   onSummarySync?: (value: string) => void;
@@ -28,6 +39,7 @@ export interface UseResumeFormReturn {
   removeEducation: (index: number) => void;
   handleSummaryChange: (value: string) => void;
   isFormValid: boolean;
+  getValidationErrors: (data: ResumeData) => ResumeValidationErrors | null;
 }
 
 export function useResumeForm({
@@ -110,6 +122,7 @@ export function useResumeForm({
       data.location.trim() !== "" &&
       data.phone.trim() !== "";
     const hasSummary = data.summary.trim() !== "";
+    const hasSkills = data.skills.length > 0;
     const hasValidExperience = data.experience.some(
       (exp) => exp.company.trim() !== "" && exp.jobTitle.trim() !== ""
     );
@@ -122,10 +135,56 @@ export function useResumeForm({
     return (
       hasRequiredPersonalData &&
       hasSummary &&
+      hasSkills &&
       hasValidExperience &&
       hasValidEducation
     );
   }, [data]);
+
+  const getValidationErrors = useCallback(
+    (formData: ResumeData): ResumeValidationErrors | null => {
+      const errors: ResumeValidationErrors = {};
+
+      if (formData.fullName.trim() === "") {
+        errors.fullName = "Nome completo é obrigatório";
+      }
+      if (formData.email.trim() === "") {
+        errors.email = "E-mail é obrigatório";
+      }
+      if (formData.location.trim() === "") {
+        errors.location = "Local é obrigatório";
+      }
+      if (formData.phone.trim() === "") {
+        errors.phone = "Telefone é obrigatório";
+      }
+      if (formData.summary.trim() === "") {
+        errors.summary = "Resumo profissional é obrigatório";
+      }
+      if (formData.skills.length === 0) {
+        errors.skills = "Adicione pelo menos uma habilidade";
+      }
+      const hasValidExperience = formData.experience.some(
+        (exp) => exp.company.trim() !== "" && exp.jobTitle.trim() !== ""
+      );
+      if (!hasValidExperience) {
+        errors.experience =
+          "Preencha pelo menos uma experiência com empresa e cargo";
+      }
+      const hasValidEducation = formData.education.some(
+        (edu) =>
+          edu.institution.trim() !== "" &&
+          edu.course.trim() !== "" &&
+          edu.level.trim() !== ""
+      );
+      if (!hasValidEducation) {
+        errors.education =
+          "Preencha pelo menos uma formação com instituição, curso e nível";
+      }
+
+      return Object.keys(errors).length > 0 ? errors : null;
+    },
+    []
+  );
 
   return {
     data,
@@ -138,5 +197,6 @@ export function useResumeForm({
     removeEducation,
     handleSummaryChange,
     isFormValid,
+    getValidationErrors,
   };
 }

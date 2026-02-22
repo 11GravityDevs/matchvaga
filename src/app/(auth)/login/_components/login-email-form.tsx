@@ -32,7 +32,6 @@ export function LoginEmailForm({
 
   const isEmailValid = useMemo(() => isValidEmail(email), [email]);
   const isDisabled = isSubmitting || isPending || isGoogleLoading;
-  const isSubmitDisabled = !isEmailValid || isDisabled;
 
   const handleGoogleClick = useCallback(async () => {
     setError(null);
@@ -52,7 +51,12 @@ export function LoginEmailForm({
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      if (!isEmailValid || isDisabled) return;
+      if (isDisabled) return;
+
+      if (!isEmailValid) {
+        setError("Digite um e-mail válido");
+        return;
+      }
 
       setError(null);
       setIsSubmitting(true);
@@ -78,12 +82,10 @@ export function LoginEmailForm({
         </FieldLabel>
         <FieldContent className="flex flex-col gap-1.5">
           <Input
-            type="email"
             placeholder="seu@email.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             disabled={isDisabled}
-            required
             autoComplete="email"
             autoFocus
             className="h-11 rounded-lg px-3.5"
@@ -98,7 +100,7 @@ export function LoginEmailForm({
 
       <Button
         type="submit"
-        disabled={isSubmitDisabled}
+        disabled={isDisabled}
         loading={isSubmitting || isPending}
         className="h-11 w-full"
       >

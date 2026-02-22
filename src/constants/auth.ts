@@ -1,7 +1,6 @@
 export const AUTH_ERROR_MESSAGES_PT: Record<string, string> = {
   // Rate limits
-  over_email_send_rate_limit:
-    "Muitos emails foram enviados para este endereço. Aguarde um minuto antes de tentar novamente.",
+  over_email_send_rate_limit: "Aguarde um minuto antes de tentar novamente.",
   over_request_rate_limit:
     "Muitas tentativas. Aguarde alguns minutos e tente novamente.",
   over_sms_send_rate_limit:

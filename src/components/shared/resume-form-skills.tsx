@@ -11,12 +11,14 @@ interface ResumeFormSkillsProps {
   skills: string[];
   onChange: (skills: string[]) => void;
   isSaving?: boolean;
+  skillsError?: string;
 }
 
 export function ResumeFormSkills({
   skills,
   onChange,
   isSaving,
+  skillsError,
 }: ResumeFormSkillsProps) {
   const [isAddingSkill, setIsAddingSkill] = useState(false);
   const [newSkill, setNewSkill] = useState("");
@@ -42,7 +44,14 @@ export function ResumeFormSkills({
 
   return (
     <div className="flex flex-col gap-4">
-      <h3 className={SECTION_TITLE_CLASS}>Habilidades</h3>
+      <div className="flex flex-col gap-1.5">
+        <h3 className={SECTION_TITLE_CLASS}>Habilidades</h3>
+        {skillsError && (
+          <p className="text-sm text-destructive" role="alert">
+            {skillsError}
+          </p>
+        )}
+      </div>
       <div className="flex flex-col gap-3">
         {skills.length > 0 && (
           <div className="flex flex-wrap gap-2">

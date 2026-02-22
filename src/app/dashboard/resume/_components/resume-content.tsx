@@ -1,7 +1,11 @@
 "use client";
 
+import { useCallback, useState } from "react";
 import { useResume } from "../_hooks/use-resume";
-import { useResumeForm } from "@/hooks/use-resume-form";
+import {
+  useResumeForm,
+  type ResumeValidationErrors,
+} from "@/hooks/use-resume-form";
 import { ResumeFormCard } from "@/components/shared/resume-form-card";
 import {
   PAGE_PADDING,
@@ -11,9 +15,12 @@ import {
   W_CONTENT,
 } from "@/constants/design-tokens";
 import { W_FORM } from "@/constants/design-tokens";
+import type { ResumeData } from "@/types/resume";
 
 export function ResumeContent() {
   const { resumeData, save, isSaving, error } = useResume();
+  const [validationErrors, setValidationErrors] =
+    useState<ResumeValidationErrors | null>(null);
 
   const {
     data,
@@ -26,17 +33,85 @@ export function ResumeContent() {
     removeEducation,
     handleSummaryChange,
     isFormValid,
+    getValidationErrors,
   } = useResumeForm({
     initialData: resumeData,
   });
 
-  const handleSave = async () => {
+  const clearValidationOnChange = useCallback(() => {
+    setValidationErrors(null);
+  }, []);
+
+  const wrappedUpdateField = useCallback(
+    <K extends keyof ResumeData>(key: K, value: ResumeData[K]) => {
+      clearValidationOnChange();
+      updateField(key, value);
+    },
+    [clearValidationOnChange, updateField]
+  );
+
+  const wrappedHandleSummaryChange = useCallback(
+    (value: string) => {
+      clearValidationOnChange();
+      handleSummaryChange(value);
+    },
+    [clearValidationOnChange, handleSummaryChange]
+  );
+
+  const wrappedUpdateExperience = useCallback(
+    (index: number, updates: Parameters<typeof updateExperience>[1]) => {
+      clearValidationOnChange();
+      updateExperience(index, updates);
+    },
+    [clearValidationOnChange, updateExperience]
+  );
+
+  const wrappedAddExperience = useCallback(() => {
+    clearValidationOnChange();
+    addExperience();
+  }, [clearValidationOnChange, addExperience]);
+
+  const wrappedRemoveExperience = useCallback(
+    (index: number) => {
+      clearValidationOnChange();
+      removeExperience(index);
+    },
+    [clearValidationOnChange, removeExperience]
+  );
+
+  const wrappedUpdateEducation = useCallback(
+    (index: number, updates: Parameters<typeof updateEducation>[1]) => {
+      clearValidationOnChange();
+      updateEducation(index, updates);
+    },
+    [clearValidationOnChange, updateEducation]
+  );
+
+  const wrappedAddEducation = useCallback(() => {
+    clearValidationOnChange();
+    addEducation();
+  }, [clearValidationOnChange, addEducation]);
+
+  const wrappedRemoveEducation = useCallback(
+    (index: number) => {
+      clearValidationOnChange();
+      removeEducation(index);
+    },
+    [clearValidationOnChange, removeEducation]
+  );
+
+  const handleSave = useCallback(async () => {
+    if (!isFormValid) {
+      setValidationErrors(getValidationErrors(data) ?? null);
+      return;
+    }
+    setValidationErrors(null);
     try {
       await save(data);
     } catch {
       // Error is set in useResume and displayed below
     }
-  };
+  }, [data, isFormValid, getValidationErrors, save]);
 
   return (
     <div
@@ -58,22 +133,23 @@ export function ResumeContent() {
       </div>
       <ResumeFormCard
         data={data}
-        updateField={updateField}
-        updateExperience={updateExperience}
-        addExperience={addExperience}
-        removeExperience={removeExperience}
-        updateEducation={updateEducation}
-        addEducation={addEducation}
-        removeEducation={removeEducation}
-        handleSummaryChange={handleSummaryChange}
+        updateField={wrappedUpdateField}
+        updateExperience={wrappedUpdateExperience}
+        addExperience={wrappedAddExperience}
+        removeExperience={wrappedRemoveExperience}
+        updateEducation={wrappedUpdateEducation}
+        addEducation={wrappedAddEducation}
+        removeEducation={wrappedRemoveEducation}
+        handleSummaryChange={wrappedHandleSummaryChange}
         isSaving={isSaving}
         primaryAction={{
           label: "Salvar",
           onClick: handleSave,
-          disabled: isSaving || !isFormValid,
+          disabled: isSaving,
           loading: isSaving,
         }}
         hideHeader
+        validationErrors={validationErrors}
       />
     </div>
   );

@@ -40,6 +40,7 @@ interface ResumeFormEducationProps {
   addEducation: () => void;
   removeEducation: (index: number) => void;
   isSaving?: boolean;
+  educationError?: string;
 }
 
 export function ResumeFormEducation({
@@ -48,10 +49,18 @@ export function ResumeFormEducation({
   addEducation,
   removeEducation,
   isSaving,
+  educationError,
 }: ResumeFormEducationProps) {
   return (
     <div className="flex flex-col gap-4">
-      <h3 className={SECTION_TITLE_CLASS}>Formação</h3>
+      <div className="flex flex-col gap-1.5">
+        <h3 className={SECTION_TITLE_CLASS}>Formação</h3>
+        {educationError && (
+          <p className="text-sm text-destructive" role="alert">
+            {educationError}
+          </p>
+        )}
+      </div>
       {education.map((edu, eduIndex) => (
         <div key={eduIndex} className="flex flex-col gap-4">
           {education.length > 1 && (

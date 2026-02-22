@@ -20,6 +20,7 @@ interface ResumeFormExperienceProps {
   addExperience: () => void;
   removeExperience: (index: number) => void;
   isSaving?: boolean;
+  experienceError?: string;
 }
 
 export function ResumeFormExperience({
@@ -28,10 +29,18 @@ export function ResumeFormExperience({
   addExperience,
   removeExperience,
   isSaving,
+  experienceError,
 }: ResumeFormExperienceProps) {
   return (
     <div className="flex flex-col gap-4">
-      <h3 className={SECTION_TITLE_CLASS}>Experiência</h3>
+      <div className="flex flex-col gap-1.5">
+        <h3 className={SECTION_TITLE_CLASS}>Experiência</h3>
+        {experienceError && (
+          <p className="text-sm text-destructive" role="alert">
+            {experienceError}
+          </p>
+        )}
+      </div>
       {experience.map((exp, expIndex) => (
         <div key={expIndex} className="flex flex-col gap-4">
           {experience.length > 1 && (

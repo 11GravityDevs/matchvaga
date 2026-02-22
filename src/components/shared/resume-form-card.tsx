@@ -5,6 +5,7 @@ import type {
   ExperienceEntry,
   ResumeData,
 } from "@/types/resume";
+import type { ResumeValidationErrors } from "@/hooks/use-resume-form";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -44,6 +45,7 @@ export interface ResumeFormCardProps {
   headerTitle?: string;
   headerSubtitle?: string;
   hideHeader?: boolean;
+  validationErrors?: ResumeValidationErrors | null;
 }
 
 const DEFAULT_HEADER_TITLE = "Verifique seus dados";
@@ -65,6 +67,7 @@ export function ResumeFormCard({
   headerTitle = DEFAULT_HEADER_TITLE,
   headerSubtitle = DEFAULT_HEADER_SUBTITLE,
   hideHeader = false,
+  validationErrors,
 }: ResumeFormCardProps) {
   return (
     <div className={`rounded-xl border border-border bg-card ${W_CONTENT}`}>
@@ -82,6 +85,7 @@ export function ResumeFormCard({
           data={data}
           updateField={updateField}
           isSaving={isSaving}
+          validationErrors={validationErrors}
         />
 
         <div className="flex flex-col gap-4">
@@ -94,12 +98,18 @@ export function ResumeFormCard({
             variant="form"
             className="w-full"
           />
+          {validationErrors?.summary && (
+            <p className="text-sm text-destructive" role="alert">
+              {validationErrors.summary}
+            </p>
+          )}
         </div>
 
         <ResumeFormSkills
           skills={data.skills}
           onChange={(skills) => updateField("skills", skills)}
           isSaving={isSaving}
+          skillsError={validationErrors?.skills}
         />
 
         <ResumeFormEducation
@@ -108,6 +118,7 @@ export function ResumeFormCard({
           addEducation={addEducation}
           removeEducation={removeEducation}
           isSaving={isSaving}
+          educationError={validationErrors?.education}
         />
 
         <ResumeFormExperience
@@ -116,6 +127,7 @@ export function ResumeFormCard({
           addExperience={addExperience}
           removeExperience={removeExperience}
           isSaving={isSaving}
+          experienceError={validationErrors?.experience}
         />
 
         <div className="flex justify-end">

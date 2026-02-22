@@ -3,6 +3,7 @@
 import { Input } from "@/components/ui/input";
 import { FormField } from "@/components/shared/form-field";
 import type { ResumeData } from "@/types/resume";
+import type { ResumeValidationErrors } from "@/hooks/use-resume-form";
 import { INPUT_CLASS, SECTION_TITLE_CLASS } from "@/constants/resume-form";
 
 interface ResumeFormPersonalDataProps {
@@ -15,18 +16,25 @@ interface ResumeFormPersonalDataProps {
     value: ResumeData[K]
   ) => void;
   isSaving?: boolean;
+  validationErrors?: ResumeValidationErrors | null;
 }
 
 export function ResumeFormPersonalData({
   data,
   updateField,
   isSaving,
+  validationErrors,
 }: ResumeFormPersonalDataProps) {
   return (
     <div className="flex flex-col gap-4">
       <h3 className={SECTION_TITLE_CLASS}>Dados pessoais</h3>
       <div className="flex gap-8">
-        <FormField label="Nome completo" htmlFor="fullName" className="flex-1">
+        <FormField
+          label="Nome completo"
+          htmlFor="fullName"
+          className="flex-1"
+          error={validationErrors?.fullName}
+        >
           <Input
             id="fullName"
             value={data.fullName}
@@ -35,7 +43,12 @@ export function ResumeFormPersonalData({
             className={INPUT_CLASS}
           />
         </FormField>
-        <FormField label="E-mail" htmlFor="email" className="flex-1">
+        <FormField
+          label="E-mail"
+          htmlFor="email"
+          className="flex-1"
+          error={validationErrors?.email}
+        >
           <Input
             id="email"
             type="email"
@@ -47,7 +60,12 @@ export function ResumeFormPersonalData({
         </FormField>
       </div>
       <div className="flex gap-8">
-        <FormField label="Local" htmlFor="location" className="flex-1">
+        <FormField
+          label="Local"
+          htmlFor="location"
+          className="flex-1"
+          error={validationErrors?.location}
+        >
           <Input
             id="location"
             value={data.location}
@@ -56,7 +74,12 @@ export function ResumeFormPersonalData({
             className={INPUT_CLASS}
           />
         </FormField>
-        <FormField label="Telefone" htmlFor="phone" className="flex-1">
+        <FormField
+          label="Telefone"
+          htmlFor="phone"
+          className="flex-1"
+          error={validationErrors?.phone}
+        >
           <Input
             id="phone"
             value={data.phone}

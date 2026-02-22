@@ -1,12 +1,14 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
   TEXT_SMALL_LEADING,
   TEXT_SMALL_SEMIBOLD,
 } from "@/constants/design-tokens";
+
+const RESEND_COOLDOWN_SECONDS = 60;
 
 interface LoginCheckEmailProps {
   onResend: () => Promise<void>;
@@ -21,13 +23,23 @@ export function LoginCheckEmail({
 }: LoginCheckEmailProps) {
   const [isResending, setIsResending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [resendCooldown, setResendCooldown] = useState(RESEND_COOLDOWN_SECONDS);
+
+  useEffect(() => {
+    if (resendCooldown <= 0) return;
+    const id = setTimeout(() => {
+      setResendCooldown((prev) => (prev <= 1 ? 0 : prev - 1));
+    }, 1000);
+    return () => clearTimeout(id);
+  }, [resendCooldown]);
 
   const handleResend = useCallback(async () => {
-    if (isResending) return;
+    if (isResending || resendCooldown > 0) return;
     setError(null);
     setIsResending(true);
     try {
       await onResend();
+      setResendCooldown(RESEND_COOLDOWN_SECONDS);
     } catch (e) {
       console.error(e);
       setError(
@@ -36,9 +48,10 @@ export function LoginCheckEmail({
     } finally {
       setIsResending(false);
     }
-  }, [isResending, onResend]);
+  }, [isResending, resendCooldown, onResend]);
 
   const isDisabled = isPending || isResending;
+  const isResendDisabled = isResending || isPending || resendCooldown > 0;
 
   return (
     <div className="flex flex-col gap-6">
@@ -66,11 +79,11 @@ export function LoginCheckEmail({
             variant="link"
             size="default"
             onClick={handleResend}
-            disabled={isResending || isPending}
+            disabled={isResendDisabled}
             loading={isResending}
             className={`h-auto cursor-pointer p-0 text-primary hover:underline disabled:opacity-50 ${TEXT_SMALL_SEMIBOLD}`}
           >
-            Reenviar
+            {resendCooldown > 0 ? `Reenviar (${resendCooldown}s)` : "Reenviar"}
           </Button>
         </div>
       </div>
