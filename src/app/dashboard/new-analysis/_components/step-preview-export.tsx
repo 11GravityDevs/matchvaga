@@ -21,7 +21,10 @@ import {
   TEXT_SMALL_LEADING,
   W_COLUMN,
 } from "@/constants/design-tokens";
-import { useNewAnalysis, WIZARD_STEPS } from "./new-analysis-context";
+import {
+  useNewAnalysis,
+  WIZARD_STEPS,
+} from "../_contexts/new-analysis-context";
 import { StepIndicator } from "@/components/shared/step-indicator";
 
 interface ChatMessage {

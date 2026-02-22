@@ -9,6 +9,7 @@ import {
   MAX_W_PREVIEW_TITLE,
   PAGE_TITLE_CLASS,
 } from "@/constants/design-tokens";
+import { ROUTE_ONBOARDING_UPLOAD } from "@/constants/routes";
 import { cn } from "@/utils/style";
 
 import { StepDots } from "./step-dots";
@@ -62,7 +63,7 @@ export function PreviewContent() {
 
   const handleNext = useCallback(() => {
     if (isLastStep) {
-      router.push("/onboarding/upload");
+      router.push(ROUTE_ONBOARDING_UPLOAD);
       return;
     }
     setCurrentStep((prev) => prev + 1);

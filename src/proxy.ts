@@ -1,16 +1,23 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-const PROTECTED_PATH_PREFIXES = ["/dashboard", "/onboarding"];
-const GUEST_ONLY_PATH_PREFIXES = ["/login"];
-const POST_LOGIN_REDIRECT = "/onboarding/upload";
+import {
+  ROUTE_AUTH_CALLBACK,
+  ROUTE_DASHBOARD,
+  ROUTE_LOGIN,
+  ROUTE_ONBOARDING,
+  ROUTE_ONBOARDING_UPLOAD,
+} from "@/constants/routes";
+
+const PROTECTED_PATH_PREFIXES = [ROUTE_DASHBOARD, ROUTE_ONBOARDING];
+const GUEST_ONLY_PATH_PREFIXES = [ROUTE_LOGIN];
 
 function isProtectedPath(pathname: string): boolean {
   return PROTECTED_PATH_PREFIXES.some((prefix) => pathname.startsWith(prefix));
 }
 
 function isGuestOnlyPath(pathname: string): boolean {
-  if (pathname.startsWith("/auth/callback")) {
+  if (pathname.startsWith(ROUTE_AUTH_CALLBACK)) {
     return false;
   }
 
@@ -53,13 +60,13 @@ export async function proxy(request: NextRequest) {
 
   if (!user && isProtectedPath(request.nextUrl.pathname)) {
     const url = request.nextUrl.clone();
-    url.pathname = "/login";
+    url.pathname = ROUTE_LOGIN;
     return NextResponse.redirect(url);
   }
 
   if (user && isGuestOnlyPath(request.nextUrl.pathname)) {
     const url = request.nextUrl.clone();
-    url.pathname = POST_LOGIN_REDIRECT;
+    url.pathname = ROUTE_ONBOARDING_UPLOAD;
     return NextResponse.redirect(url);
   }
 

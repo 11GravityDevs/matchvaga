@@ -3,7 +3,8 @@
 import { useCallback } from "react";
 import { useRouter } from "next/navigation";
 
-import { useOnboardingContext } from "@/contexts/onboarding-context";
+import { ROUTE_DASHBOARD } from "@/constants/routes";
+import { useOnboardingContext } from "../../_contexts/onboarding-context";
 
 export interface UseResumeVerifyReturn {
   resumeContent: string;
@@ -23,7 +24,7 @@ export function useResumeVerify(): UseResumeVerifyReturn {
   }, []);
 
   const continueToDashboard = useCallback(() => {
-    router.push("/dashboard");
+    router.push(ROUTE_DASHBOARD);
   }, [router]);
 
   return {

@@ -5,6 +5,7 @@ import {
   PAGE_SUBTITLE_CLASS,
   PAGE_TITLE_CLASS,
 } from "@/constants/design-tokens";
+import { ROUTE_DASHBOARD_NEW_ANALYSIS } from "@/constants/routes";
 import Link from "next/link";
 
 interface DashboardHeaderProps {
@@ -20,7 +21,7 @@ export function DashboardHeader({ userName = "Jon" }: DashboardHeaderProps) {
           Aqui está um resumo das suas otimizações.
         </p>
       </div>
-      <Link href="/dashboard/new-analysis">
+      <Link href={ROUTE_DASHBOARD_NEW_ANALYSIS}>
         <Button size="lg" className="gap-1.5">
           <Plus className="h-4 w-4" />
           Nova Análise

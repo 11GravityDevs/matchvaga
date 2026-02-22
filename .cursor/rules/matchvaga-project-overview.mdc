@@ -28,12 +28,13 @@ alwaysApply: true
 
 ```
 src/
-├── app/           # App Router pages, layouts, route groups; route-specific components in _components/
+├── app/           # App Router pages, layouts, route groups; route-specific in _components/, _utils/, _hooks/, _constants/, _contexts/
 ├── components/    # ui/ (shadcn primitives) + shared/ (cross-feature components)
-├── contexts/     # React Context providers (e.g. onboarding-context)
-├── hooks/         # Custom hooks (logic layer)
+├── constants/     # Shared constants (auth, design-tokens, routes, etc.)
+├── contexts/     # Shared React Context providers
+├── hooks/         # Shared custom hooks (logic layer)
 ├── lib/           # Supabase client (client.ts, server.ts)
-├── utils/         # Utilities: tailwind.ts (cn), file.ts (formatFileSize, etc.)
+├── utils/         # Shared utilities (style, auth, etc.)
 └── types/         # Shared TypeScript interfaces
 ```
 
@@ -43,7 +44,7 @@ src/
 - UI primitives → `components/ui/`
 - **One component per file** — Avoid multiple components in the same file. If a component is reusable across screens (e.g. form fields, layout wrappers), extract it to `components/shared/`.
 
-**Utils:** All pure utility functions (formatting, validation, parsing, helpers) MUST live in `src/utils/` under domain-specific files (e.g. `utils/file.ts`, `utils/validation.ts`, `utils/url.ts`, `utils/route.ts`). NEVER define utility functions inside components, hooks, or pages.
+**Utils, constants, hooks:** See `colocation.mdc` for placement. See `constants.mdc` for constants-specific rules. See `check-before-add.mdc` before adding new ones.
 
 ## Route Architecture
 
@@ -59,18 +60,17 @@ Route groups `(auth)` and `(legal)` use parenthesized folders to share layouts w
 ## Path Aliases
 
 - `@/components` — Components (ui/, shared/)
+- `@/constants` — Shared constants (auth, design-tokens, routes, etc.)
 - `@/components/ui` — shadcn UI primitives
 - `@/lib/supabase` — Supabase client (client, server)
 - `@/components/shared` — Cross-feature components (e.g. brand)
 - `@/contexts` — Context providers
 - `@/hooks` — Custom hooks
 - `@/utils/style` — cn() helper (clsx + tailwind-merge)
-- `@/utils/file` — File utilities (formatFileSize, etc.)
-- `@/utils/validation` — Validation (isValidEmail, etc.)
 - `@/utils/auth` — Auth utilities (translateAuthError for Supabase errors)
-- `@/utils/url` — URL/search params parsing (parseLoginStepFromSearchParams, etc.)
-- `@/utils/route` — Route/path helpers (getStepIndexFromPathname, etc.)
 - `@/types` — Shared type definitions
+
+Route-local utils/hooks/constants use relative imports (e.g. `./_utils/...`, `../_hooks/...`). See `colocation.mdc`.
 
 ## DX Tooling
 
@@ -82,7 +82,7 @@ Route groups `(auth)` and `(legal)` use parenthesized folders to share layouts w
 
 ## Design Source
 
-Designs live in `design.pen`. Use Pencil MCP tools to read and implement from `.pen` files.
+Designs live in `design.pen`. Use Pencil MCP tools to read and implement. See `pencil-design-to-code.mdc` for workflow.
 
 ## Keeping Rules Updated
 
@@ -93,7 +93,8 @@ When the project changes, update these rules accordingly:
 | New important library | Add to Tech Stack table |
 | New folder in `src/` | Add to Project Structure; update path aliases if new |
 | New path alias | Add to Path Aliases; update `components.json` reference |
-| New util function | Add to `utils/<domain>.ts` (e.g. `utils/file.ts` for file helpers) |
+| New util function | Add to `utils/<domain>.ts` (shared) or `_utils/` (route-specific); see `colocation.mdc` |
+| New shared constant (2+ routes) | Add to `constants/<domain>.ts`; route-specific → `_constants/` |
 | New route group or flow | Add to Route Architecture |
 | New domain concept | Add to `matchvaga-domain.mdc` |
 | New design file or workflow | Update `pencil-design-to-code.mdc` |

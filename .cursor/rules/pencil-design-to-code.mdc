@@ -34,7 +34,9 @@ alwaysApply: false
 | `fill_container` (flex child) | `flex-1` |
 | `fill_container` (height) | `h-full` |
 | `fit_content` | `w-fit` or `h-fit` |
-| Fixed dimensions | `w-[Npx]`, `h-[Npx]` |
+| Fixed dimensions | Use `@/constants/design-tokens` (e.g. `W_FORM`, `W_SIDEBAR`) or theme utilities (`w-form`, `w-sidebar`). Add new tokens if needed. |
+
+See `tailwind-no-arbitrary.mdc` — no arbitrary values in components.
 
 ## Discovering Design Nodes
 

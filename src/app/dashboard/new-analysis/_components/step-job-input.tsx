@@ -16,7 +16,10 @@ import {
   TIP_BANNER_PADDING,
 } from "@/constants/design-tokens";
 import { TEXT_SMALL_LEADING } from "@/constants/design-tokens";
-import { useNewAnalysis, WIZARD_STEPS } from "./new-analysis-context";
+import {
+  useNewAnalysis,
+  WIZARD_STEPS,
+} from "../_contexts/new-analysis-context";
 import { StepIndicator } from "@/components/shared/step-indicator";
 
 export function StepJobInput() {

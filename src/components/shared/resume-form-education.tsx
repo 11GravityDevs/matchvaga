@@ -18,7 +18,7 @@ import {
   SECTION_ITEM_LABEL_CLASS,
   SECTION_TITLE_CLASS,
   SUB_LABEL_CLASS,
-} from "@/components/shared/resume-form-constants";
+} from "@/constants/resume-form";
 import { TEXT_SMALL } from "@/constants/design-tokens";
 
 const EDUCATION_LEVELS = [

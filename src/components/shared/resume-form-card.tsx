@@ -12,7 +12,6 @@ import {
   CARD_TITLE_CLASS,
   SECTION_TITLE_CLASS,
   W_CONTENT,
-  W_FORM,
 } from "@/constants/design-tokens";
 import { Textarea } from "@/components/ui/textarea";
 import { ResumeFormPersonalData } from "@/components/shared/resume-form-personal-data";

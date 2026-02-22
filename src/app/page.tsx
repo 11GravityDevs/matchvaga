@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 import { BrandName } from "@/components/shared/brand-name";
+import { ROUTE_LOGIN } from "@/constants/routes";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -34,7 +35,7 @@ export default function Page() {
         </CardHeader>
         <CardContent>
           <Button asChild className="w-full">
-            <Link href="/login">Começar</Link>
+            <Link href={ROUTE_LOGIN}>Começar</Link>
           </Button>
         </CardContent>
       </Card>

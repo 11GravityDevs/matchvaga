@@ -1,4 +1,4 @@
-import { useNewAnalysis } from "./new-analysis-context";
+import { useNewAnalysis } from "../_contexts/new-analysis-context";
 import { StepGapAnalysis } from "./step-gap-analysis";
 import { StepJobInput } from "./step-job-input";
 import { StepPreviewExport } from "./step-preview-export";

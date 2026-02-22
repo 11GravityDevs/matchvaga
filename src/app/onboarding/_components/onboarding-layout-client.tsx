@@ -7,8 +7,9 @@ import {
   StepIndicator,
   type StepIndicatorStep,
 } from "@/components/shared/step-indicator";
-import { OnboardingProvider } from "@/contexts/onboarding-context";
-import { getStepIndexFromPathname } from "@/utils/route";
+import { ROUTE_ONBOARDING_UPLOAD } from "@/constants/routes";
+import { OnboardingProvider } from "../_contexts/onboarding-context";
+import { getStepIndexFromPathname } from "../_utils/route";
 
 import { OnboardingTopBar } from "./onboarding-top-bar";
 
@@ -28,7 +29,7 @@ export function OnboardingLayoutClient({
   const router = useRouter();
 
   const handleSkip = useCallback(() => {
-    router.push("/onboarding/upload");
+    router.push(ROUTE_ONBOARDING_UPLOAD);
   }, [router]);
 
   if (pathname.startsWith("/onboarding/preview")) {

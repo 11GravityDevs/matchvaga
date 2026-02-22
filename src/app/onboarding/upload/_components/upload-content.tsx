@@ -11,8 +11,8 @@ import {
   TEXT_SMALL,
   W_FORM,
 } from "@/constants/design-tokens";
-import { useResumeUpload } from "@/hooks/use-resume-upload";
-import { formatFileSize } from "@/utils/file";
+import { useResumeUpload } from "../_hooks/use-resume-upload";
+import { formatFileSize } from "../_utils/file";
 import { cn } from "@/utils/style";
 
 export function UploadContent() {

@@ -30,5 +30,6 @@ Import from `@/constants/design-tokens`:
 
 ## Exceptions
 
+- **`@/constants/design-tokens.ts`** — Arbitrary values allowed only here to define the design scale (e.g. `text-[22px]`, `text-[28px]`)
 - shadcn/Radix component internals (e.g. `rounded-[min(var(--radius-md),8px)]`)
 - Complex asymmetric radius (e.g. chat bubbles) — prefer `rounded-xl rounded-bl-md` over `rounded-[12px_12px_12px_4px]`

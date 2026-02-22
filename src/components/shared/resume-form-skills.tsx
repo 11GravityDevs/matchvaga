@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { SECTION_TITLE_CLASS } from "@/components/shared/resume-form-constants";
+import { SECTION_TITLE_CLASS } from "@/constants/resume-form";
 import { TEXT_SMALL, TEXT_SMALL_MEDIUM } from "@/constants/design-tokens";
 
 interface ResumeFormSkillsProps {

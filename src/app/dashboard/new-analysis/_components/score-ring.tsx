@@ -1,4 +1,4 @@
-import { getScoreColorToken } from "@/utils/analysis";
+import { getScoreColorToken } from "../_utils/analysis";
 import { TEXT_SCORE } from "@/constants/design-tokens";
 
 interface ScoreRingProps {

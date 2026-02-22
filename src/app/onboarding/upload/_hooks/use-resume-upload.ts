@@ -3,9 +3,10 @@
 import { useCallback } from "react";
 import { useRouter } from "next/navigation";
 
-import { useOnboardingContext } from "@/contexts/onboarding-context";
-
-import type { SelectedFileInfo } from "@/contexts/onboarding-context";
+import {
+  useOnboardingContext,
+  type SelectedFileInfo,
+} from "../../_contexts/onboarding-context";
 
 export interface UseResumeUploadReturn {
   resumeContent: string;

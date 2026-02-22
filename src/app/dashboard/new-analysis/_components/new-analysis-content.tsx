@@ -1,6 +1,6 @@
 "use client";
 
-import { NewAnalysisProvider } from "./new-analysis-context";
+import { NewAnalysisProvider } from "../_contexts/new-analysis-context";
 import { WizardInner } from "./wizard-inner";
 
 export function NewAnalysisContent() {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useResumeVerify } from "@/hooks/use-resume-verify";
+import { useResumeVerify } from "../_hooks/use-resume-verify";
 import { useResumeForm } from "@/hooks/use-resume-form";
 import type { ResumeData } from "@/types/resume";
 import { createEmptyEducation, createEmptyExperience } from "@/types/resume";

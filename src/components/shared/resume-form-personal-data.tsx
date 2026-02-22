@@ -3,10 +3,7 @@
 import { Input } from "@/components/ui/input";
 import { FormField } from "@/components/shared/form-field";
 import type { ResumeData } from "@/types/resume";
-import {
-  INPUT_CLASS,
-  SECTION_TITLE_CLASS,
-} from "@/components/shared/resume-form-constants";
+import { INPUT_CLASS, SECTION_TITLE_CLASS } from "@/constants/resume-form";
 
 interface ResumeFormPersonalDataProps {
   data: Pick<

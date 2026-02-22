@@ -6,7 +6,7 @@ import { LoginCheckEmail } from "./login-check-email";
 import { LoginEmailForm } from "./login-email-form";
 import { LoginFormCard } from "./login-form-card";
 import { LoginHero } from "./login-hero";
-import { useLogin } from "@/hooks/use-login";
+import { useLogin } from "../_hooks/use-login";
 
 export function LoginContent() {
   const searchParams = useSearchParams();

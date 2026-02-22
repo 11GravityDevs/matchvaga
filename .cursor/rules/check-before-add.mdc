@@ -1,0 +1,18 @@
+---
+description: Search before implementing — check for existing utils, constants, hooks, components
+globs: src/**/*.ts,src/**/*.tsx
+alwaysApply: false
+---
+
+# Check Before Adding
+
+Applies when adding new utils, constants, hooks, or components.
+
+Before implementing:
+
+1. **Search** for similar behavior (e.g., `formatFileSize`, `isValidEmail`, `parseLoginStep`, `getStepIndexFromPathname`)
+2. **Prefer** existing `@/utils/*`, `@/constants/*`, `@/hooks/*`, `@/components/*`
+3. If **route-specific** and not found → use `_utils`, `_hooks`, `_constants`, `_contexts` in that route
+4. If **shared** and not found → add to `src/` with domain-specific file (e.g., `utils/file.ts`, `constants/auth.ts`)
+
+See `colocation.mdc` for where to place.

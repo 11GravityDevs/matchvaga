@@ -1,14 +1,15 @@
 import { NextResponse } from "next/server";
 
+import { ROUTE_LOGIN, ROUTE_ONBOARDING_UPLOAD } from "@/constants/routes";
 import { createClient } from "@/lib/supabase/server";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  let next = searchParams.get("next") ?? "/onboarding/upload";
+  let next = searchParams.get("next") ?? ROUTE_ONBOARDING_UPLOAD;
 
   if (!next.startsWith("/")) {
-    next = "/onboarding/upload";
+    next = ROUTE_ONBOARDING_UPLOAD;
   }
 
   if (code) {
@@ -31,5 +32,5 @@ export async function GET(request: Request) {
     }
   }
 
-  return NextResponse.redirect(`${origin}/login?error=auth`);
+  return NextResponse.redirect(`${origin}${ROUTE_LOGIN}?error=auth`);
 }

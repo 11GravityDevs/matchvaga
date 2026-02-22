@@ -1,6 +1,6 @@
 "use client";
 
-import { useResume } from "@/hooks/use-resume";
+import { useResume } from "../_hooks/use-resume";
 import { useResumeForm } from "@/hooks/use-resume-form";
 import { ResumeFormCard } from "@/components/shared/resume-form-card";
 import {

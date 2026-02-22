@@ -13,8 +13,12 @@ import {
 
 import { Logo } from "@/components/shared/logo";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/utils/style";
+import {
+  ROUTE_DASHBOARD,
+  ROUTE_DASHBOARD_NEW_ANALYSIS,
+} from "@/constants/routes";
 import { TEXT_CAPTION_LEADING, W_SIDEBAR } from "@/constants/design-tokens";
+import { cn } from "@/utils/style";
 
 interface NavItem {
   label: string;
@@ -23,8 +27,12 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { label: "Nova Análise", href: "/dashboard/new-analysis", icon: Search },
-  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  {
+    label: "Nova Análise",
+    href: ROUTE_DASHBOARD_NEW_ANALYSIS,
+    icon: Search,
+  },
+  { label: "Dashboard", href: ROUTE_DASHBOARD, icon: LayoutDashboard },
   { label: "Meu Currículo", href: "/dashboard/resume", icon: FileText },
 ];
 

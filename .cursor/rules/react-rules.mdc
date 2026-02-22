@@ -25,8 +25,7 @@ export function ResumeUpload({ onUpload, isUploading }: ResumeUploadProps) {
 
 - **UI components**: Presentational only; receive data via props
 - **Logic**: Custom hooks (`useLogin`, `useResumeUpload`) or services — not inside JSX
-- **Hooks location**: `src/hooks/` or colocated in feature folders
-- **Utils**: Pure functions (format, validate, parse) → `src/utils/<domain>.ts` — never inside components
+- **Hooks/utils placement**: See `colocation.mdc`
 - **File Size Limit**: Maximum **300 lines**. If a file exceeds this limit, extract code into custom hooks or smaller components colocated in the same directory.
 
 ---

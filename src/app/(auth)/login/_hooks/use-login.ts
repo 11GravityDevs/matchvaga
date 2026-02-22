@@ -3,9 +3,17 @@
 import { useCallback, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
+import {
+  ROUTE_AUTH_CALLBACK,
+  ROUTE_LOGIN,
+  ROUTE_ONBOARDING_UPLOAD,
+} from "@/constants/routes";
 import { createClient } from "@/lib/supabase/client";
 import { translateAuthError } from "@/utils/auth";
-import { parseLoginStepFromSearchParams, type LoginStep } from "@/utils/url";
+import {
+  parseLoginStepFromSearchParams,
+  type LoginStep,
+} from "../_utils/parse-login-step";
 
 export type { LoginStep };
 
@@ -30,7 +38,7 @@ export function useLoginStep(): {
       startTransition(() => {
         const params = new URLSearchParams(searchParams.toString());
         params.set("step", newStep);
-        router.push(`/login?${params.toString()}`, { scroll: false });
+        router.push(`${ROUTE_LOGIN}?${params.toString()}`, { scroll: false });
       });
     },
     [router, searchParams]
@@ -60,7 +68,7 @@ export function useLogin(): UseLoginReturn {
         email: trimmedEmail,
         options: {
           shouldCreateUser: true,
-          emailRedirectTo: `${window.location.origin}/auth/callback?next=/onboarding/upload`,
+          emailRedirectTo: `${window.location.origin}${ROUTE_AUTH_CALLBACK}?next=${ROUTE_ONBOARDING_UPLOAD}`,
         },
       });
 
@@ -90,7 +98,7 @@ export function useLogin(): UseLoginReturn {
       email,
       options: {
         shouldCreateUser: true,
-        emailRedirectTo: `${window.location.origin}/auth/callback?next=/onboarding/upload`,
+        emailRedirectTo: `${window.location.origin}${ROUTE_AUTH_CALLBACK}?next=${ROUTE_ONBOARDING_UPLOAD}`,
       },
     });
 
@@ -103,7 +111,7 @@ export function useLogin(): UseLoginReturn {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=/onboarding/upload`,
+        redirectTo: `${window.location.origin}${ROUTE_AUTH_CALLBACK}?next=${ROUTE_ONBOARDING_UPLOAD}`,
       },
     });
 

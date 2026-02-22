@@ -6,7 +6,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Field, FieldContent, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { isValidEmail } from "@/utils/validation";
+import { isValidEmail } from "../_utils/validation";
 
 interface LoginEmailFormProps {
   onSubmit: (email: string, rememberMe?: boolean) => Promise<void>;

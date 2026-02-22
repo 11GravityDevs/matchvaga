@@ -1,0 +1,32 @@
+---
+description: Route-local colocation — _utils, _hooks, _constants, _contexts; when to use shared vs route-specific
+alwaysApply: true
+---
+
+# Colocation Rule
+
+## Core Principle
+
+Utils, constants, hooks, and components must **NOT** live inside component files UNLESS:
+- Simple behavior (e.g., 1–3 lines)
+- Does not add significant bulk
+
+## Placement by Scope
+
+| Scope | Location | Example |
+|-------|----------|---------|
+| **Single route** | `app/<route>/_utils/`, `_hooks/`, `_constants/`, `_contexts/` | `(auth)/login/_hooks/use-login.ts` |
+| **Multi-route (2+)** | `src/utils/`, `src/hooks/`, `src/constants/`, `src/contexts/` | `src/hooks/use-resume-form.ts` |
+
+## Route-Local Folders
+
+Create these folders under a route when code belongs only to that route:
+
+- `_utils/` — Pure functions (format, validate, parse) used only in that route
+- `_hooks/` — Custom hooks used only in that route
+- `_constants/` — Constants used only in that route
+- `_contexts/` — React Context providers used only in that route
+
+**Import:** Use relative paths: `./_hooks/use-login`, `../_utils/route`, `../../_contexts/onboarding-context` (no path aliases for route-local code).
+
+See `constants.mdc` for constants-specific placement. See `check-before-add.mdc` before adding new utils, constants, hooks, or components.

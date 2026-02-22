@@ -4,7 +4,7 @@ import { ArrowLeft, Check, Lightbulb, Sparkles } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/utils/style";
-import { getScoreFeedback } from "@/utils/analysis";
+import { getScoreFeedback } from "../_utils/analysis";
 import {
   CARD_CONTENT_PADDING,
   CARD_HEADER_PADDING,
@@ -22,7 +22,10 @@ import {
   TEXT_SMALL_SEMIBOLD,
   W_COLUMN,
 } from "@/constants/design-tokens";
-import { useNewAnalysis, WIZARD_STEPS } from "./new-analysis-context";
+import {
+  useNewAnalysis,
+  WIZARD_STEPS,
+} from "../_contexts/new-analysis-context";
 import { ScoreRing } from "./score-ring";
 import { StepIndicator } from "@/components/shared/step-indicator";
 
