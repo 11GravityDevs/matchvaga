@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Lightbulb, Loader2, Sparkles } from "lucide-react";
 
 import { runGapAnalysis } from "@/app/actions/analysis";
+import { QUERY_KEY_ANALYSES } from "@/constants/query-keys";
 import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Loading } from "@/components/ui/loading";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ROUTE_ONBOARDING_UPLOAD } from "@/constants/routes";
 import { StepIndicator } from "@/components/shared/step-indicator";
@@ -17,66 +18,60 @@ import {
 } from "../_contexts/new-analysis-context";
 
 export function StepJobInput() {
+  const queryClient = useQueryClient();
   const {
     resumeId,
     isLoadingResume,
-    jobTitle,
-    jobCompany,
     jobDescription,
-    setJobTitle,
-    setJobCompany,
     setJobDescription,
     setJobRole,
     setStep,
     setAnalysisResult,
-    setAnalysisError,
-    setIsAnalyzing,
-    isAnalyzing,
-    analysisError,
   } = useNewAnalysis();
 
-  const canAnalyze =
-    jobTitle.trim().length > 0 &&
-    jobCompany.trim().length > 0 &&
-    jobDescription.trim().length > 0 &&
-    !!resumeId &&
-    !isAnalyzing;
-
-  const handleAnalyze = async () => {
-    if (!resumeId) return;
-
-    setAnalysisError(null);
-    setIsAnalyzing(true);
-
-    const result = await runGapAnalysis(resumeId, {
-      title: jobTitle.trim(),
-      company: jobCompany.trim(),
-      rawText: jobDescription.trim(),
-    });
-
-    setIsAnalyzing(false);
-
-    if (!result.success) {
-      setAnalysisError(result.error ?? "Erro ao analisar. Tente novamente.");
-      return;
-    }
-
-    if (
-      result.analysisId &&
-      result.score !== undefined &&
-      result.matched_skills &&
-      result.missing_skills
-    ) {
-      setJobRole(`${jobTitle.trim()} - ${jobCompany.trim()}`);
+  const {
+    mutate: runAnalysis,
+    isPending: isAnalyzing,
+    error: analysisError,
+  } = useMutation({
+    mutationFn: async () => {
+      if (!resumeId) throw new Error("Currículo não encontrado.");
+      const result = await runGapAnalysis(resumeId, jobDescription.trim());
+      if (!result.success) {
+        throw new Error(result.error ?? "Erro ao analisar. Tente novamente.");
+      }
+      return result;
+    },
+    onSuccess: (result) => {
+      void queryClient.invalidateQueries({ queryKey: QUERY_KEY_ANALYSES });
+      const roleLabel =
+        result.job_title && result.job_company
+          ? `${result.job_title} - ${result.job_company}`
+          : (result.job_title ?? result.job_company ?? "Vaga");
+      setJobRole(roleLabel);
       setAnalysisResult({
-        analysisId: result.analysisId,
-        score: result.score,
-        matchedSkills: result.matched_skills,
-        missingSkills: result.missing_skills,
+        analysisId: result.analysisId!,
+        score: result.score!,
+        matchedSkills: result.matched_skills!,
+        missingSkills: result.missing_skills!,
       });
       setStep(2);
-    }
+    },
+  });
+
+  const canAnalyze =
+    jobDescription.trim().length > 0 && !!resumeId && !isAnalyzing;
+
+  const handleAnalyze = () => {
+    runAnalysis();
   };
+
+  const analysisErrorDisplay =
+    analysisError instanceof Error
+      ? analysisError.message
+      : analysisError
+        ? String(analysisError)
+        : null;
 
   if (isLoadingResume) {
     return <Loading className="min-h-0 flex-1" />;
@@ -117,35 +112,6 @@ export function StepJobInput() {
       {/* Job Description Card */}
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-border bg-card">
         <div className="flex min-h-0 flex-1 flex-col gap-5 overflow-auto card-content-padding">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <Field className="flex flex-col gap-1.5">
-              <FieldLabel className="text-base leading-snug font-semibold">
-                Cargo
-              </FieldLabel>
-              <FieldDescription>
-                Ex: Desenvolvedor Frontend, Product Designer
-              </FieldDescription>
-              <Input
-                placeholder="Cargo da vaga"
-                value={jobTitle}
-                onChange={(e) => setJobTitle(e.target.value)}
-              />
-            </Field>
-            <Field className="flex flex-col gap-1.5">
-              <FieldLabel className="text-base leading-snug font-semibold">
-                Empresa
-              </FieldLabel>
-              <FieldDescription>
-                Nome da empresa ou instituição
-              </FieldDescription>
-              <Input
-                placeholder="Nome da empresa"
-                value={jobCompany}
-                onChange={(e) => setJobCompany(e.target.value)}
-              />
-            </Field>
-          </div>
-
           <Field className="flex min-h-0 flex-1 flex-col gap-1.5">
             <FieldLabel className="text-base leading-snug font-semibold">
               Descrição da Vaga
@@ -163,12 +129,12 @@ export function StepJobInput() {
             </div>
           </Field>
 
-          {analysisError && (
+          {analysisErrorDisplay && (
             <div
               role="alert"
               className="rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive"
             >
-              {analysisError}
+              {analysisErrorDisplay}
             </div>
           )}
 
@@ -176,9 +142,9 @@ export function StepJobInput() {
           <div className="flex items-start gap-2 self-start rounded-lg border border-accent-success-border bg-accent-success-light tip-banner-padding">
             <Lightbulb className="mt-0.5 h-4 w-4 shrink-0 text-accent-success" />
             <p className="text-small-leading text-accent-success-text">
-              <span className="font-semibold">Dica:</span> Copie a descrição
-              completa da vaga, incluindo requisitos e qualificações para uma
-              análise mais precisa.
+              <span className="font-semibold">Dica:</span> Cole a descrição
+              completa da vaga. Cargo e empresa são identificados
+              automaticamente.
             </p>
           </div>
         </div>

@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 
-import { createClient } from "@/lib/supabase/server";
-
 import { CoreFeaturesSection } from "./_components/core-features-section";
 import { FAQSection } from "./_components/faq-section";
 import { FinalCTASection } from "./_components/final-cta-section";
@@ -22,26 +20,20 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function Page() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  const isLoggedIn = !!user;
-
+export default function Page() {
   return (
     <main className="flex min-h-screen flex-col bg-background">
-      <LandingHeader isLoggedIn={isLoggedIn} />
+      <LandingHeader />
       <div className="mx-auto w-full max-w-landing-content">
-        <HeroSection isLoggedIn={isLoggedIn} />
+        <HeroSection />
         <HowItWorksSection />
         <CoreFeaturesSection />
         <SecondaryFeaturesSection />
         <SocialProofSection />
-        <PricingSection isLoggedIn={isLoggedIn} />
+        <PricingSection />
         <FAQSection />
       </div>
-      <FinalCTASection isLoggedIn={isLoggedIn} />
+      <FinalCTASection />
       <LandingFooter />
     </main>
   );

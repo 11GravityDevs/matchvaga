@@ -15,6 +15,8 @@ export interface RunGapAnalysisResult {
   score?: number;
   matched_skills?: string[];
   missing_skills?: string[];
+  job_title?: string;
+  job_company?: string;
   error?: string;
 }
 
@@ -36,11 +38,11 @@ export interface GetAnalysesForUserResult {
 
 export async function runGapAnalysis(
   resumeId: string,
-  job: { title: string; company: string; rawText: string }
+  jobDescription: string
 ): Promise<RunGapAnalysisResult> {
-  const jobParsed = jobSnapshotSchema.safeParse(job);
-  if (!jobParsed.success) {
-    return { success: false, error: "Dados da vaga inválidos." };
+  const rawText = jobDescription.trim();
+  if (rawText.length === 0) {
+    return { success: false, error: "Cole a descrição da vaga para analisar." };
   }
 
   const supabase = await createClient();
@@ -74,9 +76,19 @@ export async function runGapAnalysis(
 
   const resumeData = resumeParsed.data as ResumeData;
 
-  const aiResult = await runGapAnalysisAI(resumeData, jobParsed.data);
+  const aiResult = await runGapAnalysisAI(resumeData, rawText);
   if (!aiResult.success) {
     return { success: false, error: aiResult.error };
+  }
+
+  const jobSnapshot = {
+    title: aiResult.data.job_title,
+    company: aiResult.data.job_company,
+    rawText,
+  };
+  const jobParsed = jobSnapshotSchema.safeParse(jobSnapshot);
+  if (!jobParsed.success) {
+    return { success: false, error: "Dados da vaga inválidos." };
   }
 
   const { data: analysisRow, error: insertError } = await supabase
@@ -108,6 +120,8 @@ export async function runGapAnalysis(
     score: aiResult.data.score,
     matched_skills: aiResult.data.matched_skills,
     missing_skills: aiResult.data.missing_skills,
+    job_title: aiResult.data.job_title,
+    job_company: aiResult.data.job_company,
   };
 }
 

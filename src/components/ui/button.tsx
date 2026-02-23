@@ -84,7 +84,11 @@ function Button({
       data-slot="button"
       data-variant={variant}
       data-size={size}
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(
+        buttonVariants({ variant, size, className }),
+        variant === "brand" && "text-on-accent-brand",
+        variant === "destructiveSolid" && "text-on-destructive"
+      )}
       disabled={disabled ?? loading}
       {...props}
     >

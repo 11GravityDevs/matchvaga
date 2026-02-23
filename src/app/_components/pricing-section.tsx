@@ -1,12 +1,8 @@
-import Link from "next/link";
 import { Check } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { ROUTE_DASHBOARD, ROUTE_LOGIN } from "@/constants/routes";
 
-interface PricingSectionProps {
-  isLoggedIn?: boolean;
-}
+import { AuthAwareLink } from "./auth-aware-link";
 
 const FREE_FEATURES = [
   "3 análises por mês",
@@ -29,7 +25,7 @@ const PRO_FEATURES: ProFeature[] = [
   { text: "Suporte prioritário" },
 ];
 
-export function PricingSection({ isLoggedIn = false }: PricingSectionProps) {
+export function PricingSection() {
   return (
     <section
       id="precos"
@@ -79,9 +75,10 @@ export function PricingSection({ isLoggedIn = false }: PricingSectionProps) {
             </div>
 
             <Button variant="outline" className="w-full py-3.5" asChild>
-              <Link href={isLoggedIn ? ROUTE_DASHBOARD : ROUTE_LOGIN}>
-                {isLoggedIn ? "Acessar Dashboard" : "Começar Grátis"}
-              </Link>
+              <AuthAwareLink
+                loggedOutLabel="Começar Grátis"
+                loggedInLabel="Acessar Dashboard"
+              />
             </Button>
           </div>
 
@@ -123,9 +120,10 @@ export function PricingSection({ isLoggedIn = false }: PricingSectionProps) {
             </div>
 
             <Button variant="brand" className="w-full py-3.5" asChild>
-              <Link href={isLoggedIn ? ROUTE_DASHBOARD : ROUTE_LOGIN}>
-                {isLoggedIn ? "Ir ao Dashboard" : "Começar Agora"}
-              </Link>
+              <AuthAwareLink
+                loggedOutLabel="Começar Agora"
+                loggedInLabel="Ir ao Dashboard"
+              />
             </Button>
           </div>
         </div>

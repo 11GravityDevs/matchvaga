@@ -14,6 +14,8 @@ export interface GapAnalysisResult {
     score: number;
     matched_skills: string[];
     missing_skills: string[];
+    job_title: string;
+    job_company: string;
   };
 }
 
@@ -26,7 +28,7 @@ export type GapAnalysisOutput = GapAnalysisResult | GapAnalysisError;
 
 function buildUserPrompt(
   resumeData: ResumeData,
-  job: { title: string; company: string; rawText: string }
+  jobDescription: string
 ): string {
   const resumeSummary = [
     `Candidate: ${resumeData.fullName}`,
@@ -36,21 +38,19 @@ function buildUserPrompt(
     `Education: ${resumeData.education.map((e) => `${e.course} at ${e.institution}`).join(" | ")}`,
   ].join("\n");
 
-  return `Job: ${job.title} at ${job.company}
-
-Job description:
-${job.rawText}
+  return `Job description (extract job_title and job_company from this):
+${jobDescription}
 
 ---
 Resume data:
 ${resumeSummary}
 
-Analyze and return JSON with score, matched_skills, and missing_skills.`;
+Analyze and return JSON with score, matched_skills, missing_skills, job_title, and job_company.`;
 }
 
 export async function runGapAnalysisAI(
   resumeData: ResumeData,
-  job: { title: string; company: string; rawText: string }
+  jobDescription: string
 ): Promise<GapAnalysisOutput> {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) {
@@ -64,7 +64,7 @@ export async function runGapAnalysisAI(
       model: MODEL,
       messages: [
         { role: "system", content: GAP_ANALYSIS_SYSTEM_PROMPT },
-        { role: "user", content: buildUserPrompt(resumeData, job) },
+        { role: "user", content: buildUserPrompt(resumeData, jobDescription) },
       ],
       response_format: { type: "json_object" },
     });
@@ -83,6 +83,8 @@ export async function runGapAnalysisAI(
         score: validated.score,
         matched_skills: validated.matched_skills,
         missing_skills: validated.missing_skills,
+        job_title: validated.job_title,
+        job_company: validated.job_company,
       },
     };
   } catch (error) {

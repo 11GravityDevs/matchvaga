@@ -111,7 +111,7 @@ export function ResumeFormExperience({
             {(exp.isCurrent || !hasCurrentExperience) && (
               <label className="flex cursor-pointer items-center gap-1 self-start">
                 <Checkbox
-                  className="cursor-pointer border-accent-brand data-[state=checked]:border-accent-brand data-[state=checked]:bg-accent-brand"
+                  className="cursor-pointer border-2 border-accent-brand data-[state=checked]:border-accent-brand data-[state=checked]:bg-accent-brand"
                   checked={exp.isCurrent ?? false}
                   onCheckedChange={(checked) =>
                     updateExperience(expIndex, {

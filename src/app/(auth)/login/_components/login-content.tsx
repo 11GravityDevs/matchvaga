@@ -43,7 +43,7 @@ export function LoginContent() {
       ) : (
         <LoginFormCard
           title="Verifique seu email"
-          description={`Clique no link enviado para autenticar automaticamente. Email: ${email}`}
+          description={`Clique no botão no corpo do email para autenticar automaticamente. Email: ${email}`}
         >
           <LoginCheckEmail
             onResend={resendLink}

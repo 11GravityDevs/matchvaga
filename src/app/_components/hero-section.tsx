@@ -1,15 +1,10 @@
-import Link from "next/link";
 import { Sparkles, Zap } from "lucide-react";
 
-import { Logo } from "@/components/shared/logo";
 import { Button } from "@/components/ui/button";
-import { ROUTE_DASHBOARD, ROUTE_LOGIN } from "@/constants/routes";
 
-interface HeroSectionProps {
-  isLoggedIn?: boolean;
-}
+import { AuthAwareLink } from "./auth-aware-link";
 
-export function HeroSection({ isLoggedIn = false }: HeroSectionProps) {
+export function HeroSection() {
   return (
     <section className="flex w-full flex-col items-center gap-12 bg-background pt-20 pb-16">
       {/* Badge */}
@@ -39,10 +34,11 @@ export function HeroSection({ isLoggedIn = false }: HeroSectionProps) {
       {/* CTAs */}
       <div className="flex items-center gap-4">
         <Button variant="brand" className="gap-2" size="brand" asChild>
-          <Link href={isLoggedIn ? ROUTE_DASHBOARD : ROUTE_LOGIN}>
-            <Zap className="size-4" />
-            {isLoggedIn ? "Acessar Dashboard" : "Começar Grátis"}
-          </Link>
+          <AuthAwareLink
+            loggedOutLabel="Começar Grátis"
+            loggedInLabel="Acessar Dashboard"
+            icon={<Zap className="size-4" />}
+          />
         </Button>
       </div>
 

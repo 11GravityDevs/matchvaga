@@ -12,8 +12,6 @@ export interface SelectedFileInfo {
 interface OnboardingContextValue {
   resumeContent: string;
   setResumeContent: (content: string) => void;
-  isUploading: boolean;
-  setIsUploading: (value: boolean) => void;
   selectedFile: SelectedFileInfo | null;
   setSelectedFile: (file: SelectedFileInfo | null) => void;
   resumeId: string | null;
@@ -26,7 +24,6 @@ const OnboardingContext = createContext<OnboardingContextValue | null>(null);
 
 export function OnboardingProvider({ children }: { children: ReactNode }) {
   const [resumeContent, setResumeContent] = useState("");
-  const [isUploading, setIsUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<SelectedFileInfo | null>(
     null
   );
@@ -38,8 +35,6 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
       value={{
         resumeContent,
         setResumeContent,
-        isUploading,
-        setIsUploading,
         selectedFile,
         setSelectedFile,
         resumeId,

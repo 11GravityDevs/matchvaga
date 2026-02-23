@@ -22,6 +22,7 @@ alwaysApply: true
 | Backend | Server Actions, Supabase (Postgres + Storage) |
 | AI/LLM | Gemini 1.5 Flash (extraction), GPT-4o-mini (scoring, chat), Claude 3.5 Sonnet (synthesis) |
 | Validation | Zod |
+| Data fetching (client) | TanStack Query v5 |
 | Styling | Tailwind CSS v4 |
 | UI Components | shadcn/ui (radix-vega style), Base UI, Radix UI |
 | Icons | lucide-react |
@@ -37,7 +38,7 @@ src/
 ├── constants/     # Shared constants (auth, design-tokens, routes, etc.)
 ├── contexts/      # React Context providers
 ├── hooks/         # Shared custom hooks (logic layer)
-├── lib/           # Supabase client (client.ts, server.ts) + AI utilities (server-only)
+├── lib/           # Supabase client (client.ts, server.ts) + AI utilities (server-only) + query/ (get-query-client, query-options)
 ├── schemas/       # Zod schemas for Server Action validation
 ├── utils/         # Shared utilities (style, auth, etc.)
 └── types/         # Shared TypeScript interfaces
@@ -65,6 +66,7 @@ Route groups `(auth)` and `(legal)` use parenthesized folders to share layouts w
 - `@/components/ui` — shadcn UI primitives
 - `@/lib/supabase` — Supabase client (client, server)
 - `@/lib/ai` — AI prompts and client wrappers (server-only)
+- `@/lib/query` — Query client, query options
 - `@/components/shared` — Cross-feature components (e.g. brand)
 - `@/contexts` — Context providers
 - `@/hooks` — Custom hooks
@@ -97,6 +99,7 @@ When the project changes, update these rules accordingly:
 | New path alias | Add to Path Aliases; update `components.json` reference |
 | New util function | Add to `utils/<domain>.ts` (shared) or `_utils/` (route-specific); see `colocation.mdc` |
 | New shared constant (2+ routes) | Add to `constants/<domain>.ts`; route-specific → `_constants/`; single constant → keep in component/module |
+| New query options/keys/hooks | Add to `lib/query/`, `constants/query-keys.ts`, or `hooks/` per colocation; update this rule |
 | New route group or flow | Add to Route Architecture |
 | New domain concept | Add to `matchvaga-domain.mdc` |
 | New AI flow or provider | Add to `matchvaga-domain.mdc`; document env vars in `security.mdc` |

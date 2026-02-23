@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useRef } from "react";
 
 import { Check, Loader2, Upload } from "lucide-react";
 
@@ -11,23 +11,21 @@ import { cn } from "@/utils/style";
 
 export function UploadContent() {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const { isUploading, selectedFile, uploadFile, uploadFromPaste, analyze } =
-    useResumeUpload();
-
-  const [analyzeError, setAnalyzeError] = useState<string | null>(null);
+  const {
+    isUploading,
+    uploadError,
+    selectedFile,
+    uploadFile,
+    uploadFromPaste,
+    analyze,
+  } = useResumeUpload();
 
   const handleAnalyze = useCallback(async () => {
     if (!selectedFile || isUploading) return;
-    setIsAnalyzing(true);
-    setAnalyzeError(null);
     try {
       await analyze();
-    } catch (err) {
-      setIsAnalyzing(false);
-      setAnalyzeError(
-        err instanceof Error ? err.message : "Erro ao processar currículo."
-      );
+    } catch {
+      // Error displayed via uploadError from mutation
     }
   }, [selectedFile, isUploading, analyze]);
 
@@ -151,9 +149,9 @@ export function UploadContent() {
           )}
         </div>
 
-        {analyzeError && (
+        {uploadError && (
           <p className="text-sm text-destructive" role="alert">
-            {analyzeError}
+            {uploadError}
           </p>
         )}
         <div className="flex justify-end">
@@ -161,7 +159,7 @@ export function UploadContent() {
             type="button"
             onClick={handleAnalyze}
             disabled={!selectedFile || isUploading}
-            loading={isAnalyzing}
+            loading={isUploading}
             variant="brand"
             size="brand"
             className="rounded-lg"

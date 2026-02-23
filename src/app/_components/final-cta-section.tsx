@@ -1,14 +1,10 @@
-import Link from "next/link";
 import { Zap } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { ROUTE_DASHBOARD, ROUTE_LOGIN } from "@/constants/routes";
 
-interface FinalCTASectionProps {
-  isLoggedIn?: boolean;
-}
+import { AuthAwareLink } from "./auth-aware-link";
 
-export function FinalCTASection({ isLoggedIn = false }: FinalCTASectionProps) {
+export function FinalCTASection() {
   return (
     <section className="flex w-full flex-col items-center justify-center gap-8 bg-linear-to-br from-accent-brand-dark via-accent-brand to-accent-brand-end py-20">
       <div className="mx-auto flex w-full max-w-landing-content flex-col items-center gap-8">
@@ -28,12 +24,13 @@ export function FinalCTASection({ isLoggedIn = false }: FinalCTASectionProps) {
           className="gap-2 bg-white px-8 py-6 hover:bg-white/90"
           asChild
         >
-          <Link href={isLoggedIn ? ROUTE_DASHBOARD : ROUTE_LOGIN}>
-            <Zap className="size-4.5 text-accent-brand" />
-            <span className="text-base font-semibold text-accent-brand">
-              {isLoggedIn ? "Acessar Dashboard" : "Começar Grátis"}
-            </span>
-          </Link>
+          <AuthAwareLink
+            loggedOutLabel="Começar Grátis"
+            loggedInLabel="Acessar Dashboard"
+            icon={<Zap className="size-4.5 text-accent-brand" />}
+            className="flex items-center gap-2"
+            labelClassName="text-base font-semibold text-accent-brand"
+          />
         </Button>
 
         <p className="text-small text-white/60">

@@ -4,13 +4,12 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useState,
   type ReactNode,
 } from "react";
 
 import type { ResumeData } from "@/types/resume";
-import { getResumeForUser } from "@/app/actions/resume";
+import { useResumeQuery } from "@/hooks/use-resume-query";
 
 export type WizardStep = 1 | 2 | 3;
 
@@ -31,8 +30,6 @@ interface NewAnalysisContextValue {
   resumeId: string | null;
   resumeData: ResumeData | null;
   isLoadingResume: boolean;
-  jobTitle: string;
-  jobCompany: string;
   jobDescription: string;
   jobRole: string;
   analysisId: string | null;
@@ -40,11 +37,7 @@ interface NewAnalysisContextValue {
   matchedSkills: string[];
   missingSkills: MissingSkill[];
   selectedMissingSkills: string[];
-  isAnalyzing: boolean;
-  analysisError: string | null;
   setStep: (step: WizardStep) => void;
-  setJobTitle: (value: string) => void;
-  setJobCompany: (value: string) => void;
   setJobDescription: (value: string) => void;
   setJobRole: (value: string) => void;
   setAnalysisResult: (result: {
@@ -55,8 +48,6 @@ interface NewAnalysisContextValue {
   }) => void;
   toggleSkill: (id: string) => void;
   setSelectedMissingSkills: (skills: string[]) => void;
-  setAnalysisError: (error: string | null) => void;
-  setIsAnalyzing: (value: boolean) => void;
   refreshResume: () => Promise<void>;
   reset: () => void;
 }
@@ -82,8 +73,6 @@ const INITIAL_STATE = {
   step: 1 as WizardStep,
   resumeId: null as string | null,
   resumeData: null as ResumeData | null,
-  jobTitle: "",
-  jobCompany: "",
   jobDescription: "",
   jobRole: "",
   analysisId: null as string | null,
@@ -94,16 +83,18 @@ const INITIAL_STATE = {
 };
 
 export function NewAnalysisProvider({ children }: { children: ReactNode }) {
+  const {
+    resumeId: queryResumeId,
+    resumeData: queryResumeData,
+    hasNoResume,
+    isLoading: isLoadingResume,
+    refetch: refetchResume,
+  } = useResumeQuery();
+
+  const resumeId = hasNoResume ? null : queryResumeId;
+  const resumeData = hasNoResume ? null : queryResumeData;
+
   const [step, setStep] = useState<WizardStep>(INITIAL_STATE.step);
-  const [resumeId, setResumeId] = useState<string | null>(
-    INITIAL_STATE.resumeId
-  );
-  const [resumeData, setResumeData] = useState<ResumeData | null>(
-    INITIAL_STATE.resumeData
-  );
-  const [isLoadingResume, setIsLoadingResume] = useState(true);
-  const [jobTitle, setJobTitle] = useState(INITIAL_STATE.jobTitle);
-  const [jobCompany, setJobCompany] = useState(INITIAL_STATE.jobCompany);
   const [jobDescription, setJobDescription] = useState(
     INITIAL_STATE.jobDescription
   );
@@ -121,31 +112,6 @@ export function NewAnalysisProvider({ children }: { children: ReactNode }) {
   const [selectedMissingSkills, setSelectedMissingSkills] = useState<string[]>(
     INITIAL_STATE.selectedMissingSkills
   );
-  const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [analysisError, setAnalysisError] = useState<string | null>(null);
-
-  useEffect(() => {
-    let cancelled = false;
-
-    async function fetchResume() {
-      const result = await getResumeForUser();
-      if (cancelled) return;
-
-      if (result.success && result.resumeId && result.data) {
-        setResumeId(result.resumeId);
-        setResumeData(result.data as ResumeData);
-      } else {
-        setResumeId(null);
-        setResumeData(null);
-      }
-      setIsLoadingResume(false);
-    }
-
-    fetchResume();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   const setAnalysisResult = useCallback(
     (result: {
@@ -160,7 +126,6 @@ export function NewAnalysisProvider({ children }: { children: ReactNode }) {
       const skills = toMissingSkills(result.missingSkills);
       setMissingSkills(skills);
       setSelectedMissingSkills(result.missingSkills);
-      setAnalysisError(null);
     },
     []
   );
@@ -172,17 +137,11 @@ export function NewAnalysisProvider({ children }: { children: ReactNode }) {
   }
 
   const refreshResume = useCallback(async () => {
-    const result = await getResumeForUser();
-    if (result.success && result.resumeId && result.data) {
-      setResumeId(result.resumeId);
-      setResumeData(result.data as ResumeData);
-    }
-  }, []);
+    await refetchResume();
+  }, [refetchResume]);
 
   function reset() {
     setStep(INITIAL_STATE.step);
-    setJobTitle(INITIAL_STATE.jobTitle);
-    setJobCompany(INITIAL_STATE.jobCompany);
     setJobDescription(INITIAL_STATE.jobDescription);
     setJobRole(INITIAL_STATE.jobRole);
     setAnalysisId(INITIAL_STATE.analysisId);
@@ -190,7 +149,6 @@ export function NewAnalysisProvider({ children }: { children: ReactNode }) {
     setMatchedSkills(INITIAL_STATE.matchedSkills);
     setMissingSkills(INITIAL_STATE.missingSkills);
     setSelectedMissingSkills(INITIAL_STATE.selectedMissingSkills);
-    setAnalysisError(null);
   }
 
   return (
@@ -200,8 +158,6 @@ export function NewAnalysisProvider({ children }: { children: ReactNode }) {
         resumeId,
         resumeData,
         isLoadingResume,
-        jobTitle,
-        jobCompany,
         jobDescription,
         jobRole,
         analysisId,
@@ -209,18 +165,12 @@ export function NewAnalysisProvider({ children }: { children: ReactNode }) {
         matchedSkills,
         missingSkills,
         selectedMissingSkills,
-        isAnalyzing,
-        analysisError,
         setStep,
-        setJobTitle,
-        setJobCompany,
         setJobDescription,
         setJobRole,
         setAnalysisResult,
         toggleSkill,
         setSelectedMissingSkills,
-        setAnalysisError,
-        setIsAnalyzing,
         refreshResume,
         reset,
       }}

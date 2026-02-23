@@ -10,7 +10,7 @@ Applies when adding new utils, constants, hooks, or components.
 
 Before implementing:
 
-1. **Search** for similar behavior (e.g., `formatFileSize`, `isValidEmail`, `parseLoginStep`, `getStepIndexFromPathname`)
+1. **Search** for similar behavior (e.g., `formatFileSize`, `isValidEmail`, `parseLoginStep`, `getStepIndexFromPathname`, `query-options`, `query-keys`, `use-resume-query`)
 2. **Prefer** existing `@/utils/*`, `@/constants/*`, `@/hooks/*`, `@/components/*`
 3. If **route-specific** and not found → use `_utils`, `_hooks`, `_constants`, `_contexts` in that route
 4. If **shared** and not found → add to `src/` with domain-specific file (e.g., `utils/file.ts`, `constants/auth.ts`)

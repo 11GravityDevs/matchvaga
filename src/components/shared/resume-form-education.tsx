@@ -170,7 +170,7 @@ export function ResumeFormEducation({
             {(edu.isCurrent || !hasCurrentEducation) && (
               <label className="flex cursor-pointer items-center gap-1 self-start">
                 <Checkbox
-                  className="cursor-pointer border-accent-brand data-[state=checked]:border-accent-brand data-[state=checked]:bg-accent-brand"
+                  className="cursor-pointer border-2 border-accent-brand data-[state=checked]:border-accent-brand data-[state=checked]:bg-accent-brand"
                   checked={edu.isCurrent ?? false}
                   onCheckedChange={(checked) =>
                     updateEducation(eduIndex, {

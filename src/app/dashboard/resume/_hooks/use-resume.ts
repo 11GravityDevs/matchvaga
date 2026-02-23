@@ -1,108 +1,65 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import type { ResumeData } from "@/types/resume";
+import { saveResumeData } from "@/app/actions/resume";
+import { QUERY_KEY_RESUME } from "@/constants/query-keys";
 import {
-  createEmptyEducation,
-  createEmptyExperience,
-  type ResumeData,
-} from "@/types/resume";
-import { getResumeForUser, saveResumeData } from "@/app/actions/resume";
+  useResumeQuery,
+  type UseResumeQueryReturn,
+} from "@/hooks/use-resume-query";
 
-const EMPTY_RESUME_DATA: ResumeData = {
-  fullName: "",
-  email: "",
-  location: "",
-  phone: "",
-  linkedin: "",
-  github: "",
-  summary: "",
-  skills: [],
-  experience: [createEmptyExperience()],
-  education: [createEmptyEducation()],
-};
-
-export interface UseResumeReturn {
-  resumeData: ResumeData;
-  resumeId: string | null;
-  isLoading: boolean;
-  error: Error | null;
-  hasNoResume: boolean;
+export interface UseResumeReturn extends UseResumeQueryReturn {
   save: (data: ResumeData) => Promise<void>;
   isSaving: boolean;
 }
 
 export function useResume(): UseResumeReturn {
-  const [resumeData, setResumeData] = useState<ResumeData>(EMPTY_RESUME_DATA);
-  const [resumeId, setResumeId] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-  const [hasNoResume, setHasNoResume] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
+  const queryClient = useQueryClient();
+  const { resumeId, resumeData, hasNoResume, isLoading, error, refetch } =
+    useResumeQuery();
 
-  useEffect(() => {
-    let cancelled = false;
+  const {
+    mutateAsync: saveMutation,
+    isPending: isSaving,
+    error: mutationError,
+  } = useMutation({
+    mutationFn: async (data: ResumeData) => {
+      if (!resumeId) {
+        throw new Error("Nenhum currículo encontrado. Faça o upload primeiro.");
+      }
 
-    async function fetchResume() {
-      const result = await getResumeForUser();
-
-      if (cancelled) return;
-
+      const result = await saveResumeData(resumeId, data);
       if (!result.success) {
-        setError(new Error(result.error ?? "Erro ao carregar currículo."));
-        setIsLoading(false);
-        return;
+        throw new Error(result.error ?? "Falha ao salvar");
       }
 
-      if (!result.resumeId || !result.data) {
-        setHasNoResume(true);
-        setResumeData(EMPTY_RESUME_DATA);
-      } else {
-        setResumeId(result.resumeId);
-        setResumeData(result.data);
-      }
-      setIsLoading(false);
-    }
-
-    fetchResume();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+      queryClient.setQueryData(QUERY_KEY_RESUME, {
+        success: true,
+        resumeId,
+        data,
+      });
+    },
+  });
 
   const save = useCallback(
     async (data: ResumeData) => {
-      if (!resumeId) {
-        setError(
-          new Error("Nenhum currículo encontrado. Faça o upload primeiro.")
-        );
-        return;
-      }
-
-      setError(null);
-      setIsSaving(true);
-      try {
-        const result = await saveResumeData(resumeId, data);
-        if (!result.success) {
-          throw new Error(result.error ?? "Falha ao salvar");
-        }
-        setResumeData(data);
-      } catch (e) {
-        const err = e instanceof Error ? e : new Error("Falha ao salvar");
-        setError(err);
-        throw e;
-      } finally {
-        setIsSaving(false);
-      }
+      await saveMutation(data);
     },
-    [resumeId]
+    [saveMutation]
   );
 
+  const displayError = mutationError instanceof Error ? mutationError : error;
+
   return {
-    resumeData,
     resumeId,
-    isLoading,
-    error,
+    resumeData,
     hasNoResume,
+    isLoading,
+    error: displayError,
+    refetch,
     save,
     isSaving,
   };

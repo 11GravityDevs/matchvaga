@@ -1,9 +1,7 @@
 "use server";
 
-import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 
-import { COOKIE_ONBOARDING_IN_PROGRESS } from "@/constants/auth";
 import { createClient } from "@/lib/supabase/server";
 import { extractResumeFromFile } from "@/lib/ai/clients/gemini";
 import { resumeDataSchema } from "@/schemas/resume";
@@ -62,14 +60,6 @@ export async function uploadResume(
     };
   }
 
-  const cookieStore = await cookies();
-  cookieStore.set(COOKIE_ONBOARDING_IN_PROGRESS, "1", {
-    path: "/onboarding",
-    maxAge: 600,
-    httpOnly: true,
-    sameSite: "lax",
-  });
-
   revalidatePath("/dashboard");
   revalidatePath("/onboarding");
 
@@ -126,12 +116,6 @@ export async function saveResumeData(
       error: "Erro ao salvar. Tente novamente.",
     };
   }
-
-  const cookieStore = await cookies();
-  cookieStore.set(COOKIE_ONBOARDING_IN_PROGRESS, "", {
-    path: "/onboarding",
-    maxAge: 0,
-  });
 
   revalidatePath("/dashboard");
   revalidatePath("/onboarding");

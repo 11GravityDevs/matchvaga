@@ -1,9 +1,11 @@
 "use client";
 
 import { useCallback } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 import { uploadResume } from "@/app/actions/resume";
+import { QUERY_KEY_RESUME } from "@/constants/query-keys";
 import { ROUTE_ONBOARDING_VERIFY } from "@/constants/routes";
 import {
   useOnboardingContext,
@@ -14,6 +16,7 @@ export interface UseResumeUploadReturn {
   resumeContent: string;
   setResumeContent: (content: string) => void;
   isUploading: boolean;
+  uploadError: string | null;
   selectedFile: SelectedFileInfo | null;
   uploadFile: (file: File) => void;
   uploadFromPaste: (text: string) => void;
@@ -21,17 +24,44 @@ export interface UseResumeUploadReturn {
 }
 
 export function useResumeUpload(): UseResumeUploadReturn {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const {
     resumeContent,
     setResumeContent,
-    isUploading,
     selectedFile,
     setSelectedFile,
-    setIsUploading,
     setResumeId,
     setParsedData,
   } = useOnboardingContext();
+
+  const {
+    mutateAsync: uploadMutation,
+    isPending: isUploading,
+    error: uploadError,
+  } = useMutation({
+    mutationFn: async (file: File) => {
+      const formData = new FormData();
+      formData.append("file", file);
+      const result = await uploadResume(formData);
+      if (!result.success) {
+        throw new Error(result.error ?? "Erro ao processar currículo.");
+      }
+      return result;
+    },
+    onSuccess: (result) => {
+      if (result.resumeId && result.parsedData) {
+        queryClient.setQueryData(QUERY_KEY_RESUME, {
+          success: true,
+          resumeId: result.resumeId,
+          data: result.parsedData,
+        });
+        setResumeId(result.resumeId);
+        setParsedData(result.parsedData);
+        router.push(ROUTE_ONBOARDING_VERIFY);
+      }
+    },
+  });
 
   const uploadFile = useCallback(
     (file: File) => {
@@ -51,33 +81,19 @@ export function useResumeUpload(): UseResumeUploadReturn {
 
   const analyze = useCallback(async () => {
     if (!selectedFile) return;
-
-    setIsUploading(true);
-    try {
-      const formData = new FormData();
-      formData.append("file", selectedFile.file);
-
-      const result = await uploadResume(formData);
-
-      if (!result.success) {
-        throw new Error(result.error ?? "Erro ao processar currículo.");
-      }
-
-      if (result.resumeId && result.parsedData) {
-        setResumeId(result.resumeId);
-        setParsedData(result.parsedData);
-        router.push(ROUTE_ONBOARDING_VERIFY);
-      }
-    } catch (error) {
-      setIsUploading(false);
-      throw error;
-    }
-  }, [selectedFile, setIsUploading, setResumeId, setParsedData, router]);
+    await uploadMutation(selectedFile.file);
+  }, [selectedFile, uploadMutation]);
 
   return {
     resumeContent,
     setResumeContent,
     isUploading,
+    uploadError:
+      uploadError instanceof Error
+        ? uploadError.message
+        : uploadError
+          ? String(uploadError)
+          : null,
     selectedFile,
     uploadFile,
     uploadFromPaste,

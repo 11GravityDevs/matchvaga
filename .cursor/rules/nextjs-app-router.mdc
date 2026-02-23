@@ -92,7 +92,7 @@ Use Route Handlers (`route.ts` in `app/<route>/`) for:
 - External callbacks (OAuth, payment providers)
 - Public API endpoints consumed by third parties
 
-**Prefer Server Actions** for app-internal mutations (forms, button clicks). Do not create Route Handlers solely for Client Component fetches—use Server Actions instead.
+**Prefer Server Actions** for app-internal mutations (forms, button clicks). Do not create Route Handlers solely for Client Component fetches—use Server Actions from `queryFn` or `mutationFn` (TanStack Query) instead.
 
 ---
 
@@ -158,7 +158,7 @@ Use `searchParams`, `params`, `headers()`, `cookies()`—not client hooks—in S
 Make providers separate Client Components. Import and wrap in `layout.tsx`. This keeps Server Components below the provider.
 
 ### 6. Revalidate After Mutations
-Call `revalidatePath()` or `revalidateTag()` after Server Actions that mutate data.
+Call `revalidatePath()` or `revalidateTag()` after Server Actions that mutate data. **TanStack Query:** Use `queryClient.invalidateQueries()` or `queryClient.setQueryData()` after mutations that change cached data.
 
 ### 7. Redirects
 Handle `redirect()` **outside** try/catch. It throws internally. For Client Components, call `redirect` from a Server Action, not from an event handler.
@@ -170,6 +170,12 @@ Handle `redirect()` **outside** try/catch. It throws internally. For Client Comp
 - **Server Components:** `await` fetch or DB calls directly in the component.
 - **Streaming:** Use `Suspense` to stream; show `Loading` while async work runs.
 - **Caching:** GET Route Handlers and `fetch` are cached by default. Use `dynamic` or `revalidate` when needed.
+
+### TanStack Query + SSR
+
+- **Server Component:** Use `prefetchQuery` with `getQueryClient()`, wrap children in `HydrationBoundary` with `dehydrate(queryClient)`.
+- **Client Component:** Use `useQuery(queryOptions)` — `queryFn` calls Server Action.
+- **Reference:** `app/dashboard/page.tsx`, `@/lib/query/`.
 
 ---
 

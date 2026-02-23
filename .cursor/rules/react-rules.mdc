@@ -92,9 +92,9 @@ if (!condition) return null;
 
 ## Purity checklist
 
-| In render                      | Use instead                               |
-| ------------------------------ | ----------------------------------------- |
-| `fetch()`                      | `useEffect` or Server Component `await`   |
+| In render                      | Use instead                                                                 |
+| ------------------------------ | --------------------------------------------------------------------------- |
+| `fetch()`                      | `useQuery` (TanStack Query) or `useEffect` or Server Component `await`    |
 | `document.title = x`           | `useEffect`                               |
 | `new Date()`, `Math.random()`  | `useState` + `useEffect` or event handler |
 | Mutating props/state           | New values, setters                       |
