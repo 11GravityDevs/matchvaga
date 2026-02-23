@@ -1,5 +1,4 @@
 import { getScoreColorToken } from "../_utils/analysis";
-import { TEXT_SCORE } from "@/constants/design-tokens";
 
 interface ScoreRingProps {
   score: number;
@@ -41,7 +40,7 @@ export function ScoreRing({ score }: ScoreRingProps) {
         />
       </svg>
       <div className="absolute inset-0 flex items-center justify-center">
-        <span className={TEXT_SCORE}>{score}%</span>
+        <span className="text-score">{score}%</span>
       </div>
     </div>
   );

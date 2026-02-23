@@ -1,17 +1,14 @@
+"use client";
+
+import { useState } from "react";
 import { Download } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-  CARD_RADIUS,
-  SECTION_HEADER_CLASS,
-  TABLE_CELL_PADDING,
-} from "@/constants/design-tokens";
-import { TEXT_CAPTION_LEADING, W_ACTION } from "@/constants/design-tokens";
 
 type FilterType = "todos" | "recentes" | "score-alto";
 
-interface AnalysisRow {
-  id: number;
+export interface AnalysisTableRow {
+  analysisId: string;
   role: string;
   company: string;
   companyInitials: string;
@@ -25,8 +22,12 @@ interface AnalysisRow {
 }
 
 interface AnalysisHistoryTableProps {
-  rows: AnalysisRow[];
+  rows: AnalysisTableRow[];
   activeFilter?: FilterType;
+  onDownload?: (
+    analysisId: string,
+    format: "pdf" | "docx"
+  ) => Promise<{ success: boolean; url?: string; error?: string }>;
 }
 
 const filters: { label: string; value: FilterType }[] = [
@@ -38,12 +39,28 @@ const filters: { label: string; value: FilterType }[] = [
 export function AnalysisHistoryTable({
   rows,
   activeFilter = "todos",
+  onDownload,
 }: AnalysisHistoryTableProps) {
+  const [downloadingId, setDownloadingId] = useState<string | null>(null);
+
+  const handleDownload = async (analysisId: string, format: "pdf" | "docx") => {
+    if (!onDownload) return;
+    setDownloadingId(analysisId);
+    try {
+      const result = await onDownload(analysisId, format);
+      if (result.success && result.url) {
+        window.open(result.url, "_blank");
+      }
+    } finally {
+      setDownloadingId(null);
+    }
+  };
+
   return (
     <div className="flex flex-1 flex-col gap-4">
       {/* Section Header - outside card */}
       <div className="flex w-full items-center justify-between">
-        <h2 className={SECTION_HEADER_CLASS}>Histórico de Análises</h2>
+        <h2 className="text-section-header">Histórico de Análises</h2>
         <div className="flex items-center gap-2">
           {filters.map((f) => (
             <Button
@@ -59,14 +76,10 @@ export function AnalysisHistoryTable({
       </div>
 
       {/* Table Card */}
-      <div
-        className={`flex flex-1 flex-col overflow-hidden ${CARD_RADIUS} border border-border bg-card`}
-      >
+      <div className="flex flex-1 flex-col overflow-hidden rounded-xl border border-border bg-card">
         {/* Header Row */}
         <div className="flex w-full items-center border-b border-border bg-muted/50">
-          <div
-            className={`flex min-w-0 flex-[1.5] items-center gap-2 border-b-0 ${TABLE_CELL_PADDING}`}
-          >
+          <div className="flex min-w-0 flex-[1.5] items-center gap-2 border-b-0 table-cell-padding">
             <span className="truncate text-sm leading-snug text-muted-foreground">
               Cargo
             </span>
@@ -91,80 +104,88 @@ export function AnalysisHistoryTable({
               Depois
             </span>
           </div>
-          <div className={`flex shrink-0 p-4 ${W_ACTION}`} />
+          <div className="flex w-action shrink-0 p-4" />
         </div>
 
         {/* Data Rows */}
-        {rows.map((row) => (
-          <div
-            key={row.id}
-            className="flex w-full items-center border-b border-border last:border-b-0"
-          >
-            {/* Role + Logo */}
-            <div className="flex min-w-0 flex-[1.5] items-center gap-2 border-r border-border p-4">
-              <div
-                className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-xs font-bold"
-                style={{
-                  backgroundColor: row.companyBg,
-                  color: row.companyTextColor,
-                }}
-              >
-                {row.companyInitials}
-              </div>
-              <span className="truncate text-sm font-medium text-foreground">
-                {row.role}
-              </span>
-            </div>
-
-            {/* Company */}
-            <div className="flex min-w-0 flex-1 items-center gap-2 border-r border-border p-4">
-              <span className="truncate text-sm text-foreground">
-                {row.company}
-              </span>
-            </div>
-
-            {/* Date */}
-            <div className="flex min-w-0 flex-1 items-center gap-2 border-r border-border p-4">
-              <span className="truncate text-sm text-muted-foreground">
-                {row.date}
-              </span>
-            </div>
-
-            {/* Before */}
-            <div className="flex min-w-0 flex-1 items-center gap-2 border-r border-border p-4">
-              <span
-                className={`rounded-full px-2 py-0.5 text-primary-foreground ${TEXT_CAPTION_LEADING} font-semibold`}
-                style={{ backgroundColor: row.beforeColor }}
-              >
-                {row.before}
-              </span>
-            </div>
-
-            {/* After */}
-            <div className="flex min-w-0 flex-1 items-center gap-2 p-4">
-              <span
-                className={`rounded-full px-2 py-0.5 text-primary-foreground ${TEXT_CAPTION_LEADING} font-semibold`}
-                style={{ backgroundColor: row.afterColor }}
-              >
-                {row.after}
-              </span>
-            </div>
-
-            {/* Action */}
-            <div
-              className={`flex shrink-0 items-center justify-center p-4 ${W_ACTION}`}
-            >
-              <Button
-                size="xs"
-                className="text-accent-brand hover:text-accent-brand-hover"
-                variant="ghost"
-              >
-                <Download />
-                Baixar
-              </Button>
-            </div>
+        {rows.length === 0 ? (
+          <div className="flex flex-col items-center justify-center gap-2 p-12 text-center">
+            <p className="text-sm text-muted-foreground">
+              Nenhuma análise ainda. Crie uma nova análise para começar.
+            </p>
           </div>
-        ))}
+        ) : (
+          rows.map((row) => (
+            <div
+              key={row.analysisId}
+              className="flex w-full items-center border-b border-border last:border-b-0"
+            >
+              {/* Role + Logo */}
+              <div className="flex min-w-0 flex-[1.5] items-center gap-2 border-r border-border p-4">
+                <div
+                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-xs font-bold"
+                  style={{
+                    backgroundColor: row.companyBg,
+                    color: row.companyTextColor,
+                  }}
+                >
+                  {row.companyInitials}
+                </div>
+                <span className="truncate text-sm font-medium text-foreground">
+                  {row.role}
+                </span>
+              </div>
+
+              {/* Company */}
+              <div className="flex min-w-0 flex-1 items-center gap-2 border-r border-border p-4">
+                <span className="truncate text-sm text-foreground">
+                  {row.company}
+                </span>
+              </div>
+
+              {/* Date */}
+              <div className="flex min-w-0 flex-1 items-center gap-2 border-r border-border p-4">
+                <span className="truncate text-sm text-muted-foreground">
+                  {row.date}
+                </span>
+              </div>
+
+              {/* Before */}
+              <div className="flex min-w-0 flex-1 items-center gap-2 border-r border-border p-4">
+                <span
+                  className="rounded-full px-2 py-0.5 text-caption-leading font-semibold text-on-accent-brand"
+                  style={{ backgroundColor: row.beforeColor }}
+                >
+                  {row.before}
+                </span>
+              </div>
+
+              {/* After */}
+              <div className="flex min-w-0 flex-1 items-center gap-2 p-4">
+                <span
+                  className="rounded-full px-2 py-0.5 text-caption-leading font-semibold text-on-accent-brand"
+                  style={{ backgroundColor: row.afterColor }}
+                >
+                  {row.after}
+                </span>
+              </div>
+
+              {/* Action */}
+              <div className="flex w-action shrink-0 items-center justify-center p-4">
+                <Button
+                  size="xs"
+                  className="text-accent-brand hover:text-accent-brand-hover"
+                  variant="ghost"
+                  disabled={!onDownload || downloadingId === row.analysisId}
+                  onClick={() => handleDownload(row.analysisId, "pdf")}
+                >
+                  <Download className="h-4 w-4" />
+                  {downloadingId === row.analysisId ? "..." : "Baixar"}
+                </Button>
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

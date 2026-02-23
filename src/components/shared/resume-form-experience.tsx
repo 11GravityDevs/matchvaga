@@ -7,13 +7,7 @@ import { Input } from "@/components/ui/input";
 import { FormField } from "@/components/shared/form-field";
 import { DatePickerField } from "@/components/shared/date-picker-field";
 import type { ExperienceEntry } from "@/types/resume";
-import {
-  INPUT_CLASS,
-  SECTION_ITEM_LABEL_CLASS,
-  SECTION_TITLE_CLASS,
-  SUB_LABEL_CLASS,
-} from "@/constants/resume-form";
-import { TEXT_SMALL } from "@/constants/design-tokens";
+import { INPUT_CLASS } from "@/components/shared/resume-form-card";
 
 interface ResumeFormExperienceProps {
   experience: ExperienceEntry[];
@@ -37,7 +31,7 @@ export function ResumeFormExperience({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-1.5">
-        <h3 className={SECTION_TITLE_CLASS}>Experiência</h3>
+        <h3 className="text-section-title">Experiência</h3>
         {experienceError && (
           <p className="text-sm text-destructive" role="alert">
             {experienceError}
@@ -47,7 +41,7 @@ export function ResumeFormExperience({
       {experience.map((exp, expIndex) => (
         <div key={expIndex} className="flex flex-col gap-4">
           {experience.length > 1 && (
-            <h4 className={SECTION_ITEM_LABEL_CLASS}>
+            <h4 className="text-section-item-label">
               Experiência {expIndex + 1}
             </h4>
           )}
@@ -94,7 +88,7 @@ export function ResumeFormExperience({
                 }
                 disabled={isSaving}
                 placeholder="Selecione a data de início"
-                labelClassName={SUB_LABEL_CLASS}
+                labelClassName="text-sub-label"
                 className="flex-1"
               />
               {!exp.isCurrent ? (
@@ -107,7 +101,7 @@ export function ResumeFormExperience({
                   }
                   disabled={isSaving}
                   placeholder="Selecione a data de término"
-                  labelClassName={SUB_LABEL_CLASS}
+                  labelClassName="text-sub-label"
                   className="flex-1"
                 />
               ) : (
@@ -127,7 +121,7 @@ export function ResumeFormExperience({
                   }
                   disabled={isSaving}
                 />
-                <span className={`${TEXT_SMALL} text-accent-brand`}>
+                <span className="text-small font-medium">
                   Atualmente trabalho aqui
                 </span>
               </label>
@@ -135,7 +129,7 @@ export function ResumeFormExperience({
             <FormField
               label="Local"
               htmlFor={`exp-location-${expIndex}`}
-              labelClassName={SUB_LABEL_CLASS}
+              labelClassName="text-sub-label"
             >
               <Input
                 id={`exp-location-${expIndex}`}
@@ -150,7 +144,7 @@ export function ResumeFormExperience({
             <FormField
               label="Descrição"
               htmlFor={`exp-desc-${expIndex}`}
-              labelClassName={SUB_LABEL_CLASS}
+              labelClassName="text-sub-label"
             >
               <textarea
                 id={`exp-desc-${expIndex}`}
@@ -167,10 +161,10 @@ export function ResumeFormExperience({
             <div className="flex justify-end">
               <Button
                 type="button"
-                variant="destructive"
+                variant="destructiveSolid"
                 size="sm"
                 onClick={() => removeExperience(expIndex)}
-                className={`w-fit gap-1.5 bg-destructive text-primary-foreground hover:bg-destructive/90 ${TEXT_SMALL}`}
+                className="w-fit gap-1.5 text-small"
               >
                 <Trash2 className="h-4 w-4" />
                 Remover
@@ -182,9 +176,10 @@ export function ResumeFormExperience({
 
       <Button
         type="button"
+        variant="brand"
         size="sm"
         onClick={addExperience}
-        className={`w-fit gap-1.5 bg-accent-brand text-primary-foreground hover:bg-accent-brand-hover ${TEXT_SMALL}`}
+        className="w-fit gap-1.5 text-small"
       >
         <Plus className="h-4 w-4" />
         Adicionar experiência

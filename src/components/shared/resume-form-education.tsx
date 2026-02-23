@@ -14,13 +14,7 @@ import {
 import { FormField } from "@/components/shared/form-field";
 import { DatePickerField } from "@/components/shared/date-picker-field";
 import type { EducationEntry } from "@/types/resume";
-import {
-  INPUT_CLASS,
-  SECTION_ITEM_LABEL_CLASS,
-  SECTION_TITLE_CLASS,
-  SUB_LABEL_CLASS,
-} from "@/constants/resume-form";
-import { TEXT_SMALL } from "@/constants/design-tokens";
+import { INPUT_CLASS } from "@/components/shared/resume-form-card";
 
 const EDUCATION_LEVELS = [
   "Ensino Fundamental",
@@ -57,7 +51,7 @@ export function ResumeFormEducation({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-1.5">
-        <h3 className={SECTION_TITLE_CLASS}>Formação</h3>
+        <h3 className="text-section-title">Formação</h3>
         {educationError && (
           <p className="text-sm text-destructive" role="alert">
             {educationError}
@@ -67,15 +61,13 @@ export function ResumeFormEducation({
       {education.map((edu, eduIndex) => (
         <div key={eduIndex} className="flex flex-col gap-4">
           {education.length > 1 && (
-            <h4 className={SECTION_ITEM_LABEL_CLASS}>
-              Formação {eduIndex + 1}
-            </h4>
+            <h4 className="text-section-item-label">Formação {eduIndex + 1}</h4>
           )}
           <div className="flex flex-col gap-2.5">
             <FormField
               label="Curso"
               htmlFor={`edu-course-${eduIndex}`}
-              labelClassName={SUB_LABEL_CLASS}
+              labelClassName="text-sub-label"
             >
               <Input
                 id={`edu-course-${eduIndex}`}
@@ -93,7 +85,7 @@ export function ResumeFormEducation({
                 label="Nível"
                 htmlFor={`edu-level-${eduIndex}`}
                 className="flex-1"
-                labelClassName={SUB_LABEL_CLASS}
+                labelClassName="text-sub-label"
               >
                 <Select
                   value={edu.level || ""}
@@ -129,7 +121,7 @@ export function ResumeFormEducation({
                 label="Instituição"
                 htmlFor={`edu-inst-${eduIndex}`}
                 className="flex-1"
-                labelClassName={SUB_LABEL_CLASS}
+                labelClassName="text-sub-label"
               >
                 <Input
                   id={`edu-inst-${eduIndex}`}
@@ -153,7 +145,7 @@ export function ResumeFormEducation({
                 }
                 disabled={isSaving}
                 placeholder="Selecione a data de início"
-                labelClassName={SUB_LABEL_CLASS}
+                labelClassName="text-sub-label"
                 className="flex-1"
               />
 
@@ -167,7 +159,7 @@ export function ResumeFormEducation({
                   }
                   disabled={isSaving}
                   placeholder="Selecione a data de conclusão"
-                  labelClassName={SUB_LABEL_CLASS}
+                  labelClassName="text-sub-label"
                   className="flex-1"
                 />
               ) : (
@@ -188,7 +180,7 @@ export function ResumeFormEducation({
                   }
                   disabled={isSaving}
                 />
-                <span className={`${TEXT_SMALL} text-accent-brand`}>
+                <span className="text-small font-medium">
                   Atualmente estudo aqui
                 </span>
               </label>
@@ -198,10 +190,10 @@ export function ResumeFormEducation({
             <div className="flex justify-end">
               <Button
                 type="button"
-                variant="destructive"
+                variant="destructiveSolid"
                 size="sm"
                 onClick={() => removeEducation(eduIndex)}
-                className={`w-fit gap-1.5 bg-destructive text-primary-foreground hover:bg-destructive/90 ${TEXT_SMALL}`}
+                className="w-fit gap-1.5 text-small"
               >
                 <Trash2 className="h-4 w-4" />
                 Remover
@@ -213,9 +205,10 @@ export function ResumeFormEducation({
 
       <Button
         type="button"
+        variant="brand"
         size="sm"
         onClick={addEducation}
-        className={`w-fit gap-1.5 bg-accent-brand text-primary-foreground hover:bg-accent-brand-hover ${TEXT_SMALL}`}
+        className="w-fit gap-1.5 text-small"
       >
         <Plus className="h-4 w-4" />
         Adicionar formação

@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
 
-import { COOKIE_ONBOARDING_IN_PROGRESS } from "@/constants/onboarding";
+import { COOKIE_ONBOARDING_IN_PROGRESS } from "@/constants/auth";
 import { createClient } from "@/lib/supabase/server";
 import { extractResumeFromFile } from "@/lib/ai/clients/gemini";
 import { resumeDataSchema } from "@/schemas/resume";

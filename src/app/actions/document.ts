@@ -23,7 +23,8 @@ export interface GenerateOptimizedDocumentResult {
 
 export async function generateOptimizedDocument(
   analysisId: string,
-  format: "pdf" | "docx"
+  format: "pdf" | "docx",
+  selectedMissingSkills?: string[]
 ): Promise<GenerateOptimizedDocumentResult> {
   const supabase = await createClient();
   const {
@@ -72,7 +73,10 @@ export async function generateOptimizedDocument(
     rawText: string;
   };
   const matchedSkills = (analysisRow.matched_skills ?? []) as string[];
-  const missingSkills = (analysisRow.missing_skills ?? []) as string[];
+  const missingSkills =
+    selectedMissingSkills && selectedMissingSkills.length > 0
+      ? selectedMissingSkills
+      : ((analysisRow.missing_skills ?? []) as string[]);
 
   const synthesis = await synthesizeOptimizedResume(
     resumeData,

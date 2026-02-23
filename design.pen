@@ -11695,7 +11695,8 @@
                   "lineHeight": 1.6,
                   "textAlign": "center",
                   "fontFamily": "Inter",
-                  "fontSize": 18
+                  "fontSize": 18,
+                  "fontWeight": "normal"
                 }
               ]
             },
@@ -11983,7 +11984,8 @@
                   "lineHeight": 1.5,
                   "textAlign": "center",
                   "fontFamily": "Inter",
-                  "fontSize": 16
+                  "fontSize": 16,
+                  "fontWeight": "normal"
                 }
               ]
             },
@@ -12064,7 +12066,8 @@
                       "content": "Faça upload do seu currículo ou perfil LinkedIn. Nossa IA analisa suas competências, experiências e formação.",
                       "lineHeight": 1.6,
                       "fontFamily": "Inter",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     }
                   ]
                 },
@@ -12138,7 +12141,8 @@
                       "content": "Cole o link ou descrição da vaga. A IA identifica palavras-chave, requisitos e competências que o ATS procura.",
                       "lineHeight": 1.6,
                       "fontFamily": "Inter",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     }
                   ]
                 },
@@ -12212,7 +12216,8 @@
                       "content": "Em segundos, receba currículo adaptado, carta de apresentação e mensagem de abordagem — tudo otimizado para ATS.",
                       "lineHeight": 1.6,
                       "fontFamily": "Inter",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     }
                   ]
                 }
@@ -12299,7 +12304,8 @@
                   "lineHeight": 1.5,
                   "textAlign": "center",
                   "fontFamily": "Inter",
-                  "fontSize": 16
+                  "fontSize": 16,
+                  "fontWeight": "normal"
                 }
               ]
             },
@@ -12378,7 +12384,8 @@
                       "content": "Nossa IA reorganiza, reescreve e otimiza seu currículo com as palavras-chave certas para cada vaga. Aumente suas chances de passar pelo ATS e impressionar recrutadores.",
                       "lineHeight": 1.6,
                       "fontFamily": "Inter",
-                      "fontSize": 16
+                      "fontSize": 16,
+                      "fontWeight": "normal"
                     }
                   ]
                 },
@@ -12517,7 +12524,8 @@
                       "content": "Comparamos seu currículo com a vaga e mostramos gaps de competências, experiência e formação — com sugestões práticas de como preenchê-los.",
                       "lineHeight": 1.6,
                       "fontFamily": "Inter",
-                      "fontSize": 16
+                      "fontSize": 16,
+                      "fontWeight": "normal"
                     }
                   ]
                 }
@@ -12598,7 +12606,8 @@
                       "content": "Gere mensagens personalizadas para recrutadores no LinkedIn, e-mails de apresentação e follow-ups que demonstram seu valor único para a posição.",
                       "lineHeight": 1.6,
                       "fontFamily": "Inter",
-                      "fontSize": 16
+                      "fontSize": 16,
+                      "fontWeight": "normal"
                     }
                   ]
                 },
@@ -12682,7 +12691,8 @@
                   "lineHeight": 1.5,
                   "textAlign": "center",
                   "fontFamily": "Inter",
-                  "fontSize": 16
+                  "fontSize": 16,
+                  "fontWeight": "normal"
                 }
               ]
             },
@@ -12761,7 +12771,8 @@
                           "content": "Cada currículo é otimizado para passar pelos filtros de Applicant Tracking Systems.",
                           "lineHeight": 1.6,
                           "fontFamily": "Inter",
-                          "fontSize": 14
+                          "fontSize": 14,
+                          "fontWeight": "normal"
                         }
                       ]
                     },
@@ -12825,7 +12836,8 @@
                           "content": "Exporte em PDF, DOCX ou copie direto para plataformas de candidatura.",
                           "lineHeight": 1.6,
                           "fontFamily": "Inter",
-                          "fontSize": 14
+                          "fontSize": 14,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -12899,7 +12911,8 @@
                           "content": "Gere currículos e mensagens em português, inglês, espanhol e outros idiomas.",
                           "lineHeight": 1.6,
                           "fontFamily": "Inter",
-                          "fontSize": 14
+                          "fontSize": 14,
+                          "fontWeight": "normal"
                         }
                       ]
                     },
@@ -12963,7 +12976,8 @@
                           "content": "Acompanhe todas suas candidaturas, versões de currículo e análises em um só lugar.",
                           "lineHeight": 1.6,
                           "fontFamily": "Inter",
-                          "fontSize": 14
+                          "fontSize": 14,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -13037,7 +13051,8 @@
                           "content": "Reduza horas de trabalho manual para menos de 2 minutos por candidatura.",
                           "lineHeight": 1.6,
                           "fontFamily": "Inter",
-                          "fontSize": 14
+                          "fontSize": 14,
+                          "fontWeight": "normal"
                         }
                       ]
                     },
@@ -13101,7 +13116,8 @@
                           "content": "Seus dados são criptografados e nunca compartilhados com terceiros.",
                           "lineHeight": 1.6,
                           "fontFamily": "Inter",
-                          "fontSize": 14
+                          "fontSize": 14,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -13393,7 +13409,8 @@
                       "content": "“Em 2 semanas usando o MatchVaga, consegui 4 entrevistas. Antes, passava horas adaptando meu currículo manualmente e quase nunca recebia retorno.”",
                       "lineHeight": 1.6,
                       "fontFamily": "Inter",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -13450,7 +13467,8 @@
                               "fill": "$--muted-foreground",
                               "content": "Analista de Marketing, São Paulo",
                               "fontFamily": "Inter",
-                              "fontSize": 13
+                              "fontSize": 13,
+                              "fontWeight": "normal"
                             }
                           ]
                         }
@@ -13542,7 +13560,8 @@
                       "content": "“A análise de gap mudou minha vida. Descobri que faltava uma certificação específica no meu currículo — consegui a vaga depois de adicioná-la.”",
                       "lineHeight": 1.6,
                       "fontFamily": "Inter",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -13599,7 +13618,8 @@
                               "fill": "$--muted-foreground",
                               "content": "Desenvolvedor Full Stack, Belo Horizonte",
                               "fontFamily": "Inter",
-                              "fontSize": 13
+                              "fontSize": 13,
+                              "fontWeight": "normal"
                             }
                           ]
                         }
@@ -13691,7 +13711,8 @@
                       "content": "“As mensagens de abordagem são incríveis. Recebi respostas de recrutadores em menos de 24 horas. Parece que foi escrito sob medida.”",
                       "lineHeight": 1.6,
                       "fontFamily": "Inter",
-                      "fontSize": 15
+                      "fontSize": 15,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "frame",
@@ -13748,7 +13769,8 @@
                               "fill": "$--muted-foreground",
                               "content": "Product Designer, Rio de Janeiro",
                               "fontFamily": "Inter",
-                              "fontSize": 13
+                              "fontSize": 13,
+                              "fontWeight": "normal"
                             }
                           ]
                         }
@@ -13835,7 +13857,8 @@
                   "lineHeight": 1.5,
                   "textAlign": "center",
                   "fontFamily": "Inter",
-                  "fontSize": 16
+                  "fontSize": 16,
+                  "fontWeight": "normal"
                 }
               ]
             },
@@ -13886,7 +13909,8 @@
                           "fill": "$--muted-foreground",
                           "content": "Para começar a explorar",
                           "fontFamily": "Inter",
-                          "fontSize": 14
+                          "fontSize": 14,
+                          "fontWeight": "normal"
                         }
                       ]
                     },
@@ -13915,7 +13939,8 @@
                           "fill": "$--muted-foreground",
                           "content": "/mês",
                           "fontFamily": "Inter",
-                          "fontSize": 14
+                          "fontSize": 14,
+                          "fontWeight": "normal"
                         }
                       ]
                     },
@@ -13959,7 +13984,8 @@
                               "fill": "$--foreground",
                               "content": "3 análises por mês",
                               "fontFamily": "Inter",
-                              "fontSize": 14
+                              "fontSize": 14,
+                              "fontWeight": "normal"
                             }
                           ]
                         },
@@ -13987,7 +14013,8 @@
                               "fill": "$--foreground",
                               "content": "Currículo adaptado básico",
                               "fontFamily": "Inter",
-                              "fontSize": 14
+                              "fontSize": 14,
+                              "fontWeight": "normal"
                             }
                           ]
                         },
@@ -14015,7 +14042,8 @@
                               "fill": "$--foreground",
                               "content": "Score ATS",
                               "fontFamily": "Inter",
-                              "fontSize": 14
+                              "fontSize": 14,
+                              "fontWeight": "normal"
                             }
                           ]
                         },
@@ -14043,7 +14071,8 @@
                               "fill": "$--foreground",
                               "content": "1 mensagem de abordagem",
                               "fontFamily": "Inter",
-                              "fontSize": 14
+                              "fontSize": 14,
+                              "fontWeight": "normal"
                             }
                           ]
                         }
@@ -14135,7 +14164,8 @@
                           "fill": "$--muted-foreground",
                           "content": "Para quem leva a busca a sério",
                           "fontFamily": "Inter",
-                          "fontSize": 14
+                          "fontSize": 14,
+                          "fontWeight": "normal"
                         }
                       ]
                     },
@@ -14164,7 +14194,8 @@
                           "fill": "$--muted-foreground",
                           "content": "/mês",
                           "fontFamily": "Inter",
-                          "fontSize": 14
+                          "fontSize": 14,
+                          "fontWeight": "normal"
                         }
                       ]
                     },
@@ -14237,7 +14268,8 @@
                               "fill": "$--foreground",
                               "content": "Currículo + carta de apresentação",
                               "fontFamily": "Inter",
-                              "fontSize": 14
+                              "fontSize": 14,
+                              "fontWeight": "normal"
                             }
                           ]
                         },
@@ -14265,7 +14297,8 @@
                               "fill": "$--foreground",
                               "content": "Mensagens de abordagem ilimitadas",
                               "fontFamily": "Inter",
-                              "fontSize": 14
+                              "fontSize": 14,
+                              "fontWeight": "normal"
                             }
                           ]
                         },
@@ -14293,7 +14326,8 @@
                               "fill": "$--foreground",
                               "content": "Análise de gap detalhada",
                               "fontFamily": "Inter",
-                              "fontSize": 14
+                              "fontSize": 14,
+                              "fontWeight": "normal"
                             }
                           ]
                         },
@@ -14321,7 +14355,8 @@
                               "fill": "$--foreground",
                               "content": "Exportação PDF e DOCX",
                               "fontFamily": "Inter",
-                              "fontSize": 14
+                              "fontSize": 14,
+                              "fontWeight": "normal"
                             }
                           ]
                         },
@@ -14349,7 +14384,8 @@
                               "fill": "$--foreground",
                               "content": "Suporte prioritário",
                               "fontFamily": "Inter",
-                              "fontSize": 14
+                              "fontSize": 14,
+                              "fontWeight": "normal"
                             }
                           ]
                         }
@@ -14715,7 +14751,8 @@
               "lineHeight": 1.5,
               "textAlign": "center",
               "fontFamily": "Inter",
-              "fontSize": 18
+              "fontSize": 18,
+              "fontWeight": "normal"
             },
             {
               "type": "frame",
@@ -14768,7 +14805,8 @@
               "fill": "#FFFFFF99",
               "content": "Sem cartão de crédito  •  Cancele quando quiser  •  Setup em 30 segundos",
               "fontFamily": "Inter",
-              "fontSize": 13
+              "fontSize": 13,
+              "fontWeight": "normal"
             }
           ]
         },
@@ -14855,7 +14893,8 @@
                       "content": "A plataforma inteligente que transforma sua busca por emprego com IA.",
                       "lineHeight": 1.6,
                       "fontFamily": "Inter",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     }
                   ]
                 },
@@ -14885,7 +14924,8 @@
                       "fill": "#94A3B8",
                       "content": "Recursos",
                       "fontFamily": "Inter",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
@@ -14894,7 +14934,8 @@
                       "fill": "#94A3B8",
                       "content": "Preços",
                       "fontFamily": "Inter",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
@@ -14903,7 +14944,8 @@
                       "fill": "#94A3B8",
                       "content": "Como Funciona",
                       "fontFamily": "Inter",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
@@ -14912,7 +14954,8 @@
                       "fill": "#94A3B8",
                       "content": "Changelog",
                       "fontFamily": "Inter",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     }
                   ]
                 },
@@ -14942,7 +14985,8 @@
                       "fill": "#94A3B8",
                       "content": "Sobre",
                       "fontFamily": "Inter",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
@@ -14951,7 +14995,8 @@
                       "fill": "#94A3B8",
                       "content": "Blog",
                       "fontFamily": "Inter",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
@@ -14960,7 +15005,8 @@
                       "fill": "#94A3B8",
                       "content": "Carreiras",
                       "fontFamily": "Inter",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
@@ -14969,7 +15015,8 @@
                       "fill": "#94A3B8",
                       "content": "Contato",
                       "fontFamily": "Inter",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     }
                   ]
                 },
@@ -14999,7 +15046,8 @@
                       "fill": "#94A3B8",
                       "content": "Termos de Serviço",
                       "fontFamily": "Inter",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
@@ -15008,7 +15056,8 @@
                       "fill": "#94A3B8",
                       "content": "Política de Privacidade",
                       "fontFamily": "Inter",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     },
                     {
                       "type": "text",
@@ -15017,7 +15066,8 @@
                       "fill": "#94A3B8",
                       "content": "Cookies",
                       "fontFamily": "Inter",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     }
                   ]
                 }
@@ -15046,7 +15096,8 @@
                   "fill": "#64748B",
                   "content": "© 2026 MatchVaga. Todos os direitos reservados.",
                   "fontFamily": "Inter",
-                  "fontSize": 13
+                  "fontSize": 13,
+                  "fontWeight": "normal"
                 },
                 {
                   "type": "frame",

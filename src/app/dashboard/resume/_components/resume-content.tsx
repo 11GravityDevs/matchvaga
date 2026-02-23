@@ -9,20 +9,22 @@ import {
 } from "@/hooks/use-resume-form";
 import { ResumeFormCard } from "@/components/shared/resume-form-card";
 import { Loading } from "@/components/ui/loading";
-import {
-  PAGE_PADDING,
-  PAGE_SUBTITLE_CLASS,
-  PAGE_TITLE_CLASS,
-  SECTION_GAP,
-  W_CONTENT,
-} from "@/constants/design-tokens";
-import { W_FORM } from "@/constants/design-tokens";
 import { ROUTE_ONBOARDING_UPLOAD } from "@/constants/routes";
 import type { ResumeData } from "@/types/resume";
 
-export function ResumeContent() {
-  const { resumeData, isLoading, error, hasNoResume, save, isSaving } =
-    useResume();
+interface ResumeEditFormProps {
+  initialData: ResumeData;
+  save: (data: ResumeData) => Promise<void>;
+  isSaving: boolean;
+  error: Error | null;
+}
+
+function ResumeEditForm({
+  initialData,
+  save,
+  isSaving,
+  error,
+}: ResumeEditFormProps) {
   const [validationErrors, setValidationErrors] =
     useState<ResumeValidationErrors | null>(null);
 
@@ -38,9 +40,7 @@ export function ResumeContent() {
     handleSummaryChange,
     isFormValid,
     getValidationErrors,
-  } = useResumeForm({
-    initialData: resumeData,
-  });
+  } = useResumeForm({ initialData });
 
   const clearValidationOnChange = useCallback(() => {
     setValidationErrors(null);
@@ -117,46 +117,19 @@ export function ResumeContent() {
     }
   }, [data, isFormValid, getValidationErrors, save]);
 
-  if (isLoading) {
-    return <Loading />;
-  }
-
-  if (hasNoResume) {
-    return (
-      <div
-        className={`flex w-full flex-col items-center overflow-auto ${SECTION_GAP} ${PAGE_PADDING}`}
-      >
-        <div className={`flex flex-col gap-1 ${W_CONTENT}`}>
-          <h1 className={PAGE_TITLE_CLASS}>Nenhum currículo encontrado</h1>
-          <p className={PAGE_SUBTITLE_CLASS}>
-            Faça o upload do seu currículo para começar a editá-lo.
-          </p>
-          <Link
-            href={ROUTE_ONBOARDING_UPLOAD}
-            className="text-primary underline hover:no-underline"
-          >
-            Ir para upload
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div
-      className={`flex w-full flex-col items-center overflow-auto ${SECTION_GAP} ${PAGE_PADDING}`}
-    >
+    <div className="flex w-full flex-col items-center section-gap overflow-auto page-padding">
       {error && (
         <div
           role="alert"
-          className={`rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive ${W_FORM}`}
+          className="w-form rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive"
         >
           Falha ao salvar. Tente novamente.
         </div>
       )}
-      <div className={`flex flex-col gap-1 ${W_CONTENT}`}>
-        <h1 className={PAGE_TITLE_CLASS}>Edite seu currículo</h1>
-        <p className={PAGE_SUBTITLE_CLASS}>
+      <div className="flex w-content flex-col gap-1">
+        <h1 className="text-page-title">Edite seu currículo</h1>
+        <p className="text-page-subtitle">
           Atualize suas informações e salve as alterações.
         </p>
       </div>
@@ -181,5 +154,42 @@ export function ResumeContent() {
         validationErrors={validationErrors}
       />
     </div>
+  );
+}
+
+export function ResumeContent() {
+  const { resumeData, isLoading, error, hasNoResume, save, isSaving } =
+    useResume();
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (hasNoResume) {
+    return (
+      <div className="flex w-full flex-col items-center section-gap overflow-auto page-padding">
+        <div className="flex w-content flex-col gap-1">
+          <h1 className="text-page-title">Nenhum currículo encontrado</h1>
+          <p className="text-page-subtitle">
+            Faça o upload do seu currículo para começar a editá-lo.
+          </p>
+          <Link
+            href={ROUTE_ONBOARDING_UPLOAD}
+            className="text-primary underline hover:no-underline"
+          >
+            Ir para upload
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <ResumeEditForm
+      initialData={resumeData}
+      save={save}
+      isSaving={isSaving}
+      error={error}
+    />
   );
 }

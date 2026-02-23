@@ -18,3 +18,5 @@ export const ROUTE_ONBOARDING_VERIFY = "/onboarding/verify";
 export const ROUTE_AUTH_CALLBACK = "/auth/callback";
 
 export const ROUTE_DASHBOARD_NEW_ANALYSIS = "/dashboard/new-analysis";
+
+export const ROUTE_DASHBOARD_RESUME = "/dashboard/resume";

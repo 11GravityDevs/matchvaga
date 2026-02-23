@@ -45,7 +45,7 @@ src/
 
 **Component colocation:** See `colocation.mdc`.
 
-**Utils, constants, hooks:** See `colocation.mdc` for placement. See `constants.mdc` for constants-specific rules. See `check-before-add.mdc` before adding new ones.
+**Utils, constants, hooks:** See `colocation.mdc` for placement. See `check-before-add.mdc` before adding new ones.
 
 ## Route Architecture
 
@@ -96,7 +96,7 @@ When the project changes, update these rules accordingly:
 | New folder in `src/` | Add to Project Structure; update path aliases if new |
 | New path alias | Add to Path Aliases; update `components.json` reference |
 | New util function | Add to `utils/<domain>.ts` (shared) or `_utils/` (route-specific); see `colocation.mdc` |
-| New shared constant (2+ routes) | Add to `constants/<domain>.ts`; route-specific → `_constants/` |
+| New shared constant (2+ routes) | Add to `constants/<domain>.ts`; route-specific → `_constants/`; single constant → keep in component/module |
 | New route group or flow | Add to Route Architecture |
 | New domain concept | Add to `matchvaga-domain.mdc` |
 | New AI flow or provider | Add to `matchvaga-domain.mdc`; document env vars in `security.mdc` |

@@ -4,8 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { Plus, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { SECTION_TITLE_CLASS } from "@/constants/resume-form";
-import { TEXT_SMALL, TEXT_SMALL_MEDIUM } from "@/constants/design-tokens";
 
 interface ResumeFormSkillsProps {
   skills: string[];
@@ -45,7 +43,7 @@ export function ResumeFormSkills({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-1.5">
-        <h3 className={SECTION_TITLE_CLASS}>Habilidades</h3>
+        <h3 className="text-section-title">Habilidades</h3>
         {skillsError && (
           <p className="text-sm text-destructive" role="alert">
             {skillsError}
@@ -60,7 +58,7 @@ export function ResumeFormSkills({
                 key={`${skill}-${index}`}
                 className="flex items-center gap-1.5 rounded-full border border-accent-brand-light bg-accent-brand-light/50 px-2.5 py-1.5"
               >
-                <span className={`${TEXT_SMALL_MEDIUM} text-accent-brand`}>
+                <span className="text-small-medium text-accent-brand">
                   {skill}
                 </span>
                 <button
@@ -107,9 +105,10 @@ export function ResumeFormSkills({
         {!isAddingSkill && (
           <Button
             type="button"
+            variant="brand"
             size="sm"
             onClick={() => setIsAddingSkill(true)}
-            className={`w-fit gap-1.5 bg-accent-brand text-primary-foreground hover:bg-accent-brand-hover ${TEXT_SMALL}`}
+            className="w-fit gap-1.5 text-small"
           >
             <Plus className="h-4 w-4" />
             Adicionar habilidades

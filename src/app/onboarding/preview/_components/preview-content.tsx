@@ -4,11 +4,6 @@ import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
-import {
-  MAX_W_PREVIEW_DESC,
-  MAX_W_PREVIEW_TITLE,
-  PAGE_TITLE_CLASS,
-} from "@/constants/design-tokens";
 import { ROUTE_ONBOARDING_UPLOAD } from "@/constants/routes";
 import { cn } from "@/utils/style";
 
@@ -83,14 +78,12 @@ export function PreviewContent() {
 
       {/* Text block */}
       <div className="flex flex-col items-center gap-3">
-        <h1
-          className={cn(PAGE_TITLE_CLASS, MAX_W_PREVIEW_TITLE, "text-center")}
-        >
+        <h1 className={cn("max-w-preview-title text-center text-page-title")}>
           {step.title}
         </h1>
         <p
           className={cn(
-            MAX_W_PREVIEW_DESC,
+            "max-w-preview-desc",
             "text-center text-base leading-relaxed text-muted-foreground"
           )}
         >

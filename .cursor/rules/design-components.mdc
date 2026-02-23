@@ -91,6 +91,30 @@ One primary action per section. Right-align actions in cards/modals; left-align 
 - Use `FieldError` for form validation
 - Provide loading feedback for async actions
 
+**Full-screen loading:** When a route or section shows a loading state that replaces the main content (e.g. `if (isLoading) return ...`), use the `Loading` component from `@/components/ui/loading`. Do not use inline `Loader2` or custom spinners for this pattern.
+
+```tsx
+// ✅ Good: full-screen loading
+if (isLoading) {
+  return <Loading className="min-h-0 flex-1" />; // flex child: fills available space
+}
+// or
+if (isLoading) {
+  return <Loading />; // page-level: uses default min-h-screen
+}
+
+// ❌ Bad: custom spinner for full-screen loading
+if (isLoading) {
+  return (
+    <div className="flex min-h-0 flex-1 items-center justify-center">
+      <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+    </div>
+  );
+}
+```
+
+Use `Loader2` or similar only for **inline** loading (e.g. inside a button, small section).
+
 ### Responsive
 
 - Sidebar: 256px fixed; collapse to icon-only on mobile (if implemented)
@@ -103,6 +127,7 @@ One primary action per section. Right-align actions in cards/modals; left-align 
 
 | Component | Location | Purpose |
 |-----------|----------|---------|
+| **Loading** | `@/components/ui/loading` | Full-screen or inline loading (Logo + spinner); use for content-replacement loading states |
 | **BrandName** | `@/components/shared/brand-name` | MatchVaga branding |
 | **FormField** | `@/components/shared/form-field` | Label + input wrapper |
 | **StepIndicator** | `@/components/shared/step-indicator` | Onboarding step progress |

@@ -1,12 +1,12 @@
 ---
-description: Design tokens — colors, typography, spacing, radius; use @/constants/design-tokens
+description: Design tokens — all in globals.css; use semantic utilities
 globs: design.pen,src/**/*.css
 alwaysApply: false
 ---
 
 # Design Tokens Reference
 
-Use constants from `@/constants/design-tokens` for typography, spacing, and layout. See `tailwind-no-arbitrary.mdc` — no arbitrary values in components.
+All design tokens live in `globals.css`. Use semantic utility classes directly — no imports.
 
 ---
 
@@ -21,10 +21,12 @@ Use constants from `@/constants/design-tokens` for typography, spacing, and layo
 | `--muted-foreground` | Secondary text, placeholders | `text-muted-foreground` |
 | `--accent` | Hover states | `bg-accent` |
 | `--accent-brand` | Brand accent (blue) | `bg-accent-brand` |
+| `--on-accent-brand` | Text on solid accent-brand | `text-on-accent-brand` |
 | `--accent-brand-hover` | Brand accent hover | `hover:bg-accent-brand-hover` |
 | `--accent-brand-light` | Active nav background | `bg-accent-brand-light` |
 | `--accent-success` | Success states | `bg-accent-success` |
 | `--destructive` | Danger actions | `bg-destructive`, `text-destructive` |
+| `--on-destructive` | Text on solid destructive | `text-on-destructive` |
 | `--foreground` | Primary text | `text-foreground` |
 | `--background` | Page background | `bg-background` |
 | `--card` | Card surfaces | `bg-card` |
@@ -33,15 +35,15 @@ Use constants from `@/constants/design-tokens` for typography, spacing, and layo
 | `--ring` | Focus rings | `ring-ring` |
 | `--sidebar` | Sidebar background | `bg-sidebar` |
 | `--sidebar-foreground` | Sidebar text | `text-sidebar-foreground` |
-| `--sidebar-primary` | Sidebar brand | `text-sidebar-primary` |
 | `--sidebar-border` | Sidebar divider | `border-sidebar-border` |
 
-**Note:** Use design tokens only; never hardcode hex values. Brand accent: `--accent-brand` (#2563eb), `--accent-brand-hover` (#1d4ed8), `--accent-brand-light` (#dbeafe).
+**Note:** Use design tokens only; never hardcode hex values.
 
 ```tsx
 // ✅ Good: design tokens
 <div className="bg-primary text-primary-foreground" />
-<div className="bg-accent-brand hover:bg-accent-brand-hover" />
+<div className="bg-accent-brand text-on-accent-brand hover:bg-accent-brand-hover" />
+<div className="bg-destructive text-on-destructive" />
 
 // ❌ Bad: hardcoded values
 <div className="bg-[#2563eb] text-white" />
@@ -49,68 +51,76 @@ Use constants from `@/constants/design-tokens` for typography, spacing, and layo
 
 ---
 
-## Typography Scale
+## Typography (semantic utilities in globals.css)
 
-Import from `@/constants/design-tokens`: `PAGE_TITLE_CLASS`, `CARD_TITLE_CLASS`, `TEXT_SMALL`, `TEXT_KPI`, etc.
-
-| Role | Tailwind (via constants) |
-|------|---------------------------|
-| Card title | `CARD_TITLE_CLASS` (22px, bold) |
-| Brand / Section | `text-base font-bold` |
-| Body / Label | `text-sm font-medium` |
-| Small / CTA | `TEXT_SMALL_SEMIBOLD` |
-| Caption | `text-xs` |
-| KPI value | `TEXT_KPI` (32px) |
+| Role | Utility |
+|------|---------|
+| Page title | `text-page-title` |
+| Page subtitle | `text-page-subtitle` |
+| Section header | `text-section-header` |
+| Section header large | `text-section-header-large` |
+| Card title | `text-card-title` |
+| Card description | `text-card-description` |
+| Section title | `text-section-title` |
+| Section item label | `text-section-item-label` |
+| Form label | `text-form-label` |
+| Sub label | `text-sub-label` |
+| Small | `text-small`, `text-small-medium`, `text-small-semibold`, `text-small-leading` |
+| Caption | `text-caption-leading` |
+| KPI value | `text-kpi` |
+| Score | `text-score` |
+| Hero | `text-hero`, `text-hero-large` |
+| Badge | `text-badge` |
+| CTA title | `text-cta-title` |
 
 **Font:** Inter via `next/font/google`. Use `font-sans` or `var(--font-sans)`.
 
 ---
 
-## Spacing Scale
+## Spacing (semantic utilities)
 
-| Value | Context | Tailwind |
-|-------|---------|----------|
-| 4px | Tight gaps | `gap-1` |
-| 6px | Form label + input | `gap-1.5` |
-| 8px | Nav items, buttons | `gap-2`, `p-2` |
-| 12px | Button groups | `gap-3` |
-| 16px | Sidebar items | `gap-4`, `p-4` |
-| 20px | Card content | `gap-5` |
-| 24px | Section spacing | `gap-6`, `p-6` |
-| 28px | Card padding | `p-7` |
+| Utility | Usage |
+|---------|-------|
+| `page-padding` | Page-level container |
+| `section-gap` | Gap between major sections |
+| `column-gap` | Two-column layouts |
+| `card-header-padding` | Card header |
+| `card-content-padding` | Card body |
+| `table-cell-padding` | Table cells |
+| `tip-banner-padding` | Tip banners |
+| `footer-padding` | Footer action row |
 
-**Forbidden:** `p-[Xpx]`, `gap-[Xpx]`, `m-[Xpx]`. Use the scale above.
+Standard Tailwind scale: `gap-1`–`gap-12`, `p-1`–`p-12`.
 
 ---
 
-## Border Radius
+## Layout (semantic utilities)
 
-| Size | Context | Tailwind |
-|------|---------|----------|
-| xs | Section titles | `rounded-[2px]` |
-| sm | Nav items, buttons | `rounded-md` |
-| md | Buttons, inputs | `rounded-lg` |
-| lg | Cards | `rounded-xl` |
+| Utility | Usage |
+|---------|-------|
+| `w-form` | Form/card width |
+| `w-content` | Content width |
+| `max-w-content` | Max content (centered) |
+| `w-sidebar` | Sidebar width |
+| `w-column` | Column in two-column |
+| `w-action` | Action column |
+| `max-w-hero-title`, `max-w-hero-desc` | Hero section |
+| `max-w-login-form`, `max-w-login-hero-title` | Login |
+| `max-w-preview-title`, `max-w-preview-desc` | Onboarding preview |
+| `max-w-section-header`, `max-w-section-desc` | Section headers |
+| `max-w-faq`, `max-w-cta`, `max-w-cta-desc`, `max-w-footer-brand` | Various |
 
-Use `RADIUS_SM`, `RADIUS_MD`, `RADIUS_LG`, `CARD_RADIUS` from `@/constants/design-tokens`.
+---
+
+## Radius
+
+Use `rounded-md`, `rounded-lg`, `rounded-xl` — or `card-base` for cards.
 
 ---
 
 ## No Shadows
 
 Cards and surfaces: `rounded-xl border border-border bg-card`. No shadows.
-
----
-
-## Layout Dimensions
-
-| Element | Width | Tailwind |
-|---------|-------|----------|
-| Sidebar | 256px | `W_SIDEBAR` / `w-sidebar` |
-| Form / Card | 300–400px | `W_FORM`, `W_COLUMN` |
-| Content | 1100px | `MAX_W_CONTENT` |
-
-Use `flex-1` for fill; `w-full` for full-width.
 
 ---
 

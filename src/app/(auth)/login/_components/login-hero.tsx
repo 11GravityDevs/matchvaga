@@ -1,12 +1,5 @@
 import { BarChart3, MessageSquare, Sparkles } from "lucide-react";
 
-import {
-  MAX_W_HERO_DESC,
-  MAX_W_HERO_TITLE,
-  TEXT_HERO,
-  TEXT_SMALL_MEDIUM,
-  TEXT_SMALL_SEMIBOLD,
-} from "@/constants/design-tokens";
 import { cn } from "@/utils/style";
 
 export function LoginHero() {
@@ -51,18 +44,13 @@ export function LoginHero() {
         ))}
       </div>
 
-      <div className="relative z-10 flex flex-1 flex-col justify-center px-12 pr-[15%] pl-[10%]">
-        <div
-          className={cn(
-            "absolute top-[22%] right-[12%] flex items-center gap-4 rounded-2xl bg-card px-5 py-4",
-            "animate-balance"
-          )}
-        >
+      <div className="relative z-10 flex flex-1 flex-col justify-center gap-6 px-12 pr-[15%] pl-[10%]">
+        <div className="flex items-center gap-4 self-start rounded-2xl bg-card px-5 py-4">
           <div className="flex size-14 shrink-0 items-center justify-center rounded-full bg-accent-success">
             <span className="text-lg font-bold text-white">92</span>
           </div>
           <div className="flex flex-col gap-0.5">
-            <span className={`${TEXT_SMALL_SEMIBOLD} text-foreground`}>
+            <span className="text-small-semibold text-foreground">
               Pontuação ATS
             </span>
             <span className="text-xs font-normal text-accent-success">
@@ -72,12 +60,10 @@ export function LoginHero() {
         </div>
 
         <div className="flex flex-col gap-5 text-left">
-          <h1 className={`${MAX_W_HERO_TITLE} ${TEXT_HERO} text-white`}>
+          <h1 className="max-w-login-hero-title text-hero text-white">
             Seu currículo otimizado para a sua vaga dos sonhos.
           </h1>
-          <p
-            className={`${MAX_W_HERO_DESC} text-base leading-relaxed font-normal text-white/80`}
-          >
+          <p className="max-w-hero-desc text-lg font-normal text-white/80">
             Aumente suas chances com a análise inteligente de vagas e adaptação
             automática do seu currículo.
           </p>
@@ -88,7 +74,7 @@ export function LoginHero() {
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/20">
               <Sparkles className="h-5 w-5 text-white" />
             </div>
-            <span className={`${TEXT_SMALL_MEDIUM} text-white/87`}>
+            <span className="text-small-medium text-white/87">
               Currículo adaptado automaticamente
             </span>
           </div>
@@ -96,7 +82,7 @@ export function LoginHero() {
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/20">
               <BarChart3 className="h-5 w-5 text-white" />
             </div>
-            <span className={`${TEXT_SMALL_MEDIUM} text-white/87`}>
+            <span className="text-small-medium text-white/87">
               Análise detalhada de requisitos
             </span>
           </div>
@@ -104,7 +90,7 @@ export function LoginHero() {
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white/20">
               <MessageSquare className="h-5 w-5 text-white" />
             </div>
-            <span className={`${TEXT_SMALL_MEDIUM} text-white/87`}>
+            <span className="text-small-medium text-white/87">
               Mensagens personalizadas para cada vaga
             </span>
           </div>

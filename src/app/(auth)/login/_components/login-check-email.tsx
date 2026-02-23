@@ -3,10 +3,6 @@
 import { useCallback, useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import {
-  TEXT_SMALL_LEADING,
-  TEXT_SMALL_SEMIBOLD,
-} from "@/constants/design-tokens";
 
 const RESEND_COOLDOWN_SECONDS = 60;
 
@@ -69,9 +65,7 @@ export function LoginCheckEmail({
         </Button>
 
         <div className="flex items-center justify-center gap-1">
-          <span
-            className={`${TEXT_SMALL_LEADING} font-normal text-muted-foreground`}
-          >
+          <span className="text-small-leading font-normal text-muted-foreground">
             Não recebeu o link?
           </span>
           <Button
@@ -81,7 +75,7 @@ export function LoginCheckEmail({
             onClick={handleResend}
             disabled={isResendDisabled}
             loading={isResending}
-            className={`h-auto cursor-pointer p-0 text-primary hover:underline disabled:opacity-50 ${TEXT_SMALL_SEMIBOLD}`}
+            className="h-auto cursor-pointer p-0 text-small-semibold text-primary hover:underline disabled:opacity-50"
           >
             {resendCooldown > 0 ? `Reenviar (${resendCooldown}s)` : "Reenviar"}
           </Button>

@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { FormField } from "@/components/shared/form-field";
 import type { ResumeData } from "@/types/resume";
 import type { ResumeValidationErrors } from "@/hooks/use-resume-form";
-import { INPUT_CLASS, SECTION_TITLE_CLASS } from "@/constants/resume-form";
+import { INPUT_CLASS } from "@/components/shared/resume-form-card";
 
 interface ResumeFormPersonalDataProps {
   data: Pick<
@@ -27,7 +27,7 @@ export function ResumeFormPersonalData({
 }: ResumeFormPersonalDataProps) {
   return (
     <div className="flex flex-col gap-4">
-      <h3 className={SECTION_TITLE_CLASS}>Dados pessoais</h3>
+      <h3 className="text-section-title">Dados pessoais</h3>
       <div className="flex gap-8">
         <FormField
           label="Nome completo"

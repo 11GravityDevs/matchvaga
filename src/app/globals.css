@@ -5,6 +5,16 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --color-surface-subtle: var(--surface-subtle);
+  --color-star-rating: var(--star-rating);
+  --color-accent-purple: var(--accent-purple);
+  --color-accent-purple-light: var(--accent-purple-light);
+  --color-accent-pink: var(--accent-pink);
+  --color-accent-pink-light: var(--accent-pink-light);
+  --color-footer-bg: var(--footer-bg);
+  --color-footer-border: var(--footer-border);
+  --color-footer-muted: var(--footer-muted);
+  --color-footer-muted-subtle: var(--footer-muted-subtle);
   --color-accent-brand: var(--accent-brand);
   --color-accent-brand-hover: var(--accent-brand-hover);
   --color-accent-brand-light: var(--accent-brand-light);
@@ -22,6 +32,12 @@
   --color-accent-low-light: var(--accent-low-light);
   --color-accent-low-border: var(--accent-low-border);
   --color-accent-low-text: var(--accent-low-text);
+  --color-on-accent-brand: var(--on-accent-brand);
+  --color-on-destructive: var(--on-destructive);
+  --color-on-accent-success: var(--on-accent-success);
+  --color-on-accent-warning: var(--on-accent-warning);
+  --color-on-accent-low: var(--on-accent-low);
+  --color-on-muted-foreground: var(--on-muted-foreground);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
@@ -56,6 +72,7 @@
 
   --width-form: 900px;
   --width-content: 1100px;
+  --width-landing-content: 1140px;
   --width-sidebar: 280px;
   --width-column: 450px;
 }
@@ -101,19 +118,42 @@
   --accent-low-light: #fef2f2;
   --accent-low-border: #fecaca;
   --accent-low-text: #b91c1c;
+  --on-accent-brand: #ffffff;
+  --on-destructive: #ffffff;
+  --on-accent-success: #ffffff;
+  --on-accent-warning: #ffffff;
+  --on-accent-low: #ffffff;
+  --on-muted-foreground: #ffffff;
   --surface-subtle: #f8fafc;
+  --star-rating: #facc15;
+  --accent-purple: #7c3aed;
+  --accent-purple-light: #ede9fe;
+  --accent-pink: #db2777;
+  --accent-pink-light: #fce7f3;
+  --footer-bg: #0f172a;
+  --footer-border: #1e293b;
+  --footer-muted: #94a3b8;
+  --footer-muted-subtle: #64748b;
   --font-geist-mono: ui-monospace, monospace;
 
   /* Layout dimensions (also in @theme for utilities) */
   --width-form: 900px;
   --width-content: 1100px;
+  --width-landing-content: 1140px;
   --width-sidebar: 280px;
   --width-column: 380px;
-  --width-hero-title: 420px;
-  --width-hero-desc: 340px;
+  --width-hero-title: 600px;
+  --width-hero-desc: 800px;
+  --width-login-hero-title: 600px;
   --width-login-form: 400px;
   --width-preview-title: 480px;
   --width-preview-desc: 460px;
+  --width-section-header: 600px;
+  --width-section-desc: 540px;
+  --width-faq: 800px;
+  --width-cta: 700px;
+  --width-cta-desc: 560px;
+  --width-footer-brand: 280px;
 
   /* Login hero decorative positioning */
   --top-hero-circle-2: 600px;
@@ -148,6 +188,12 @@
   --accent-brand-hover: #3b82f6;
   --accent-brand-dark: #3b82f6;
   --accent-brand-end: #60a5fa;
+  --on-accent-brand: #ffffff;
+  --on-destructive: #ffffff;
+  --on-accent-success: #ffffff;
+  --on-accent-warning: #ffffff;
+  --on-accent-low: #ffffff;
+  --on-muted-foreground: #ffffff;
 }
 
 /* Layout width utilities — design system */
@@ -160,11 +206,17 @@
 @utility max-w-content {
   max-width: var(--width-content);
 }
+@utility max-w-landing-content {
+  max-width: var(--width-landing-content);
+}
 @utility w-sidebar {
   width: var(--width-sidebar);
 }
 @utility w-column {
   width: var(--width-column);
+}
+@utility max-w-login-hero-title {
+  max-width: var(--width-login-hero-title);
 }
 @utility max-w-hero-title {
   max-width: var(--width-hero-title);
@@ -181,8 +233,185 @@
 @utility max-w-preview-desc {
   max-width: var(--width-preview-desc);
 }
+@utility max-w-section-header {
+  max-width: var(--width-section-header);
+}
+@utility max-w-section-desc {
+  max-width: var(--width-section-desc);
+}
+@utility max-w-faq {
+  max-width: var(--width-faq);
+}
+@utility max-w-cta {
+  max-width: var(--width-cta);
+}
+@utility max-w-cta-desc {
+  max-width: var(--width-cta-desc);
+}
+@utility max-w-footer-brand {
+  max-width: var(--width-footer-brand);
+}
+
+@utility w-action {
+  width: 6.25rem;
+}
+
+@utility min-h-screenshot-hero {
+  min-height: 620px;
+}
+
+/* Typography — semantic utilities */
+@utility text-page-title {
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--foreground);
+}
+@utility text-page-subtitle {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--muted-foreground);
+}
+@utility text-section-header {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--foreground);
+}
+@utility text-card-title {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--foreground);
+}
+@utility text-card-description {
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--muted-foreground);
+}
+@utility text-small {
+  font-size: 13px;
+}
+@utility text-small-leading {
+  font-size: 13px;
+  line-height: 1.5;
+}
+@utility text-small-medium {
+  font-size: 13px;
+  font-weight: 500;
+}
+@utility text-small-semibold {
+  font-size: 13px;
+  font-weight: 600;
+}
+@utility text-caption-leading {
+  font-size: 12px;
+  line-height: 1.33;
+}
+@utility text-section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--foreground);
+}
+@utility text-section-item-label {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--foreground);
+}
+@utility text-body-15 {
+  font-size: 15px;
+  line-height: 1.625;
+}
+@utility text-form-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--foreground);
+}
+@utility text-sub-label {
+  font-size: 12px;
+  font-weight: 500;
+}
+@utility text-kpi {
+  font-size: 32px;
+  line-height: 1;
+  font-weight: 600;
+  color: var(--foreground);
+}
+@utility text-score {
+  font-size: 44px;
+  line-height: 1;
+  font-weight: 700;
+  color: var(--foreground);
+}
+@utility text-hero {
+  font-size: 42px;
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+@utility text-badge {
+  font-size: 11px;
+  line-height: 1.33;
+  font-weight: 600;
+}
+@utility text-section-header-large {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  color: var(--foreground);
+}
+@utility text-hero-large {
+  font-size: 52px;
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--foreground);
+}
+@utility text-cta-title {
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+/* Spacing — semantic utilities */
+@utility page-padding {
+  padding: 3rem 2.5rem;
+}
+@utility section-gap {
+  gap: 2.5rem;
+}
+@utility column-gap {
+  gap: 2.5rem;
+}
+@utility card-header-padding {
+  padding: 1.5rem 1.75rem;
+}
+@utility card-content-padding {
+  padding: 1.75rem;
+}
+@utility table-cell-padding {
+  padding: 1rem;
+}
+@utility tip-banner-padding {
+  padding: 0.75rem 1rem;
+}
+@utility footer-padding {
+  padding: 1rem 2.5rem;
+}
+
+/* Card base — rounded, bordered, no shadow */
+@utility card-base {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background-color: var(--card);
+}
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
   * {
     @apply border-border outline-ring/50;
   }

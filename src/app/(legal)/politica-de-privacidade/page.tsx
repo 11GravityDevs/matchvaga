@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
-import { ArrowLeft } from "lucide-react";
-
+import { BackLink } from "@/components/shared/back-link";
 import { BrandName } from "@/components/shared/brand-name";
-import { ROUTE_LOGIN } from "@/constants/routes";
 
 export const metadata: Metadata = {
   title: "Política de Privacidade | MatchVaga",
@@ -15,13 +12,7 @@ export const metadata: Metadata = {
 export default function PoliticaDePrivacidadePage() {
   return (
     <article className="mx-auto max-w-3xl px-6 py-12">
-      <Link
-        href={ROUTE_LOGIN}
-        className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-      >
-        <ArrowLeft className="h-4 w-4" />
-        Voltar
-      </Link>
+      <BackLink className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground" />
 
       <header className="mb-10">
         <h1 className="text-3xl font-bold tracking-tight text-foreground">

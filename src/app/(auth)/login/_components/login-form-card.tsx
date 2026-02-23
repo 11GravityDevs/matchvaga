@@ -9,12 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  CARD_DESCRIPTION_CLASS,
-  CARD_TITLE_CLASS,
-  MAX_W_HERO_DESC,
-  MAX_W_LOGIN_FORM,
-} from "@/constants/design-tokens";
 import { cn } from "@/utils/style";
 
 interface LoginFormCardProps {
@@ -37,9 +31,7 @@ export function LoginFormCard({
         className
       )}
     >
-      <div
-        className={`flex w-full flex-col items-center gap-7 ${MAX_W_LOGIN_FORM}`}
-      >
+      <div className="flex w-full max-w-login-form flex-col items-center gap-7">
         <div className="flex flex-col items-center gap-1">
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent-brand">
             <FileSearch className="h-6 w-6 text-primary-foreground" />
@@ -52,8 +44,8 @@ export function LoginFormCard({
 
         <Card className="w-full rounded-xl border border-border">
           <CardHeader className="gap-1 pb-0">
-            <CardTitle className={CARD_TITLE_CLASS}>{title}</CardTitle>
-            <CardDescription className={CARD_DESCRIPTION_CLASS}>
+            <CardTitle className="text-card-title">{title}</CardTitle>
+            <CardDescription className="text-card-description">
               {description}
             </CardDescription>
           </CardHeader>
@@ -63,9 +55,7 @@ export function LoginFormCard({
           </CardContent>
         </Card>
 
-        <p
-          className={`${MAX_W_HERO_DESC} text-center text-xs font-normal text-muted-foreground`}
-        >
+        <p className="max-w-hero-desc text-center text-xs font-normal text-muted-foreground">
           Ao continuar, você concorda com nossos{" "}
           <Link
             href="/termos-de-servico"

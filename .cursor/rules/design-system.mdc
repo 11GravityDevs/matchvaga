@@ -12,8 +12,8 @@ Design source: `design.pen`. Use Pencil MCP tools to read; see `pencil-design-to
 
 | Rule | Content |
 |------|---------|
-| `design-tokens-reference.mdc` | Colors, typography, spacing, radius, layout. Use `@/constants/design-tokens`. |
+| `design-tokens-reference.mdc` | Colors, typography, spacing, radius, layout. All in `globals.css`. |
 | `design-components.mdc` | Component catalog, UX principles, shadcn usage. |
 | `tailwind-no-arbitrary.mdc` | No arbitrary Tailwind values in components. |
 
-When adding design components or changing tokens, update the relevant rule and `globals.css` / `design-tokens.ts` accordingly.
+When adding design components or changing tokens, update the relevant rule and `globals.css` accordingly.

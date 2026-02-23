@@ -8,12 +8,6 @@ import type {
 import type { ResumeValidationErrors } from "@/hooks/use-resume-form";
 
 import { Button } from "@/components/ui/button";
-import {
-  CARD_DESCRIPTION_CLASS,
-  CARD_TITLE_CLASS,
-  SECTION_TITLE_CLASS,
-  W_CONTENT,
-} from "@/constants/design-tokens";
 import { Textarea } from "@/components/ui/textarea";
 import { ResumeFormPersonalData } from "@/components/shared/resume-form-personal-data";
 import { ResumeFormSkills } from "@/components/shared/resume-form-skills";
@@ -48,6 +42,11 @@ export interface ResumeFormCardProps {
   validationErrors?: ResumeValidationErrors | null;
 }
 
+export { INPUT_CLASS };
+
+const INPUT_CLASS =
+  "h-9 bg-background px-3 shadow-none focus-visible:border-accent-brand focus-visible:ring-1 focus-visible:ring-accent-brand/30";
+
 const DEFAULT_HEADER_TITLE = "Verifique seus dados";
 const DEFAULT_HEADER_SUBTITLE =
   "Revisamos e extraimos as informações do seu currículo. Confira e edite se necessário.";
@@ -70,11 +69,11 @@ export function ResumeFormCard({
   validationErrors,
 }: ResumeFormCardProps) {
   return (
-    <div className={`rounded-xl border border-border bg-card ${W_CONTENT}`}>
+    <div className="w-content rounded-xl border border-border bg-card">
       {!hideHeader && (
         <div className="flex flex-col gap-1 p-7">
-          <h2 className={CARD_TITLE_CLASS}>{headerTitle}</h2>
-          <p className={CARD_DESCRIPTION_CLASS}>{headerSubtitle}</p>
+          <h2 className="text-card-title">{headerTitle}</h2>
+          <p className="text-card-description">{headerSubtitle}</p>
         </div>
       )}
 
@@ -94,7 +93,7 @@ export function ResumeFormCard({
         />
 
         <div className="flex flex-col gap-4">
-          <h3 className={SECTION_TITLE_CLASS}>Resumo profissional</h3>
+          <h3 className="text-section-title">Resumo profissional</h3>
           <Textarea
             id="summary"
             value={data.summary}

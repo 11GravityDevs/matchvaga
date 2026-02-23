@@ -8,20 +8,19 @@ alwaysApply: false
 
 Never use Tailwind arbitrary values `[value]` for spacing, typography, or layout.
 
-## Use Design Tokens
+## Use Semantic Utilities from globals.css
 
-Import from `@/constants/design-tokens`:
+All design tokens live in `globals.css`. Use these utilities directly:
 
-- **Layout:** `W_FORM`, `W_CONTENT`, `W_SIDEBAR`, `W_COLUMN`, `W_ACTION`
-- **Typography:** `PAGE_TITLE_CLASS`, `CARD_TITLE_CLASS`, `TEXT_SMALL`, `TEXT_SMALL_MEDIUM`, `TEXT_SMALL_SEMIBOLD`, `TEXT_SMALL_LEADING`, `TEXT_CAPTION_LEADING`, `TEXT_KPI`, `TEXT_SCORE`, `TEXT_HERO`, `TEXT_BADGE`
-- **Spacing:** `PAGE_PADDING`, `SECTION_GAP`, `CARD_CONTENT_PADDING`, `CARD_HEADER_PADDING`, `TIP_BANNER_PADDING`, `FOOTER_PADDING`
-- **Radius:** `CARD_RADIUS`, `RADIUS_SM`, `RADIUS_MD`, `RADIUS_LG`
+- **Layout:** `w-form`, `w-content`, `max-w-content`, `w-sidebar`, `w-column`, `w-action`
+- **Typography:** `text-page-title`, `text-card-title`, `text-small`, `text-small-medium`, `text-small-semibold`, `text-small-leading`, `text-caption-leading`, `text-form-label`, `text-kpi`, `text-score`, `text-hero`, `text-badge`, `text-section-header-large`
+- **Spacing:** `page-padding`, `section-gap`, `card-content-padding`, `card-header-padding`, `tip-banner-padding`, `footer-padding`, `table-cell-padding`
+- **Radius:** `rounded-md`, `rounded-lg`, `rounded-xl`, `card-base`
 
 ## Allowed
 
 - Standard Tailwind scale: `gap-1`–`gap-12`, `p-1`–`p-12`, `rounded-md`, `rounded-lg`, `rounded-xl`
-- Theme utilities: `w-form`, `w-content`, `w-sidebar`, `w-column`, `max-w-hero-title`, `max-w-hero-desc`, `max-w-login-form`
-- Design token constants from `@/constants/design-tokens`
+- Semantic utilities from `globals.css` (see design-tokens-reference.mdc)
 
 ## Forbidden
 
@@ -30,6 +29,7 @@ Import from `@/constants/design-tokens`:
 
 ## Exceptions
 
-- **`@/constants/design-tokens.ts`** — Arbitrary values allowed only here to define the design scale (e.g. `text-[22px]`, `text-[28px]`)
+- **`globals.css`** — Arbitrary values allowed only here to define the design scale (e.g. in `@utility` blocks)
+- **`@/components/shared/resume-form-card`** — `INPUT_CLASS` for resume form inputs
 - shadcn/Radix component internals (e.g. `rounded-[min(var(--radius-md),8px)]`)
 - Complex asymmetric radius (e.g. chat bubbles) — prefer `rounded-xl rounded-bl-md` over `rounded-[12px_12px_12px_4px]`

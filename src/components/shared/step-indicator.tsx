@@ -1,10 +1,6 @@
 import { Check } from "lucide-react";
 
 import { cn } from "@/utils/style";
-import {
-  TEXT_SMALL_MEDIUM,
-  TEXT_SMALL_SEMIBOLD,
-} from "@/constants/design-tokens";
 
 export interface StepIndicatorStep {
   id: string;
@@ -56,7 +52,7 @@ export function StepIndicator({
               )}
               <span
                 className={cn(
-                  isActive ? TEXT_SMALL_SEMIBOLD : TEXT_SMALL_MEDIUM
+                  isActive ? "text-small-semibold" : "text-small-medium"
                 )}
               >
                 {isActive ? `${index + 1}. ${step.label}` : step.label}

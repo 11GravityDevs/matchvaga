@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 
 import { cn } from "@/utils/style";
-import { FORM_LABEL_CLASS } from "@/constants/design-tokens";
 
 interface FormFieldProps {
   label: string;
@@ -22,7 +21,7 @@ export function FormField({
 }: FormFieldProps) {
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
-      <label htmlFor={htmlFor} className={labelClassName ?? FORM_LABEL_CLASS}>
+      <label htmlFor={htmlFor} className={labelClassName ?? "text-form-label"}>
         {label}
       </label>
       {children}

@@ -10,6 +10,7 @@ alwaysApply: true
 Utils, constants, hooks, and components must **NOT** live inside component files UNLESS:
 - Simple behavior (e.g., 1–3 lines)
 - Does not add significant bulk
+- Single constant used by that component (or its children) — do not create a dedicated constants file for one constant
 
 ## Placement by Scope
 
@@ -30,4 +31,11 @@ Create these folders under a route when code belongs only to that route:
 
 **Import:** Use relative paths: `./_hooks/use-login`, `../_utils/route`, `../../_contexts/onboarding-context` (no path aliases for route-local code). For shared Server Actions, use `@/app/actions/` or `src/app/actions/`.
 
-See `constants.mdc` for constants-specific placement. See `check-before-add.mdc` before adding new utils, constants, hooks, or components.
+## Constants
+
+- **Constants vs Utils:** Constants = static data (routes, config, magic strings, storage keys). Utils = pure functions (formatting, validation, parsing).
+- **When to move:** Same scope logic as the table — 2+ routes → `src/constants/<domain>.ts`, single route → `_constants/`, single file → keep inline.
+- **Single constant:** Do not create a dedicated constants file for one constant; keep it in the owning component/module.
+- **Example:** `import { ROUTE_LOGIN } from "@/constants/routes"` — prefer over hardcoded `router.push("/login")`.
+
+See `check-before-add.mdc` before adding new utils, constants, hooks, or components.

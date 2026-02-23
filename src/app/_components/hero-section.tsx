@@ -1,0 +1,59 @@
+import Link from "next/link";
+import { Sparkles, Zap } from "lucide-react";
+
+import { Logo } from "@/components/shared/logo";
+import { Button } from "@/components/ui/button";
+import { ROUTE_DASHBOARD, ROUTE_LOGIN } from "@/constants/routes";
+
+interface HeroSectionProps {
+  isLoggedIn?: boolean;
+}
+
+export function HeroSection({ isLoggedIn = false }: HeroSectionProps) {
+  return (
+    <section className="flex w-full flex-col items-center gap-12 bg-background pt-20 pb-16">
+      {/* Badge */}
+      <div className="flex items-center gap-2 rounded-full bg-accent-brand-light px-4 py-2">
+        <Sparkles className="size-3.5 text-accent-brand" />
+        <span className="text-small-semibold text-accent-brand">
+          Plataforma #1 para candidatos no Brasil
+        </span>
+      </div>
+
+      {/* Headline + Subheadline */}
+      <div className="flex flex-col items-center gap-5">
+        <h1 className="max-w-hero-title text-center text-hero-large">
+          Chega de <span className="text-accent-brand">perder tempo</span> com
+          candidaturas
+        </h1>
+        <p className="max-w-hero-desc text-center text-lg leading-relaxed text-muted-foreground">
+          O MatchVaga adapta seu currículo automaticamente para cada vaga,
+          otimiza para ATS e gera mensagens de apresentação —{" "}
+          <span className="font-semibold text-accent-brand">
+            tudo em segundos
+          </span>
+          .
+        </p>
+      </div>
+
+      {/* CTAs */}
+      <div className="flex items-center gap-4">
+        <Button variant="brand" className="gap-2" size="brand" asChild>
+          <Link href={isLoggedIn ? ROUTE_DASHBOARD : ROUTE_LOGIN}>
+            <Zap className="size-4" />
+            {isLoggedIn ? "Acessar Dashboard" : "Começar Grátis"}
+          </Link>
+        </Button>
+      </div>
+
+      {/* Product Screenshot Placeholder */}
+      <div className="w-full max-w-landing-content">
+        <div className="flex min-h-screenshot-hero w-full items-center justify-center rounded-xl border border-border bg-card">
+          <span className="text-base font-medium text-muted-foreground">
+            Screenshot placeholder
+          </span>
+        </div>
+      </div>
+    </section>
+  );
+}

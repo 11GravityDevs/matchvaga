@@ -8,6 +8,7 @@ interface LogoProps {
   iconContainerClassName?: string;
   iconClassName?: string;
   textClassName?: string;
+  variant?: "default" | "light";
 }
 
 export function Logo({
@@ -15,7 +16,9 @@ export function Logo({
   iconContainerClassName,
   iconClassName,
   textClassName,
+  variant = "default",
 }: LogoProps) {
+  const isLight = variant === "light";
   return (
     <div className={cn("flex items-center gap-2", className)}>
       <div
@@ -25,11 +28,20 @@ export function Logo({
         )}
       >
         <FileSearch
-          className={cn("h-4 w-4 text-primary-foreground", iconClassName)}
+          className={cn(
+            "h-4 w-4 text-primary-foreground",
+            isLight && "text-white",
+            iconClassName
+          )}
         />
       </div>
       <BrandName
-        className={cn("text-base font-bold text-foreground", textClassName)}
+        className={cn(
+          "text-base font-bold text-foreground",
+          isLight && "text-white",
+          textClassName
+        )}
+        accentClassName={isLight ? "text-white" : undefined}
       />
     </div>
   );

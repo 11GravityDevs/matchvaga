@@ -1,3 +1,5 @@
+export const COOKIE_ONBOARDING_IN_PROGRESS = "onboarding_in_progress";
+
 export const AUTH_ERROR_MESSAGES_PT: Record<string, string> = {
   // Rate limits
   over_email_send_rate_limit: "Aguarde um minuto antes de tentar novamente.",

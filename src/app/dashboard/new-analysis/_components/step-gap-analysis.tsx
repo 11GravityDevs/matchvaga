@@ -1,35 +1,17 @@
 "use client";
 
+import { useCallback } from "react";
 import { ArrowLeft, Check, Lightbulb, Sparkles } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/utils/style";
 import { getScoreFeedback } from "../_utils/analysis";
 import {
-  CARD_CONTENT_PADDING,
-  CARD_HEADER_PADDING,
-  CARD_RADIUS,
-  COLUMN_GAP,
-  PAGE_PADDING,
-  PAGE_SUBTITLE_CLASS,
-  PAGE_TITLE_CLASS,
-  SECTION_GAP,
-  SECTION_HEADER_CLASS,
-  TIP_BANNER_PADDING,
-} from "@/constants/design-tokens";
-import {
-  TEXT_SMALL_LEADING,
-  TEXT_SMALL_SEMIBOLD,
-  W_COLUMN,
-} from "@/constants/design-tokens";
-import {
   useNewAnalysis,
   WIZARD_STEPS,
 } from "../_contexts/new-analysis-context";
 import { ScoreRing } from "./score-ring";
 import { StepIndicator } from "@/components/shared/step-indicator";
-
-const SCORE = 38;
 
 const FEEDBACK_BADGE_CLASSES = {
   success:
@@ -40,39 +22,50 @@ const FEEDBACK_BADGE_CLASSES = {
 } as const;
 
 export function StepGapAnalysis() {
-  const { jobRole, missingSkills, toggleSkill, setStep } = useNewAnalysis();
+  const {
+    jobRole,
+    score,
+    matchedSkills,
+    missingSkills,
+    toggleSkill,
+    setStep,
+    setSelectedMissingSkills,
+  } = useNewAnalysis();
 
   const selectedCount = missingSkills.filter((s) => s.selected).length;
-  const feedback = getScoreFeedback(SCORE);
+  const displayScore = score ?? 0;
+  const feedback = getScoreFeedback(displayScore);
   const feedbackClasses = FEEDBACK_BADGE_CLASSES[feedback.variant];
 
+  const handleGenerate = useCallback(() => {
+    const selected = missingSkills
+      .filter((s) => s.selected)
+      .map((s) => s.label);
+    setSelectedMissingSkills(selected);
+    setStep(3);
+  }, [missingSkills, setSelectedMissingSkills, setStep]);
+
   return (
-    <div
-      className={`flex flex-1 flex-col gap-10 overflow-hidden ${PAGE_PADDING}`}
-    >
+    <div className="flex flex-1 flex-col gap-10 overflow-hidden page-padding">
       {/* Header strip */}
-      <div className={`flex flex-1 flex-col ${SECTION_GAP}`}>
+      <div className="flex flex-1 flex-col section-gap">
         <div className={`flex items-center justify-between`}>
           <div className="flex flex-col gap-1">
-            <h1 className={PAGE_TITLE_CLASS}>Análise de Compatibilidade</h1>
-            <p className={PAGE_SUBTITLE_CLASS}>{jobRole}</p>
+            <h1 className="text-page-title">Análise de Compatibilidade</h1>
+            <p className="text-page-subtitle">{jobRole}</p>
           </div>
           <StepIndicator steps={WIZARD_STEPS} currentStepIndex={1} />
         </div>
 
         {/* Two-column body */}
-        <div className={`flex min-h-0 flex-1 overflow-hidden ${COLUMN_GAP}`}>
+        <div className="flex min-h-0 flex-1 column-gap overflow-hidden">
           {/* Left column — Skills selection */}
-          <div
-            className={`flex flex-1 flex-col overflow-hidden border border-border bg-card ${CARD_RADIUS}`}
-          >
+          <div className="flex flex-1 flex-col overflow-hidden rounded-xl border border-border bg-card">
             {/* Card header */}
-            <div
-              className={`flex items-center justify-between border-b border-border ${CARD_HEADER_PADDING}`}
-            >
+            <div className="flex items-center justify-between border-b border-border card-header-padding">
               <div className="flex flex-col gap-1.5">
-                <h2 className={SECTION_HEADER_CLASS}>Habilidades Ausentes</h2>
-                <p className={`${TEXT_SMALL_LEADING} text-muted-foreground`}>
+                <h2 className="text-section-header">Habilidades Ausentes</h2>
+                <p className="text-small-leading text-muted-foreground">
                   Selecione as habilidades que deseja incorporar ao currículo
                   otimizado
                 </p>
@@ -85,9 +78,7 @@ export function StepGapAnalysis() {
             </div>
 
             {/* Skills list */}
-            <div
-              className={`flex flex-col gap-2 overflow-auto ${CARD_CONTENT_PADDING}`}
-            >
+            <div className="flex flex-col gap-2 overflow-auto card-content-padding">
               {missingSkills.map((skill) => (
                 <button
                   key={skill.id}
@@ -120,11 +111,9 @@ export function StepGapAnalysis() {
 
             {/* Tip */}
             <div className="self-start px-7 pt-0 pb-7">
-              <div
-                className={`flex items-start gap-2 rounded-lg border border-accent-success-border bg-accent-success-light ${TIP_BANNER_PADDING}`}
-              >
+              <div className="flex items-start gap-2 rounded-lg border border-accent-success-border bg-accent-success-light tip-banner-padding">
                 <Lightbulb className="mt-0.5 h-4 w-4 shrink-0 text-accent-success" />
-                <p className={`${TEXT_SMALL_LEADING} text-accent-success-text`}>
+                <p className="text-small-leading text-accent-success-text">
                   <span className="font-semibold">Dica:</span> Selecione apenas
                   habilidades com as quais você já teve contato. Isso garante um
                   currículo mais autêntico.
@@ -134,19 +123,13 @@ export function StepGapAnalysis() {
           </div>
 
           {/* Right column — Score */}
-          <div
-            className={`flex shrink-0 flex-col overflow-hidden border border-border bg-card ${CARD_RADIUS} ${W_COLUMN}`}
-          >
-            <div
-              className={`flex flex-1 flex-col items-center gap-4 overflow-auto ${CARD_CONTENT_PADDING}`}
-            >
-              <h2
-                className={`w-full ${SECTION_HEADER_CLASS} tracking-[-0.3px]`}
-              >
+          <div className="flex w-column shrink-0 flex-col overflow-hidden rounded-xl border border-border bg-card">
+            <div className="flex flex-1 flex-col items-center gap-4 overflow-auto card-content-padding">
+              <h2 className="w-full text-section-header tracking-[-0.3px]">
                 Score de Compatibilidade
               </h2>
 
-              <ScoreRing score={SCORE} />
+              <ScoreRing score={displayScore} />
 
               {/* Feedback badge */}
               <div
@@ -155,15 +138,16 @@ export function StepGapAnalysis() {
                   feedbackClasses
                 )}
               >
-                <span className={TEXT_SMALL_SEMIBOLD}>{feedback.label}</span>
+                <span className="text-small-semibold">{feedback.label}</span>
               </div>
 
               {/* Hint text */}
-              <p
-                className={`text-center ${TEXT_SMALL_LEADING} text-muted-foreground`}
-              >
-                Seu currículo tem potencial, mas precisa de ajustes nas
-                habilidades técnicas para esta vaga
+              <p className="text-center text-small-leading text-muted-foreground">
+                {displayScore >= 75
+                  ? "Seu currículo está bem alinhado com a vaga."
+                  : displayScore >= 50
+                    ? "Seu currículo tem potencial, mas precisa de ajustes nas habilidades técnicas."
+                    : "Seu currículo precisa de ajustes significativos para esta vaga."}
               </p>
 
               {/* Breakdown */}
@@ -171,45 +155,33 @@ export function StepGapAnalysis() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
                     <div className="h-2 w-2 rounded-full bg-accent-success" />
-                    <span
-                      className={`${TEXT_SMALL_LEADING} text-muted-foreground`}
-                    >
+                    <span className="text-small-leading text-muted-foreground">
                       Habilidades presentes
                     </span>
                   </div>
-                  <span
-                    className={`${TEXT_SMALL_SEMIBOLD} font-bold text-foreground`}
-                  >
-                    4/10
+                  <span className="text-small-semibold font-bold text-foreground">
+                    {matchedSkills.length}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
                     <div className="h-2 w-2 rounded-full bg-accent-warning" />
-                    <span
-                      className={`${TEXT_SMALL_LEADING} text-muted-foreground`}
-                    >
+                    <span className="text-small-leading text-muted-foreground">
                       Ausentes selecionadas
                     </span>
                   </div>
-                  <span
-                    className={`${TEXT_SMALL_SEMIBOLD} font-bold text-accent-brand`}
-                  >
+                  <span className="text-small-semibold font-bold text-accent-brand">
                     {selectedCount}/{missingSkills.length}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
                     <div className="h-2 w-2 rounded-full bg-destructive" />
-                    <span
-                      className={`${TEXT_SMALL_LEADING} text-muted-foreground`}
-                    >
+                    <span className="text-small-leading text-muted-foreground">
                       Experiência relevante
                     </span>
                   </div>
-                  <span
-                    className={`${TEXT_SMALL_SEMIBOLD} text-accent-warning`}
-                  >
+                  <span className="text-small-semibold text-accent-warning">
                     Parcial
                   </span>
                 </div>
@@ -234,7 +206,7 @@ export function StepGapAnalysis() {
 
         <Button
           size="brand"
-          onClick={() => setStep(3)}
+          onClick={handleGenerate}
           className="gap-1.5 rounded-lg bg-accent-brand px-7 py-3 text-base font-bold hover:bg-accent-brand-hover"
         >
           <Sparkles className="h-4 w-4" />

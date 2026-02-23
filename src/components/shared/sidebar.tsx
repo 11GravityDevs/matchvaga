@@ -16,8 +16,8 @@ import { Button } from "@/components/ui/button";
 import {
   ROUTE_DASHBOARD,
   ROUTE_DASHBOARD_NEW_ANALYSIS,
+  ROUTE_DASHBOARD_RESUME,
 } from "@/constants/routes";
-import { TEXT_CAPTION_LEADING, W_SIDEBAR } from "@/constants/design-tokens";
 import { cn } from "@/utils/style";
 
 interface NavItem {
@@ -33,16 +33,14 @@ const navItems: NavItem[] = [
     icon: Search,
   },
   { label: "Dashboard", href: ROUTE_DASHBOARD, icon: LayoutDashboard },
-  { label: "Meu Currículo", href: "/dashboard/resume", icon: FileText },
+  { label: "Meu Currículo", href: ROUTE_DASHBOARD_RESUME, icon: FileText },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside
-      className={`flex h-full shrink-0 flex-col gap-4 border-r border-sidebar-border bg-sidebar p-2 ${W_SIDEBAR}`}
-    >
+    <aside className="flex h-full w-sidebar shrink-0 flex-col gap-4 border-r border-sidebar-border bg-sidebar p-2">
       {/* Brand */}
       <div className="px-2 py-3">
         <Logo textClassName="text-sidebar-foreground" />
@@ -50,9 +48,7 @@ export function Sidebar() {
 
       {/* Nav */}
       <div className="flex flex-1 flex-col gap-1 px-1">
-        <p
-          className={`px-2 py-2 font-medium tracking-wide text-muted-foreground uppercase ${TEXT_CAPTION_LEADING}`}
-        >
+        <p className="px-2 py-2 text-caption-leading font-medium tracking-wide text-muted-foreground uppercase">
           MENU
         </p>
         {navItems.map((item) => {

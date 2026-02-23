@@ -1,12 +1,14 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+import { COOKIE_ONBOARDING_IN_PROGRESS } from "@/constants/auth";
 import {
   ROUTE_AUTH_CALLBACK,
   ROUTE_DASHBOARD,
   ROUTE_LOGIN,
   ROUTE_ONBOARDING,
   ROUTE_ONBOARDING_PREVIEW,
+  ROUTE_ONBOARDING_UPLOAD,
 } from "@/constants/routes";
 
 const PROTECTED_PATH_PREFIXES = [ROUTE_DASHBOARD, ROUTE_ONBOARDING];
@@ -68,6 +70,36 @@ export async function proxy(request: NextRequest) {
     const url = request.nextUrl.clone();
     url.pathname = ROUTE_ONBOARDING_PREVIEW;
     return NextResponse.redirect(url);
+  }
+
+  if (user && isProtectedPath(request.nextUrl.pathname)) {
+    const userId = user.sub as string;
+    const { data: resumes, error } = await supabase
+      .from("resumes")
+      .select("id")
+      .eq("user_id", userId)
+      .limit(1);
+
+    const userHasResume = !error && (resumes?.length ?? 0) > 0;
+    const pathname = request.nextUrl.pathname;
+
+    if (pathname.startsWith(ROUTE_ONBOARDING)) {
+      const onboardingInProgress = request.cookies.get(
+        COOKIE_ONBOARDING_IN_PROGRESS
+      )?.value;
+
+      if (userHasResume && !onboardingInProgress) {
+        const url = request.nextUrl.clone();
+        url.pathname = ROUTE_DASHBOARD;
+        return NextResponse.redirect(url);
+      }
+    }
+
+    if (pathname.startsWith(ROUTE_DASHBOARD) && !userHasResume) {
+      const url = request.nextUrl.clone();
+      url.pathname = ROUTE_ONBOARDING_UPLOAD;
+      return NextResponse.redirect(url);
+    }
   }
 
   return supabaseResponse;

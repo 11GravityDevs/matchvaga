@@ -5,12 +5,6 @@ import { useCallback, useRef, useState } from "react";
 import { Check, Loader2, Upload } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-  CARD_TITLE_CLASS,
-  CARD_DESCRIPTION_CLASS,
-  TEXT_SMALL,
-  W_FORM,
-} from "@/constants/design-tokens";
 import { useResumeUpload } from "../_hooks/use-resume-upload";
 import { formatFileSize } from "../_utils/file";
 import { cn } from "@/utils/style";
@@ -81,10 +75,10 @@ export function UploadContent() {
   }, []);
 
   return (
-    <div className={`rounded-xl border border-border bg-card ${W_FORM}`}>
+    <div className="w-form rounded-xl border border-border bg-card">
       <div className="flex flex-col gap-1 px-7 pt-7">
-        <h2 className={CARD_TITLE_CLASS}>Upload do Curriculo</h2>
-        <p className={CARD_DESCRIPTION_CLASS}>
+        <h2 className="text-card-title">Upload do Curriculo</h2>
+        <p className="text-card-description">
           Envie seu curriculo para começar
         </p>
       </div>
@@ -149,7 +143,7 @@ export function UploadContent() {
               <p className="text-center text-sm text-muted-foreground">
                 Suportamos PDF e DOCX
               </p>
-              <p className={`${TEXT_SMALL} text-muted-foreground`}>ou</p>
+              <p className="text-small text-muted-foreground">ou</p>
               <Button variant="secondary" size="lg" onClick={handleBrowseClick}>
                 Selecionar arquivo
               </Button>
