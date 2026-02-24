@@ -459,7 +459,7 @@
 
 @keyframes fade-up {
   from {
-    opacity: 0;
+    opacity: 0.01;
     transform: translateY(1rem);
   }
   to {
