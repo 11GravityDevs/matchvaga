@@ -59,7 +59,7 @@ export function CoreFeaturesSection() {
   return (
     <section
       id="recursos"
-      className="flex w-full flex-col items-center gap-10 bg-background py-12 md:gap-16 md:py-20"
+      className="flex w-full flex-col items-center gap-10 bg-background py-12 md:scroll-mt-12 md:gap-16 md:py-20"
     >
       {/* Section Header */}
       <AnimateOnScroll>

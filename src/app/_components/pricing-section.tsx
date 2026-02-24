@@ -30,7 +30,7 @@ export function PricingSection() {
   return (
     <section
       id="precos"
-      className="flex w-full flex-col items-center gap-8 bg-surface-subtle py-12 md:gap-12 md:py-20"
+      className="flex w-full flex-col items-center gap-8 bg-surface-subtle py-12 md:scroll-mt-12 md:gap-12 md:py-20"
     >
       <div className="mx-auto flex w-full max-w-landing-content flex-col items-center gap-8 px-4 md:w-4/6 md:gap-12 md:px-0">
         {/* Section Header */}

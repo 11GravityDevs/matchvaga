@@ -31,7 +31,7 @@ export function HowItWorksSection() {
   return (
     <section
       id="como-funciona"
-      className="flex w-full flex-col items-center gap-10 bg-surface-subtle py-12 md:gap-14 md:py-20"
+      className="flex w-full flex-col items-center gap-10 bg-surface-subtle py-12 md:scroll-mt-12 md:gap-14 md:py-20"
     >
       {/* Section Header */}
       <AnimateOnScroll>

@@ -69,7 +69,7 @@ export function PreviewContent() {
   }, []);
 
   return (
-    <main>
+    <main className="flex flex-col items-center gap-8">
       {/* Illustration */}
       {step.illustration}
 
@@ -96,7 +96,7 @@ export function PreviewContent() {
         {!isFirstStep && !isLastStep && (
           <Button
             variant="outline"
-            size="lg"
+            size="brand"
             onClick={handleBack}
             className="w-30"
           >
@@ -105,9 +105,9 @@ export function PreviewContent() {
         )}
         <Button
           variant="brand"
-          size="lg"
+          size="brand"
           onClick={handleNext}
-          className={isLastStep ? "w-60" : "w-50"}
+          className={cn("rounded-lg", isLastStep ? "w-60" : "w-50")}
         >
           {isLastStep ? "Começar agora" : "Próximo"}
         </Button>
