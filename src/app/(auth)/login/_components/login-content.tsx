@@ -22,7 +22,7 @@ export function LoginContent() {
   } = useLogin();
 
   return (
-    <main>
+    <main className="flex w-full flex-col md:flex-row">
       <LoginHero />
       {step === "email" ? (
         <LoginFormCard

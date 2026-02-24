@@ -27,7 +27,7 @@ export function LoginFormCard({
   return (
     <div
       className={cn(
-        "flex w-1/2 flex-col items-center justify-center bg-background px-12 py-0",
+        "flex w-full flex-col items-center justify-center bg-background px-12 py-0 md:w-1/2",
         className
       )}
     >

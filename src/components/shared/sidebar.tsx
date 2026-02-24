@@ -1,6 +1,7 @@
 "use client";
 
 import type { ComponentType } from "react";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -9,16 +10,36 @@ import {
   Zap,
   Search,
   ChevronsUpDown,
+  LogOut,
+  Moon,
 } from "lucide-react";
 
 import { Logo } from "@/components/shared/logo";
 import { Button } from "@/components/ui/button";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   ROUTE_DASHBOARD,
   ROUTE_DASHBOARD_NEW_ANALYSIS,
   ROUTE_DASHBOARD_RESUME,
 } from "@/constants/routes";
+import { useSignOut } from "@/hooks/use-sign-out";
+import { resumeQueryOptions } from "@/lib/query/query-options";
 import { cn } from "@/utils/style";
+
+function getInitials(fullName: string): string {
+  return fullName
+    .split(" ")
+    .map((s) => s[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+}
 
 interface NavItem {
   label: string;
@@ -38,6 +59,15 @@ const navItems: NavItem[] = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { data: resumeResult } = useQuery(resumeQueryOptions);
+  const { signOut, isPending } = useSignOut();
+
+  const resumeData = resumeResult?.data;
+  const displayName = resumeData?.fullName?.split(" ")[0] ?? "Usuário";
+  const email = resumeData?.email ?? "—";
+  const initials = resumeData?.fullName
+    ? getInitials(resumeData.fullName)
+    : "?";
 
   return (
     <aside className="flex h-full w-sidebar shrink-0 flex-col gap-4 border-r border-sidebar-border bg-sidebar p-2">
@@ -99,22 +129,53 @@ export function Sidebar() {
       </div>
 
       {/* Footer */}
-      <div className="flex items-center justify-between gap-2 rounded-md bg-sidebar p-2">
-        <div className="flex items-center gap-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-muted">
-            <span className="text-sm font-semibold text-foreground">JD</span>
-          </div>
-          <div className="flex flex-col justify-center">
-            <span className="text-sm leading-snug font-medium text-sidebar-foreground">
-              Jon Doe
-            </span>
-            <span className="text-xs leading-relaxed text-sidebar-foreground">
-              joe@acmecorp.com
-            </span>
-          </div>
-        </div>
-        <ChevronsUpDown className="h-4 w-4 text-muted-foreground" />
-      </div>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild aria-label="Abrir menu da conta">
+          <button
+            type="button"
+            className="flex w-full cursor-pointer items-center justify-between gap-2 rounded-md bg-sidebar p-2 transition-colors hover:bg-sidebar-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar"
+          >
+            <div className="flex items-center gap-2">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-muted">
+                <span className="text-sm font-semibold text-foreground">
+                  {initials}
+                </span>
+              </div>
+              <div className="flex flex-col justify-center text-left">
+                <span className="text-sm leading-snug font-medium text-sidebar-foreground">
+                  {displayName}
+                </span>
+                <span className="text-xs leading-relaxed text-sidebar-foreground">
+                  {email}
+                </span>
+              </div>
+            </div>
+            <ChevronsUpDown className="h-4 w-4 shrink-0 text-muted-foreground" />
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="start" side="top" className="w-56">
+          <DropdownMenuItem
+            disabled
+            className="cursor-pointer text-muted-foreground"
+          >
+            <Moon className="h-4 w-4" />
+            Modo escuro (em breve)
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            className="cursor-pointer"
+            variant="destructive"
+            onSelect={(e) => {
+              e.preventDefault();
+              void signOut();
+            }}
+            disabled={isPending}
+          >
+            <LogOut className="h-4 w-4" />
+            Sair
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </aside>
   );
 }

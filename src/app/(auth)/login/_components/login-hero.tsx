@@ -6,7 +6,7 @@ export function LoginHero() {
   return (
     <div
       className={cn(
-        "relative flex min-h-screen w-1/2 flex-col overflow-hidden",
+        "relative flex min-h-screen w-full flex-col overflow-hidden md:w-1/2",
         "bg-linear-to-br from-accent-brand-dark via-accent-brand to-accent-brand-end"
       )}
     >
