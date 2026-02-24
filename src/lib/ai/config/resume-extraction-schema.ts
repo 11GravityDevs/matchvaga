@@ -31,6 +31,7 @@ const educationEntrySchema = {
     level: stringSchema,
     startDate: stringSchema,
     completionDate: stringSchema,
+    description: stringSchema,
     isCurrent: { type: SchemaType.BOOLEAN },
   },
   required: ["institution", "course", "level", "startDate", "completionDate"],

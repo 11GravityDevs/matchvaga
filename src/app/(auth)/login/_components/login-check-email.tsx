@@ -75,7 +75,7 @@ export function LoginCheckEmail({
             onClick={handleResend}
             disabled={isResendDisabled}
             loading={isResending}
-            className="h-auto cursor-pointer p-0 text-small-semibold text-primary hover:underline disabled:opacity-50"
+            className="h-auto p-0 text-small-semibold text-primary hover:underline disabled:opacity-50"
           >
             {resendCooldown > 0 ? `Reenviar (${resendCooldown}s)` : "Reenviar"}
           </Button>

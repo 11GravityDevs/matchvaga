@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { BackLink } from "@/components/shared/back-link";
+import { Logo } from "@/components/shared/logo";
 import { BrandName } from "@/components/shared/brand-name";
 
 export const metadata: Metadata = {
@@ -11,10 +11,15 @@ export const metadata: Metadata = {
 
 export default function TermosDeServicoPage() {
   return (
-    <article className="mx-auto max-w-3xl px-6 py-12">
-      <BackLink className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground" />
+    <article className="mx-auto flex max-w-3xl flex-col items-center px-6 py-12">
+      <Logo
+        className="mb-10 flex-col gap-3"
+        iconContainerClassName="h-16 w-16 rounded-xl"
+        iconClassName="h-8 w-8"
+        textClassName="text-3xl font-bold"
+      />
 
-      <header className="mb-10">
+      <header className="mb-10 w-full text-center">
         <h1 className="text-3xl font-bold tracking-tight text-foreground">
           Termos de Serviço
         </h1>
@@ -23,7 +28,7 @@ export default function TermosDeServicoPage() {
         </p>
       </header>
 
-      <div className="prose prose-neutral dark:prose-invert max-w-none space-y-8 text-sm leading-relaxed text-foreground">
+      <div className="prose prose-neutral dark:prose-invert w-full max-w-none space-y-8 text-sm leading-relaxed text-foreground">
         <section>
           <h2 className="mb-4 text-lg font-semibold text-foreground">
             1. Aceitação dos Termos

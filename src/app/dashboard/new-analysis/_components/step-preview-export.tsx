@@ -3,8 +3,7 @@
 import { useCallback, useState } from "react";
 import { Download, FileText, Loader2, RefreshCw, Send } from "lucide-react";
 
-import { generateOptimizedDocument } from "@/app/actions/document";
-import { sendChatMessage } from "@/app/actions/chat";
+import { applyCvRefinementInstruction } from "@/app/actions/chat";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -12,6 +11,7 @@ import {
   WIZARD_STEPS,
 } from "../_contexts/new-analysis-context";
 import { StepIndicator } from "@/components/shared/step-indicator";
+import { ResumePreviewDocument } from "./resume-preview-document";
 
 interface ChatMessage {
   role: "user" | "assistant";
@@ -22,24 +22,23 @@ export function StepPreviewExport() {
   const {
     jobRole,
     resumeData,
+    optimizedResumeData,
+    setOptimizedResumeData,
     analysisId,
     score,
-    selectedMissingSkills,
     reset,
   } = useNewAnalysis();
+
+  const displayResumeData = optimizedResumeData ?? resumeData;
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [chatError, setChatError] = useState<string | null>(null);
-  const [downloadingFormat, setDownloadingFormat] = useState<
-    "pdf" | "docx" | null
-  >(null);
-  const [downloadError, setDownloadError] = useState<string | null>(null);
 
   const handleSend = useCallback(async () => {
     const trimmed = input.trim();
-    if (!trimmed || !analysisId || isSending) return;
+    if (!trimmed || !analysisId || !displayResumeData || isSending) return;
 
     setChatError(null);
     setInput("");
@@ -52,58 +51,47 @@ export function StepPreviewExport() {
       content: m.content,
     }));
 
-    const result = await sendChatMessage(analysisId, trimmed, prevMessages);
+    const result = await applyCvRefinementInstruction(
+      analysisId,
+      displayResumeData,
+      trimmed,
+      prevMessages
+    );
     setIsSending(false);
 
     if (!result.success) {
-      setChatError(result.error ?? "Erro ao enviar mensagem.");
+      setChatError(result.error ?? "Erro ao aplicar alteração.");
       setMessages((prev) => prev.slice(0, -1));
       setInput(trimmed);
       return;
     }
 
-    if (result.content) {
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: result.content! },
-      ]);
+    if (result.modifiedResume) {
+      setOptimizedResumeData(result.modifiedResume);
     }
-  }, [input, analysisId, isSending, messages]);
-
-  const handleDownload = useCallback(
-    async (format: "pdf" | "docx") => {
-      if (!analysisId || downloadingFormat) return;
-
-      setDownloadError(null);
-      setDownloadingFormat(format);
-
-      const result = await generateOptimizedDocument(
-        analysisId,
-        format,
-        selectedMissingSkills.length > 0 ? selectedMissingSkills : undefined
-      );
-
-      setDownloadingFormat(null);
-
-      if (!result.success) {
-        setDownloadError(result.error ?? "Erro ao gerar documento.");
-        return;
-      }
-
-      if (result.url) {
-        window.open(result.url, "_blank");
-      }
-    },
-    [analysisId, downloadingFormat, selectedMissingSkills]
-  );
+    setMessages((prev) => [
+      ...prev,
+      {
+        role: "assistant" as const,
+        content: result.summary ?? "Alterações aplicadas.",
+      },
+    ]);
+  }, [
+    input,
+    analysisId,
+    displayResumeData,
+    isSending,
+    messages,
+    setOptimizedResumeData,
+  ]);
 
   const displayScore = score ?? 0;
 
   return (
     <div className="flex flex-1 flex-col gap-4 overflow-hidden page-padding">
       {/* Header strip */}
-      <div className="flex flex-1 flex-col section-gap">
-        <div className="flex items-center justify-between">
+      <div className="flex min-h-0 flex-1 flex-col section-gap">
+        <div className="flex shrink-0 items-center justify-between">
           <div className="flex flex-col gap-1">
             <h1 className="text-page-title">Currículo Otimizado</h1>
             <p className="text-page-subtitle">{jobRole}</p>
@@ -113,10 +101,10 @@ export function StepPreviewExport() {
 
         {/* Two-column body */}
         <div className="flex min-h-0 flex-1 column-gap overflow-hidden">
-          {/* Left — Document preview */}
-          <div className="flex flex-1 flex-col overflow-hidden rounded-xl border border-border bg-card">
+          {/* Left — Document preview (scrollable) */}
+          <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-border bg-card">
             {/* Doc header */}
-            <div className="flex items-center justify-between border-b border-border card-header-padding">
+            <div className="flex shrink-0 items-center justify-between border-b border-border card-header-padding">
               <span className="text-base font-semibold text-foreground">
                 Visualização do Currículo
               </span>
@@ -127,64 +115,22 @@ export function StepPreviewExport() {
               </div>
             </div>
 
-            {/* Doc body */}
-            <div className="flex flex-1 flex-col gap-4 overflow-auto card-content-padding">
-              {resumeData ? (
-                <>
-                  <div className="flex flex-col gap-1">
-                    <h2 className="text-card-title">
-                      {resumeData.fullName || "—"}
-                    </h2>
-                    <p className="text-sm text-muted-foreground">
-                      {resumeData.experience?.[0]?.jobTitle ?? "—"}
-                    </p>
-                  </div>
-
-                  <div className="h-px w-full bg-border" />
-
-                  <div className="flex flex-col gap-2">
-                    <span className="text-badge tracking-widest text-muted-foreground uppercase">
-                      RESUMO PROFISSIONAL
-                    </span>
-                    <p className="text-small-leading leading-relaxed text-foreground">
-                      {resumeData.summary || "—"}
-                    </p>
-                  </div>
-
-                  <div className="h-px w-full bg-border" />
-
-                  <div className="flex flex-col gap-2">
-                    <span className="text-badge tracking-widest text-muted-foreground uppercase">
-                      EXPERIÊNCIA
-                    </span>
-                    <div className="flex flex-col gap-3">
-                      {resumeData.experience.map((exp, i) => (
-                        <div key={i}>
-                          <p className="text-small-leading leading-relaxed text-foreground">
-                            <strong>
-                              {exp.jobTitle} - {exp.company} ({exp.startDate}–
-                              {exp.endDate})
-                            </strong>
-                            <br />
-                            {exp.description}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </>
+            {/* Doc body — scrollable */}
+            <div className="flex min-h-0 flex-1 flex-col overflow-auto card-content-padding">
+              {displayResumeData ? (
+                <ResumePreviewDocument data={displayResumeData} />
               ) : (
-                <p className="text-sm text-muted-foreground">
+                <p className="text-small text-muted-foreground">
                   Carregando currículo...
                 </p>
               )}
             </div>
           </div>
 
-          {/* Right — Refinement chat */}
-          <div className="flex w-column shrink-0 flex-col overflow-hidden rounded-xl border border-border bg-card">
+          {/* Right — Refinement chat (fixed, non-scrolling) */}
+          <div className="flex w-column shrink-0 flex-col self-stretch overflow-hidden rounded-xl border border-border bg-card">
             {/* Chat header */}
-            <div className="flex flex-col gap-1 border-b border-border card-header-padding">
+            <div className="flex shrink-0 flex-col gap-1 border-b border-border card-header-padding">
               <span className="text-base font-semibold text-foreground">
                 Refinamento
               </span>
@@ -254,11 +200,16 @@ export function StepPreviewExport() {
             </div>
 
             {/* Input row */}
-            <div className="flex items-center gap-2 px-7 pt-0 pb-7">
+            <div className="flex shrink-0 items-center gap-2 px-7 pt-0 pb-7">
               <div className="flex flex-1 items-center rounded-lg border border-input bg-background px-3">
                 <Input
                   className="h-10 flex-1 border-0 bg-transparent shadow-none focus-visible:ring-0"
-                  placeholder="Digite uma instrução..."
+                  placeholder={
+                    displayResumeData
+                      ? "Digite uma instrução..."
+                      : "Aguarde o currículo carregar..."
+                  }
+                  disabled={!displayResumeData}
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => {
@@ -273,7 +224,7 @@ export function StepPreviewExport() {
                 type="button"
                 size="icon"
                 className="shrink-0 rounded-lg bg-accent-brand hover:bg-accent-brand-hover"
-                disabled={!input.trim() || isSending}
+                disabled={!input.trim() || isSending || !displayResumeData}
                 onClick={handleSend}
               >
                 <Send className="h-4 w-4" />
@@ -284,7 +235,7 @@ export function StepPreviewExport() {
       </div>
 
       {/* Footer action row */}
-      <div className="flex items-center justify-between border-border">
+      <div className="flex shrink-0 items-center justify-between border-border">
         <Button
           type="button"
           size="lg"
@@ -296,39 +247,21 @@ export function StepPreviewExport() {
           Nova Análise
         </Button>
 
-        <div className="flex flex-col items-end gap-2">
-          {downloadError && (
-            <p className="text-sm text-destructive">{downloadError}</p>
-          )}
-          <div className="flex items-center gap-3">
-            <Button
-              size="brand"
-              variant="outline"
-              className="gap-1.5"
-              disabled={!analysisId || !!downloadingFormat}
-              onClick={() => handleDownload("pdf")}
-            >
-              {downloadingFormat === "pdf" ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <FileText className="h-4 w-4" />
-              )}
-              Download PDF
-            </Button>
-            <Button
-              size="brand"
-              disabled={!analysisId || !!downloadingFormat}
-              onClick={() => handleDownload("docx")}
-              className="gap-1.5"
-            >
-              {downloadingFormat === "docx" ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Download className="h-4 w-4" />
-              )}
-              Download DOCX
-            </Button>
-          </div>
+        <div className="flex items-center gap-3">
+          <Button
+            size="brand"
+            variant="outline"
+            className="gap-1.5"
+            disabled
+            title="Em breve"
+          >
+            <FileText className="h-4 w-4" />
+            Download PDF
+          </Button>
+          <Button size="brand" disabled className="gap-1.5" title="Em breve">
+            <Download className="h-4 w-4" />
+            Download DOCX
+          </Button>
         </div>
       </div>
     </div>

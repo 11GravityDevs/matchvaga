@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
+import { CookieConsent } from "@/components/shared/cookie-consent";
 import { QueryProvider } from "@/components/providers/query-provider";
 
 import "./globals.css";
@@ -21,7 +22,10 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className={`${inter.variable} min-h-screen antialiased`}>
-        <QueryProvider>{children}</QueryProvider>
+        <QueryProvider>
+          {children}
+          <CookieConsent />
+        </QueryProvider>
       </body>
     </html>
   );

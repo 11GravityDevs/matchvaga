@@ -75,6 +75,7 @@
   --width-landing-content: 1140px;
   --width-sidebar: 280px;
   --width-column: 450px;
+  --scrollbar-width: 6px;
 }
 
 :root {
@@ -140,6 +141,7 @@
   --width-form: 900px;
   --width-content: 1100px;
   --width-landing-content: 1140px;
+  --width-cookie-content: 1260px;
   --width-sidebar: 280px;
   --width-column: 380px;
   --width-hero-title: 600px;
@@ -154,6 +156,7 @@
   --width-cta: 700px;
   --width-cta-desc: 560px;
   --width-footer-brand: 280px;
+  --scrollbar-width: 6px;
 
   /* Login hero decorative positioning */
   --top-hero-circle-2: 600px;
@@ -205,6 +208,9 @@
 }
 @utility max-w-content {
   max-width: var(--width-content);
+}
+@utility max-w-cookie-content {
+  max-width: var(--width-cookie-content);
 }
 @utility max-w-landing-content {
   max-width: var(--width-landing-content);
@@ -414,6 +420,23 @@
   }
   * {
     @apply border-border outline-ring/50;
+    scrollbar-width: thin;
+    scrollbar-color: var(--accent-brand) var(--border);
+  }
+  *::-webkit-scrollbar {
+    width: var(--scrollbar-width);
+    height: var(--scrollbar-width);
+  }
+  *::-webkit-scrollbar-track {
+    background: var(--border);
+    border-radius: var(--radius);
+  }
+  *::-webkit-scrollbar-thumb {
+    background: var(--accent-brand);
+    border-radius: var(--radius);
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-brand-hover);
   }
   body {
     @apply bg-background text-foreground;
@@ -432,4 +455,23 @@
 
 .animate-balance {
   animation: balance 4s ease-in-out infinite;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.6s ease-out both;
+}
+
+.animate-shimmer-subtle {
+  animation: shimmer-subtle 3s ease-in-out infinite;
 }

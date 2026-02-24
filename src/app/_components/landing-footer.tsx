@@ -20,6 +20,8 @@ export function LandingFooter() {
             <Link
               key={link.label}
               href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center rounded-md px-3 py-2 text-small text-footer-muted transition-colors hover:text-white focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-footer-bg focus-visible:outline-none"
             >
               {link.label}

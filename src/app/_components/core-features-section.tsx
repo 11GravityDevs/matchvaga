@@ -1,5 +1,7 @@
 import { ChartBar, FileText, Mail } from "lucide-react";
 
+import { AnimateOnScroll } from "./animate-on-scroll";
+
 interface Feature {
   tagIcon: React.ReactNode;
   tagText: string;
@@ -58,21 +60,23 @@ export function CoreFeaturesSection() {
       className="flex w-full flex-col items-center gap-16 bg-background py-20"
     >
       {/* Section Header */}
-      <div className="flex max-w-section-header flex-col items-center gap-4">
-        <span className="rounded-full border border-border px-3.5 py-1.5 text-xs font-semibold tracking-widest text-accent-brand">
-          RECURSOS
-        </span>
-        <h2 className="text-center text-section-header-large">
-          Tudo que você precisa para se destacar
-        </h2>
-        <p className="max-w-section-desc text-center text-base leading-normal text-muted-foreground">
-          Ferramentas inteligentes que transformam sua busca por emprego em um
-          processo eficiente e estratégico.
-        </p>
-      </div>
+      <AnimateOnScroll>
+        <div className="flex max-w-section-header flex-col items-center gap-4">
+          <span className="rounded-full border border-border px-3.5 py-1.5 text-xs font-semibold tracking-widest text-accent-brand">
+            RECURSOS
+          </span>
+          <h2 className="text-center text-section-header-large">
+            Tudo que você precisa para se destacar
+          </h2>
+          <p className="max-w-section-desc text-center text-base leading-normal text-muted-foreground">
+            Ferramentas inteligentes que transformam sua busca por emprego em um
+            processo eficiente e estratégico.
+          </p>
+        </div>
+      </AnimateOnScroll>
 
       {/* Feature Rows */}
-      {FEATURES.map((feature) => {
+      {FEATURES.map((feature, i) => {
         const textContent = (
           <div className="flex flex-1 flex-col gap-5">
             <div
@@ -91,22 +95,21 @@ export function CoreFeaturesSection() {
         );
 
         return (
-          <div
-            key={feature.tagText}
-            className="flex w-full items-center gap-12"
-          >
-            {feature.reversed ? (
-              <>
-                <ScreenshotPlaceholder />
-                {textContent}
-              </>
-            ) : (
-              <>
-                {textContent}
-                <ScreenshotPlaceholder />
-              </>
-            )}
-          </div>
+          <AnimateOnScroll key={feature.tagText} delay={i * 100}>
+            <div className="flex w-full items-center gap-12">
+              {feature.reversed ? (
+                <>
+                  <ScreenshotPlaceholder />
+                  {textContent}
+                </>
+              ) : (
+                <>
+                  {textContent}
+                  <ScreenshotPlaceholder />
+                </>
+              )}
+            </div>
+          </AnimateOnScroll>
         );
       })}
     </section>

@@ -20,29 +20,28 @@ export function OnboardingTopBar({
 
   return (
     <header
-      className={cn(
-        "flex h-16 w-full items-center justify-between border-b border-border bg-card px-8",
-        className
-      )}
+      className={cn("flex w-full justify-center bg-background py-5", className)}
     >
-      <Link
-        href="/"
-        className="flex items-center gap-2 text-foreground no-underline hover:opacity-90"
-      >
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent-brand">
-          <FileSearch className="h-4 w-4 text-primary-foreground" />
-        </div>
-        <BrandName className="text-lg font-bold" />
-      </Link>
-      {shouldShowSkip && (
-        <button
-          type="button"
-          onClick={onSkip}
-          className="cursor-pointer text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+      <div className="mx-auto flex w-full max-w-landing-content items-center justify-between">
+        <Link
+          href="/"
+          className="flex items-center gap-2 text-foreground no-underline hover:opacity-90"
         >
-          Pular
-        </button>
-      )}
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent-brand">
+            <FileSearch className="h-4 w-4 text-primary-foreground" />
+          </div>
+          <BrandName className="text-lg font-bold" />
+        </Link>
+        {shouldShowSkip && (
+          <button
+            type="button"
+            onClick={onSkip}
+            className="cursor-pointer text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+          >
+            Pular
+          </button>
+        )}
+      </div>
     </header>
   );
 }

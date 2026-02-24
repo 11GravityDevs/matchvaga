@@ -1,25 +1,26 @@
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 
 import { getQueryClient } from "@/lib/query/get-query-client";
-import { analysesQueryOptions } from "@/lib/query/query-options";
-import { createClient } from "@/lib/supabase/server";
+import {
+  analysesQueryOptions,
+  resumeQueryOptions,
+} from "@/lib/query/query-options";
 
 import { DashboardContent } from "./_components/dashboard-content";
 
 export default async function DashboardPage() {
   const queryClient = getQueryClient();
-  await queryClient.prefetchQuery(analysesQueryOptions);
+  await Promise.all([
+    queryClient.prefetchQuery(resumeQueryOptions),
+    queryClient.prefetchQuery(analysesQueryOptions),
+  ]);
+  const { data } = queryClient.getQueryData(resumeQueryOptions.queryKey) ?? {};
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  const userName =
-    user?.user_metadata?.full_name ?? user?.email?.split("@")[0] ?? "Usuário";
+  const name = data?.fullName.split(" ")[0] ?? "Usuário";
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <DashboardContent userName={userName} />
+      <DashboardContent userName={name} />
     </HydrationBoundary>
   );
 }

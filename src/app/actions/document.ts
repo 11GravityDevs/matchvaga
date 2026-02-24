@@ -15,6 +15,86 @@ import { translateAuthError } from "@/utils/auth";
 const BUCKET = "documents";
 const SIGNED_URL_EXPIRES_IN = 3600;
 
+export interface SynthesizeOptimizedResumeResult {
+  success: boolean;
+  data?: ResumeData;
+  error?: string;
+}
+
+export async function synthesizeOptimizedResumeForPreview(
+  analysisId: string,
+  selectedMissingSkills?: string[]
+): Promise<SynthesizeOptimizedResumeResult> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError) {
+    return { success: false, error: translateAuthError(authError) };
+  }
+
+  if (!user) {
+    return { success: false, error: "Faça login para continuar." };
+  }
+
+  const { data: analysisRow, error: analysisError } = await supabase
+    .from("analyses")
+    .select("id, resume_id, job_snapshot, matched_skills, missing_skills")
+    .eq("id", analysisId)
+    .eq("user_id", user.id)
+    .single();
+
+  if (analysisError || !analysisRow) {
+    return { success: false, error: "Análise não encontrada." };
+  }
+
+  const { data: resumeRow, error: resumeError } = await supabase
+    .from("resumes")
+    .select("parsed_data")
+    .eq("id", analysisRow.resume_id)
+    .eq("user_id", user.id)
+    .single();
+
+  if (resumeError || !resumeRow) {
+    return { success: false, error: "Currículo não encontrado." };
+  }
+
+  const resumeParsed = resumeDataSchema.safeParse(resumeRow.parsed_data);
+  if (!resumeParsed.success) {
+    return { success: false, error: "Dados do currículo inválidos." };
+  }
+
+  const resumeData = resumeParsed.data as ResumeData;
+  const jobSnapshot = analysisRow.job_snapshot as {
+    title: string;
+    company: string;
+    rawText: string;
+  };
+  const matchedSkills = (analysisRow.matched_skills ?? []) as string[];
+  const missingSkills =
+    selectedMissingSkills && selectedMissingSkills.length > 0
+      ? selectedMissingSkills
+      : ((analysisRow.missing_skills ?? []) as string[]);
+
+  const synthesis = await synthesizeOptimizedResume(
+    resumeData,
+    jobSnapshot,
+    matchedSkills,
+    missingSkills
+  );
+
+  if (!synthesis.success) {
+    return { success: false, error: synthesis.error };
+  }
+
+  return {
+    success: true,
+    data: synthesis.data,
+  };
+}
+
 export interface GenerateOptimizedDocumentResult {
   success: boolean;
   url?: string;

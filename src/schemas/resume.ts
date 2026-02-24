@@ -16,7 +16,13 @@ export const educationEntrySchema = z.object({
   level: z.string(),
   startDate: z.string(),
   completionDate: z.string(),
+  description: z.string().optional(),
   isCurrent: z.boolean().optional(),
+});
+
+export const skillCategorySchema = z.object({
+  category: z.string(),
+  items: z.array(z.string()),
 });
 
 export const resumeDataSchema = z.object({
@@ -28,6 +34,7 @@ export const resumeDataSchema = z.object({
   github: z.string(),
   summary: z.string(),
   skills: z.array(z.string()),
+  skillsByCategory: z.array(skillCategorySchema).optional(),
   experience: z.array(experienceEntrySchema),
   education: z.array(educationEntrySchema),
 });

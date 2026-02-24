@@ -1,3 +1,5 @@
+import { AnimateOnScroll } from "./animate-on-scroll";
+
 interface Step {
   number: string;
   title: string;
@@ -32,38 +34,39 @@ export function HowItWorksSection() {
       className="flex w-full flex-col items-center gap-14 bg-surface-subtle py-20"
     >
       {/* Section Header */}
-      <div className="flex max-w-section-header flex-col items-center gap-4">
-        <span className="rounded-full border border-border px-3.5 py-1.5 text-xs font-semibold tracking-widest text-accent-brand">
-          COMO FUNCIONA
-        </span>
-        <h2 className="text-center text-section-header-large">
-          Três passos para a vaga dos seus sonhos
-        </h2>
-        <p className="max-w-section-desc text-center text-base leading-normal text-muted-foreground">
-          De upload do currículo até candidatura otimizada em menos de 2
-          minutos.
-        </p>
-      </div>
+      <AnimateOnScroll>
+        <div className="flex max-w-section-header flex-col items-center gap-4">
+          <span className="rounded-full border border-border px-3.5 py-1.5 text-xs font-semibold tracking-widest text-accent-brand">
+            COMO FUNCIONA
+          </span>
+          <h2 className="text-center text-section-header-large">
+            Três passos para a vaga dos seus sonhos
+          </h2>
+          <p className="max-w-section-desc text-center text-base leading-normal text-muted-foreground">
+            De upload do currículo até candidatura otimizada em menos de 2
+            minutos.
+          </p>
+        </div>
+      </AnimateOnScroll>
 
       {/* Steps */}
       <div className="flex w-full gap-8">
-        {STEPS.map((step) => (
-          <div
-            key={step.number}
-            className="flex flex-1 flex-col gap-5 rounded-xl border border-border bg-card p-8"
-          >
-            <div className="flex size-11 items-center justify-center rounded-lg bg-accent-brand-light">
-              <span className="text-lg font-bold text-accent-brand">
-                {step.number}
-              </span>
+        {STEPS.map((step, i) => (
+          <AnimateOnScroll key={step.number} delay={i * 80}>
+            <div className="flex h-full flex-1 flex-col gap-5 rounded-xl border border-border bg-card p-8">
+              <div className="flex size-11 items-center justify-center rounded-lg bg-accent-brand-light">
+                <span className="text-lg font-bold text-accent-brand">
+                  {step.number}
+                </span>
+              </div>
+              <h3 className="text-xl font-semibold text-foreground">
+                {step.title}
+              </h3>
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                {step.description}
+              </p>
             </div>
-            <h3 className="text-xl font-semibold text-foreground">
-              {step.title}
-            </h3>
-            <p className="text-sm leading-relaxed text-muted-foreground">
-              {step.description}
-            </p>
-          </div>
+          </AnimateOnScroll>
         ))}
       </div>
     </section>

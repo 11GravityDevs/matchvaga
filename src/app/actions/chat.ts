@@ -1,19 +1,23 @@
 "use server";
 
-import OpenAI from "openai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 import { revalidatePath } from "next/cache";
 
+import { refinementResponseSchema } from "@/lib/ai/config/refinement-response-schema";
+import { REFINEMENT_SYSTEM_PROMPT } from "@/lib/ai/prompts/refinement";
+import { normalizeAIResumeData } from "@/lib/ai/utils/normalize-resume";
 import { createClient } from "@/lib/supabase/server";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
 import { translateAuthError } from "@/utils/auth";
 
-const MODEL = "gpt-4o-mini";
+const MODEL = "gemini-2.5-flash-lite";
 
-export interface SendChatMessageResult {
+export interface ApplyCvRefinementResult {
   success: boolean;
-  content?: string;
+  modifiedResume?: ResumeData;
+  summary?: string;
   error?: string;
 }
 
@@ -27,33 +31,46 @@ export interface ChatSuggestion {
   value: unknown;
 }
 
-function buildChatSystemPrompt(
-  resumeData: ResumeData,
+function buildRefinementUserPrompt(
+  currentResumeData: ResumeData,
+  instruction: string,
   job: { title: string; company: string; rawText: string },
   matchedSkills: string[],
-  missingSkills: string[]
+  missingSkills: string[],
+  chatHistory: { role: "user" | "assistant"; content: string }[]
 ): string {
-  return `You are an expert resume coach helping a candidate improve their resume for a specific job.
+  const historyBlock =
+    chatHistory.length > 0
+      ? `\n---\nHistórico da conversa:\n${chatHistory
+          .map(
+            (m) =>
+              `${m.role === "user" ? "Usuário" : "Assistente"}: ${m.content}`
+          )
+          .join("\n")}\n---\n`
+      : "";
 
-Job: ${job.title} at ${job.company}
+  return `Job: ${job.title} at ${job.company}
 Job description (excerpt): ${job.rawText.slice(0, 500)}...
+Matched skills: ${matchedSkills.join(", ") || "none"}
+Missing skills: ${missingSkills.join(", ") || "none"}
+${historyBlock}
+Currículo atual (JSON):
+${JSON.stringify(currentResumeData, null, 2)}
 
-Candidate's current resume summary: ${resumeData.summary}
-Skills: ${resumeData.skills.join(", ")}
-Matched skills (emphasize): ${matchedSkills.join(", ")}
-Missing skills (suggest adding): ${missingSkills.join(", ")}
+Instrução do usuário: ${instruction}
 
-Respond in Portuguese. Be concise and actionable. When suggesting edits, you can propose specific text changes (e.g. "Altere o resumo para: ..." or "Adicione a habilidade X").`;
+Apply the instruction and return { "modifiedResume": <full resume object>, "summary": "<brief summary in Portuguese>" }.`;
 }
 
-export async function sendChatMessage(
+export async function applyCvRefinementInstruction(
   analysisId: string,
-  message: string,
-  messages: { role: "user" | "assistant"; content: string }[]
-): Promise<SendChatMessageResult> {
-  const apiKey = process.env.OPENAI_API_KEY;
+  currentResumeData: ResumeData,
+  instruction: string,
+  chatHistory: { role: "user" | "assistant"; content: string }[]
+): Promise<ApplyCvRefinementResult> {
+  const apiKey = process.env.GOOGLE_AI_API_KEY;
   if (!apiKey) {
-    return { success: false, error: "OPENAI_API_KEY is not configured" };
+    return { success: false, error: "GOOGLE_AI_API_KEY is not configured" };
   }
 
   const supabase = await createClient();
@@ -71,7 +88,7 @@ export async function sendChatMessage(
 
   const { data: analysisRow, error: analysisError } = await supabase
     .from("analyses")
-    .select("resume_id, job_snapshot, matched_skills, missing_skills")
+    .select("job_snapshot, matched_skills, missing_skills")
     .eq("id", analysisId)
     .eq("user_id", user.id)
     .single();
@@ -80,23 +97,6 @@ export async function sendChatMessage(
     return { success: false, error: "Análise não encontrada." };
   }
 
-  const { data: resumeRow, error: resumeError } = await supabase
-    .from("resumes")
-    .select("parsed_data")
-    .eq("id", analysisRow.resume_id)
-    .eq("user_id", user.id)
-    .single();
-
-  if (resumeError || !resumeRow) {
-    return { success: false, error: "Currículo não encontrado." };
-  }
-
-  const resumeParsed = resumeDataSchema.safeParse(resumeRow.parsed_data);
-  if (!resumeParsed.success) {
-    return { success: false, error: "Dados do currículo inválidos." };
-  }
-
-  const resumeData = resumeParsed.data as ResumeData;
   const jobSnapshot = analysisRow.job_snapshot as {
     title: string;
     company: string;
@@ -105,45 +105,82 @@ export async function sendChatMessage(
   const matchedSkills = (analysisRow.matched_skills ?? []) as string[];
   const missingSkills = (analysisRow.missing_skills ?? []) as string[];
 
-  const systemPrompt = buildChatSystemPrompt(
-    resumeData,
+  const userPrompt = buildRefinementUserPrompt(
+    currentResumeData,
+    instruction,
     jobSnapshot,
     matchedSkills,
-    missingSkills
+    missingSkills,
+    chatHistory
   );
 
-  const client = new OpenAI({ apiKey });
-
-  const openaiMessages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [
-    { role: "system", content: systemPrompt },
-    ...messages.map((m) => ({
-      role: m.role as "user" | "assistant",
-      content: m.content,
-    })),
-    { role: "user", content: message },
-  ];
+  const fullPrompt = `${REFINEMENT_SYSTEM_PROMPT}\n\n---\n\n${userPrompt}`;
 
   try {
-    const completion = await client.chat.completions.create({
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({
       model: MODEL,
-      messages: openaiMessages,
+      generationConfig: {
+        responseMimeType: "application/json",
+        responseSchema: refinementResponseSchema,
+      },
     });
 
-    const content = completion.choices[0]?.message?.content;
+    const result = await model.generateContent([{ text: fullPrompt }]);
+    const response = result.response;
+    const content = response.text();
+
     if (!content) {
       return { success: false, error: "Resposta vazia do modelo." };
     }
 
-    return { success: true, content };
+    const parsed = JSON.parse(content.trim()) as {
+      modifiedResume?: unknown;
+      summary?: string;
+    };
+
+    if (!parsed.modifiedResume || typeof parsed.modifiedResume !== "object") {
+      return {
+        success: false,
+        error: "Resposta inválida: currículo modificado não encontrado.",
+      };
+    }
+
+    const normalized = normalizeAIResumeData(parsed.modifiedResume);
+    const validated = resumeDataSchema.safeParse(normalized);
+
+    if (!validated.success) {
+      return {
+        success: false,
+        error: "Não foi possível interpretar as alterações. Tente novamente.",
+      };
+    }
+
+    const summary =
+      typeof parsed.summary === "string" && parsed.summary.trim()
+        ? parsed.summary.trim()
+        : "Alterações aplicadas.";
+
+    return {
+      success: true,
+      modifiedResume: validated.data,
+      summary,
+    };
   } catch (error) {
+    if (error instanceof SyntaxError) {
+      return {
+        success: false,
+        error: "Não foi possível interpretar a resposta. Tente novamente.",
+      };
+    }
     console.error(
-      "[sendChatMessage] OpenAI error:",
+      "[applyCvRefinementInstruction] Gemini error:",
       error instanceof Error ? error.message : error
     );
     if (error instanceof Error) {
       return { success: false, error: error.message };
     }
-    return { success: false, error: "Erro ao processar mensagem." };
+    return { success: false, error: "Erro ao processar instrução." };
   }
 }
 

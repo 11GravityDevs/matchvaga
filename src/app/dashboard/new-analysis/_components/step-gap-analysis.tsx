@@ -1,8 +1,9 @@
 "use client";
 
-import { useCallback } from "react";
-import { ArrowLeft, Check, Lightbulb, Sparkles } from "lucide-react";
+import { useMutation } from "@tanstack/react-query";
+import { ArrowLeft, Check, Lightbulb, Loader2, Sparkles } from "lucide-react";
 
+import { synthesizeOptimizedResumeForPreview } from "@/app/actions/document";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/utils/style";
 import { getScoreFeedback } from "../_utils/analysis";
@@ -30,26 +31,66 @@ export function StepGapAnalysis() {
     toggleSkill,
     setStep,
     setSelectedMissingSkills,
+    setOptimizedResumeData,
+    analysisId,
   } = useNewAnalysis();
+
+  const {
+    mutate: generateDocument,
+    isPending: isGenerating,
+    error: generateError,
+  } = useMutation({
+    mutationFn: async () => {
+      if (!analysisId) throw new Error("Análise não encontrada.");
+      const selected = missingSkills
+        .filter((s) => s.selected)
+        .map((s) => s.label);
+      const result = await synthesizeOptimizedResumeForPreview(
+        analysisId,
+        selected.length > 0 ? selected : undefined
+      );
+
+      if (!result.success) {
+        throw new Error(
+          result.error ?? "Erro ao gerar currículo. Tente novamente."
+        );
+      }
+
+      return result;
+    },
+    onSuccess: (result) => {
+      const selected = missingSkills
+        .filter((s) => s.selected)
+        .map((s) => s.label);
+      setSelectedMissingSkills(selected);
+      if (result.data) {
+        setOptimizedResumeData(result.data);
+      }
+      setStep(3);
+    },
+  });
 
   const selectedCount = missingSkills.filter((s) => s.selected).length;
   const displayScore = score ?? 0;
   const feedback = getScoreFeedback(displayScore);
   const feedbackClasses = FEEDBACK_BADGE_CLASSES[feedback.variant];
 
-  const handleGenerate = useCallback(() => {
-    const selected = missingSkills
-      .filter((s) => s.selected)
-      .map((s) => s.label);
-    setSelectedMissingSkills(selected);
-    setStep(3);
-  }, [missingSkills, setSelectedMissingSkills, setStep]);
+  const generateErrorDisplay =
+    generateError instanceof Error
+      ? generateError.message
+      : generateError
+        ? String(generateError)
+        : null;
+
+  const handleGenerate = () => {
+    generateDocument();
+  };
 
   return (
     <div className="flex flex-1 flex-col gap-10 overflow-hidden page-padding">
       {/* Header strip */}
-      <div className="flex flex-1 flex-col section-gap">
-        <div className={`flex items-center justify-between`}>
+      <div className="flex min-h-0 flex-1 flex-col section-gap">
+        <div className="flex shrink-0 items-center justify-between">
           <div className="flex flex-col gap-1">
             <h1 className="text-page-title">Análise de Compatibilidade</h1>
             <p className="text-page-subtitle">{jobRole}</p>
@@ -60,9 +101,9 @@ export function StepGapAnalysis() {
         {/* Two-column body */}
         <div className="flex min-h-0 flex-1 column-gap overflow-hidden">
           {/* Left column — Skills selection */}
-          <div className="flex flex-1 flex-col overflow-hidden rounded-xl border border-border bg-card">
+          <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-border bg-card">
             {/* Card header */}
-            <div className="flex items-center justify-between border-b border-border card-header-padding">
+            <div className="flex shrink-0 items-center justify-between card-header-padding">
               <div className="flex flex-col gap-1.5">
                 <h2 className="text-section-header">Habilidades Ausentes</h2>
                 <p className="text-small-leading text-muted-foreground">
@@ -77,8 +118,8 @@ export function StepGapAnalysis() {
               </div>
             </div>
 
-            {/* Skills list */}
-            <div className="flex flex-col gap-2 overflow-auto card-content-padding">
+            {/* Skills list — flex-1 min-h-0 so it scrolls when many skills */}
+            <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-auto card-content-padding">
               {missingSkills.map((skill) => (
                 <button
                   key={skill.id}
@@ -110,7 +151,7 @@ export function StepGapAnalysis() {
             </div>
 
             {/* Tip */}
-            <div className="self-start px-7 pt-0 pb-7">
+            <div className="shrink-0 self-start px-7 pt-4 pb-7">
               <div className="flex items-start gap-2 rounded-lg border border-accent-success-border bg-accent-success-light tip-banner-padding">
                 <Lightbulb className="mt-0.5 h-4 w-4 shrink-0 text-accent-success" />
                 <p className="text-small-leading text-accent-success-text">
@@ -122,9 +163,9 @@ export function StepGapAnalysis() {
             </div>
           </div>
 
-          {/* Right column — Score */}
-          <div className="flex w-column shrink-0 flex-col overflow-hidden rounded-xl border border-border bg-card">
-            <div className="flex flex-1 flex-col items-center gap-4 overflow-auto card-content-padding">
+          {/* Right column — Score + actions (fixed, non-scrolling) */}
+          <div className="flex w-column shrink-0 flex-col self-stretch overflow-hidden rounded-xl border border-border bg-card">
+            <div className="flex flex-1 flex-col items-center gap-4 card-content-padding">
               <h2 className="w-full text-section-header tracking-[-0.3px]">
                 Score de Compatibilidade
               </h2>
@@ -187,32 +228,47 @@ export function StepGapAnalysis() {
                 </div>
               </div>
             </div>
+
+            {/* Action buttons — shared with score column */}
+            <div className="flex shrink-0 items-center justify-between card-content-padding py-4">
+              <Button
+                type="button"
+                size="lg"
+                variant="outline"
+                onClick={() => setStep(1)}
+                className="gap-1.5"
+                disabled={isGenerating}
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Voltar
+              </Button>
+
+              <Button
+                size="brand"
+                onClick={handleGenerate}
+                disabled={!analysisId || isGenerating}
+                className="gap-1.5 rounded-lg bg-accent-brand px-7 py-3 text-base font-bold hover:bg-accent-brand-hover"
+              >
+                {isGenerating ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Sparkles className="h-4 w-4" />
+                )}
+                Gerar Currículo Otimizado
+              </Button>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Footer action row */}
-      <div className={`flex items-center justify-between border-border`}>
-        <Button
-          type="button"
-          size="lg"
-          variant="outline"
-          onClick={() => setStep(1)}
-          className="gap-1.5"
+      {generateErrorDisplay && (
+        <div
+          role="alert"
+          className="rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive"
         >
-          <ArrowLeft className="h-4 w-4" />
-          Voltar
-        </Button>
-
-        <Button
-          size="brand"
-          onClick={handleGenerate}
-          className="gap-1.5 rounded-lg bg-accent-brand px-7 py-3 text-base font-bold hover:bg-accent-brand-hover"
-        >
-          <Sparkles className="h-4 w-4" />
-          Gerar Currículo Otimizado
-        </Button>
-      </div>
+          {generateErrorDisplay}
+        </div>
+      )}
     </div>
   );
 }

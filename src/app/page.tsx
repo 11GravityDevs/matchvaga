@@ -24,7 +24,7 @@ export default function Page() {
   return (
     <main className="flex min-h-screen flex-col bg-background">
       <LandingHeader />
-      <div className="mx-auto w-full max-w-landing-content">
+      <div className="mx-auto w-full max-w-landing-content pt-20">
         <HeroSection />
         <HowItWorksSection />
         <CoreFeaturesSection />

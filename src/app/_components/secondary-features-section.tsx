@@ -7,6 +7,8 @@ import {
   Timer,
 } from "lucide-react";
 
+import { AnimateOnScroll } from "./animate-on-scroll";
+
 interface SecondaryFeature {
   icon: React.ReactNode;
   iconBg: string;
@@ -89,27 +91,33 @@ export function SecondaryFeaturesSection() {
   return (
     <section className="flex w-full flex-col items-center gap-12 bg-surface-subtle py-20">
       {/* Section Header */}
-      <div className="flex max-w-section-header flex-col items-center gap-4">
-        <span className="rounded-full border border-border px-3.5 py-1.5 text-xs font-semibold tracking-widest text-accent-brand">
-          RECURSOS EXTRAS
-        </span>
-        <h2 className="text-center text-section-header-large">
-          E muito mais para acelerar sua busca
-        </h2>
-        <p className="text-center text-base leading-normal text-muted-foreground">
-          Cada detalhe pensado para maximizar suas chances de conseguir a vaga.
-        </p>
-      </div>
+      <AnimateOnScroll>
+        <div className="flex max-w-section-header flex-col items-center gap-4">
+          <span className="rounded-full border border-border px-3.5 py-1.5 text-xs font-semibold tracking-widest text-accent-brand">
+            RECURSOS EXTRAS
+          </span>
+          <h2 className="text-center text-section-header-large">
+            E muito mais para acelerar sua busca
+          </h2>
+          <p className="text-center text-base leading-normal text-muted-foreground">
+            Cada detalhe pensado para maximizar suas chances de conseguir a
+            vaga.
+          </p>
+        </div>
+      </AnimateOnScroll>
 
       {/* Feature Grid - 3 columns, 2 rows, equal card heights */}
       <div className="grid w-full auto-rows-fr grid-cols-3 gap-6">
         {[0, 1].flatMap((rowIndex) =>
           [FEATURES_COL_1, FEATURES_COL_2, FEATURES_COL_3].map(
             (col, colIndex) => (
-              <FeatureCard
+              <AnimateOnScroll
                 key={`${colIndex}-${rowIndex}`}
-                feature={col[rowIndex]!}
-              />
+                delay={(rowIndex * 3 + colIndex) * 60}
+                className="h-full"
+              >
+                <FeatureCard feature={col[rowIndex]!} />
+              </AnimateOnScroll>
             )
           )
         )}

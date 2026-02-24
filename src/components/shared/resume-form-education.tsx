@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { FormField } from "@/components/shared/form-field";
+import { Textarea } from "@/components/ui/textarea";
 import { DatePickerField } from "@/components/shared/date-picker-field";
 import type { EducationEntry } from "@/types/resume";
 import { INPUT_CLASS } from "@/components/shared/resume-form-card";
@@ -185,6 +186,25 @@ export function ResumeFormEducation({
                 </span>
               </label>
             )}
+            <FormField
+              label="Detalhes"
+              htmlFor={`edu-desc-${eduIndex}`}
+              labelClassName="text-sub-label"
+            >
+              <Textarea
+                id={`edu-desc-${eduIndex}`}
+                value={edu.description ?? ""}
+                onChange={(e) =>
+                  updateEducation(eduIndex, {
+                    description: e.target.value,
+                  })
+                }
+                disabled={isSaving}
+                placeholder="Uma conquista por linha"
+                variant="form"
+                className="h-32 w-full resize-none"
+              />
+            </FormField>
           </div>
           {education.length > 1 && (
             <div className="flex justify-end">

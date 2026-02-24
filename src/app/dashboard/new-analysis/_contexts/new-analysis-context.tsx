@@ -29,6 +29,7 @@ interface NewAnalysisContextValue {
   step: WizardStep;
   resumeId: string | null;
   resumeData: ResumeData | null;
+  optimizedResumeData: ResumeData | null;
   isLoadingResume: boolean;
   jobDescription: string;
   jobRole: string;
@@ -46,6 +47,7 @@ interface NewAnalysisContextValue {
     matchedSkills: string[];
     missingSkills: string[];
   }) => void;
+  setOptimizedResumeData: (data: ResumeData | null) => void;
   toggleSkill: (id: string) => void;
   setSelectedMissingSkills: (skills: string[]) => void;
   refreshResume: () => Promise<void>;
@@ -73,6 +75,7 @@ const INITIAL_STATE = {
   step: 1 as WizardStep,
   resumeId: null as string | null,
   resumeData: null as ResumeData | null,
+  optimizedResumeData: null as ResumeData | null,
   jobDescription: "",
   jobRole: "",
   analysisId: null as string | null,
@@ -112,6 +115,8 @@ export function NewAnalysisProvider({ children }: { children: ReactNode }) {
   const [selectedMissingSkills, setSelectedMissingSkills] = useState<string[]>(
     INITIAL_STATE.selectedMissingSkills
   );
+  const [optimizedResumeData, setOptimizedResumeData] =
+    useState<ResumeData | null>(INITIAL_STATE.optimizedResumeData);
 
   const setAnalysisResult = useCallback(
     (result: {
@@ -149,6 +154,7 @@ export function NewAnalysisProvider({ children }: { children: ReactNode }) {
     setMatchedSkills(INITIAL_STATE.matchedSkills);
     setMissingSkills(INITIAL_STATE.missingSkills);
     setSelectedMissingSkills(INITIAL_STATE.selectedMissingSkills);
+    setOptimizedResumeData(INITIAL_STATE.optimizedResumeData);
   }
 
   return (
@@ -157,6 +163,7 @@ export function NewAnalysisProvider({ children }: { children: ReactNode }) {
         step,
         resumeId,
         resumeData,
+        optimizedResumeData,
         isLoadingResume,
         jobDescription,
         jobRole,
@@ -169,6 +176,7 @@ export function NewAnalysisProvider({ children }: { children: ReactNode }) {
         setJobDescription,
         setJobRole,
         setAnalysisResult,
+        setOptimizedResumeData,
         toggleSkill,
         setSelectedMissingSkills,
         refreshResume,

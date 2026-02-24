@@ -5,6 +5,7 @@ import OpenAI from "openai";
 import { gapAnalysisResponseSchema } from "@/lib/ai/config/gap-analysis-schema";
 import { GAP_ANALYSIS_SYSTEM_PROMPT } from "@/lib/ai/prompts/gap-analysis";
 import type { ResumeData } from "@/types/resume";
+import { getFlattenedSkills } from "@/utils/resume";
 
 const MODEL = "gpt-4o-mini";
 
@@ -30,10 +31,11 @@ function buildUserPrompt(
   resumeData: ResumeData,
   jobDescription: string
 ): string {
+  const skills = getFlattenedSkills(resumeData);
   const resumeSummary = [
     `Candidate: ${resumeData.fullName}`,
     `Summary: ${resumeData.summary}`,
-    `Skills: ${resumeData.skills.join(", ")}`,
+    `Skills: ${skills.join(", ")}`,
     `Experience: ${resumeData.experience.map((e) => `${e.jobTitle} at ${e.company}: ${e.description}`).join(" | ")}`,
     `Education: ${resumeData.education.map((e) => `${e.course} at ${e.institution}`).join(" | ")}`,
   ].join("\n");

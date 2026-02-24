@@ -2,11 +2,12 @@
 
 import Anthropic from "@anthropic-ai/sdk";
 
+import { normalizeAIResumeData } from "@/lib/ai/utils/normalize-resume";
 import { SYNTHESIS_SYSTEM_PROMPT } from "@/lib/ai/prompts/synthesis";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
 
-const MODEL = "claude-3-5-sonnet-20241022";
+const MODEL = "claude-haiku-4-5-20251001";
 
 export interface SynthesisResult {
   success: true;
@@ -39,7 +40,7 @@ Missing skills (weave in where truthful): ${missingSkills.join(", ") || "none"}
 Current resume (JSON):
 ${JSON.stringify(resumeData, null, 2)}
 
-Return the optimized resume as JSON with the same structure. Output only valid JSON.`;
+Return the optimized resume as JSON. Include skillsByCategory (array of { category, items }), skills (flat array), and all other fields. Experience and education descriptions: one bullet per line. Output only valid JSON.`;
 }
 
 export async function synthesizeOptimizedResume(
@@ -58,7 +59,7 @@ export async function synthesizeOptimizedResume(
   try {
     const message = await client.messages.create({
       model: MODEL,
-      max_tokens: 4096,
+      max_tokens: 8192,
       system: SYNTHESIS_SYSTEM_PROMPT,
       messages: [
         {
@@ -85,7 +86,8 @@ export async function synthesizeOptimizedResume(
     const jsonMatch = trimmed.match(/\{[\s\S]*\}/);
     const jsonStr = jsonMatch ? jsonMatch[0] : trimmed;
     const parsed = JSON.parse(jsonStr) as unknown;
-    const validated = resumeDataSchema.parse(parsed);
+    const normalized = normalizeAIResumeData(parsed);
+    const validated = resumeDataSchema.parse(normalized);
 
     return { success: true, data: validated };
   } catch (error) {

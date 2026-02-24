@@ -1,5 +1,9 @@
 import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
 import type { ResumeData } from "@/types/resume";
+import {
+  getSkillsByCategoryForDisplay,
+  formatResumeDateBr,
+} from "@/utils/resume";
 
 const styles = StyleSheet.create({
   page: {
@@ -29,24 +33,22 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "bold",
     marginBottom: 6,
-    textTransform: "uppercase",
-    letterSpacing: 1,
   },
   summary: {
     lineHeight: 1.5,
     color: "#333",
   },
-  skills: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-  },
-  skill: {
-    backgroundColor: "#eee",
-    padding: "4 8",
-    borderRadius: 4,
-    fontSize: 9,
-    marginRight: 6,
+  skillCategory: {
     marginBottom: 4,
+  },
+  skillCategoryLabel: {
+    fontWeight: "bold",
+    fontSize: 10,
+  },
+  skillCategoryItems: {
+    fontSize: 10,
+    color: "#333",
+    marginLeft: 8,
   },
   experienceItem: {
     marginBottom: 10,
@@ -60,7 +62,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 11,
   },
-  company: {
+  jobMeta: {
     fontSize: 10,
     color: "#555",
   },
@@ -68,10 +70,15 @@ const styles = StyleSheet.create({
     fontSize: 9,
     color: "#666",
   },
-  description: {
+  bulletList: {
+    marginLeft: 12,
+    marginTop: 4,
+  },
+  bulletItem: {
     fontSize: 10,
     lineHeight: 1.4,
     color: "#333",
+    marginBottom: 2,
   },
   educationItem: {
     marginBottom: 8,
@@ -91,98 +98,140 @@ const styles = StyleSheet.create({
   },
 });
 
+function buildContactLine(data: ResumeData): string {
+  const parts: string[] = [];
+  if (data.location) parts.push(data.location);
+  if (data.phone) parts.push(data.phone);
+  if (data.linkedin) parts.push(data.linkedin);
+  if (data.github) parts.push(data.github);
+  if (data.email) parts.push(data.email);
+  return parts.join(" | ");
+}
+
 interface ResumeDocumentProps {
   data: ResumeData;
 }
 
 export function ResumeDocument({ data }: ResumeDocumentProps) {
+  const skillsForDisplay = getSkillsByCategoryForDisplay(data);
+
   return (
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
           <Text style={styles.name}>{data.fullName}</Text>
-          <View style={styles.contact}>
-            <Text>{data.email}</Text>
-            <Text> • </Text>
-            <Text>{data.phone}</Text>
-            <Text> • </Text>
-            <Text>{data.location}</Text>
-            {data.linkedin ? (
-              <>
-                <Text> • </Text>
-                <Text>{data.linkedin}</Text>
-              </>
-            ) : null}
-            {data.github ? (
-              <>
-                <Text> • </Text>
-                <Text>{data.github}</Text>
-              </>
-            ) : null}
-          </View>
+          <Text style={styles.contact}>{buildContactLine(data)}</Text>
         </View>
 
         {data.summary ? (
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Resumo</Text>
+            <Text style={styles.sectionTitle}>Resumo Profissional</Text>
             <Text style={styles.summary}>{data.summary}</Text>
           </View>
         ) : null}
 
-        {data.skills.length > 0 ? (
+        {skillsForDisplay.length > 0 ? (
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Habilidades</Text>
-            <View style={styles.skills}>
-              {data.skills.map((skill, i) => (
-                <Text key={i} style={styles.skill}>
-                  {skill}
+            <Text style={styles.sectionTitle}>Habilidades Técnicas</Text>
+            {skillsForDisplay.map((cat, i) => (
+              <View key={i} style={styles.skillCategory}>
+                <Text style={styles.skillCategoryLabel}>
+                  • {cat.category}: {cat.items.join(", ")}
                 </Text>
-              ))}
-            </View>
+              </View>
+            ))}
           </View>
         ) : null}
 
         {data.experience.length > 0 ? (
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Experiência</Text>
-            {data.experience.map((exp, i) => (
-              <View key={i} style={styles.experienceItem}>
-                <View style={styles.jobHeader}>
-                  <View>
-                    <Text style={styles.jobTitle}>{exp.jobTitle}</Text>
-                    <Text style={styles.company}>
-                      {exp.company}
-                      {exp.location ? ` • ${exp.location}` : ""}
-                    </Text>
+            <Text style={styles.sectionTitle}>Experiência Profissional</Text>
+            {data.experience.map((exp, i) => {
+              const dateEnd =
+                exp.isCurrent || !exp.endDate
+                  ? "Presente"
+                  : formatResumeDateBr(exp.endDate);
+              const jobLineParts: string[] = [];
+              if (exp.jobTitle) jobLineParts.push(exp.jobTitle);
+              if (exp.company) jobLineParts.push(exp.company);
+              if (exp.location) jobLineParts.push(exp.location);
+              jobLineParts.push(
+                `${formatResumeDateBr(exp.startDate)} – ${dateEnd}`
+              );
+              const bullets = exp.description
+                .split("\n")
+                .map((s) => s.trim())
+                .filter(Boolean);
+
+              return (
+                <View key={i} style={styles.experienceItem}>
+                  <View style={styles.jobHeader}>
+                    <View>
+                      <Text style={styles.jobTitle}>{exp.jobTitle}</Text>
+                      <Text style={styles.jobMeta}>
+                        {jobLineParts.join(" | ")}
+                      </Text>
+                    </View>
                   </View>
-                  <Text style={styles.dates}>
-                    {exp.startDate} – {exp.endDate}
-                  </Text>
+                  {bullets.length > 0 && (
+                    <View style={styles.bulletList}>
+                      {bullets.map((bullet, j) => (
+                        <Text key={j} style={styles.bulletItem}>
+                          • {bullet}
+                        </Text>
+                      ))}
+                    </View>
+                  )}
                 </View>
-                <Text style={styles.description}>{exp.description}</Text>
-              </View>
-            ))}
+              );
+            })}
           </View>
         ) : null}
 
         {data.education.length > 0 ? (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Formação</Text>
-            {data.education.map((edu, i) => (
-              <View key={i} style={styles.educationItem}>
-                <View style={styles.eduHeader}>
-                  <View>
-                    <Text style={styles.course}>{edu.course}</Text>
-                    <Text style={styles.institution}>
-                      {edu.institution} • {edu.level}
-                    </Text>
+            {data.education.map((edu, i) => {
+              const dateEnd =
+                edu.isCurrent || !edu.completionDate
+                  ? "Presente"
+                  : formatResumeDateBr(edu.completionDate);
+              const eduLineParts: string[] = [];
+              if (edu.course) eduLineParts.push(edu.course);
+              if (edu.institution) eduLineParts.push(edu.institution);
+              if (edu.level) eduLineParts.push(edu.level);
+              eduLineParts.push(
+                `${formatResumeDateBr(edu.startDate)} – ${dateEnd}`
+              );
+              const bullets = edu.description
+                ? edu.description
+                    .split("\n")
+                    .map((s) => s.trim())
+                    .filter(Boolean)
+                : [];
+
+              return (
+                <View key={i} style={styles.educationItem}>
+                  <View style={styles.eduHeader}>
+                    <View>
+                      <Text style={styles.course}>{edu.course}</Text>
+                      <Text style={styles.institution}>
+                        {eduLineParts.join(" | ")}
+                      </Text>
+                    </View>
                   </View>
-                  <Text style={styles.dates}>
-                    {edu.startDate} – {edu.completionDate}
-                  </Text>
+                  {bullets.length > 0 && (
+                    <View style={styles.bulletList}>
+                      {bullets.map((bullet, j) => (
+                        <Text key={j} style={styles.bulletItem}>
+                          • {bullet}
+                        </Text>
+                      ))}
+                    </View>
+                  )}
                 </View>
-              </View>
-            ))}
+              );
+            })}
           </View>
         ) : null}
       </Page>

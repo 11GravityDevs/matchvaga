@@ -59,6 +59,8 @@ export function LoginFormCard({
           Ao continuar, você concorda com nossos{" "}
           <Link
             href="/termos-de-servico"
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-accent-brand hover:text-accent-brand-hover"
           >
             Termos de Serviço
@@ -66,6 +68,8 @@ export function LoginFormCard({
           e{" "}
           <Link
             href="/politica-de-privacidade"
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-accent-brand hover:text-accent-brand-hover"
           >
             Política de Privacidade

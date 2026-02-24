@@ -1,5 +1,7 @@
 import { Star } from "lucide-react";
 
+import { AnimateOnScroll } from "./animate-on-scroll";
+
 interface Testimonial {
   quote: string;
   name: string;
@@ -53,46 +55,47 @@ export function SocialProofSection() {
   return (
     <section className="flex w-full flex-col items-center gap-14 bg-background py-20">
       {/* Section Header */}
-      <div className="flex max-w-section-header flex-col items-center gap-4">
-        <span className="rounded-full border border-border px-3.5 py-1.5 text-xs font-semibold tracking-widest text-accent-brand">
-          DEPOIMENTOS
-        </span>
-        <h2 className="text-center text-section-header-large">
-          O que nossos usuários dizem
-        </h2>
-        <p className="max-w-section-desc text-center text-base leading-normal text-muted-foreground">
-          Junte-se a milhares de candidatos que já transformaram sua busca por
-          emprego.
-        </p>
-      </div>
+      <AnimateOnScroll>
+        <div className="flex max-w-section-header flex-col items-center gap-4">
+          <span className="rounded-full border border-border px-3.5 py-1.5 text-xs font-semibold tracking-widest text-accent-brand">
+            DEPOIMENTOS
+          </span>
+          <h2 className="text-center text-section-header-large">
+            O que nossos usuários dizem
+          </h2>
+          <p className="max-w-section-desc text-center text-base leading-normal text-muted-foreground">
+            Junte-se a milhares de candidatos que já transformaram sua busca por
+            emprego.
+          </p>
+        </div>
+      </AnimateOnScroll>
 
       {/* Testimonials */}
       <div className="flex w-full gap-6">
-        {TESTIMONIALS.map((t) => (
-          <div
-            key={t.name}
-            className="flex flex-1 flex-col gap-5 rounded-xl border border-border bg-card p-7"
-          >
-            <Stars />
-            <p className="text-body-15 text-foreground">{t.quote}</p>
-            <div className="flex items-center gap-3">
-              <div
-                className={`flex size-10 items-center justify-center rounded-full ${t.avatarColor}`}
-              >
-                <span className="text-sm font-semibold text-primary-foreground">
-                  {t.initials}
-                </span>
-              </div>
-              <div className="flex flex-col gap-0.5">
-                <span className="text-sm font-semibold text-foreground">
-                  {t.name}
-                </span>
-                <span className="text-small text-muted-foreground">
-                  {t.role}
-                </span>
+        {TESTIMONIALS.map((t, i) => (
+          <AnimateOnScroll key={t.name} delay={i * 80} className="flex-1">
+            <div className="flex h-full flex-col gap-5 rounded-xl border border-border bg-card p-7">
+              <Stars />
+              <p className="text-body-15 text-foreground">{t.quote}</p>
+              <div className="flex items-center gap-3">
+                <div
+                  className={`flex size-10 items-center justify-center rounded-full ${t.avatarColor}`}
+                >
+                  <span className="text-sm font-semibold text-primary-foreground">
+                    {t.initials}
+                  </span>
+                </div>
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-sm font-semibold text-foreground">
+                    {t.name}
+                  </span>
+                  <span className="text-small text-muted-foreground">
+                    {t.role}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
+          </AnimateOnScroll>
         ))}
       </div>
     </section>

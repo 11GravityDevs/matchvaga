@@ -14,7 +14,13 @@ export interface EducationEntry {
   level: string;
   startDate: string;
   completionDate: string;
+  description?: string;
   isCurrent?: boolean;
+}
+
+export interface SkillCategory {
+  category: string;
+  items: string[];
 }
 
 export interface ResumeData {
@@ -26,6 +32,7 @@ export interface ResumeData {
   github: string;
   summary: string;
   skills: string[];
+  skillsByCategory?: SkillCategory[];
   experience: ExperienceEntry[];
   education: EducationEntry[];
 }
