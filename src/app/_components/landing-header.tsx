@@ -21,14 +21,14 @@ export function LandingHeader() {
 
   return (
     <header
-      className={`animate-fade-up fixed inset-x-0 top-0 z-50 flex w-full justify-center border-b py-5 transition-colors duration-300 ease-in-out ${isScrolled ? "border-border bg-white" : "border-transparent bg-background"}`}
+      className={`animate-fade-up relative inset-x-0 top-0 z-50 flex w-full justify-center border-b py-5 transition-colors duration-300 ease-in-out md:fixed ${isScrolled ? "border-border bg-white" : "border-transparent bg-background"}`}
     >
-      <div className="mx-auto flex w-full max-w-landing-content items-center justify-between">
+      <div className="mx-4 flex w-full max-w-landing-content items-center justify-between md:mx-auto">
         <Logo textClassName="text-xl" />
 
-        <LandingNav />
+        <LandingNav className="hidden md:flex" />
 
-        <div className="flex items-center gap-3">
+        <div className="hidden items-center gap-3 md:flex">
           <Button variant="brand" className="gap-2" size="lg" asChild>
             <AuthAwareLink
               loggedOutLabel="Começar Grátis"

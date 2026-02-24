@@ -30,9 +30,9 @@ export function PricingSection() {
   return (
     <section
       id="precos"
-      className="flex w-full flex-col items-center gap-12 bg-surface-subtle py-20"
+      className="flex w-full flex-col items-center gap-8 bg-surface-subtle py-12 md:gap-12 md:py-20"
     >
-      <div className="mx-auto flex w-4/6 max-w-landing-content flex-col items-center gap-12">
+      <div className="mx-auto flex w-full max-w-landing-content flex-col items-center gap-8 px-4 md:w-4/6 md:gap-12 md:px-0">
         {/* Section Header */}
         <AnimateOnScroll>
           <div className="flex max-w-section-header flex-col items-center gap-4">
@@ -49,13 +49,13 @@ export function PricingSection() {
         </AnimateOnScroll>
 
         {/* Pricing Cards */}
-        <div className="flex w-full gap-6">
+        <div className="flex w-full flex-col gap-4 md:flex-row md:gap-6">
           {/* Free Plan */}
           <AnimateOnScroll
             delay={0}
             className="flex min-w-0 flex-1 items-start"
           >
-            <div className="flex w-full flex-col gap-6 rounded-xl border border-border bg-card p-8">
+            <div className="flex w-full flex-col gap-6 rounded-xl border border-border bg-card p-5 md:p-8">
               <div className="flex flex-col gap-2">
                 <h3 className="text-lg font-semibold text-foreground">
                   Grátis
@@ -94,7 +94,7 @@ export function PricingSection() {
 
           {/* Pro Plan */}
           <AnimateOnScroll delay={80} className="flex min-w-0 flex-1 flex-col">
-            <div className="flex flex-1 flex-col gap-6 rounded-xl border-2 border-accent-brand bg-card p-8">
+            <div className="flex flex-1 flex-col gap-6 rounded-xl border-2 border-accent-brand bg-card p-5 md:p-8">
               <span className="w-fit rounded-full bg-accent-brand px-3 py-1 text-badge tracking-wide text-on-accent-brand">
                 MAIS POPULAR
               </span>

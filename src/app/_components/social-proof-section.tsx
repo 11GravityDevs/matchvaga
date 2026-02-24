@@ -53,10 +53,10 @@ function Stars() {
 
 export function SocialProofSection() {
   return (
-    <section className="flex w-full flex-col items-center gap-14 bg-background py-20">
+    <section className="flex w-full flex-col items-center gap-10 bg-background py-12 md:gap-14 md:py-20">
       {/* Section Header */}
       <AnimateOnScroll>
-        <div className="flex max-w-section-header flex-col items-center gap-4">
+        <div className="flex max-w-section-header flex-col items-center gap-4 px-4 md:px-0">
           <span className="rounded-full border border-border px-3.5 py-1.5 text-xs font-semibold tracking-widest text-accent-brand">
             DEPOIMENTOS
           </span>
@@ -71,10 +71,10 @@ export function SocialProofSection() {
       </AnimateOnScroll>
 
       {/* Testimonials */}
-      <div className="flex w-full gap-6">
+      <div className="flex w-full flex-col gap-4 md:flex-row md:gap-6">
         {TESTIMONIALS.map((t, i) => (
           <AnimateOnScroll key={t.name} delay={i * 80} className="flex-1">
-            <div className="flex h-full flex-col gap-5 rounded-xl border border-border bg-card p-7">
+            <div className="flex h-full flex-col gap-5 rounded-xl border border-border bg-card p-5 md:p-7">
               <Stars />
               <p className="text-body-15 text-foreground">{t.quote}</p>
               <div className="flex items-center gap-3">

@@ -14,11 +14,11 @@ export function FAQSection() {
   return (
     <section
       id="faq"
-      className="flex w-full flex-col items-center gap-12 bg-background py-20"
+      className="flex w-full flex-col items-center gap-8 bg-background py-12 md:gap-12 md:py-20"
     >
       {/* Section Header */}
       <AnimateOnScroll>
-        <div className="flex max-w-section-header flex-col items-center gap-4">
+        <div className="flex max-w-section-header flex-col items-center gap-4 px-4 md:px-0">
           <span className="rounded-full border border-border px-3.5 py-1.5 text-xs font-semibold tracking-widest text-accent-brand">
             FAQ
           </span>
@@ -30,7 +30,7 @@ export function FAQSection() {
 
       {/* FAQ List */}
       <AnimateOnScroll delay={60}>
-        <div className="flex w-full max-w-faq flex-col">
+        <div className="flex w-full max-w-faq flex-col px-4 md:px-0">
           {FAQ_ITEMS.map((item, i) => {
             const isOpen = openIndex === i;
             const isLast = i === FAQ_ITEMS.length - 1;

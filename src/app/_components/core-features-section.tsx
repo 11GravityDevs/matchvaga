@@ -1,5 +1,7 @@
 import { ChartBar, FileText, Mail } from "lucide-react";
 
+import { cn } from "@/utils/style";
+
 import { AnimateOnScroll } from "./animate-on-scroll";
 
 interface Feature {
@@ -45,7 +47,7 @@ const FEATURES: Feature[] = [
 
 function ScreenshotPlaceholder() {
   return (
-    <div className="flex min-h-80 flex-1 items-center justify-center rounded-xl border border-border bg-surface-subtle">
+    <div className="flex min-h-48 flex-1 items-center justify-center rounded-xl border border-border bg-surface-subtle md:min-h-80">
       <span className="text-sm font-medium text-muted-foreground">
         Screenshot placeholder
       </span>
@@ -57,11 +59,11 @@ export function CoreFeaturesSection() {
   return (
     <section
       id="recursos"
-      className="flex w-full flex-col items-center gap-16 bg-background py-20"
+      className="flex w-full flex-col items-center gap-10 bg-background py-12 md:gap-16 md:py-20"
     >
       {/* Section Header */}
       <AnimateOnScroll>
-        <div className="flex max-w-section-header flex-col items-center gap-4">
+        <div className="flex max-w-section-header flex-col items-center gap-4 px-4 md:px-0">
           <span className="rounded-full border border-border px-3.5 py-1.5 text-xs font-semibold tracking-widest text-accent-brand">
             RECURSOS
           </span>
@@ -96,7 +98,12 @@ export function CoreFeaturesSection() {
 
         return (
           <AnimateOnScroll key={feature.tagText} delay={i * 100}>
-            <div className="flex w-full items-center gap-12">
+            <div
+              className={cn(
+                "flex w-full flex-col items-center gap-6 md:flex-row md:gap-12",
+                feature.reversed && "max-md:flex-col-reverse"
+              )}
+            >
               {feature.reversed ? (
                 <>
                   <ScreenshotPlaceholder />

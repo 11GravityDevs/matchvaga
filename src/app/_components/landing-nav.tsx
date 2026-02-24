@@ -1,5 +1,7 @@
 "use client";
 
+import { cn } from "@/utils/style";
+
 const NAV_LINKS = [
   { label: "Como Funciona", href: "#como-funciona" },
   { label: "Recursos", href: "#recursos" },
@@ -12,9 +14,13 @@ function scrollToSection(sectionId: string) {
   element?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-export function LandingNav() {
+interface LandingNavProps {
+  className?: string;
+}
+
+export function LandingNav({ className }: LandingNavProps) {
   return (
-    <nav className="flex items-center gap-8">
+    <nav className={cn("flex items-center gap-8", className)}>
       {NAV_LINKS.map((link) => {
         const sectionId = link.href.replace("#", "");
         return (

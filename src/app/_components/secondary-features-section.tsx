@@ -73,7 +73,7 @@ const FEATURES_COL_3: SecondaryFeature[] = [
 
 function FeatureCard({ feature }: FeatureCardProps) {
   return (
-    <div className="flex h-full flex-col gap-4 rounded-xl border border-border bg-card p-7">
+    <div className="flex h-full flex-col gap-4 rounded-xl border border-border bg-card p-5 md:p-7">
       <div
         className={`flex size-11 items-center justify-center rounded-lg ${feature.iconBg}`}
       >
@@ -89,10 +89,10 @@ function FeatureCard({ feature }: FeatureCardProps) {
 
 export function SecondaryFeaturesSection() {
   return (
-    <section className="flex w-full flex-col items-center gap-12 bg-surface-subtle py-20">
+    <section className="flex w-full flex-col items-center gap-8 bg-surface-subtle py-12 md:gap-12 md:py-20">
       {/* Section Header */}
       <AnimateOnScroll>
-        <div className="flex max-w-section-header flex-col items-center gap-4">
+        <div className="flex max-w-section-header flex-col items-center gap-4 px-4 md:px-0">
           <span className="rounded-full border border-border px-3.5 py-1.5 text-xs font-semibold tracking-widest text-accent-brand">
             RECURSOS EXTRAS
           </span>
@@ -107,7 +107,7 @@ export function SecondaryFeaturesSection() {
       </AnimateOnScroll>
 
       {/* Feature Grid - 3 columns, 2 rows, equal card heights */}
-      <div className="grid w-full auto-rows-fr grid-cols-3 gap-6">
+      <div className="grid w-full auto-rows-fr grid-cols-1 gap-4 md:grid-cols-3 md:gap-6">
         {[0, 1].flatMap((rowIndex) =>
           [FEATURES_COL_1, FEATURES_COL_2, FEATURES_COL_3].map(
             (col, colIndex) => (

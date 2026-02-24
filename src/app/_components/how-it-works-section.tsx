@@ -31,11 +31,11 @@ export function HowItWorksSection() {
   return (
     <section
       id="como-funciona"
-      className="flex w-full flex-col items-center gap-14 bg-surface-subtle py-20"
+      className="flex w-full flex-col items-center gap-10 bg-surface-subtle py-12 md:gap-14 md:py-20"
     >
       {/* Section Header */}
       <AnimateOnScroll>
-        <div className="flex max-w-section-header flex-col items-center gap-4">
+        <div className="flex max-w-section-header flex-col items-center gap-4 px-4 md:px-0">
           <span className="rounded-full border border-border px-3.5 py-1.5 text-xs font-semibold tracking-widest text-accent-brand">
             COMO FUNCIONA
           </span>
@@ -50,10 +50,10 @@ export function HowItWorksSection() {
       </AnimateOnScroll>
 
       {/* Steps */}
-      <div className="flex w-full gap-8">
+      <div className="flex w-full flex-col gap-4 md:flex-row md:gap-8">
         {STEPS.map((step, i) => (
           <AnimateOnScroll key={step.number} delay={i * 80}>
-            <div className="flex h-full flex-1 flex-col gap-5 rounded-xl border border-border bg-card p-8">
+            <div className="flex h-full flex-1 flex-col gap-5 rounded-xl border border-border bg-card p-5 md:p-8">
               <div className="flex size-11 items-center justify-center rounded-lg bg-accent-brand-light">
                 <span className="text-lg font-bold text-accent-brand">
                   {step.number}

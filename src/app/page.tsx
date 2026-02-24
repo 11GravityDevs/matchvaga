@@ -34,7 +34,7 @@ export default function Page() {
     <main className="flex min-h-screen flex-col bg-background">
       <LandingStructuredData />
       <LandingHeader />
-      <div className="mx-auto w-full max-w-landing-content pt-20">
+      <div className="mx-auto w-full max-w-landing-content px-4 md:px-0">
         <HeroSection />
         <HowItWorksSection />
         <CoreFeaturesSection />
