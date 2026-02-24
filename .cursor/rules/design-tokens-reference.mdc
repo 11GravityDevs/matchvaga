@@ -73,7 +73,7 @@ All design tokens live in `globals.css`. Use semantic utility classes directly â
 | Badge | `text-badge` |
 | CTA title | `text-cta-title` |
 
-**Font:** Inter via `next/font/google`. Use `font-sans` or `var(--font-sans)`.
+**Font:** Inter via `@fontsource-variable/inter` (self-hosted). Use `font-sans` or `var(--font-sans)`.
 
 ---
 

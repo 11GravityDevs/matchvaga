@@ -1,3 +1,4 @@
+@import "@fontsource-variable/inter";
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -136,6 +137,7 @@
   --footer-muted: #94a3b8;
   --footer-muted-subtle: #94a3b8;
   --font-geist-mono: ui-monospace, monospace;
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
 
   /* Layout dimensions (also in @theme for utilities) */
   --width-form: 900px;

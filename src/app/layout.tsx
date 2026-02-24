@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 
 import { Analytics } from "@vercel/analytics/next";
 import { SITE_URL } from "@/constants/site";
@@ -7,8 +6,6 @@ import { CookieConsent } from "@/components/shared/cookie-consent";
 import { QueryProvider } from "@/components/providers/query-provider";
 
 import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 const DEFAULT_DESCRIPTION =
   "O MatchVaga adapta seu currículo automaticamente para cada vaga, otimiza para ATS e gera mensagens de apresentação — tudo em segundos. Plataforma #1 para candidatos no Brasil.";
@@ -64,7 +61,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className={`${inter.variable} min-h-screen antialiased`}>
+      <body className="min-h-screen font-sans antialiased">
         <QueryProvider>
           {children}
           <CookieConsent />
