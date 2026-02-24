@@ -69,7 +69,7 @@ export function PreviewContent() {
   }, []);
 
   return (
-    <>
+    <main>
       {/* Illustration */}
       {step.illustration}
 
@@ -112,6 +112,6 @@ export function PreviewContent() {
           {isLastStep ? "Começar agora" : "Próximo"}
         </Button>
       </div>
-    </>
+    </main>
   );
 }

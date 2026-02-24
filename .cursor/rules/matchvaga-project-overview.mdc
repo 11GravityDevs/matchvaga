@@ -107,6 +107,7 @@ When the project changes, update these rules accordingly:
 | New design components or tokens | Update `design-tokens-reference.mdc`, `design-components.mdc`, and `globals.css` / `design-tokens.ts` |
 | New security surface | Update `security.mdc` |
 | New Server Action | Add to `app/actions/` or route `_actions/`; validate with Zod |
+| New DB table or migration | Update `database-schema.mdc` |
 | App Router patterns, loading/error | See `nextjs-app-router.mdc` |
 | React purity, hooks, Thinking in React | See `react-rules.mdc` |
 | Editing rules | See `rule-writing-guidelines.mdc` |

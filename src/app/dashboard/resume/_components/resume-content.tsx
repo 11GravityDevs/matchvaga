@@ -167,7 +167,7 @@ export function ResumeContent() {
 
   if (hasNoResume) {
     return (
-      <div className="flex w-full flex-col items-center section-gap overflow-auto page-padding">
+      <main className="flex w-full flex-col items-center section-gap overflow-auto page-padding">
         <div className="flex w-content flex-col gap-1">
           <h1 className="text-page-title">Nenhum currículo encontrado</h1>
           <p className="text-page-subtitle">
@@ -180,7 +180,7 @@ export function ResumeContent() {
             Ir para upload
           </Link>
         </div>
-      </div>
+      </main>
     );
   }
 

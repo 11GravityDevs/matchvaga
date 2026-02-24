@@ -73,7 +73,7 @@ export function UploadContent() {
   }, []);
 
   return (
-    <div className="w-form rounded-xl border border-border bg-card">
+    <main className="w-form rounded-xl border border-border bg-card">
       <div className="flex flex-col gap-1 px-7 pt-7">
         <h2 className="text-card-title">Upload do Curriculo</h2>
         <p className="text-card-description">
@@ -159,7 +159,6 @@ export function UploadContent() {
             type="button"
             onClick={handleAnalyze}
             disabled={!selectedFile || isUploading}
-            loading={isUploading}
             variant="brand"
             size="brand"
             className="rounded-lg"
@@ -168,6 +167,6 @@ export function UploadContent() {
           </Button>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

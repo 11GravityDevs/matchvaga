@@ -96,6 +96,22 @@ Use Route Handlers (`route.ts` in `app/<route>/`) for:
 
 ---
 
+## Server Actions
+
+Reference: [Server Actions and Mutations](https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations), [Data Security](https://nextjs.org/docs/app/guides/data-security)
+
+- **Location:** Shared actions in `src/app/actions/`; route-specific in `app/<route>/_actions/`.
+- **Directive:** `"use server"` at top of file (or inside function body for inline actions).
+- **Public endpoints:** Server Actions create public HTTP endpoints. Validate all client input; re-authorize inside each action.
+- **Validation:** Use Zod schemas from `@/schemas/*` for inputs. Call `schema.safeParse()` before business logic.
+- **Result shape:** Return `{ success: boolean; error?: string; data?: T }` for consistent client handling.
+- **Revalidation:** Call `revalidatePath()` or `revalidateTag()` from `next/cache` after mutations. For dynamic paths: `revalidatePath('/blog/[slug]', 'page')` — the `type` param is required when path has dynamic segments.
+- **Auth:** Check `supabase.auth.getUser()` at action entry; return `{ success: false, error: "..." }` if unauthenticated.
+
+See `@/app/actions/resume.ts`, `@/app/actions/analysis.ts` for patterns.
+
+---
+
 ## Page Pattern (Client-Heavy Routes)
 
 For pages that need client logic (hooks, event handlers, Context consumers):
@@ -152,7 +168,7 @@ const data = await fetch("https://api.example.com/data");
 ```
 
 ### 4. Request Data in Server Components
-Use `searchParams`, `params`, `headers()`, `cookies()`—not client hooks—in Server Components.
+Use `searchParams`, `params`, `headers()`, `cookies()`—not client hooks—in Server Components. In Next.js 15+, `params` is a Promise: `const { id } = await params`.
 
 ### 5. Context Providers
 Make providers separate Client Components. Import and wrap in `layout.tsx`. This keeps Server Components below the provider.

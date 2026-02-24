@@ -192,7 +192,7 @@ export function StepGapAnalysis() {
               </p>
 
               {/* Breakdown */}
-              <div className="flex w-full flex-col gap-2.5 border-t border-border pt-4">
+              <div className="flex w-full flex-col gap-2.5 border-t border-border pt-7">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5">
                     <div className="h-2 w-2 rounded-full bg-accent-success" />

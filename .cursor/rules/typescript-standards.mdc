@@ -12,6 +12,19 @@ alwaysApply: false
 - **Explicit prop interfaces** — Define `interface Props` for component props.
 - **Named exports** — Prefer `export const foo` over `export default`.
 
+## Type Inference
+
+- **Prefer inferred types.** Do not add explicit types when TypeScript infers correctly.
+- **Avoid redundant annotations:**
+  - Variables: `const x = "foo"` not `const x: string = "foo"`
+  - Function returns: omit when obvious — `function getId() { return "abc" }` not `function getId(): string { ... }`
+  - Parameters in simple cases when inference flows from usage
+- **Add explicit types when:**
+  - Public API: exported component props (`interface Props`)
+  - Server Action inputs/outputs (clarity for callers)
+  - Complex generics or type guards
+  - Return type aids readability for non-trivial functions
+
 ## Examples
 
 ```ts

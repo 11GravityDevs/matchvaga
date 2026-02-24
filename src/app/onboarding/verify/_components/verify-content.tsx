@@ -156,7 +156,7 @@ export function VerifyContent() {
 
   if (!effectiveResumeId) {
     return (
-      <div className="w-form rounded-xl border border-border bg-card">
+      <main className="w-form rounded-xl border border-border bg-card">
         <div className="flex flex-col gap-1 px-7 pt-7">
           <h2 className="text-card-title">Nenhum currículo encontrado</h2>
           <p className="text-card-description">
@@ -178,7 +178,7 @@ export function VerifyContent() {
             </Link>
           </Button>
         </div>
-      </div>
+      </main>
     );
   }
 

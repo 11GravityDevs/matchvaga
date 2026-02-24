@@ -22,7 +22,7 @@ export function LoginContent() {
   } = useLogin();
 
   return (
-    <>
+    <main>
       <LoginHero />
       {step === "email" ? (
         <LoginFormCard
@@ -52,6 +52,6 @@ export function LoginContent() {
           />
         </LoginFormCard>
       )}
-    </>
+    </main>
   );
 }

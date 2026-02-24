@@ -41,3 +41,17 @@ const aiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
 - **Never** import the service role key in client code or expose it via `NEXT_PUBLIC_`.
 
 See `@/lib/supabase/client.ts` and `@/lib/supabase/server.ts` for the canonical setup.
+
+## Server Actions
+
+- **Public endpoints:** Exported Server Actions create public HTTP endpoints. Treat them like API routes.
+- **Validate input:** Never trust client data (form data, URL params, headers). Use Zod before business logic.
+- **Re-authorize:** Check auth inside each action, not only at the route level.
+
+See [Data Security](https://nextjs.org/docs/app/guides/data-security).
+
+## Error Exposure
+
+- **Never expose** raw AI errors, DB errors, or stack traces to the client.
+- Return user-friendly messages (e.g. via `translateAuthError`, or generic "Tente novamente").
+- Log raw errors server-side with `console.error` for debugging.

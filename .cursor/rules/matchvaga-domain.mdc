@@ -42,3 +42,10 @@ alwaysApply: false
 - Use `gapAnalysis` or `analysis` for the comparison result
 - Use `optimizedResume` or `optimizedDocument` for the output
 - Use `lateralChat` or `chat` for the AI-assisted editing conversation
+
+## AI Implementation
+
+- **Structured outputs:** AI responses validated via Zod. Schemas in `src/lib/ai/config/` (gap-analysis, resume-extraction, refinement-response).
+- **Flow:** Extraction (Gemini) → Scoring (GPT) → Synthesis (Claude). See AI Model Strategy table.
+- **Validation:** Use `schema.safeParse()` on AI output before use. Never trust raw AI response shape.
+- **Error handling:** Never expose raw AI or DB errors to client. Return user-friendly messages via `{ success: false, error: "..." }`.

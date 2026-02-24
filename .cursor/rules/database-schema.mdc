@@ -1,0 +1,29 @@
+---
+description: DB tables profiles, resumes, analyses, optimized_documents — use when writing Server Actions
+globs: src/app/actions/**/*.ts,src/app/**/_actions/**/*.ts,supabase/migrations/**/*.sql
+alwaysApply: false
+---
+
+# Database Schema
+
+Reference: `supabase/migrations/20250222000000_initial_schema.sql`
+
+## Tables
+
+| Table | Key Columns | Notes |
+|-------|-------------|-------|
+| **profiles** | `id` (FK auth.users), `full_name`, `avatar_url` | Optional; RLS: own rows |
+| **resumes** | `id`, `user_id`, `parsed_data` (JSONB) | No file storage; `parsed_data` matches `ResumeData` |
+| **analyses** | `id`, `user_id`, `resume_id`, `job_snapshot` (JSONB), `score`, `matched_skills`, `missing_skills` | Job stored as snapshot; no job_descriptions table |
+| **optimized_documents** | `id`, `analysis_id`, `file_path`, `format` ('pdf'\|'docx') | Access via analysis ownership |
+
+## Column Mapping
+
+- **resumes.parsed_data** — Validated with `resumeDataSchema` from `@/schemas/resume`
+- **analyses.job_snapshot** — `{ title, company, rawText }`; validated with `jobSnapshotSchema` from `@/schemas/job`
+- **analyses.matched_skills**, **missing_skills** — `string[]` in JSONB
+
+## RLS
+
+- profiles, resumes, analyses: users access only their own rows (`auth.uid() = user_id` or `id`)
+- optimized_documents: SELECT/INSERT via analysis ownership

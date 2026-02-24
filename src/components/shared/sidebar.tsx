@@ -79,7 +79,7 @@ export function Sidebar() {
         })}
 
         {/* Pro Upgrade Card */}
-        <div className="mt-auto rounded-xl bg-linear-to-b from-primary to-slate-800 p-4">
+        <div className="mt-auto rounded-xl bg-accent-brand p-4">
           <div className="flex flex-col gap-3">
             <Zap className="h-6 w-6 text-primary-foreground" />
             <p className="text-sm font-semibold text-primary-foreground">

@@ -60,7 +60,7 @@ export function DashboardContent({ userName }: DashboardContentProps) {
   });
 
   return (
-    <div className="flex flex-1 flex-col section-gap page-padding">
+    <main className="flex flex-1 flex-col section-gap page-padding">
       <DashboardHeader userName={userName} />
 
       {/* KPI Row */}
@@ -91,6 +91,6 @@ export function DashboardContent({ userName }: DashboardContentProps) {
         activeFilter="todos"
         onDownload={generateOptimizedDocument}
       />
-    </div>
+    </main>
   );
 }
