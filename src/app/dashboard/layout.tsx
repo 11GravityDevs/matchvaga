@@ -1,4 +1,12 @@
+import type { Metadata } from "next";
+
 import { Sidebar } from "@/components/shared/sidebar";
+
+export const metadata: Metadata = {
+  title: "Dashboard",
+  description: "Gerencie suas análises de currículo e documentos otimizados.",
+  robots: { index: false, follow: false },
+};
 
 interface DashboardLayoutProps {
   children: React.ReactNode;

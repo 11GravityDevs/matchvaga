@@ -4,9 +4,10 @@ import { Logo } from "@/components/shared/logo";
 import { BrandName } from "@/components/shared/brand-name";
 
 export const metadata: Metadata = {
-  title: "Termos de Serviço | MatchVaga",
+  title: "Termos de Serviço",
   description:
-    "Termos de Serviço do MatchVaga - plataforma de análise e otimização de currículos.",
+    "Termos de Serviço do MatchVaga - plataforma de análise e otimização de currículos para vagas no Brasil.",
+  keywords: ["termos de uso", "MatchVaga", "currículo", "plataforma"],
 };
 
 export default function TermosDeServicoPage() {

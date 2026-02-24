@@ -134,7 +134,7 @@
   --footer-bg: #0f172a;
   --footer-border: #1e293b;
   --footer-muted: #94a3b8;
-  --footer-muted-subtle: #64748b;
+  --footer-muted-subtle: #94a3b8;
   --font-geist-mono: ui-monospace, monospace;
 
   /* Layout dimensions (also in @theme for utilities) */

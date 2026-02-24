@@ -12,8 +12,8 @@ export function HeroSection() {
         className="animate-fade-up flex items-center gap-2 rounded-full bg-accent-brand-light px-4 py-2"
         style={{ animationDelay: "0ms" }}
       >
-        <Sparkles className="size-3.5 text-accent-brand" />
-        <span className="text-small-semibold text-accent-brand">
+        <Sparkles className="size-3.5 text-accent-brand-dark" />
+        <span className="text-small-semibold text-accent-brand-dark">
           Plataforma #1 para candidatos no Brasil
         </span>
       </div>

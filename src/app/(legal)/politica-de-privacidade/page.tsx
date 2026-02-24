@@ -4,9 +4,10 @@ import { Logo } from "@/components/shared/logo";
 import { BrandName } from "@/components/shared/brand-name";
 
 export const metadata: Metadata = {
-  title: "Política de Privacidade | MatchVaga",
+  title: "Política de Privacidade",
   description:
-    "Política de Privacidade do MatchVaga - como tratamos seus dados pessoais.",
+    "Política de Privacidade do MatchVaga - como tratamos seus dados pessoais. Conformidade com LGPD.",
+  keywords: ["privacidade", "LGPD", "dados pessoais", "MatchVaga"],
 };
 
 export default function PoliticaDePrivacidadePage() {

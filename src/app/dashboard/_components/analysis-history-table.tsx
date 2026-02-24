@@ -174,7 +174,7 @@ export function AnalysisHistoryTable({
               <div className="flex w-action shrink-0 items-center justify-center p-4">
                 <Button
                   size="xs"
-                  className="text-accent-brand hover:text-accent-brand-hover"
+                  className="text-accent-brand underline underline-offset-4 hover:text-accent-brand-hover"
                   variant="ghost"
                   disabled={!onDownload || downloadingId === row.analysisId}
                   onClick={() => handleDownload(row.analysisId, "pdf")}

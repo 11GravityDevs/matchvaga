@@ -50,7 +50,7 @@ export function CookieConsent() {
                 href="/politica-de-privacidade"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-accent-brand hover:text-accent-brand-hover"
+                className="text-accent-brand underline underline-offset-4 hover:text-accent-brand-hover"
               >
                 política de privacidade
               </Link>
