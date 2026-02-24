@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
+import { Analytics } from "@vercel/analytics/next";
 import { SITE_URL } from "@/constants/site";
 import { CookieConsent } from "@/components/shared/cookie-consent";
 import { QueryProvider } from "@/components/providers/query-provider";
@@ -67,6 +68,7 @@ export default function RootLayout({
         <QueryProvider>
           {children}
           <CookieConsent />
+          <Analytics />
         </QueryProvider>
       </body>
     </html>
