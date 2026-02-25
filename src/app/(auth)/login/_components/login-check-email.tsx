@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
@@ -29,7 +29,7 @@ export function LoginCheckEmail({
     return () => clearTimeout(id);
   }, [resendCooldown]);
 
-  const handleResend = useCallback(async () => {
+  async function handleResend() {
     if (isResending || resendCooldown > 0) return;
     setError(null);
     setIsResending(true);
@@ -44,7 +44,7 @@ export function LoginCheckEmail({
     } finally {
       setIsResending(false);
     }
-  }, [isResending, resendCooldown, onResend]);
+  }
 
   const isDisabled = isPending || isResending;
   const isResendDisabled = isResending || isPending || resendCooldown > 0;

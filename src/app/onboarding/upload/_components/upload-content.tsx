@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef } from "react";
+import { useRef } from "react";
 
 import { Check, Loader2, Upload } from "lucide-react";
 
@@ -20,57 +20,48 @@ export function UploadContent() {
     analyze,
   } = useResumeUpload();
 
-  const handleAnalyze = useCallback(async () => {
+  async function handleAnalyze() {
     if (!selectedFile || isUploading) return;
     try {
       await analyze();
     } catch {
       // Error displayed via uploadError from mutation
     }
-  }, [selectedFile, isUploading, analyze]);
+  }
 
-  const handleFileChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0];
-      if (file) {
-        void uploadFile(file);
-      }
-      e.target.value = "";
-    },
-    [uploadFile]
-  );
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (file) {
+      void uploadFile(file);
+    }
+    e.target.value = "";
+  }
 
-  const handlePaste = useCallback(
-    (e: React.ClipboardEvent<HTMLDivElement>) => {
-      const text = e.clipboardData.getData("text");
-      if (text) {
-        e.preventDefault();
-        uploadFromPaste(text);
-      }
-    },
-    [uploadFromPaste]
-  );
-
-  const handleDrop = useCallback(
-    (e: React.DragEvent<HTMLDivElement>) => {
+  function handlePaste(e: React.ClipboardEvent<HTMLDivElement>) {
+    const text = e.clipboardData.getData("text");
+    if (text) {
       e.preventDefault();
-      const file = e.dataTransfer.files?.[0];
-      if (file) {
-        void uploadFile(file);
-      }
-    },
-    [uploadFile]
-  );
+      uploadFromPaste(text);
+    }
+  }
 
-  const handleDragOver = useCallback((e: React.DragEvent<HTMLDivElement>) => {
+  function handleDrop(e: React.DragEvent<HTMLDivElement>) {
+    e.preventDefault();
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      void uploadFile(file);
+    }
+  }
+
+  function handleDragOver(e: React.DragEvent<HTMLDivElement>) {
     e.preventDefault();
     e.dataTransfer.dropEffect = "copy";
-  }, []);
+  }
 
-  const handleBrowseClick = useCallback((e: React.MouseEvent) => {
+  function handleBrowseClick(e: React.MouseEvent) {
     e.stopPropagation();
     inputRef.current?.click();
-  }, []);
+  }
 
   return (
     <main className="w-form rounded-xl border border-border bg-card">

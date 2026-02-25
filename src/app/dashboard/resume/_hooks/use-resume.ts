@@ -1,6 +1,5 @@
 "use client";
 
-import { useCallback } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import type { ResumeData } from "@/types/resume";
@@ -44,12 +43,9 @@ export function useResume(): UseResumeReturn {
     },
   });
 
-  const save = useCallback(
-    async (data: ResumeData) => {
-      await saveMutation(data);
-    },
-    [saveMutation]
-  );
+  async function save(data: ResumeData) {
+    await saveMutation(data);
+  }
 
   const displayError = mutationError instanceof Error ? mutationError : error;
 

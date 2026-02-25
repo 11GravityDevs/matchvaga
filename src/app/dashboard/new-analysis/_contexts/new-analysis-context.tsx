@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useState,
-  type ReactNode,
-} from "react";
+import { createContext, useContext, useState, type ReactNode } from "react";
 
 import type { ResumeData } from "@/types/resume";
 import { useResumeQuery } from "@/hooks/use-resume-query";
@@ -118,22 +112,19 @@ export function NewAnalysisProvider({ children }: { children: ReactNode }) {
   const [optimizedResumeData, setOptimizedResumeData] =
     useState<ResumeData | null>(INITIAL_STATE.optimizedResumeData);
 
-  const setAnalysisResult = useCallback(
-    (result: {
-      analysisId: string;
-      score: number;
-      matchedSkills: string[];
-      missingSkills: string[];
-    }) => {
-      setAnalysisId(result.analysisId);
-      setScore(result.score);
-      setMatchedSkills(result.matchedSkills);
-      const skills = toMissingSkills(result.missingSkills);
-      setMissingSkills(skills);
-      setSelectedMissingSkills(result.missingSkills);
-    },
-    []
-  );
+  function setAnalysisResult(result: {
+    analysisId: string;
+    score: number;
+    matchedSkills: string[];
+    missingSkills: string[];
+  }) {
+    setAnalysisId(result.analysisId);
+    setScore(result.score);
+    setMatchedSkills(result.matchedSkills);
+    const skills = toMissingSkills(result.missingSkills);
+    setMissingSkills(skills);
+    setSelectedMissingSkills(result.missingSkills);
+  }
 
   function toggleSkill(id: string) {
     setMissingSkills((prev) =>
@@ -141,9 +132,9 @@ export function NewAnalysisProvider({ children }: { children: ReactNode }) {
     );
   }
 
-  const refreshResume = useCallback(async () => {
+  async function refreshResume() {
     await refetchResume();
-  }, [refetchResume]);
+  }
 
   function reset() {
     setStep(INITIAL_STATE.step);

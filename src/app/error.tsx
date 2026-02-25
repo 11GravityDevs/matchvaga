@@ -9,8 +9,10 @@ import { Button } from "@/components/ui/button";
 
 export default function Error({
   error,
+  reset,
 }: {
   error: Error & { digest?: string };
+  reset: () => void;
 }) {
   useEffect(() => {
     console.error(error);
@@ -45,7 +47,10 @@ export default function Error({
         </div>
 
         <div className="relative flex items-center gap-3">
-          <Button asChild variant="brand" size="lg">
+          <Button variant="brand" size="lg" onClick={reset}>
+            Tentar novamente
+          </Button>
+          <Button asChild variant="outline" size="lg">
             <Link href="/">
               <ArrowLeft className="size-4" data-icon="inline-start" />
               Voltar ao início

@@ -1,6 +1,6 @@
 ---
 description: Design tokens — all in globals.css; use semantic utilities
-globs: design.pen,src/**/*.css
+globs: src/**/*.css
 alwaysApply: false
 ---
 
@@ -10,7 +10,7 @@ All design tokens live in `globals.css`. Use semantic utility classes directly �
 
 ---
 
-## Color Tokens (design.pen → globals.css → Tailwind)
+## Color Tokens (globals.css → Tailwind)
 
 | Token | Usage | Tailwind |
 |-------|-------|----------|

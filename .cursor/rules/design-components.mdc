@@ -1,12 +1,12 @@
 ---
 description: Design component catalog, UX principles, shadcn usage
-globs: src/**/*.tsx,design.pen
+globs: src/**/*.tsx
 alwaysApply: false
 ---
 
 # Design Components
 
-See `design-tokens-reference.mdc` for tokens. See `pencil-design-to-code.mdc` for design.pen workflow.
+See `design-tokens-reference.mdc` for tokens.
 
 ---
 
@@ -26,8 +26,6 @@ See `design-tokens-reference.mdc` for tokens. See `pencil-design-to-code.mdc` fo
 | **Sidebar Section Title** | Custom | `text-muted-foreground` `text-xs font-medium` |
 | **Sidebar Pro Upgrade** | Custom | Gradient primary→ring; CTA "Saiba Mais" |
 | **Sidebar Footer** | Custom | Avatar + name + email + chevron |
-
-Use `batch_get` with patterns to discover design.pen nodes; avoid hardcoding node IDs.
 
 ---
 
@@ -131,8 +129,8 @@ Use `Loader2` or similar only for **inline** loading (e.g. inside a button, smal
 | **BrandName** | `@/components/shared/brand-name` | MatchVaga branding |
 | **FormField** | `@/components/shared/form-field` | Label + input wrapper |
 | **StepIndicator** | `@/components/shared/step-indicator` | Onboarding step progress |
-| **KPI Card** | design.pen → custom | Metric display |
-| **Sidebar Brand** | design.pen → custom; uses BrandName | Logo + name |
+| **KPI Card** | `@/components/shared/kpi-card` | Metric display |
+| **Sidebar Brand** | `@/components/shared/sidebar` (Brand section; uses `@/components/shared/logo`) | Logo + name |
 
 ---
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
@@ -56,17 +56,17 @@ export function PreviewContent() {
   const isLastStep = currentStep === TOTAL_STEPS - 1;
   const step = STEPS[currentStep];
 
-  const handleNext = useCallback(() => {
+  function handleNext() {
     if (isLastStep) {
       router.push(ROUTE_ONBOARDING_UPLOAD);
       return;
     }
     setCurrentStep((prev) => prev + 1);
-  }, [isLastStep, router]);
+  }
 
-  const handleBack = useCallback(() => {
+  function handleBack() {
     setCurrentStep((prev) => prev - 1);
-  }, []);
+  }
 
   return (
     <main className="flex flex-col items-center gap-8">

@@ -1,3 +1,5 @@
+"use cache";
+
 import type { Metadata } from "next";
 
 import { SITE_URL } from "@/constants/site";
@@ -29,7 +31,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Page() {
+export default async function Page() {
   return (
     <main className="flex min-h-screen flex-col bg-background">
       <LandingStructuredData />

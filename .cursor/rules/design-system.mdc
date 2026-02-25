@@ -1,12 +1,12 @@
 ---
 description: MatchVaga design system — index; tokens and components
-globs: design.pen,src/**/*.tsx,src/**/*.css
+globs: src/**/*.tsx,src/**/*.css
 alwaysApply: false
 ---
 
 # MatchVaga Design System
 
-Design source: `design.pen`. Use Pencil MCP tools to read; see `pencil-design-to-code.mdc` for workflow.
+Design tokens and components are defined in the rules below. All tokens live in `globals.css`; components follow the catalog in `design-components.mdc`.
 
 ## Rule Index
 

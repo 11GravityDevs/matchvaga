@@ -84,10 +84,6 @@ Route-local utils/hooks/constants use relative imports (e.g. `./_utils/...`, `..
 | **Prettier** + `prettier-plugin-tailwindcss` | Auto-format; Tailwind class sorting |
 | **ESLint** + `eslint-config-next` | Linting with Next.js rules |
 
-## Design Source
-
-Designs live in `design.pen`. Use Pencil MCP tools to read and implement. See `pencil-design-to-code.mdc` for workflow.
-
 ## Keeping Rules Updated
 
 When the project changes, update these rules accordingly:
@@ -103,11 +99,11 @@ When the project changes, update these rules accordingly:
 | New route group or flow | Add to Route Architecture |
 | New domain concept | Add to `matchvaga-domain.mdc` |
 | New AI flow or provider | Add to `matchvaga-domain.mdc`; document env vars in `security.mdc` |
-| New design file or workflow | Update `pencil-design-to-code.mdc` |
 | New design components or tokens | Update `design-tokens-reference.mdc`, `design-components.mdc`, and `globals.css` / `design-tokens.ts` |
 | New security surface | Update `security.mdc` |
 | New Server Action | Add to `app/actions/` or route `_actions/`; validate with Zod |
 | New DB table or migration | Update `database-schema.mdc` |
-| App Router patterns, loading/error | See `nextjs-app-router.mdc` |
+| App Router patterns, loading/error, use cache | See `nextjs-app-router.mdc` |
 | React purity, hooks, Thinking in React | See `react-rules.mdc` |
 | Editing rules | See `rule-writing-guidelines.mdc` |
+| New MCP server | Update `mcp-tools.mdc` and `.cursor/mcp.json` |

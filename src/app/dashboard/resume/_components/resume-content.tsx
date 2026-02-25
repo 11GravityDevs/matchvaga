@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useResume } from "../_hooks/use-resume";
 import {
@@ -42,69 +42,60 @@ function ResumeEditForm({
     getValidationErrors,
   } = useResumeForm({ initialData });
 
-  const clearValidationOnChange = useCallback(() => {
+  function clearValidationOnChange() {
     setValidationErrors(null);
-  }, []);
+  }
 
-  const wrappedUpdateField = useCallback(
-    <K extends keyof ResumeData>(key: K, value: ResumeData[K]) => {
-      clearValidationOnChange();
-      updateField(key, value);
-    },
-    [clearValidationOnChange, updateField]
-  );
+  function wrappedUpdateField<K extends keyof ResumeData>(
+    key: K,
+    value: ResumeData[K]
+  ) {
+    clearValidationOnChange();
+    updateField(key, value);
+  }
 
-  const wrappedHandleSummaryChange = useCallback(
-    (value: string) => {
-      clearValidationOnChange();
-      handleSummaryChange(value);
-    },
-    [clearValidationOnChange, handleSummaryChange]
-  );
+  function wrappedHandleSummaryChange(value: string) {
+    clearValidationOnChange();
+    handleSummaryChange(value);
+  }
 
-  const wrappedUpdateExperience = useCallback(
-    (index: number, updates: Parameters<typeof updateExperience>[1]) => {
-      clearValidationOnChange();
-      updateExperience(index, updates);
-    },
-    [clearValidationOnChange, updateExperience]
-  );
+  function wrappedUpdateExperience(
+    index: number,
+    updates: Parameters<typeof updateExperience>[1]
+  ) {
+    clearValidationOnChange();
+    updateExperience(index, updates);
+  }
 
-  const wrappedAddExperience = useCallback(() => {
+  function wrappedAddExperience() {
     clearValidationOnChange();
     addExperience();
-  }, [clearValidationOnChange, addExperience]);
+  }
 
-  const wrappedRemoveExperience = useCallback(
-    (index: number) => {
-      clearValidationOnChange();
-      removeExperience(index);
-    },
-    [clearValidationOnChange, removeExperience]
-  );
+  function wrappedRemoveExperience(index: number) {
+    clearValidationOnChange();
+    removeExperience(index);
+  }
 
-  const wrappedUpdateEducation = useCallback(
-    (index: number, updates: Parameters<typeof updateEducation>[1]) => {
-      clearValidationOnChange();
-      updateEducation(index, updates);
-    },
-    [clearValidationOnChange, updateEducation]
-  );
+  function wrappedUpdateEducation(
+    index: number,
+    updates: Parameters<typeof updateEducation>[1]
+  ) {
+    clearValidationOnChange();
+    updateEducation(index, updates);
+  }
 
-  const wrappedAddEducation = useCallback(() => {
+  function wrappedAddEducation() {
     clearValidationOnChange();
     addEducation();
-  }, [clearValidationOnChange, addEducation]);
+  }
 
-  const wrappedRemoveEducation = useCallback(
-    (index: number) => {
-      clearValidationOnChange();
-      removeEducation(index);
-    },
-    [clearValidationOnChange, removeEducation]
-  );
+  function wrappedRemoveEducation(index: number) {
+    clearValidationOnChange();
+    removeEducation(index);
+  }
 
-  const handleSave = useCallback(async () => {
+  async function handleSave() {
     if (!isFormValid) {
       setValidationErrors(getValidationErrors(data) ?? null);
       return;
@@ -115,7 +106,7 @@ function ResumeEditForm({
     } catch {
       // Error is set in useResume and displayed below
     }
-  }, [data, isFormValid, getValidationErrors, save]);
+  }
 
   return (
     <div className="flex w-full flex-col items-center section-gap overflow-auto page-padding">

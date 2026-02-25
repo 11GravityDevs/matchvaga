@@ -1,6 +1,5 @@
 "use client";
 
-import { useCallback } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
@@ -63,26 +62,20 @@ export function useResumeUpload(): UseResumeUploadReturn {
     },
   });
 
-  const uploadFile = useCallback(
-    (file: File) => {
-      setSelectedFile({ name: file.name, size: file.size, file });
-      setResumeContent("");
-    },
-    [setSelectedFile, setResumeContent]
-  );
+  function uploadFile(file: File) {
+    setSelectedFile({ name: file.name, size: file.size, file });
+    setResumeContent("");
+  }
 
-  const uploadFromPaste = useCallback(
-    (text: string) => {
-      setResumeContent(text);
-      setSelectedFile(null);
-    },
-    [setResumeContent, setSelectedFile]
-  );
+  function uploadFromPaste(text: string) {
+    setResumeContent(text);
+    setSelectedFile(null);
+  }
 
-  const analyze = useCallback(async () => {
+  async function analyze() {
     if (!selectedFile) return;
     await uploadMutation(selectedFile.file);
-  }, [selectedFile, uploadMutation]);
+  }
 
   return {
     resumeContent,

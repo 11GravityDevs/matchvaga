@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Field, FieldContent, FieldLabel } from "@/components/ui/field";
@@ -30,10 +30,10 @@ export function LoginEmailForm({
     setError(initialError ?? null);
   }, [initialError]);
 
-  const isEmailValid = useMemo(() => isValidEmail(email), [email]);
+  const isEmailValid = isValidEmail(email);
   const isDisabled = isSubmitting || isPending || isGoogleLoading;
 
-  const handleGoogleClick = useCallback(async () => {
+  async function handleGoogleClick() {
     setError(null);
     setIsGoogleLoading(true);
     try {
@@ -46,33 +46,30 @@ export function LoginEmailForm({
     } finally {
       setIsGoogleLoading(false);
     }
-  }, [onGoogleClick]);
+  }
 
-  const handleSubmit = useCallback(
-    async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      if (isDisabled) return;
+  async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (isDisabled) return;
 
-      if (!isEmailValid) {
-        setError("Digite um e-mail válido");
-        return;
-      }
+    if (!isEmailValid) {
+      setError("Digite um e-mail válido");
+      return;
+    }
 
-      setError(null);
-      setIsSubmitting(true);
-      try {
-        await onSubmit(email.trim());
-      } catch (e) {
-        console.error(e);
-        setError(
-          e instanceof Error ? e.message : "Algo deu errado. Tente novamente."
-        );
-      } finally {
-        setIsSubmitting(false);
-      }
-    },
-    [email, isEmailValid, isDisabled, onSubmit]
-  );
+    setError(null);
+    setIsSubmitting(true);
+    try {
+      await onSubmit(email.trim());
+    } catch (e) {
+      console.error(e);
+      setError(
+        e instanceof Error ? e.message : "Algo deu errado. Tente novamente."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-6">

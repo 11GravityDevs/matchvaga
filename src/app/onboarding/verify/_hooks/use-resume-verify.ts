@@ -1,6 +1,5 @@
 "use client";
 
-import { useCallback } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
@@ -50,16 +49,13 @@ export function useResumeVerify({
     },
   });
 
-  const save = useCallback(
-    async (data: ResumeData) => {
-      await saveMutation(data);
-    },
-    [saveMutation]
-  );
+  async function save(data: ResumeData) {
+    await saveMutation(data);
+  }
 
-  const continueToDashboard = useCallback(() => {
+  function continueToDashboard() {
     router.push(ROUTE_DASHBOARD);
-  }, [router]);
+  }
 
   return {
     resumeContent,

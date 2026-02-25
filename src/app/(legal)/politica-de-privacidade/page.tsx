@@ -1,3 +1,5 @@
+"use cache";
+
 import type { Metadata } from "next";
 
 import { Logo } from "@/components/shared/logo";
@@ -10,7 +12,7 @@ export const metadata: Metadata = {
   keywords: ["privacidade", "LGPD", "dados pessoais", "MatchVaga"],
 };
 
-export default function PoliticaDePrivacidadePage() {
+export default async function PoliticaDePrivacidadePage() {
   return (
     <article className="mx-auto flex max-w-3xl flex-col items-center px-6 py-12">
       <Logo

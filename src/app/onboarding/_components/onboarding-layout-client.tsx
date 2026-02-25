@@ -1,6 +1,5 @@
 "use client";
 
-import { useCallback } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
 import {
@@ -28,9 +27,9 @@ export function OnboardingLayoutClient({
   const pathname = usePathname();
   const router = useRouter();
 
-  const handleSkip = useCallback(() => {
+  function handleSkip() {
     router.push(ROUTE_ONBOARDING_UPLOAD);
-  }, [router]);
+  }
 
   if (pathname.startsWith("/onboarding/preview")) {
     return (

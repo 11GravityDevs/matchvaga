@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useTransition } from "react";
+import { useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import {
@@ -31,18 +31,15 @@ export function useLoginStep(): {
 
   const step = parseLoginStepFromSearchParams(searchParams);
 
-  const setStep = useCallback(
-    (newStep: LoginStep) => {
-      if (!VALID_STEPS.includes(newStep)) return;
+  function setStep(newStep: LoginStep) {
+    if (!VALID_STEPS.includes(newStep)) return;
 
-      startTransition(() => {
-        const params = new URLSearchParams(searchParams.toString());
-        params.set("step", newStep);
-        router.push(`${ROUTE_LOGIN}?${params.toString()}`, { scroll: false });
-      });
-    },
-    [router, searchParams]
-  );
+    startTransition(() => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("step", newStep);
+      router.push(`${ROUTE_LOGIN}?${params.toString()}`, { scroll: false });
+    });
+  }
 
   return { step, setStep, isPending };
 }
@@ -61,30 +58,27 @@ export function useLogin(): UseLoginReturn {
   const { step, setStep, isPending } = useLoginStep();
   const supabase = createClient();
 
-  const submitEmail = useCallback(
-    async (email: string) => {
-      const trimmedEmail = email.trim();
-      const { error } = await supabase.auth.signInWithOtp({
-        email: trimmedEmail,
-        options: {
-          shouldCreateUser: true,
-          emailRedirectTo: `${window.location.origin}${ROUTE_AUTH_CALLBACK}?next=${ROUTE_ONBOARDING_PREVIEW}`,
-        },
-      });
+  async function submitEmail(email: string) {
+    const trimmedEmail = email.trim();
+    const { error } = await supabase.auth.signInWithOtp({
+      email: trimmedEmail,
+      options: {
+        shouldCreateUser: true,
+        emailRedirectTo: `${window.location.origin}${ROUTE_AUTH_CALLBACK}?next=${ROUTE_ONBOARDING_PREVIEW}`,
+      },
+    });
 
-      if (error) {
-        throw new Error(translateAuthError(error));
-      }
+    if (error) {
+      throw new Error(translateAuthError(error));
+    }
 
-      if (typeof window !== "undefined") {
-        sessionStorage.setItem(LOGIN_EMAIL_STORAGE_KEY, trimmedEmail);
-      }
-      setStep("magic-link");
-    },
-    [setStep, supabase.auth]
-  );
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem(LOGIN_EMAIL_STORAGE_KEY, trimmedEmail);
+    }
+    setStep("magic-link");
+  }
 
-  const resendLink = useCallback(async () => {
+  async function resendLink() {
     const email =
       typeof window !== "undefined"
         ? sessionStorage.getItem(LOGIN_EMAIL_STORAGE_KEY)
@@ -105,9 +99,9 @@ export function useLogin(): UseLoginReturn {
     if (error) {
       throw new Error(translateAuthError(error));
     }
-  }, [supabase.auth]);
+  }
 
-  const submitGoogle = useCallback(async () => {
+  async function submitGoogle() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
@@ -118,7 +112,7 @@ export function useLogin(): UseLoginReturn {
     if (error) {
       throw new Error(translateAuthError(error));
     }
-  }, [supabase.auth]);
+  }
 
   const email =
     step === "magic-link" && typeof window !== "undefined"

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { Download, FileText, Loader2, RefreshCw, Send } from "lucide-react";
 
 import { applyCvRefinementInstruction } from "@/app/actions/chat";
@@ -36,7 +36,7 @@ export function StepPreviewExport() {
   const [isSending, setIsSending] = useState(false);
   const [chatError, setChatError] = useState<string | null>(null);
 
-  const handleSend = useCallback(async () => {
+  async function handleSend() {
     const trimmed = input.trim();
     if (!trimmed || !analysisId || !displayResumeData || isSending) return;
 
@@ -76,14 +76,7 @@ export function StepPreviewExport() {
         content: result.summary ?? "Alterações aplicadas.",
       },
     ]);
-  }, [
-    input,
-    analysisId,
-    displayResumeData,
-    isSending,
-    messages,
-    setOptimizedResumeData,
-  ]);
+  }
 
   const displayScore = score ?? 0;
 

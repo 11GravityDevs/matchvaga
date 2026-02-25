@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { ROUTE_LOGIN } from "@/constants/routes";
@@ -18,7 +18,7 @@ export function useSignOut(): UseSignOutReturn {
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const signOut = useCallback(async () => {
+  async function signOut() {
     setIsPending(true);
     setError(null);
 
@@ -42,7 +42,7 @@ export function useSignOut(): UseSignOutReturn {
     } finally {
       setIsPending(false);
     }
-  }, [router]);
+  }
 
   return { signOut, isPending, error };
 }

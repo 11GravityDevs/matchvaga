@@ -1,0 +1,98 @@
+---
+description: MCP tools available — use them when relevant
+alwaysApply: true
+---
+
+# MCP Tools
+
+You have access to these MCPs.
+
+**Rule:** When a relevant MCP exists for the task, **prefer MCP tools over web search**. MCPs provide structured, domain-specific access to docs, schemas, and live APIs. Use web search only when no MCP applies or when the MCP fails.
+
+---
+
+## next-devtools
+
+**Requirements:** Next.js 16+, dev server running (`npm run dev`). The MCP discovers the app via `/_next/mcp`.
+
+### When to Use
+
+| Scenario | Action |
+|---------|--------|
+| **Error diagnosis** | User reports errors, hydration issues, build failures → use `get_errors` to retrieve current build/runtime/type errors from the dev server |
+| **Before implementing changes** | Use `nextjs_index` to discover routes, components, and app structure; understand where to add code |
+| **Next.js API questions** | Use `nextjs_docs` for up-to-date docs (e.g. "when to use use client", Server Actions, caching) |
+| **Upgrades & migrations** | Help with Next.js 16 upgrade, codemods, breaking changes |
+| **Structure audits & compliance** | Use `nextjs_index` to inspect app structure; use `nextjs_docs` for official project structure and file conventions |
+| **Page/layout inspection** | Use `get_page_metadata`, `get_project_metadata` for routes, components, rendering info |
+| **Server Actions lookup** | Use `get_server_action_by_id` to find source file and function name |
+
+### Key Tools
+
+- `nextjs_index` — Discover running Next.js servers and available MCP tools; call before implementing
+- `nextjs_docs` — Fetch Next.js docs by path (read `nextjs-docs://llms-index` resource first for correct paths)
+- `nextjs_call` — Execute tools from the running app (get_errors, get_logs, get_page_metadata, etc.)
+
+---
+
+## supabase
+
+**Config:** `https://mcp.supabase.com/mcp`.
+
+### When to Use
+
+| Scenario | Action |
+|---------|--------|
+| **Supabase docs** | Use `search_docs` for auth, SSR, RLS, Edge Functions — docs change often |
+| **Database queries** | List tables, execute SQL, apply migrations |
+| **Project management** | List projects, get project URL, manage branches |
+| **Auth troubleshooting** | Search docs for Next.js + Supabase Auth, `@supabase/ssr`, proxy setup |
+| **Edge Functions** | Deploy, list, get Edge Function code |
+
+### Key Tools
+
+- `search_docs` — GraphQL search over Supabase documentation
+- `list_tables`, `execute_sql`, `apply_migration` — Database operations
+- `list_projects` — Discover project IDs
+
+---
+
+## shadcn
+
+**Config:** `npx shadcn@latest mcp`.
+
+### When to Use
+
+| Scenario | Action |
+|---------|--------|
+| **Adding UI components** | "Add a login form" → search registries, get add command, install |
+| **Browsing components** | List items from `@shadcn` or other registries |
+| **Finding components** | Search by name or functionality across registries |
+| **Checking availability** | Before building custom, check if a component exists in registry |
+
+### Key Tools
+
+- `search_items_in_registries` — Fuzzy search (e.g. `registries: ["@shadcn"]`, `query: "dialog"`)
+- `list_items_in_registries` — List all items from a registry
+- `get_add_command_for_items` — Get CLI add command for specific items
+- `get_item_examples_from_registries` — Usage examples
+- `view_items_in_registries` — View item details
+
+### Workflow
+
+1. Search or list to find the component
+2. Use `get_add_command_for_items` to get the install command
+3. Use `get_item_examples_from_registries` for usage if needed
+
+---
+
+## Quick Reference
+
+| Task | MCP | Tool |
+|------|-----|------|
+| Fix errors on page | next-devtools | nextjs_call → get_errors |
+| Next.js API question | next-devtools | nextjs_docs |
+| Audit structure / Next.js compliance | next-devtools | nextjs_index + nextjs_docs |
+| Supabase auth/SSR help | supabase | search_docs |
+| Add shadcn component | shadcn | search_items_in_registries → get_add_command_for_items |
+| Inspect app structure | next-devtools | nextjs_index (dev server must be running) |

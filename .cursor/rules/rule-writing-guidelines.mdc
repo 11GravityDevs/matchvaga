@@ -23,10 +23,9 @@ Standards for editing `.cursor/rules/*.mdc`. See `matchvaga-project-overview.mdc
 
 | Use Case | Setting | Example |
 |----------|---------|---------|
-| Foundational context | alwaysApply: true | matchvaga-project-overview, colocation, composer-workflow |
+| Foundational context | alwaysApply: true | matchvaga-project-overview, colocation, composer-workflow, mcp-tools |
 | Domain-specific | globs: path | nextjs-app-router (src/app/**), tailwind-no-arbitrary |
 | Task-triggered | globs: broad | check-before-add (src/**/*.ts) |
-| Design-only | globs: design.pen | pencil-design-to-code |
 
 **Guideline:** Prefer glob-scoped over always-apply when the rule applies only to specific file types.
 
