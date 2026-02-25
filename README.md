@@ -12,9 +12,19 @@ MatchVaga helps job seekers:
 
 ## Tech Stack
 
-- **Framework:** Next.js 16 (App Router)
-- **UI:** React 19, Tailwind CSS v4, shadcn/ui (Radix, Base UI)
-- **Language:** TypeScript (strict mode)
+| Layer                  | Technology                                                                                |
+| ---------------------- | ----------------------------------------------------------------------------------------- |
+| Framework              | Next.js 16 (App Router)                                                                   |
+| React                  | React 19                                                                                  |
+| Auth                   | Supabase Auth (email OTP, Google OAuth)                                                   |
+| Backend                | Server Actions, Supabase (Postgres + Storage)                                             |
+| AI/LLM                 | Gemini 1.5 Flash (extraction), GPT-4o-mini (scoring, chat), Claude 3.5 Sonnet (synthesis) |
+| Validation             | Zod                                                                                       |
+| Data fetching (client) | TanStack Query v5                                                                         |
+| Styling                | Tailwind CSS v4                                                                           |
+| UI Components          | shadcn/ui (radix-vega style), Base UI, Radix UI                                           |
+| Icons                  | lucide-react                                                                              |
+| Utils                  | clsx, tailwind-merge, class-variance-authority                                            |
 
 ## Getting Started
 
@@ -55,10 +65,41 @@ yarn start
 
 ```
 src/
-├── app/           # Next.js App Router (pages, layout)
-├── components/    # UI components (shadcn/ui)
-└── lib/           # Utilities and shared logic
+├── app/           # App Router pages, layouts, route groups; route-specific in _components/, _utils/, _hooks/, _constants/, _contexts/, _actions/
+│   └── actions/   # Shared Server Actions (resume, job, analysis, document, chat)
+├── components/    # ui/ (shadcn primitives) + shared/ (cross-feature components)
+├── constants/     # Shared constants (auth, design-tokens, routes, etc.)
+├── contexts/      # React Context providers
+├── hooks/         # Shared custom hooks (logic layer)
+├── lib/           # Supabase client + AI utilities (server-only) + query/ (get-query-client, query-options)
+├── schemas/       # Zod schemas for Server Action validation
+├── utils/         # Shared utilities (style, auth, etc.)
+└── types/         # Shared TypeScript interfaces
 ```
+
+### Route Architecture
+
+| Route Group   | Purpose                          |
+| ------------- | -------------------------------- |
+| `(auth)/`     | Login (email → token flow)       |
+| `(legal)/`    | Privacy policy, Terms of service |
+| `onboarding/` | Resume upload → verify flow      |
+| `dashboard/`  | Main app after onboarding        |
+
+### Path Aliases
+
+- `@/components` — Components (ui/, shared/)
+- `@/lib/supabase` — Supabase client (client, server)
+- `@/lib/ai` — AI prompts and client wrappers (server-only)
+- `@/lib/query` — Query client, query options
+- `@/constants` — Shared constants
+- `@/contexts` — Context providers
+- `@/hooks` — Custom hooks
+- `@/utils/style` — cn() helper (clsx + tailwind-merge)
+- `@/utils/auth` — Auth utilities
+- `@/types` — Shared type definitions
+
+Route-local utils/hooks/constants use relative imports (e.g. `./_utils/...`, `../_hooks/...`).
 
 ## Scripts
 
