@@ -86,6 +86,27 @@ You have access to these MCPs.
 
 ---
 
+## Linear
+
+**Config:** `https://mcp.linear.app/mcp` (see `.cursor/mcp.json`). **Rule:** When creating or updating Linear tasks for this project, you must use the Linear MCP. Follow `linear-task-template.mdc` for the issue template.
+
+### When to Use
+
+| Scenario | Action |
+|---------|--------|
+| **Creating a new task** | Use `save_issue` to create the issue; description must follow the Linear Task Template (Context, Acceptance Criteria as checkboxes, Implementation Notes). |
+| **Updating an existing task** | Use `save_issue` to update description, status, or other fields instead of editing in the UI. |
+| **Listing / finding tasks** | Use `list_issues` to search, filter, or list issues; use `get_issue` for full details. |
+
+### Key Tools
+
+- `save_issue` — Create or update an issue (use for both new and existing tasks)
+- `get_issue` — Get full issue details by ID
+- `list_issues` — List or filter issues (e.g. by project, status)
+- `list_projects`, `list_teams` — Discover project/team IDs for creating or filtering issues
+
+---
+
 ## Quick Reference
 
 | Task | MCP | Tool |
@@ -95,4 +116,6 @@ You have access to these MCPs.
 | Audit structure / Next.js compliance | next-devtools | nextjs_index + nextjs_docs |
 | Supabase auth/SSR help | supabase | search_docs |
 | Add shadcn component | shadcn | search_items_in_registries → get_add_command_for_items |
+| Create or update Linear task | Linear | save_issue (follow linear-task-template.mdc) |
+| List/find Linear issues | Linear | list_issues, get_issue |
 | Inspect app structure | next-devtools | nextjs_index (dev server must be running) |

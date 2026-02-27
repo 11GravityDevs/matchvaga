@@ -1,0 +1,28 @@
+---
+description: Standard template for Linear issues; use when creating or describing tasks
+alwaysApply: false
+---
+
+# Linear Task Template
+
+Use this structure when creating or updating Linear issues so that context, scope, and implementation hints are clear.
+
+## Template
+
+**🎯 Context**  
+Describe what needs to be done and why this matters to the user or the company.
+
+**✅ Acceptance Criteria**  
+- [ ] Step 1  
+- [ ] Step 2  
+- [ ] Test/Validate X  
+
+**🔗 Implementation Notes**  
+e.g. I think we can use Library X so we don't have to build this from scratch.
+
+---
+
+**Rules:**
+- **Acceptance criteria** are checkboxes in Linear (use `- [ ]` in descriptions so they render as unchecked).
+- Keep context brief but sufficient for anyone picking up the task.
+- Implementation notes are optional but encouraged when they unblock or guide implementation.
