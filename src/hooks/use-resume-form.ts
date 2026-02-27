@@ -17,6 +17,7 @@ export interface ResumeValidationErrors {
   phone?: string;
   summary?: string;
   skills?: string;
+  languages?: string;
   experience?: string;
   education?: string;
 }
