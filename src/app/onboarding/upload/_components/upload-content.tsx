@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 import { Check, Loader2, Upload } from "lucide-react";
 
@@ -11,6 +11,7 @@ import { cn } from "@/utils/style";
 
 export function UploadContent() {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [isDraggingOver, setIsDraggingOver] = useState(false);
   const {
     isUploading,
     uploadError,
@@ -45,8 +46,23 @@ export function UploadContent() {
     }
   }
 
+  function handleDragEnter(e: React.DragEvent<HTMLDivElement>) {
+    e.preventDefault();
+    setIsDraggingOver(true);
+  }
+
+  function handleDragLeave(e: React.DragEvent<HTMLDivElement>) {
+    e.preventDefault();
+    const { currentTarget, relatedTarget } = e;
+    if (relatedTarget && currentTarget.contains(relatedTarget as Node)) {
+      return;
+    }
+    setIsDraggingOver(false);
+  }
+
   function handleDrop(e: React.DragEvent<HTMLDivElement>) {
     e.preventDefault();
+    setIsDraggingOver(false);
     const file = e.dataTransfer.files?.[0];
     if (file) {
       void uploadFile(file);
@@ -76,10 +92,13 @@ export function UploadContent() {
         <div
           className={cn(
             "flex min-h-80 cursor-pointer flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed border-border bg-card transition-colors",
-            "hover:border-accent-brand/50 hover:bg-muted/20"
+            "hover:border-accent-brand/50 hover:bg-muted/20",
+            isDraggingOver && "border-accent-brand bg-muted/20"
           )}
           onPaste={handlePaste}
           onDrop={handleDrop}
+          onDragEnter={handleDragEnter}
+          onDragLeave={handleDragLeave}
           onDragOver={handleDragOver}
           tabIndex={0}
           role="button"
