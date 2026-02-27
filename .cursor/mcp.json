@@ -10,6 +10,10 @@
     "shadcn": {
       "command": "npx",
       "args": ["shadcn@latest", "mcp"]
+    },
+    "linear": {
+      "url": "https://mcp.linear.app/mcp",
+      "headers": {}
     }
   }
 }
