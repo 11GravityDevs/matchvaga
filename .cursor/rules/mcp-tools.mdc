@@ -94,7 +94,7 @@ You have access to these MCPs.
 
 | Scenario | Action |
 |---------|--------|
-| **Creating a new task** | Use `save_issue` to create the issue; description must follow the Linear Task Template (Context, Acceptance Criteria as checkboxes, Implementation Notes). |
+| **Creating a new task** | Use `save_issue` to create the issue; description must follow the Linear Task Template with icons (🎯 Context, ✅ Acceptance Criteria, 🔗 Implementation Notes) and assign the correct label (Bug, Feature, Business, QA, Marketing). |
 | **Updating an existing task** | Use `save_issue` to update description, status, or other fields instead of editing in the UI. |
 | **Listing / finding tasks** | Use `list_issues` to search, filter, or list issues; use `get_issue` for full details. |
 

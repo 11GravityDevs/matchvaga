@@ -7,22 +7,45 @@ alwaysApply: false
 
 Use this structure when creating or updating Linear issues so that context, scope, and implementation hints are clear.
 
-## Template
+## Template Structure
 
-**🎯 Context**  
+**🎯 Context**
+
 Describe what needs to be done and why this matters to the user or the company.
 
-**✅ Acceptance Criteria**  
+
+**✅ Acceptance Criteria**
+
 - [ ] Step 1  
 - [ ] Step 2  
 - [ ] Test/Validate X  
 
-**🔗 Implementation Notes**  
+
+**🔗 Implementation Notes**
+
 e.g. I think we can use Library X so we don't have to build this from scratch.
 
 ---
 
-**Rules:**
+## Labels
+
+Assign the correct label to each issue based on its type:
+
+| Label | Use For |
+|-------|---------|
+| **Bug** | Fixes for incorrect behavior, bugs, regressions |
+| **Feature** | New functionality, UI changes, enhancements |
+| **Business** | Credit logic, billing, subscription, product rules |
+| **QA** | Quality assurance, prompt review, accuracy validation |
+| **Marketing** | Marketing-related tasks, campaigns, copy |
+
+---
+
+## Rules
+
+- **Icons:** Use 🎯 (Context), ✅ (Acceptance Criteria), 🔗 (Implementation Notes) as section headers.
+- **Spacing:** Add a blank line after each section header and a blank line between each of the three sections (Context, Acceptance Criteria, Implementation Notes).
 - **Acceptance criteria** are checkboxes in Linear (use `- [ ]` in descriptions so they render as unchecked).
+- **Labels** are required; assign one of Bug, Feature, Business, QA, or Marketing per task.
 - Keep context brief but sufficient for anyone picking up the task.
 - Implementation notes are optional but encouraged when they unblock or guide implementation.
