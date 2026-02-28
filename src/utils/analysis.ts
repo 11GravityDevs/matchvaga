@@ -3,7 +3,6 @@ export interface MissingSkillsByCategory {
   behavioral: string[];
 }
 
-/** Build MissingSkillsByCategory from the two DB columns (after split). */
 export function missingSkillsFromColumns(
   technical: unknown,
   behavioral: unknown
