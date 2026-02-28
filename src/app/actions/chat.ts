@@ -2,8 +2,6 @@
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-import { revalidatePath } from "next/cache";
-
 import { refinementResponseSchema } from "@/lib/ai/config/refinement-response-schema";
 import { REFINEMENT_SYSTEM_PROMPT } from "@/lib/ai/prompts/refinement";
 import { normalizeAIResumeData } from "@/lib/ai/utils/normalize-resume";
@@ -19,16 +17,6 @@ export interface ApplyCvRefinementResult {
   modifiedResume?: ResumeData;
   summary?: string;
   error?: string;
-}
-
-export interface ApplyChatSuggestionResult {
-  success: boolean;
-  error?: string;
-}
-
-export interface ChatSuggestion {
-  field: keyof ResumeData;
-  value: unknown;
 }
 
 function buildRefinementUserPrompt(
@@ -182,77 +170,4 @@ export async function applyCvRefinementInstruction(
     }
     return { success: false, error: "Erro ao processar instrução." };
   }
-}
-
-export async function applyChatSuggestion(
-  resumeId: string,
-  suggestion: ChatSuggestion
-): Promise<ApplyChatSuggestionResult> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-    error: authError,
-  } = await supabase.auth.getUser();
-
-  if (authError) {
-    return { success: false, error: translateAuthError(authError) };
-  }
-  if (!user) {
-    return { success: false, error: "Faça login para continuar." };
-  }
-
-  const { data: resumeRow, error: resumeError } = await supabase
-    .from("resumes")
-    .select("parsed_data")
-    .eq("id", resumeId)
-    .eq("user_id", user.id)
-    .single();
-
-  if (resumeError || !resumeRow) {
-    return { success: false, error: "Currículo não encontrado." };
-  }
-
-  const currentParsed = resumeDataSchema.safeParse(resumeRow.parsed_data);
-  if (!currentParsed.success) {
-    return { success: false, error: "Dados do currículo inválidos." };
-  }
-
-  const current = currentParsed.data as ResumeData;
-  const field = suggestion.field;
-  const value = suggestion.value;
-
-  if (!(field in current)) {
-    return { success: false, error: `Campo inválido: ${field}` };
-  }
-
-  const updated = { ...current, [field]: value };
-  const validated = resumeDataSchema.safeParse(updated);
-
-  if (!validated.success) {
-    return {
-      success: false,
-      error: "Sugestão inválida. Verifique os dados.",
-    };
-  }
-
-  const { error: updateError } = await supabase
-    .from("resumes")
-    .update({
-      parsed_data: validated.data as unknown as Record<string, unknown>,
-      updated_at: new Date().toISOString(),
-    })
-    .eq("id", resumeId)
-    .eq("user_id", user.id);
-
-  if (updateError) {
-    console.error("[applyChatSuggestion] update error:", updateError.message);
-    return {
-      success: false,
-      error: "Erro ao aplicar alteração.",
-    };
-  }
-
-  revalidatePath("/dashboard");
-
-  return { success: true };
 }

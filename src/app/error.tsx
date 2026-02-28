@@ -31,10 +31,6 @@ export default function Error({
           <p className="text-[240px] leading-none font-bold tracking-tight text-destructive/10">
             500
           </p>
-
-          <div className="absolute top-1/2 flex size-20 -translate-y-1/2 items-center justify-center rounded-2xl border border-border bg-card">
-            <TriangleAlert className="size-8 text-destructive" />
-          </div>
         </div>
 
         <div className="relative flex flex-col items-center gap-2 text-center">

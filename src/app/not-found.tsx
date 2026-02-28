@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, SearchX } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
 import { Logo } from "@/components/shared/logo";
 import { Button } from "@/components/ui/button";
@@ -18,10 +18,6 @@ export default function NotFound() {
           <p className="text-[240px] leading-none font-bold tracking-tight text-accent-brand/10">
             404
           </p>
-
-          <div className="absolute top-1/2 flex size-20 -translate-y-1/2 items-center justify-center rounded-2xl border border-border bg-card">
-            <SearchX className="size-8 text-accent-brand" />
-          </div>
         </div>
 
         <div className="relative flex flex-col items-center gap-2 text-center">

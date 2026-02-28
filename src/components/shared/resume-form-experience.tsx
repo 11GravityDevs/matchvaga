@@ -60,6 +60,7 @@ export function ResumeFormExperience({
                   }
                   disabled={isSaving}
                   className={INPUT_CLASS}
+                  aria-invalid={!!experienceError && expIndex === 0}
                 />
               </FormField>
               <FormField

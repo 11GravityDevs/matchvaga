@@ -18,6 +18,7 @@ export const EMPTY_RESUME_DATA: ResumeData = {
   github: "",
   summary: "",
   skills: [],
+  languages: [],
   experience: [createEmptyExperience()],
   education: [createEmptyEducation()],
 };

@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ResumeFormPersonalData } from "@/components/shared/resume-form-personal-data";
 import { ResumeFormSkills } from "@/components/shared/resume-form-skills";
+import { ResumeFormLanguages } from "@/components/shared/resume-form-languages";
 import { ResumeFormEducation } from "@/components/shared/resume-form-education";
 import { ResumeFormExperience } from "@/components/shared/resume-form-experience";
 
@@ -101,6 +102,7 @@ export function ResumeFormCard({
             disabled={isSaving}
             variant="form"
             className="w-full"
+            aria-invalid={!!validationErrors?.summary}
           />
           {validationErrors?.summary && (
             <p className="text-sm text-destructive" role="alert">
@@ -114,6 +116,12 @@ export function ResumeFormCard({
           onChange={(skills) => updateField("skills", skills)}
           isSaving={isSaving}
           skillsError={validationErrors?.skills}
+        />
+
+        <ResumeFormLanguages
+          languages={data.languages ?? []}
+          onChange={(languages) => updateField("languages", languages)}
+          isSaving={isSaving}
         />
 
         <ResumeFormEducation
