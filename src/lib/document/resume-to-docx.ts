@@ -110,6 +110,31 @@ export async function buildResumeDocx(data: ResumeData): Promise<Buffer> {
     );
   }
 
+  if (data.languages?.length) {
+    children.push(
+      new Paragraph({
+        children: [
+          new TextRun({
+            text: "Idiomas",
+            bold: true,
+            size: 24,
+          }),
+        ],
+        heading: HeadingLevel.HEADING_2,
+        spacing: { before: 120, after: 80 },
+      }),
+      new Paragraph({
+        children: [
+          new TextRun({
+            text: data.languages.join(", "),
+            size: 22,
+          }),
+        ],
+        spacing: { after: 200 },
+      })
+    );
+  }
+
   if (data.experience.length > 0) {
     children.push(
       new Paragraph({

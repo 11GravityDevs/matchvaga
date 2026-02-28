@@ -41,6 +41,7 @@ export function ResumeFormPersonalData({
             onChange={(e) => updateField("fullName", e.target.value)}
             disabled={isSaving}
             className={INPUT_CLASS}
+            aria-invalid={!!validationErrors?.fullName}
           />
         </FormField>
         <FormField
@@ -56,6 +57,7 @@ export function ResumeFormPersonalData({
             onChange={(e) => updateField("email", e.target.value)}
             disabled={isSaving}
             className={INPUT_CLASS}
+            aria-invalid={!!validationErrors?.email}
           />
         </FormField>
       </div>
@@ -72,6 +74,7 @@ export function ResumeFormPersonalData({
             onChange={(e) => updateField("location", e.target.value)}
             disabled={isSaving}
             className={INPUT_CLASS}
+            aria-invalid={!!validationErrors?.location}
           />
         </FormField>
         <FormField
@@ -86,12 +89,20 @@ export function ResumeFormPersonalData({
             onChange={(e) => updateField("phone", e.target.value)}
             disabled={isSaving}
             className={INPUT_CLASS}
+            aria-invalid={!!validationErrors?.phone}
           />
         </FormField>
       </div>
       <div className="flex gap-8">
         <FormField
-          label="LinkedIn (opcional)"
+          label={
+            <div className="flex items-baseline gap-0.5">
+              LinkedIn
+              <span className="align-baseline text-small font-normal text-muted-foreground">
+                (opcional)
+              </span>
+            </div>
+          }
           htmlFor="linkedin"
           className="flex-1"
         >
@@ -104,7 +115,14 @@ export function ResumeFormPersonalData({
           />
         </FormField>
         <FormField
-          label="GitHub (opcional)"
+          label={
+            <div className="flex items-baseline gap-0.5">
+              GitHub
+              <span className="align-baseline text-small font-normal text-muted-foreground">
+                (opcional)
+              </span>
+            </div>
+          }
           htmlFor="github"
           className="flex-1"
         >

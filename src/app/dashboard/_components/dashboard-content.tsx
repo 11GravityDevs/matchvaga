@@ -1,8 +1,11 @@
 "use client";
 
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { TrendingUp, TriangleAlert, CircleCheck } from "lucide-react";
 
 import { generateOptimizedDocument } from "@/app/actions/document";
+import { ROUTE_DASHBOARD_NEW_ANALYSIS } from "@/constants/routes";
 import { DashboardHeader } from "./dashboard-header";
 import { AnalysisHistoryTable } from "./analysis-history-table";
 import { KpiCard } from "@/components/shared/kpi-card";
@@ -18,12 +21,23 @@ import { Loading } from "@/components/ui/loading";
 
 interface DashboardContentProps {
   userName: string;
+  fromOnboarding?: boolean;
 }
 
-export function DashboardContent({ userName }: DashboardContentProps) {
+export function DashboardContent({
+  userName,
+  fromOnboarding = false,
+}: DashboardContentProps) {
+  const router = useRouter();
   const { data: analyses = [], isLoading } = useQuery(analysesQueryOptions);
 
-  if (isLoading) {
+  useEffect(() => {
+    if (!isLoading && fromOnboarding) {
+      router.replace(ROUTE_DASHBOARD_NEW_ANALYSIS);
+    }
+  }, [isLoading, fromOnboarding, router]);
+
+  if (isLoading || fromOnboarding) {
     return <Loading className="min-h-0 flex-1" />;
   }
 

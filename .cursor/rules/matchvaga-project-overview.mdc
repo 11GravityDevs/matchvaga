@@ -84,6 +84,9 @@ Route-local utils/hooks/constants use relative imports (e.g. `./_utils/...`, `..
 | **Prettier** + `prettier-plugin-tailwindcss` | Auto-format; Tailwind class sorting |
 | **ESLint** + `eslint-config-next` | Linting with Next.js rules |
 
+- **Cursor rules:** Types (Always / Auto Attached / Agent Requested) and editing standards: see `rule-writing-guidelines.mdc`.
+- **Git:** Workflow and commit format: see `git-workflow.mdc`, `commit-messages.mdc`.
+
 ## Keeping Rules Updated
 
 When the project changes, update these rules accordingly:
@@ -108,3 +111,5 @@ When the project changes, update these rules accordingly:
 | Editing rules | See `rule-writing-guidelines.mdc` |
 | New MCP server | Update `mcp-tools.mdc` and `.cursor/mcp.json` |
 | Linear task template change | Update `linear-task-template.mdc` |
+| Branch + Linear workflow (start task) | Update `linear-task-branch.mdc` |
+| Git workflow or commit message convention | Update `git-workflow.mdc` or `commit-messages.mdc`; keep branch workflow in `linear-task-branch.mdc` |

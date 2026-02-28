@@ -36,9 +36,14 @@ function buildUserPrompt(
     `Candidate: ${resumeData.fullName}`,
     `Summary: ${resumeData.summary}`,
     `Skills: ${skills.join(", ")}`,
+    resumeData.languages?.length
+      ? `Languages: ${resumeData.languages.join(", ")}`
+      : null,
     `Experience: ${resumeData.experience.map((e) => `${e.jobTitle} at ${e.company}: ${e.description}`).join(" | ")}`,
     `Education: ${resumeData.education.map((e) => `${e.course} at ${e.institution}`).join(" | ")}`,
-  ].join("\n");
+  ]
+    .filter(Boolean)
+    .join("\n");
 
   return `Job description (extract job_title and job_company from this):
 ${jobDescription}

@@ -2,8 +2,15 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Download, Play } from "lucide-react";
+import { Download, FileCheck, FileText, Loader2, Play } from "lucide-react";
 
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import {
   QUERY_CONTINUE_ANALYSIS,
@@ -58,6 +65,7 @@ export function AnalysisHistoryTable({
   onDownload,
 }: AnalysisHistoryTableProps) {
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
+  const [openAnalysisId, setOpenAnalysisId] = useState<string | null>(null);
 
   const handleDownload = async (analysisId: string, format: "pdf" | "docx") => {
     if (!onDownload) return;
@@ -67,6 +75,7 @@ export function AnalysisHistoryTable({
       if (result.success && result.url) {
         window.open(result.url, "_blank");
       }
+      setOpenAnalysisId(null);
     } finally {
       setDownloadingId(null);
     }
@@ -202,28 +211,33 @@ export function AnalysisHistoryTable({
               <div className="flex w-action shrink-0 items-center justify-center gap-1 p-4">
                 {row.status === "pending" ? (
                   <Button
-                    size="xs"
-                    className="gap-1 text-accent-brand underline underline-offset-4 hover:text-accent-brand-hover"
+                    size="icon"
+                    className="text-accent-brand hover:text-accent-brand-hover [&_svg]:size-5"
                     variant="ghost"
-                    asChild
+                    title="Continuar"
                   >
                     <Link
                       href={`${ROUTE_DASHBOARD_NEW_ANALYSIS}?${QUERY_CONTINUE_ANALYSIS}=${row.analysisId}`}
                     >
-                      <Play className="h-4 w-4" />
-                      Continuar
+                      <Play className="size-5"  />
                     </Link>
                   </Button>
                 ) : (
                   <Button
-                    size="xs"
-                    className="text-accent-brand underline underline-offset-4 hover:text-accent-brand-hover"
+                    size="icon"
+                    className="text-accent-brand hover:text-accent-brand-hover [&_svg]:size-5"
                     variant="ghost"
                     disabled={!onDownload || downloadingId === row.analysisId}
-                    onClick={() => handleDownload(row.analysisId, "pdf")}
+                    onClick={() => setOpenAnalysisId(row.analysisId)}
+                    aria-haspopup="dialog"
+                    aria-expanded={openAnalysisId === row.analysisId}
+                    title="Baixar"
                   >
-                    <Download className="h-4 w-4" />
-                    {downloadingId === row.analysisId ? "..." : "Baixar"}
+                    {downloadingId === row.analysisId ? (
+                      <Loader2 className="size-5 animate-spin" />
+                    ) : (
+                      <Download className="size-5" />
+                    )}
                   </Button>
                 )}
               </div>
@@ -231,6 +245,44 @@ export function AnalysisHistoryTable({
           ))
         )}
       </div>
+
+      <Dialog
+        open={openAnalysisId !== null}
+        onOpenChange={(open) => !open && setOpenAnalysisId(null)}
+      >
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Baixar documento</DialogTitle>
+          </DialogHeader>
+          <DialogFooter className="flex-row gap-3 sm:justify-center">
+            <Button
+              size="brand"
+              variant="outline"
+              className="gap-1.5"
+              disabled={!openAnalysisId || downloadingId === openAnalysisId}
+              onClick={() =>
+                openAnalysisId && handleDownload(openAnalysisId, "docx")
+              }
+            >
+              <FileText className="h-4 w-4" />
+              Baixar DOCX
+            </Button>
+
+            <Button
+              size="brand"
+              variant="brand"
+              className="gap-1.5"
+              disabled={!openAnalysisId || downloadingId === openAnalysisId}
+              onClick={() =>
+                openAnalysisId && handleDownload(openAnalysisId, "pdf")
+              }
+            >
+              <FileCheck className="h-4 w-4" />
+              Baixar PDF
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

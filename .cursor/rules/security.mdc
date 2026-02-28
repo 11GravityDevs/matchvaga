@@ -1,6 +1,6 @@
 ---
 description: Security — API keys, env vars, Supabase client usage
-globs: src/**/*.ts,src/**/*.tsx,src/lib/**
+globs: src/**/*.ts,src/**/*.tsx
 alwaysApply: false
 ---
 

@@ -52,7 +52,14 @@ export function ResumeFormEducation({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-1.5">
-        <h3 className="text-section-title">Formação</h3>
+        <h3 className="text-section-title">
+          <span className="inline-flex items-baseline gap-1">
+            Formação
+            <span className="align-baseline text-small font-normal text-muted-foreground">
+              (opcional)
+            </span>
+          </span>
+        </h3>
         {educationError && (
           <p className="text-sm text-destructive" role="alert">
             {educationError}
@@ -78,6 +85,7 @@ export function ResumeFormEducation({
                 }
                 disabled={isSaving}
                 className={INPUT_CLASS}
+                aria-invalid={!!educationError && eduIndex === 0}
               />
             </FormField>
 
@@ -206,20 +214,18 @@ export function ResumeFormEducation({
               />
             </FormField>
           </div>
-          {education.length > 1 && (
-            <div className="flex justify-end">
-              <Button
-                type="button"
-                variant="destructiveSolid"
-                size="sm"
-                onClick={() => removeEducation(eduIndex)}
-                className="w-fit gap-1.5 text-small"
-              >
-                <Trash2 className="h-4 w-4" />
-                Remover
-              </Button>
-            </div>
-          )}
+          <div className="flex justify-end">
+            <Button
+              type="button"
+              variant="destructiveSolid"
+              size="sm"
+              onClick={() => removeEducation(eduIndex)}
+              className="w-fit gap-1.5 text-small"
+            >
+              <Trash2 className="h-4 w-4" />
+              Remover
+            </Button>
+          </div>
         </div>
       ))}
 

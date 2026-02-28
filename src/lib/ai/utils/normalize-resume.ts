@@ -16,6 +16,7 @@ export function normalizeAIResumeData(raw: unknown): unknown {
   }
 
   if (!Array.isArray(obj.skills)) obj.skills = [];
+  if (!Array.isArray(obj.languages)) obj.languages = [];
   if (!Array.isArray(obj.experience)) obj.experience = [];
   if (!Array.isArray(obj.education)) obj.education = [];
 

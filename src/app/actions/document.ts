@@ -76,7 +76,7 @@ export async function synthesizeOptimizedResumeForPreview(
   const missingSkills =
     selectedMissingSkills && selectedMissingSkills.length > 0
       ? selectedMissingSkills
-      : ((analysisRow.missing_skills ?? []) as string[]);
+      : [];
 
   const synthesis = await synthesizeOptimizedResume(
     resumeData,
@@ -169,7 +169,7 @@ export async function generateOptimizedDocument(
   const missingSkills =
     selectedMissingSkills && selectedMissingSkills.length > 0
       ? selectedMissingSkills
-      : ((analysisRow.missing_skills ?? []) as string[]);
+      : [];
 
   const synthesis = await synthesizeOptimizedResume(
     resumeData,

@@ -100,6 +100,7 @@ export function ResumeFormSkills({
             placeholder="Digite uma habilidade e pressione Enter"
             disabled={isSaving}
             className="h-9 bg-background px-3 shadow-none focus-visible:border-accent-brand focus-visible:ring-1 focus-visible:ring-accent-brand/30"
+            aria-invalid={!!skillsError}
           />
         )}
         {!isAddingSkill && (

@@ -51,6 +51,7 @@ export function VerifyContent() {
     github: "",
     summary: resumeContent,
     skills: [],
+    languages: [],
     experience: [createEmptyExperience()],
     education: [createEmptyEducation()],
   };

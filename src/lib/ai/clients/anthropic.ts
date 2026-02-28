@@ -34,7 +34,7 @@ ${job.rawText}
 
 ---
 Matched skills (emphasize these): ${matchedSkills.join(", ") || "none"}
-Missing skills (weave in where truthful): ${missingSkills.join(", ") || "none"}
+${missingSkills.length === 0 ? "Missing skills: none — do not add any skills beyond the matched skills list above." : `Missing skills (weave in where truthful): ${missingSkills.join(", ")}`}
 
 ---
 Current resume (JSON):

@@ -143,6 +143,13 @@ export function ResumeDocument({ data }: ResumeDocumentProps) {
           </View>
         ) : null}
 
+        {data.languages?.length ? (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>Idiomas</Text>
+            <Text style={styles.summary}>{data.languages.join(", ")}</Text>
+          </View>
+        ) : null}
+
         {data.experience.length > 0 ? (
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Experiência Profissional</Text>
