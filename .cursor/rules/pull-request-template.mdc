@@ -41,4 +41,4 @@ Explicitly state how the changes were or should be validated — also as checkbo
 - **Always** structure PR descriptions using the sections above, in this order.
 - **Acceptance criteria** and **Test Plan** must use `- [ ]` checkboxes so they render as real checklists in GitHub.
 - When a PR implements or changes a Linear task, reference the Linear issue ID in **🔗 Links** and ensure the Linear description uses `linear-task-template.mdc`.
-- When operating programmatically, use the GitHub MCP (`user-github`) for reading and reviewing pull requests (`pull_request_read`, `pull_request_review_write`), and follow this template when generating review bodies or PR descriptions.
+- When using GitHub MCP (if configured), use it for reading and reviewing pull requests and follow this template when generating review bodies or PR descriptions.

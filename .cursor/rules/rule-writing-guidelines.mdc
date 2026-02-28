@@ -1,11 +1,13 @@
 ---
-description: Internal standards for writing and editing Cursor rules
+description: When to use: creating or editing .cursor/rules; MDC frontmatter, scoping, and instruction style
 alwaysApply: false
 ---
 
 # Rule Writing Guidelines
 
 Standards for editing `.cursor/rules/*.mdc`. See `matchvaga-project-overview.mdc` "Keeping Rules Updated" for when to update each rule.
+
+**Agent Requested rules:** Must have a clear `description` so the AI can decide when to include them. Prefer "When to use: …" or a short scenario (e.g. "Commit message format and good practices").
 
 ## Instruction Style
 
@@ -20,6 +22,12 @@ Standards for editing `.cursor/rules/*.mdc`. See `matchvaga-project-overview.mdc
 - **Where:** Inline in the rule, not a separate "Examples" section unless many.
 
 ## Scoping
+
+| Rule type | Frontmatter | When included |
+|-----------|-------------|----------------|
+| **Always** | `alwaysApply: true` | Every conversation |
+| **Auto Attached** | `globs: path` | When referenced files match the glob |
+| **Agent Requested** | `alwaysApply: false`, optional globs, **description required** | AI includes when description matches task |
 
 | Use Case | Setting | Example |
 |----------|---------|---------|

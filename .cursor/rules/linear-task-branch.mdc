@@ -30,4 +30,5 @@ If Linear suggests a branch name that starts with a username, replace that prefi
 ## Reference
 
 - Linear MCP: use **save_issue** to assign and set state. See `mcp-tools.mdc`.
+- Git workflow index and commit format: see `git-workflow.mdc`, `commit-messages.mdc`.
 - Default branch: use the repo’s default (e.g. `main`); confirm in the project if unsure.
