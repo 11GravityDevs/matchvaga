@@ -32,16 +32,12 @@ export function DashboardContent({
   const { data: analyses = [], isLoading } = useQuery(analysesQueryOptions);
 
   useEffect(() => {
-    if (!isLoading && analyses.length === 0 && fromOnboarding) {
+    if (!isLoading && fromOnboarding) {
       router.replace(ROUTE_DASHBOARD_NEW_ANALYSIS);
     }
-  }, [isLoading, analyses.length, fromOnboarding, router]);
+  }, [isLoading, fromOnboarding, router]);
 
-  if (isLoading) {
-    return <Loading className="min-h-0 flex-1" />;
-  }
-
-  if (analyses.length === 0 && fromOnboarding) {
+  if (isLoading || fromOnboarding) {
     return <Loading className="min-h-0 flex-1" />;
   }
 
