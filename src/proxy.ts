@@ -82,6 +82,12 @@ export async function proxy(request: NextRequest) {
     const userHasResume = !error && (resumes?.length ?? 0) > 0;
     const pathname = request.nextUrl.pathname;
 
+    if (pathname.startsWith(ROUTE_ONBOARDING) && userHasResume) {
+      const url = request.nextUrl.clone();
+      url.pathname = ROUTE_DASHBOARD;
+      return NextResponse.redirect(url);
+    }
+
     if (pathname.startsWith(ROUTE_DASHBOARD) && !userHasResume) {
       const url = request.nextUrl.clone();
       url.pathname = ROUTE_ONBOARDING_UPLOAD;

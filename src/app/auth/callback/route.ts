@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 
-import { ROUTE_LOGIN, ROUTE_ONBOARDING_UPLOAD } from "@/constants/routes";
+import {
+  ROUTE_DASHBOARD,
+  ROUTE_LOGIN,
+  ROUTE_ONBOARDING_UPLOAD,
+} from "@/constants/routes";
+import { hasResume } from "@/app/actions/resume";
 import { createClient } from "@/lib/supabase/server";
 
 export async function GET(request: Request) {
@@ -17,6 +22,10 @@ export async function GET(request: Request) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error) {
+      if (await hasResume()) {
+        next = ROUTE_DASHBOARD;
+      }
+
       const forwardedHost = request.headers.get("x-forwarded-host");
       const isLocalEnv = process.env.NODE_ENV === "development";
 

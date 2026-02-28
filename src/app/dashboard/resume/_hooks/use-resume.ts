@@ -35,10 +35,13 @@ export function useResume(): UseResumeReturn {
         throw new Error(result.error ?? "Falha ao salvar");
       }
 
+      return { resumeId, data };
+    },
+    onSuccess: (result) => {
       queryClient.setQueryData(QUERY_KEY_RESUME, {
         success: true,
-        resumeId,
-        data,
+        resumeId: result.resumeId,
+        data: result.data,
       });
     },
   });

@@ -41,10 +41,13 @@ export function useResumeVerify({
         throw new Error(result.error ?? "Erro ao salvar.");
       }
 
+      return { resumeId, data };
+    },
+    onSuccess: (result) => {
       queryClient.setQueryData(QUERY_KEY_RESUME, {
         success: true,
-        resumeId,
-        data,
+        resumeId: result.resumeId,
+        data: result.data,
       });
     },
   });
