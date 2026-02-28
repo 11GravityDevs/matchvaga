@@ -21,11 +21,47 @@ export interface SynthesisError {
 
 export type SynthesisOutput = SynthesisResult | SynthesisError;
 
+function buildMissingSkillsBlock(
+  missing:
+    | {
+        technical: string[];
+        behavioral: string[];
+      }
+    | undefined
+): string {
+  if (!missing) {
+    return "Missing skills: none — do not add any skills beyond the matched skills list above.";
+  }
+  const { technical, behavioral } = missing;
+  const hasTechnical = technical.length > 0;
+  const hasBehavioral = behavioral.length > 0;
+
+  if (!hasTechnical && !hasBehavioral) {
+    return "Missing skills: none — do not add any skills beyond the matched skills list above.";
+  }
+
+  const lines: string[] = [];
+
+  if (hasTechnical) {
+    lines.push(
+      `Missing technical skills (weave in where truthful): ${technical.join(", ")}`
+    );
+  }
+
+  if (hasBehavioral) {
+    lines.push(
+      `Missing behavioral skills (weave in where truthful): ${behavioral.join(", ")}`
+    );
+  }
+
+  return lines.join("\n");
+}
+
 function buildUserPrompt(
   resumeData: ResumeData,
   job: { title: string; company: string; rawText: string },
   matchedSkills: string[],
-  missingSkills: string[]
+  missingSkills: { technical: string[]; behavioral: string[] } | undefined
 ): string {
   return `Job: ${job.title} at ${job.company}
 
@@ -34,7 +70,7 @@ ${job.rawText}
 
 ---
 Matched skills (emphasize these): ${matchedSkills.join(", ") || "none"}
-${missingSkills.length === 0 ? "Missing skills: none — do not add any skills beyond the matched skills list above." : `Missing skills (weave in where truthful): ${missingSkills.join(", ")}`}
+${buildMissingSkillsBlock(missingSkills)}
 
 ---
 Current resume (JSON):
@@ -47,9 +83,10 @@ export async function synthesizeOptimizedResume(
   resumeData: ResumeData,
   job: { title: string; company: string; rawText: string },
   matchedSkills: string[],
-  missingSkills: string[]
+  missingSkills: { technical: string[]; behavioral: string[] } | undefined
 ): Promise<SynthesisOutput> {
   const apiKey = process.env.ANTHROPIC_API_KEY;
+
   if (!apiKey) {
     return { success: false, error: "ANTHROPIC_API_KEY is not configured" };
   }

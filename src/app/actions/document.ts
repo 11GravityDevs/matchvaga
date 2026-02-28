@@ -23,7 +23,8 @@ export interface SynthesizeOptimizedResumeResult {
 
 export async function synthesizeOptimizedResumeForPreview(
   analysisId: string,
-  selectedMissingSkills?: string[]
+  selectedTechnicalSkills?: string[],
+  selectedBehavioralSkills?: string[]
 ): Promise<SynthesizeOptimizedResumeResult> {
   const supabase = await createClient();
   const {
@@ -73,16 +74,15 @@ export async function synthesizeOptimizedResumeForPreview(
     rawText: string;
   };
   const matchedSkills = (analysisRow.matched_skills ?? []) as string[];
-  const missingSkills =
-    selectedMissingSkills && selectedMissingSkills.length > 0
-      ? selectedMissingSkills
-      : [];
+  const technical = selectedTechnicalSkills ?? [];
+  const behavioral = selectedBehavioralSkills ?? [];
+  const hasAnyMissing = technical.length > 0 || behavioral.length > 0;
 
   const synthesis = await synthesizeOptimizedResume(
     resumeData,
     jobSnapshot,
     matchedSkills,
-    missingSkills
+    hasAnyMissing ? { technical, behavioral } : undefined
   );
 
   if (!synthesis.success) {
@@ -104,7 +104,8 @@ export interface GenerateOptimizedDocumentResult {
 export async function generateOptimizedDocument(
   analysisId: string,
   format: "pdf" | "docx",
-  selectedMissingSkills?: string[]
+  selectedTechnicalSkills?: string[],
+  selectedBehavioralSkills?: string[]
 ): Promise<GenerateOptimizedDocumentResult> {
   const supabase = await createClient();
   const {
@@ -153,16 +154,15 @@ export async function generateOptimizedDocument(
     rawText: string;
   };
   const matchedSkills = (analysisRow.matched_skills ?? []) as string[];
-  const missingSkills =
-    selectedMissingSkills && selectedMissingSkills.length > 0
-      ? selectedMissingSkills
-      : [];
+  const technical = selectedTechnicalSkills ?? [];
+  const behavioral = selectedBehavioralSkills ?? [];
+  const hasAnyMissing = technical.length > 0 || behavioral.length > 0;
 
   const synthesis = await synthesizeOptimizedResume(
     resumeData,
     jobSnapshot,
     matchedSkills,
-    missingSkills
+    hasAnyMissing ? { technical, behavioral } : undefined
   );
 
   if (!synthesis.success) {

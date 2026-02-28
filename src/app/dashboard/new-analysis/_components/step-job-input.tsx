@@ -36,25 +36,33 @@ export function StepJobInput() {
   } = useMutation({
     mutationFn: async () => {
       if (!resumeId) throw new Error("Currículo não encontrado.");
+
       const result = await runGapAnalysis(resumeId, jobDescription.trim());
+
       if (!result.success) {
         throw new Error(result.error ?? "Erro ao analisar. Tente novamente.");
       }
+
       return result;
     },
     onSuccess: (result) => {
       void queryClient.invalidateQueries({ queryKey: QUERY_KEY_ANALYSES });
+
       const roleLabel =
         result.job_title && result.job_company
           ? `${result.job_title} - ${result.job_company}`
           : (result.job_title ?? result.job_company ?? "Vaga");
+
       setJobRole(roleLabel);
+
       setAnalysisResult({
         analysisId: result.analysisId!,
         score: result.score!,
         matchedSkills: result.matched_skills!,
-        missingSkills: result.missing_skills!,
+        technicalSkills: result.missing_technical_skills ?? [],
+        behavioralSkills: result.missing_behavioral_skills ?? [],
       });
+
       setStep(2);
     },
   });

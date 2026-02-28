@@ -416,7 +416,15 @@
   background-color: var(--card);
 }
 
+@utility scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
 @layer base {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
   html {
     scroll-behavior: smooth;
   }

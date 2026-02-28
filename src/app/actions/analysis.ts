@@ -8,17 +8,24 @@ import { jobSnapshotSchema } from "@/schemas/job";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
 import { translateAuthError } from "@/utils/auth";
+import {
+  parseMissingSkillsFromDb,
+  type MissingSkillsByCategory,
+} from "@/utils/analysis";
 
 export interface RunGapAnalysisResult {
   success: boolean;
   analysisId?: string;
   score?: number;
   matched_skills?: string[];
-  missing_skills?: string[];
+  missing_technical_skills?: string[];
+  missing_behavioral_skills?: string[];
   job_title?: string;
   job_company?: string;
   error?: string;
 }
+
+export type { MissingSkillsByCategory } from "@/utils/analysis";
 
 export interface AnalysisRow {
   id: string;
@@ -26,7 +33,7 @@ export interface AnalysisRow {
   job_snapshot: { title: string; company: string; rawText: string };
   score: number;
   matched_skills: string[];
-  missing_skills: string[];
+  missing_skills: MissingSkillsByCategory;
   created_at: string;
 }
 
@@ -91,6 +98,11 @@ export async function runGapAnalysis(
     return { success: false, error: "Dados da vaga inválidos." };
   }
 
+  const missingSkillsPayload: MissingSkillsByCategory = {
+    technical: aiResult.data.missing_technical_skills,
+    behavioral: aiResult.data.missing_behavioral_skills,
+  };
+
   const { data: analysisRow, error: insertError } = await supabase
     .from("analyses")
     .insert({
@@ -99,7 +111,7 @@ export async function runGapAnalysis(
       job_snapshot: jobParsed.data as unknown as Record<string, unknown>,
       score: aiResult.data.score,
       matched_skills: aiResult.data.matched_skills,
-      missing_skills: aiResult.data.missing_skills,
+      missing_skills: missingSkillsPayload,
     })
     .select("id")
     .single();
@@ -119,7 +131,8 @@ export async function runGapAnalysis(
     analysisId: analysisRow.id,
     score: aiResult.data.score,
     matched_skills: aiResult.data.matched_skills,
-    missing_skills: aiResult.data.missing_skills,
+    missing_technical_skills: aiResult.data.missing_technical_skills,
+    missing_behavioral_skills: aiResult.data.missing_behavioral_skills,
     job_title: aiResult.data.job_title,
     job_company: aiResult.data.job_company,
   };
@@ -167,7 +180,7 @@ export async function getAnalysesForUser(): Promise<GetAnalysesForUserResult> {
       },
       score: row.score,
       matched_skills: (row.matched_skills ?? []) as string[],
-      missing_skills: (row.missing_skills ?? []) as string[],
+      missing_skills: parseMissingSkillsFromDb(row.missing_skills),
       created_at: row.created_at,
     })),
   };
