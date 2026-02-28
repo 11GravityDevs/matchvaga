@@ -19,4 +19,6 @@ export const ROUTE_AUTH_CALLBACK = "/auth/callback";
 
 export const ROUTE_DASHBOARD_NEW_ANALYSIS = "/dashboard/new-analysis";
 
+export const QUERY_CONTINUE_ANALYSIS = "continue";
+
 export const ROUTE_DASHBOARD_RESUME = "/dashboard/resume";

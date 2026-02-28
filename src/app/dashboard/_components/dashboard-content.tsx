@@ -70,6 +70,7 @@ export function DashboardContent({
       beforeColor: getScoreColorToken(a.score),
       after: "—",
       afterColor: "var(--muted-foreground)",
+      status: a.status,
     };
   });
 

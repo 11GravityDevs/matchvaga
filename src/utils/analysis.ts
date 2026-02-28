@@ -3,6 +3,16 @@ export interface MissingSkillsByCategory {
   behavioral: string[];
 }
 
+export function missingSkillsFromColumns(
+  technical: unknown,
+  behavioral: unknown
+): MissingSkillsByCategory {
+  return {
+    technical: Array.isArray(technical) ? technical : [],
+    behavioral: Array.isArray(behavioral) ? behavioral : [],
+  };
+}
+
 export function parseMissingSkillsFromDb(
   raw: unknown
 ): MissingSkillsByCategory {

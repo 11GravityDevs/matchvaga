@@ -42,7 +42,9 @@ export async function synthesizeOptimizedResumeForPreview(
 
   const { data: analysisRow, error: analysisError } = await supabase
     .from("analyses")
-    .select("id, resume_id, job_snapshot, matched_skills, missing_skills")
+    .select(
+      "id, resume_id, job_snapshot, matched_skills, missing_technical_skills, missing_behavioral_skills"
+    )
     .eq("id", analysisId)
     .eq("user_id", user.id)
     .single();
@@ -89,6 +91,19 @@ export async function synthesizeOptimizedResumeForPreview(
     return { success: false, error: synthesis.error };
   }
 
+  const { error: updateStatusError } = await supabase
+    .from("analyses")
+    .update({ status: "completed" })
+    .eq("id", analysisId)
+    .eq("user_id", user.id);
+
+  if (updateStatusError) {
+    console.error(
+      "[synthesizeOptimizedResumeForPreview] status update error:",
+      updateStatusError.message
+    );
+  }
+
   return {
     success: true,
     data: synthesis.data,
@@ -122,7 +137,9 @@ export async function generateOptimizedDocument(
 
   const { data: analysisRow, error: analysisError } = await supabase
     .from("analyses")
-    .select("id, resume_id, job_snapshot, matched_skills, missing_skills")
+    .select(
+      "id, resume_id, job_snapshot, matched_skills, missing_technical_skills, missing_behavioral_skills"
+    )
     .eq("id", analysisId)
     .eq("user_id", user.id)
     .single();

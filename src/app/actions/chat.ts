@@ -6,7 +6,7 @@ import { refinementResponseSchema } from "@/lib/ai/config/refinement-response-sc
 import { REFINEMENT_SYSTEM_PROMPT } from "@/lib/ai/prompts/refinement";
 import { normalizeAIResumeData } from "@/lib/ai/utils/normalize-resume";
 import {
-  parseMissingSkillsFromDb,
+  missingSkillsFromColumns,
   type MissingSkillsByCategory,
 } from "@/utils/analysis";
 import { createClient } from "@/lib/supabase/server";
@@ -98,7 +98,9 @@ export async function applyCvRefinementInstruction(
 
   const { data: analysisRow, error: analysisError } = await supabase
     .from("analyses")
-    .select("job_snapshot, matched_skills, missing_skills")
+    .select(
+      "job_snapshot, matched_skills, missing_technical_skills, missing_behavioral_skills"
+    )
     .eq("id", analysisId)
     .eq("user_id", user.id)
     .single();
@@ -113,7 +115,10 @@ export async function applyCvRefinementInstruction(
     rawText: string;
   };
   const matchedSkills = (analysisRow.matched_skills ?? []) as string[];
-  const missingSkills = parseMissingSkillsFromDb(analysisRow.missing_skills);
+  const missingSkills = missingSkillsFromColumns(
+    analysisRow.missing_technical_skills,
+    analysisRow.missing_behavioral_skills
+  );
 
   const userPrompt = buildRefinementUserPrompt(
     currentResumeData,

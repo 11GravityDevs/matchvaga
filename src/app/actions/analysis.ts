@@ -9,7 +9,7 @@ import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
 import { translateAuthError } from "@/utils/auth";
 import {
-  parseMissingSkillsFromDb,
+  missingSkillsFromColumns,
   type MissingSkillsByCategory,
 } from "@/utils/analysis";
 
@@ -35,6 +35,7 @@ export interface AnalysisRow {
   matched_skills: string[];
   missing_skills: MissingSkillsByCategory;
   created_at: string;
+  status: string;
 }
 
 export interface GetAnalysesForUserResult {
@@ -98,11 +99,6 @@ export async function runGapAnalysis(
     return { success: false, error: "Dados da vaga inválidos." };
   }
 
-  const missingSkillsPayload: MissingSkillsByCategory = {
-    technical: aiResult.data.missing_technical_skills,
-    behavioral: aiResult.data.missing_behavioral_skills,
-  };
-
   const { data: analysisRow, error: insertError } = await supabase
     .from("analyses")
     .insert({
@@ -111,7 +107,9 @@ export async function runGapAnalysis(
       job_snapshot: jobParsed.data as unknown as Record<string, unknown>,
       score: aiResult.data.score,
       matched_skills: aiResult.data.matched_skills,
-      missing_skills: missingSkillsPayload,
+      missing_technical_skills: aiResult.data.missing_technical_skills,
+      missing_behavioral_skills: aiResult.data.missing_behavioral_skills,
+      status: "pending",
     })
     .select("id")
     .single();
@@ -155,7 +153,7 @@ export async function getAnalysesForUser(): Promise<GetAnalysesForUserResult> {
   const { data, error } = await supabase
     .from("analyses")
     .select(
-      "id, resume_id, job_snapshot, score, matched_skills, missing_skills, created_at"
+      "id, resume_id, job_snapshot, score, matched_skills, missing_technical_skills, missing_behavioral_skills, created_at, status"
     )
     .eq("user_id", user.id)
     .order("created_at", { ascending: false });
@@ -180,8 +178,69 @@ export async function getAnalysesForUser(): Promise<GetAnalysesForUserResult> {
       },
       score: row.score,
       matched_skills: (row.matched_skills ?? []) as string[],
-      missing_skills: parseMissingSkillsFromDb(row.missing_skills),
+      missing_skills: missingSkillsFromColumns(
+        row.missing_technical_skills,
+        row.missing_behavioral_skills
+      ),
       created_at: row.created_at,
+      status: row.status ?? "pending",
     })),
+  };
+}
+
+export interface GetAnalysisByIdResult {
+  success: boolean;
+  data?: AnalysisRow;
+  error?: string;
+}
+
+export async function getAnalysisById(
+  analysisId: string
+): Promise<GetAnalysisByIdResult> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError) {
+    return { success: false, error: translateAuthError(authError) };
+  }
+  if (!user) {
+    return { success: false, error: "Faça login para continuar." };
+  }
+
+  const { data: row, error } = await supabase
+    .from("analyses")
+    .select(
+      "id, resume_id, job_snapshot, score, matched_skills, missing_technical_skills, missing_behavioral_skills, created_at, status"
+    )
+    .eq("id", analysisId)
+    .eq("user_id", user.id)
+    .single();
+
+  if (error || !row) {
+    return { success: false, error: "Análise não encontrada." };
+  }
+
+  return {
+    success: true,
+    data: {
+      id: row.id,
+      resume_id: row.resume_id,
+      job_snapshot: row.job_snapshot as {
+        title: string;
+        company: string;
+        rawText: string;
+      },
+      score: row.score,
+      matched_skills: (row.matched_skills ?? []) as string[],
+      missing_skills: missingSkillsFromColumns(
+        row.missing_technical_skills,
+        row.missing_behavioral_skills
+      ),
+      created_at: row.created_at,
+      status: row.status,
+    },
   };
 }
