@@ -28,6 +28,7 @@ export interface AnalysisRow {
   matched_skills: string[];
   missing_skills: string[];
   created_at: string;
+  status: string;
 }
 
 export interface GetAnalysesForUserResult {
@@ -100,6 +101,7 @@ export async function runGapAnalysis(
       score: aiResult.data.score,
       matched_skills: aiResult.data.matched_skills,
       missing_skills: aiResult.data.missing_skills,
+      status: "pending",
     })
     .select("id")
     .single();
@@ -142,7 +144,7 @@ export async function getAnalysesForUser(): Promise<GetAnalysesForUserResult> {
   const { data, error } = await supabase
     .from("analyses")
     .select(
-      "id, resume_id, job_snapshot, score, matched_skills, missing_skills, created_at"
+      "id, resume_id, job_snapshot, score, matched_skills, missing_skills, created_at, status"
     )
     .eq("user_id", user.id)
     .order("created_at", { ascending: false });
@@ -169,6 +171,61 @@ export async function getAnalysesForUser(): Promise<GetAnalysesForUserResult> {
       matched_skills: (row.matched_skills ?? []) as string[],
       missing_skills: (row.missing_skills ?? []) as string[],
       created_at: row.created_at,
+      status: row.status ?? "pending",
     })),
+  };
+}
+
+export interface GetAnalysisByIdResult {
+  success: boolean;
+  data?: AnalysisRow;
+  error?: string;
+}
+
+export async function getAnalysisById(
+  analysisId: string
+): Promise<GetAnalysisByIdResult> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError) {
+    return { success: false, error: translateAuthError(authError) };
+  }
+  if (!user) {
+    return { success: false, error: "Faça login para continuar." };
+  }
+
+  const { data: row, error } = await supabase
+    .from("analyses")
+    .select(
+      "id, resume_id, job_snapshot, score, matched_skills, missing_skills, created_at, status"
+    )
+    .eq("id", analysisId)
+    .eq("user_id", user.id)
+    .single();
+
+  if (error || !row) {
+    return { success: false, error: "Análise não encontrada." };
+  }
+
+  return {
+    success: true,
+    data: {
+      id: row.id,
+      resume_id: row.resume_id,
+      job_snapshot: row.job_snapshot as {
+        title: string;
+        company: string;
+        rawText: string;
+      },
+      score: row.score,
+      matched_skills: (row.matched_skills ?? []) as string[],
+      missing_skills: (row.missing_skills ?? []) as string[],
+      created_at: row.created_at,
+      status: row.status,
+    },
   };
 }

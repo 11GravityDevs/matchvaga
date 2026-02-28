@@ -56,6 +56,7 @@ export function DashboardContent({ userName }: DashboardContentProps) {
       beforeColor: getScoreColorToken(a.score),
       after: "—",
       afterColor: "var(--muted-foreground)",
+      status: a.status,
     };
   });
 

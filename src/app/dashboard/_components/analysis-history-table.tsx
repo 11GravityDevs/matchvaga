@@ -1,9 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Download } from "lucide-react";
+import Link from "next/link";
+import { Download, Play } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import {
+  QUERY_CONTINUE_ANALYSIS,
+  ROUTE_DASHBOARD_NEW_ANALYSIS,
+} from "@/constants/routes";
 
 type FilterType = "todos" | "recentes" | "score-alto";
 
@@ -19,6 +24,7 @@ export interface AnalysisTableRow {
   beforeColor: string;
   after: string;
   afterColor: string;
+  status: string;
 }
 
 interface AnalysisHistoryTableProps {
@@ -35,6 +41,16 @@ const filters: { label: string; value: FilterType }[] = [
   { label: "Recentes", value: "recentes" },
   { label: "Score Alto", value: "score-alto" },
 ];
+
+const STATUS_LABEL_PT_BR: Record<string, string> = {
+  pending: "Pendente",
+  completed: "Concluído",
+  abandoned: "Abandonado",
+};
+
+function getStatusLabel(status: string): string {
+  return STATUS_LABEL_PT_BR[status] ?? status;
+}
 
 export function AnalysisHistoryTable({
   rows,
@@ -104,6 +120,11 @@ export function AnalysisHistoryTable({
               Depois
             </span>
           </div>
+          <div className="flex min-w-0 flex-1 items-center gap-2 border-r border-border p-4">
+            <span className="truncate text-sm leading-snug text-muted-foreground">
+              Status
+            </span>
+          </div>
           <div className="flex w-action shrink-0 p-4" />
         </div>
 
@@ -161,7 +182,7 @@ export function AnalysisHistoryTable({
               </div>
 
               {/* After */}
-              <div className="flex min-w-0 flex-1 items-center gap-2 p-4">
+              <div className="flex min-w-0 flex-1 items-center gap-2 border-r border-border p-4">
                 <span
                   className="rounded-full px-2 py-0.5 text-caption-leading font-semibold text-on-accent-brand"
                   style={{ backgroundColor: row.afterColor }}
@@ -170,18 +191,41 @@ export function AnalysisHistoryTable({
                 </span>
               </div>
 
+              {/* Status */}
+              <div className="flex min-w-0 flex-1 items-center gap-2 border-r border-border p-4">
+                <span className="truncate text-sm text-foreground">
+                  {getStatusLabel(row.status)}
+                </span>
+              </div>
+
               {/* Action */}
-              <div className="flex w-action shrink-0 items-center justify-center p-4">
-                <Button
-                  size="xs"
-                  className="text-accent-brand underline underline-offset-4 hover:text-accent-brand-hover"
-                  variant="ghost"
-                  disabled={!onDownload || downloadingId === row.analysisId}
-                  onClick={() => handleDownload(row.analysisId, "pdf")}
-                >
-                  <Download className="h-4 w-4" />
-                  {downloadingId === row.analysisId ? "..." : "Baixar"}
-                </Button>
+              <div className="flex w-action shrink-0 items-center justify-center gap-1 p-4">
+                {row.status === "pending" ? (
+                  <Button
+                    size="xs"
+                    className="gap-1 text-accent-brand underline underline-offset-4 hover:text-accent-brand-hover"
+                    variant="ghost"
+                    asChild
+                  >
+                    <Link
+                      href={`${ROUTE_DASHBOARD_NEW_ANALYSIS}?${QUERY_CONTINUE_ANALYSIS}=${row.analysisId}`}
+                    >
+                      <Play className="h-4 w-4" />
+                      Continuar
+                    </Link>
+                  </Button>
+                ) : (
+                  <Button
+                    size="xs"
+                    className="text-accent-brand underline underline-offset-4 hover:text-accent-brand-hover"
+                    variant="ghost"
+                    disabled={!onDownload || downloadingId === row.analysisId}
+                    onClick={() => handleDownload(row.analysisId, "pdf")}
+                  >
+                    <Download className="h-4 w-4" />
+                    {downloadingId === row.analysisId ? "..." : "Baixar"}
+                  </Button>
+                )}
               </div>
             </div>
           ))

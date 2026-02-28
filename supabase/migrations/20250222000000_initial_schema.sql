@@ -29,6 +29,7 @@ CREATE TABLE analyses (
   score INTEGER NOT NULL CHECK (score >= 0 AND score <= 100),
   matched_skills JSONB NOT NULL DEFAULT '[]',
   missing_skills JSONB NOT NULL DEFAULT '[]',
+  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'completed', 'abandoned')),
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 

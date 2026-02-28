@@ -89,6 +89,19 @@ export async function synthesizeOptimizedResumeForPreview(
     return { success: false, error: synthesis.error };
   }
 
+  const { error: updateStatusError } = await supabase
+    .from("analyses")
+    .update({ status: "completed" })
+    .eq("id", analysisId)
+    .eq("user_id", user.id);
+
+  if (updateStatusError) {
+    console.error(
+      "[synthesizeOptimizedResumeForPreview] status update error:",
+      updateStatusError.message
+    );
+  }
+
   return {
     success: true,
     data: synthesis.data,
