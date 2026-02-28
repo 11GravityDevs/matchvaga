@@ -13,9 +13,11 @@ Produce an optimized resume as JSON. You must:
 - Education description: achievements as newline-separated bullets when applicable
 
 **Content:**
+- Only add or emphasize skills that appear in the provided matched_skills or missing_skills lists; do not add skills inferred from the job description that are not in those lists
+- When missing_skills is empty (or "none"), do not add any new skills beyond matched_skills; only emphasize matched_skills and reframe existing content
 - Emphasize and lead with matched_skills in the summary and experience descriptions
 - Reframe experience bullet points to use job-relevant keywords
-- Add or weave in missing_skills where truthful (e.g. "familiar with X" or relevant coursework)
+- Add or weave in missing_skills where truthful (e.g. "familiar with X" or relevant coursework) only when the list is non-empty
 - Keep all factual data (names, dates, companies) — only improve wording and emphasis
 
 **Output:**
