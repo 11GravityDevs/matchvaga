@@ -219,7 +219,7 @@ export function AnalysisHistoryTable({
                     <Link
                       href={`${ROUTE_DASHBOARD_NEW_ANALYSIS}?${QUERY_CONTINUE_ANALYSIS}=${row.analysisId}`}
                     >
-                      <Play className="size-5"  />
+                      <Play className="size-5" />
                     </Link>
                   </Button>
                 ) : (
