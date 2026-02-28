@@ -13,26 +13,31 @@ import { useNewAnalysis } from "../_contexts/new-analysis-context";
 
 interface ContinueAnalysisLoaderProps {
   children: React.ReactNode;
+  initialContinueId?: string | null;
 }
 
 export function ContinueAnalysisLoader({
   children,
+  initialContinueId = null,
 }: ContinueAnalysisLoaderProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const continueId = searchParams.get(QUERY_CONTINUE_ANALYSIS);
-  const [isLoading, setIsLoading] = useState(Boolean(continueId));
+  const [continueApplied, setContinueApplied] = useState(false);
   const loadedRef = useRef(false);
   const { setAnalysisResult, setStep, setJobDescription, setJobRole } =
     useNewAnalysis();
 
+  const inContinueMode = Boolean(continueId ?? initialContinueId);
+  const showLoading = inContinueMode && !continueApplied;
+
   useEffect(() => {
-    if (!continueId || loadedRef.current) return;
+    if (!continueId || continueApplied || loadedRef.current) return;
     loadedRef.current = true;
 
     getAnalysisById(continueId).then((result) => {
       if (!result.success || !result.data) {
-        setIsLoading(false);
+        setContinueApplied(true);
         router.replace(ROUTE_DASHBOARD_NEW_ANALYSIS);
         return;
       }
@@ -48,11 +53,12 @@ export function ContinueAnalysisLoader({
         behavioralSkills: a.missing_skills.behavioral,
       });
       setStep(2);
-      setIsLoading(false);
+      setContinueApplied(true);
       router.replace(ROUTE_DASHBOARD_NEW_ANALYSIS);
     });
   }, [
     continueId,
+    continueApplied,
     router,
     setAnalysisResult,
     setJobDescription,
@@ -60,7 +66,7 @@ export function ContinueAnalysisLoader({
     setStep,
   ]);
 
-  if (continueId && isLoading) {
+  if (showLoading) {
     return <Loading className="min-h-0 flex-1" />;
   }
 
