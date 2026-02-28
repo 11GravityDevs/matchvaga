@@ -1,0 +1,33 @@
+---
+description: Linear task start — pull main, create feat/fix branch (no username prefix), assign issue and set In Progress when user starts a task
+alwaysApply: true
+---
+
+# Linear Task – Branch and Issue Workflow
+
+When the user says they will **start** or **work on** a specific Linear task (e.g. by issue ID like MAT-8, or "the task on Linear"), follow this order:
+
+1. **Pull the default branch** (usually `main`):  
+   `git fetch origin main` then `git checkout main` and `git pull origin main` (or your project’s default branch).
+2. **Create the branch** for the task:
+   - **Branch name must start with** `feat/`, `fix/`, `chore/`, or similar — **never** with the user’s name (e.g. no `leolrccv/...`).
+   - Use the issue key and a short slug: e.g. `feat/mat-8-navigation-flow-redirect-when-no-analyses`, `fix/mat-12-login-error`.
+   - Pattern: `<prefix>/<issue-key-lower>-<short-slug>` (e.g. `feat/mat-8-...`, `fix/mat-9-...`).
+3. **Update the Linear issue** via the Linear MCP:
+   - Call **save_issue** with:
+     - `id`: the issue identifier (e.g. `MAT-8`),
+     - `assignee`: `"me"`,
+     - `state`: `"In Progress"`.
+   - Do this right after creating the branch so the issue is assigned to the user and moved to In Progress.
+
+## Branch naming
+
+- **Allowed:** `feat/mat-8-...`, `fix/mat-12-...`, `chore/mat-5-...`
+- **Not allowed:** `leolrccv/mat-8-...`, or any branch that starts with a username.
+
+If Linear suggests a branch name that starts with a username, replace that prefix with `feat/`, `fix/`, or another type prefix.
+
+## Reference
+
+- Linear MCP: use **save_issue** to assign and set state. See `mcp-tools.mdc`.
+- Default branch: use the repo’s default (e.g. `main`); confirm in the project if unsure.
