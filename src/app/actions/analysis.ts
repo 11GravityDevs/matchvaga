@@ -8,17 +8,24 @@ import { jobSnapshotSchema } from "@/schemas/job";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
 import { translateAuthError } from "@/utils/auth";
+import {
+  missingSkillsFromColumns,
+  type MissingSkillsByCategory,
+} from "@/utils/analysis";
 
 export interface RunGapAnalysisResult {
   success: boolean;
   analysisId?: string;
   score?: number;
   matched_skills?: string[];
-  missing_skills?: string[];
+  missing_technical_skills?: string[];
+  missing_behavioral_skills?: string[];
   job_title?: string;
   job_company?: string;
   error?: string;
 }
+
+export type { MissingSkillsByCategory } from "@/utils/analysis";
 
 export interface AnalysisRow {
   id: string;
@@ -26,7 +33,7 @@ export interface AnalysisRow {
   job_snapshot: { title: string; company: string; rawText: string };
   score: number;
   matched_skills: string[];
-  missing_skills: string[];
+  missing_skills: MissingSkillsByCategory;
   created_at: string;
   status: string;
 }
@@ -100,7 +107,8 @@ export async function runGapAnalysis(
       job_snapshot: jobParsed.data as unknown as Record<string, unknown>,
       score: aiResult.data.score,
       matched_skills: aiResult.data.matched_skills,
-      missing_skills: aiResult.data.missing_skills,
+      missing_technical_skills: aiResult.data.missing_technical_skills,
+      missing_behavioral_skills: aiResult.data.missing_behavioral_skills,
       status: "pending",
     })
     .select("id")
@@ -121,7 +129,8 @@ export async function runGapAnalysis(
     analysisId: analysisRow.id,
     score: aiResult.data.score,
     matched_skills: aiResult.data.matched_skills,
-    missing_skills: aiResult.data.missing_skills,
+    missing_technical_skills: aiResult.data.missing_technical_skills,
+    missing_behavioral_skills: aiResult.data.missing_behavioral_skills,
     job_title: aiResult.data.job_title,
     job_company: aiResult.data.job_company,
   };
@@ -144,7 +153,7 @@ export async function getAnalysesForUser(): Promise<GetAnalysesForUserResult> {
   const { data, error } = await supabase
     .from("analyses")
     .select(
-      "id, resume_id, job_snapshot, score, matched_skills, missing_skills, created_at, status"
+      "id, resume_id, job_snapshot, score, matched_skills, missing_technical_skills, missing_behavioral_skills, created_at, status"
     )
     .eq("user_id", user.id)
     .order("created_at", { ascending: false });
@@ -169,7 +178,10 @@ export async function getAnalysesForUser(): Promise<GetAnalysesForUserResult> {
       },
       score: row.score,
       matched_skills: (row.matched_skills ?? []) as string[],
-      missing_skills: (row.missing_skills ?? []) as string[],
+      missing_skills: missingSkillsFromColumns(
+        row.missing_technical_skills,
+        row.missing_behavioral_skills
+      ),
       created_at: row.created_at,
       status: row.status ?? "pending",
     })),
@@ -201,7 +213,7 @@ export async function getAnalysisById(
   const { data: row, error } = await supabase
     .from("analyses")
     .select(
-      "id, resume_id, job_snapshot, score, matched_skills, missing_skills, created_at, status"
+      "id, resume_id, job_snapshot, score, matched_skills, missing_technical_skills, missing_behavioral_skills, created_at, status"
     )
     .eq("id", analysisId)
     .eq("user_id", user.id)
@@ -223,7 +235,10 @@ export async function getAnalysisById(
       },
       score: row.score,
       matched_skills: (row.matched_skills ?? []) as string[],
-      missing_skills: (row.missing_skills ?? []) as string[],
+      missing_skills: missingSkillsFromColumns(
+        row.missing_technical_skills,
+        row.missing_behavioral_skills
+      ),
       created_at: row.created_at,
       status: row.status,
     },

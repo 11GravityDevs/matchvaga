@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
-import { ArrowLeft, Check, Lightbulb, Loader2, Sparkles } from "lucide-react";
+import { Check, Lightbulb, Loader2, RefreshCw, Sparkles } from "lucide-react";
 
 import { synthesizeOptimizedResumeForPreview } from "@/app/actions/document";
 import { Button } from "@/components/ui/button";
@@ -22,18 +22,94 @@ const FEEDBACK_BADGE_CLASSES = {
   low: "border-accent-low-border bg-accent-low-light text-accent-low-text",
 } as const;
 
+function SkillsColumn({
+  title,
+  description,
+  skills,
+  selectedCount,
+  totalCount,
+  onToggleSkill,
+}: {
+  title: string;
+  description: string;
+  skills: { id: string; label: string; selected: boolean }[];
+  selectedCount: number;
+  totalCount: number;
+  onToggleSkill: (id: string) => void;
+}) {
+  return (
+    <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-border bg-card">
+      <div className="flex shrink-0 justify-between gap-3 card-header-padding pb-6">
+        <div className="flex min-w-0 flex-1 flex-col gap-2">
+          <h2 className="truncate text-section-header">{title}</h2>
+          <p className="text-small-leading text-muted-foreground">
+            {description}
+          </p>
+        </div>
+        <div className="flex shrink-0 items-center self-start rounded-full border border-accent-brand-light bg-accent-brand-light px-3 py-1">
+          <span className="text-xs font-semibold text-accent-brand">
+            {selectedCount} de {totalCount} selecionadas
+          </span>
+        </div>
+      </div>
+      <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-auto p-6 pt-0 scrollbar-hide">
+        {skills.map((skill) => (
+          <button
+            key={skill.id}
+            type="button"
+            onClick={() => onToggleSkill(skill.id)}
+            className={cn(
+              "flex w-full cursor-pointer items-center gap-3 rounded-md border px-4 py-3 text-left transition-colors",
+              skill.selected
+                ? "border-accent-brand-light bg-accent-brand-light"
+                : "border-border bg-card hover:bg-muted/40"
+            )}
+          >
+            <div
+              className={cn(
+                "flex h-5 w-5 shrink-0 items-center justify-center rounded-md border transition-colors",
+                skill.selected
+                  ? "border-accent-brand bg-accent-brand"
+                  : "border-border bg-background"
+              )}
+            >
+              {skill.selected && <Check className="h-3 w-3 text-white" />}
+            </div>
+            <span className="text-sm font-semibold text-foreground">
+              {skill.label}
+            </span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function StepGapAnalysis() {
   const {
     jobRole,
     score,
     matchedSkills,
-    missingSkills,
+    technicalSkills,
+    behavioralSkills,
     toggleSkill,
     setStep,
-    setSelectedMissingSkills,
+    setSelectedTechnicalSkills,
+    setSelectedBehavioralSkills,
     setOptimizedResumeData,
     analysisId,
   } = useNewAnalysis();
+
+  const selectedTechnical = technicalSkills
+    .filter((s) => s.selected)
+    .map((s) => s.label);
+  const selectedBehavioral = behavioralSkills
+    .filter((s) => s.selected)
+    .map((s) => s.label);
+  const selectedCount =
+    technicalSkills.filter((s) => s.selected).length +
+    behavioralSkills.filter((s) => s.selected).length;
+  const totalSkillsCount = technicalSkills.length + behavioralSkills.length;
 
   const {
     mutate: generateDocument,
@@ -42,12 +118,10 @@ export function StepGapAnalysis() {
   } = useMutation({
     mutationFn: async () => {
       if (!analysisId) throw new Error("Análise não encontrada.");
-      const selected = missingSkills
-        .filter((s) => s.selected)
-        .map((s) => s.label);
       const result = await synthesizeOptimizedResumeForPreview(
         analysisId,
-        selected.length > 0 ? selected : undefined
+        selectedTechnical,
+        selectedBehavioral
       );
 
       if (!result.success) {
@@ -59,10 +133,8 @@ export function StepGapAnalysis() {
       return result;
     },
     onSuccess: (result) => {
-      const selected = missingSkills
-        .filter((s) => s.selected)
-        .map((s) => s.label);
-      setSelectedMissingSkills(selected);
+      setSelectedTechnicalSkills(selectedTechnical);
+      setSelectedBehavioralSkills(selectedBehavioral);
       if (result.data) {
         setOptimizedResumeData(result.data);
       }
@@ -70,7 +142,6 @@ export function StepGapAnalysis() {
     },
   });
 
-  const selectedCount = missingSkills.filter((s) => s.selected).length;
   const displayScore = score ?? 0;
   const feedback = getScoreFeedback(displayScore);
   const feedbackClasses = FEEDBACK_BADGE_CLASSES[feedback.variant];
@@ -100,58 +171,30 @@ export function StepGapAnalysis() {
 
         {/* Two-column body */}
         <div className="flex min-h-0 flex-1 column-gap overflow-hidden">
-          {/* Left column — Skills selection */}
-          <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-border bg-card">
-            {/* Card header */}
-            <div className="flex shrink-0 items-center justify-between card-header-padding">
-              <div className="flex flex-col gap-1.5">
-                <h2 className="text-section-header">Habilidades Ausentes</h2>
-                <p className="text-small-leading text-muted-foreground">
-                  Selecione as habilidades que deseja incorporar ao currículo
-                  otimizado
-                </p>
-              </div>
-              <div className="flex items-center rounded-full border border-accent-brand-light bg-accent-brand-light px-3 py-1">
-                <span className="text-xs font-semibold text-accent-brand">
-                  {selectedCount} de {missingSkills.length} selecionadas
-                </span>
-              </div>
+          {/* Left side — two skill columns + tip */}
+          <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-hidden">
+            <div className="flex min-h-0 flex-1 column-gap overflow-hidden">
+              <SkillsColumn
+                title="Técnico"
+                description="Selecione as habilidades que deseja incorporar ao currículo"
+                skills={technicalSkills}
+                selectedCount={technicalSkills.filter((s) => s.selected).length}
+                totalCount={technicalSkills.length}
+                onToggleSkill={toggleSkill}
+              />
+              <SkillsColumn
+                title="Comportamental"
+                description="Selecione as competências que deseja incorporar ao currículo"
+                skills={behavioralSkills}
+                selectedCount={
+                  behavioralSkills.filter((s) => s.selected).length
+                }
+                totalCount={behavioralSkills.length}
+                onToggleSkill={toggleSkill}
+              />
             </div>
-
-            {/* Skills list — flex-1 min-h-0 so it scrolls when many skills */}
-            <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-auto card-content-padding">
-              {missingSkills.map((skill) => (
-                <button
-                  key={skill.id}
-                  type="button"
-                  onClick={() => toggleSkill(skill.id)}
-                  className={cn(
-                    "flex w-full cursor-pointer items-center gap-3 rounded-lg border px-4 py-3 text-left transition-colors",
-                    skill.selected
-                      ? "border-accent-brand-light bg-accent-brand-light"
-                      : "border-border bg-card hover:bg-muted/40"
-                  )}
-                >
-                  {/* Checkbox */}
-                  <div
-                    className={cn(
-                      "flex h-5 w-5 shrink-0 items-center justify-center rounded-md border transition-colors",
-                      skill.selected
-                        ? "border-accent-brand bg-accent-brand"
-                        : "border-border bg-background"
-                    )}
-                  >
-                    {skill.selected && <Check className="h-3 w-3 text-white" />}
-                  </div>
-                  <span className="text-sm font-semibold text-foreground">
-                    {skill.label}
-                  </span>
-                </button>
-              ))}
-            </div>
-
             {/* Tip */}
-            <div className="shrink-0 self-start px-7 pt-4 pb-7">
+            <div className="shrink-0 self-start px-0">
               <div className="flex items-start gap-2 rounded-lg border border-accent-success-border bg-accent-success-light tip-banner-padding">
                 <Lightbulb className="mt-0.5 h-4 w-4 shrink-0 text-accent-success" />
                 <p className="text-small-leading text-accent-success-text">
@@ -212,7 +255,7 @@ export function StepGapAnalysis() {
                     </span>
                   </div>
                   <span className="text-small-semibold font-bold text-accent-brand">
-                    {selectedCount}/{missingSkills.length}
+                    {selectedCount}/{totalSkillsCount}
                   </span>
                 </div>
               </div>
@@ -222,14 +265,14 @@ export function StepGapAnalysis() {
             <div className="flex shrink-0 items-center justify-between card-content-padding py-4">
               <Button
                 type="button"
-                size="lg"
+                size="brand"
                 variant="outline"
                 onClick={() => setStep(1)}
                 className="gap-1.5"
                 disabled={isGenerating}
               >
-                <ArrowLeft className="h-4 w-4" />
-                Voltar
+                <RefreshCw className="h-4 w-4" />
+                Nova Análise
               </Button>
 
               <Button
@@ -243,7 +286,7 @@ export function StepGapAnalysis() {
                 ) : (
                   <Sparkles className="h-4 w-4" />
                 )}
-                Gerar Currículo Otimizado
+                Gerar Currículo
               </Button>
             </div>
           </div>

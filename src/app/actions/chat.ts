@@ -5,6 +5,10 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { refinementResponseSchema } from "@/lib/ai/config/refinement-response-schema";
 import { REFINEMENT_SYSTEM_PROMPT } from "@/lib/ai/prompts/refinement";
 import { normalizeAIResumeData } from "@/lib/ai/utils/normalize-resume";
+import {
+  missingSkillsFromColumns,
+  type MissingSkillsByCategory,
+} from "@/utils/analysis";
 import { createClient } from "@/lib/supabase/server";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
@@ -19,12 +23,30 @@ export interface ApplyCvRefinementResult {
   error?: string;
 }
 
+function formatMissingSkillsForPrompt(
+  missing: MissingSkillsByCategory
+): string {
+  const { technical, behavioral } = missing;
+
+  const hasTechnical = technical.length > 0;
+  const hasBehavioral = behavioral.length > 0;
+
+  if (!hasTechnical && !hasBehavioral) return "none";
+
+  const parts: string[] = [];
+
+  if (hasTechnical) parts.push(`Technical: ${technical.join(", ")}`);
+  if (hasBehavioral) parts.push(`Behavioral: ${behavioral.join(", ")}`);
+
+  return parts.join(" ; ");
+}
+
 function buildRefinementUserPrompt(
   currentResumeData: ResumeData,
   instruction: string,
   job: { title: string; company: string; rawText: string },
   matchedSkills: string[],
-  missingSkills: string[],
+  missingSkills: MissingSkillsByCategory,
   chatHistory: { role: "user" | "assistant"; content: string }[]
 ): string {
   const historyBlock =
@@ -40,7 +62,7 @@ function buildRefinementUserPrompt(
   return `Job: ${job.title} at ${job.company}
 Job description (excerpt): ${job.rawText.slice(0, 500)}...
 Matched skills: ${matchedSkills.join(", ") || "none"}
-Missing skills: ${missingSkills.join(", ") || "none"}
+Missing skills: ${formatMissingSkillsForPrompt(missingSkills)}
 ${historyBlock}
 Currículo atual (JSON):
 ${JSON.stringify(currentResumeData, null, 2)}
@@ -76,7 +98,9 @@ export async function applyCvRefinementInstruction(
 
   const { data: analysisRow, error: analysisError } = await supabase
     .from("analyses")
-    .select("job_snapshot, matched_skills, missing_skills")
+    .select(
+      "job_snapshot, matched_skills, missing_technical_skills, missing_behavioral_skills"
+    )
     .eq("id", analysisId)
     .eq("user_id", user.id)
     .single();
@@ -91,7 +115,10 @@ export async function applyCvRefinementInstruction(
     rawText: string;
   };
   const matchedSkills = (analysisRow.matched_skills ?? []) as string[];
-  const missingSkills = (analysisRow.missing_skills ?? []) as string[];
+  const missingSkills = missingSkillsFromColumns(
+    analysisRow.missing_technical_skills,
+    analysisRow.missing_behavioral_skills
+  );
 
   const userPrompt = buildRefinementUserPrompt(
     currentResumeData,

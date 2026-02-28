@@ -30,8 +30,10 @@ interface NewAnalysisContextValue {
   analysisId: string | null;
   score: number | null;
   matchedSkills: string[];
-  missingSkills: MissingSkill[];
-  selectedMissingSkills: string[];
+  technicalSkills: MissingSkill[];
+  behavioralSkills: MissingSkill[];
+  selectedTechnicalSkills: string[];
+  selectedBehavioralSkills: string[];
   setStep: (step: WizardStep) => void;
   setJobDescription: (value: string) => void;
   setJobRole: (value: string) => void;
@@ -39,11 +41,13 @@ interface NewAnalysisContextValue {
     analysisId: string;
     score: number;
     matchedSkills: string[];
-    missingSkills: string[];
+    technicalSkills: string[];
+    behavioralSkills: string[];
   }) => void;
   setOptimizedResumeData: (data: ResumeData | null) => void;
   toggleSkill: (id: string) => void;
-  setSelectedMissingSkills: (skills: string[]) => void;
+  setSelectedTechnicalSkills: (skills: string[]) => void;
+  setSelectedBehavioralSkills: (skills: string[]) => void;
   refreshResume: () => Promise<void>;
   reset: () => void;
 }
@@ -57,9 +61,12 @@ function slugify(str: string): string {
     .replace(/[^a-z0-9-]/g, "");
 }
 
-function toMissingSkills(labels: string[]): MissingSkill[] {
+function toMissingSkillsWithPrefix(
+  prefix: "technical" | "behavioral",
+  labels: string[]
+): MissingSkill[] {
   return labels.map((label) => ({
-    id: slugify(label),
+    id: `${prefix}-${slugify(label)}`,
     label,
     selected: true,
   }));
@@ -75,8 +82,10 @@ const INITIAL_STATE = {
   analysisId: null as string | null,
   score: null as number | null,
   matchedSkills: [] as string[],
-  missingSkills: [] as MissingSkill[],
-  selectedMissingSkills: [] as string[],
+  technicalSkills: [] as MissingSkill[],
+  behavioralSkills: [] as MissingSkill[],
+  selectedTechnicalSkills: [] as string[],
+  selectedBehavioralSkills: [] as string[],
 };
 
 export function NewAnalysisProvider({ children }: { children: ReactNode }) {
@@ -103,12 +112,18 @@ export function NewAnalysisProvider({ children }: { children: ReactNode }) {
   const [matchedSkills, setMatchedSkills] = useState<string[]>(
     INITIAL_STATE.matchedSkills
   );
-  const [missingSkills, setMissingSkills] = useState<MissingSkill[]>(
-    INITIAL_STATE.missingSkills
+  const [technicalSkills, setTechnicalSkills] = useState<MissingSkill[]>(
+    INITIAL_STATE.technicalSkills
   );
-  const [selectedMissingSkills, setSelectedMissingSkills] = useState<string[]>(
-    INITIAL_STATE.selectedMissingSkills
+  const [behavioralSkills, setBehavioralSkills] = useState<MissingSkill[]>(
+    INITIAL_STATE.behavioralSkills
   );
+  const [selectedTechnicalSkills, setSelectedTechnicalSkills] = useState<
+    string[]
+  >(INITIAL_STATE.selectedTechnicalSkills);
+  const [selectedBehavioralSkills, setSelectedBehavioralSkills] = useState<
+    string[]
+  >(INITIAL_STATE.selectedBehavioralSkills);
   const [optimizedResumeData, setOptimizedResumeData] =
     useState<ResumeData | null>(INITIAL_STATE.optimizedResumeData);
 
@@ -116,20 +131,32 @@ export function NewAnalysisProvider({ children }: { children: ReactNode }) {
     analysisId: string;
     score: number;
     matchedSkills: string[];
-    missingSkills: string[];
+    technicalSkills: string[];
+    behavioralSkills: string[];
   }) {
     setAnalysisId(result.analysisId);
     setScore(result.score);
     setMatchedSkills(result.matchedSkills);
-    const skills = toMissingSkills(result.missingSkills);
-    setMissingSkills(skills);
-    setSelectedMissingSkills(result.missingSkills);
+    setTechnicalSkills(
+      toMissingSkillsWithPrefix("technical", result.technicalSkills)
+    );
+    setBehavioralSkills(
+      toMissingSkillsWithPrefix("behavioral", result.behavioralSkills)
+    );
+    setSelectedTechnicalSkills(result.technicalSkills);
+    setSelectedBehavioralSkills(result.behavioralSkills);
   }
 
   function toggleSkill(id: string) {
-    setMissingSkills((prev) =>
-      prev.map((s) => (s.id === id ? { ...s, selected: !s.selected } : s))
-    );
+    if (id.startsWith("technical-")) {
+      setTechnicalSkills((prev) =>
+        prev.map((s) => (s.id === id ? { ...s, selected: !s.selected } : s))
+      );
+    } else {
+      setBehavioralSkills((prev) =>
+        prev.map((s) => (s.id === id ? { ...s, selected: !s.selected } : s))
+      );
+    }
   }
 
   async function refreshResume() {
@@ -143,8 +170,10 @@ export function NewAnalysisProvider({ children }: { children: ReactNode }) {
     setAnalysisId(INITIAL_STATE.analysisId);
     setScore(INITIAL_STATE.score);
     setMatchedSkills(INITIAL_STATE.matchedSkills);
-    setMissingSkills(INITIAL_STATE.missingSkills);
-    setSelectedMissingSkills(INITIAL_STATE.selectedMissingSkills);
+    setTechnicalSkills(INITIAL_STATE.technicalSkills);
+    setBehavioralSkills(INITIAL_STATE.behavioralSkills);
+    setSelectedTechnicalSkills(INITIAL_STATE.selectedTechnicalSkills);
+    setSelectedBehavioralSkills(INITIAL_STATE.selectedBehavioralSkills);
     setOptimizedResumeData(INITIAL_STATE.optimizedResumeData);
   }
 
@@ -161,15 +190,18 @@ export function NewAnalysisProvider({ children }: { children: ReactNode }) {
         analysisId,
         score,
         matchedSkills,
-        missingSkills,
-        selectedMissingSkills,
+        technicalSkills,
+        behavioralSkills,
+        selectedTechnicalSkills,
+        selectedBehavioralSkills,
         setStep,
         setJobDescription,
         setJobRole,
         setAnalysisResult,
         setOptimizedResumeData,
         toggleSkill,
-        setSelectedMissingSkills,
+        setSelectedTechnicalSkills,
+        setSelectedBehavioralSkills,
         refreshResume,
         reset,
       }}

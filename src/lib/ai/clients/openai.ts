@@ -14,7 +14,8 @@ export interface GapAnalysisResult {
   data: {
     score: number;
     matched_skills: string[];
-    missing_skills: string[];
+    missing_technical_skills: string[];
+    missing_behavioral_skills: string[];
     job_title: string;
     job_company: string;
   };
@@ -52,7 +53,7 @@ ${jobDescription}
 Resume data:
 ${resumeSummary}
 
-Analyze and return JSON with score, matched_skills, missing_skills, job_title, and job_company.`;
+Analyze and return JSON with score, matched_skills, missing_technical_skills, missing_behavioral_skills, job_title, and job_company.`;
 }
 
 export async function runGapAnalysisAI(
@@ -89,7 +90,8 @@ export async function runGapAnalysisAI(
       data: {
         score: validated.score,
         matched_skills: validated.matched_skills,
-        missing_skills: validated.missing_skills,
+        missing_technical_skills: validated.missing_technical_skills,
+        missing_behavioral_skills: validated.missing_behavioral_skills,
         job_title: validated.job_title,
         job_company: validated.job_company,
       },

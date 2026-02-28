@@ -44,7 +44,8 @@ export function ContinueAnalysisLoader({
         analysisId: a.id,
         score: a.score,
         matchedSkills: a.matched_skills,
-        missingSkills: a.missing_skills,
+        technicalSkills: a.missing_skills.technical,
+        behavioralSkills: a.missing_skills.behavioral,
       });
       setStep(2);
       setIsLoading(false);

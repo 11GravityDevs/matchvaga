@@ -14,14 +14,15 @@ Reference: `supabase/migrations/20250222000000_initial_schema.sql`
 |-------|-------------|-------|
 | **profiles** | `id` (FK auth.users), `full_name`, `avatar_url` | Optional; RLS: own rows |
 | **resumes** | `id`, `user_id`, `parsed_data` (JSONB) | No file storage; `parsed_data` matches `ResumeData` |
-| **analyses** | `id`, `user_id`, `resume_id`, `job_snapshot` (JSONB), `score`, `matched_skills`, `missing_skills`, `status` | Job stored as snapshot; `status`: pending \| completed \| abandoned |
+| **analyses** | `id`, `user_id`, `resume_id`, `job_snapshot` (JSONB), `score`, `matched_skills`, `missing_technical_skills`, `missing_behavioral_skills`, `status` | Job stored as snapshot; `status`: pending \| completed \| abandoned |
 | **optimized_documents** | `id`, `analysis_id`, `file_path`, `format` ('pdf'\|'docx') | Access via analysis ownership |
 
 ## Column Mapping
 
 - **resumes.parsed_data** — Validated with `resumeDataSchema` from `@/schemas/resume`
 - **analyses.job_snapshot** — `{ title, company, rawText }`; validated with `jobSnapshotSchema` from `@/schemas/job`
-- **analyses.matched_skills**, **missing_skills** — `string[]` in JSONB
+- **analyses.matched_skills** — `string[]` in JSONB
+- **analyses.missing_technical_skills**, **missing_behavioral_skills** — `string[]` in JSONB; set from gap analysis AI result; used by synthesis and chat
 - **analyses.status** — `'pending' | 'completed' | 'abandoned'`; set in `runGapAnalysis` (pending) and `synthesizeOptimizedResumeForPreview` (completed)
 
 ## RLS

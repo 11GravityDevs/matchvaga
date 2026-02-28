@@ -23,7 +23,8 @@ export interface SynthesizeOptimizedResumeResult {
 
 export async function synthesizeOptimizedResumeForPreview(
   analysisId: string,
-  selectedMissingSkills?: string[]
+  selectedTechnicalSkills?: string[],
+  selectedBehavioralSkills?: string[]
 ): Promise<SynthesizeOptimizedResumeResult> {
   const supabase = await createClient();
   const {
@@ -41,7 +42,9 @@ export async function synthesizeOptimizedResumeForPreview(
 
   const { data: analysisRow, error: analysisError } = await supabase
     .from("analyses")
-    .select("id, resume_id, job_snapshot, matched_skills, missing_skills")
+    .select(
+      "id, resume_id, job_snapshot, matched_skills, missing_technical_skills, missing_behavioral_skills"
+    )
     .eq("id", analysisId)
     .eq("user_id", user.id)
     .single();
@@ -73,16 +76,15 @@ export async function synthesizeOptimizedResumeForPreview(
     rawText: string;
   };
   const matchedSkills = (analysisRow.matched_skills ?? []) as string[];
-  const missingSkills =
-    selectedMissingSkills && selectedMissingSkills.length > 0
-      ? selectedMissingSkills
-      : [];
+  const technical = selectedTechnicalSkills ?? [];
+  const behavioral = selectedBehavioralSkills ?? [];
+  const hasAnyMissing = technical.length > 0 || behavioral.length > 0;
 
   const synthesis = await synthesizeOptimizedResume(
     resumeData,
     jobSnapshot,
     matchedSkills,
-    missingSkills
+    hasAnyMissing ? { technical, behavioral } : undefined
   );
 
   if (!synthesis.success) {
@@ -117,7 +119,8 @@ export interface GenerateOptimizedDocumentResult {
 export async function generateOptimizedDocument(
   analysisId: string,
   format: "pdf" | "docx",
-  selectedMissingSkills?: string[]
+  selectedTechnicalSkills?: string[],
+  selectedBehavioralSkills?: string[]
 ): Promise<GenerateOptimizedDocumentResult> {
   const supabase = await createClient();
   const {
@@ -134,7 +137,9 @@ export async function generateOptimizedDocument(
 
   const { data: analysisRow, error: analysisError } = await supabase
     .from("analyses")
-    .select("id, resume_id, job_snapshot, matched_skills, missing_skills")
+    .select(
+      "id, resume_id, job_snapshot, matched_skills, missing_technical_skills, missing_behavioral_skills"
+    )
     .eq("id", analysisId)
     .eq("user_id", user.id)
     .single();
@@ -166,16 +171,15 @@ export async function generateOptimizedDocument(
     rawText: string;
   };
   const matchedSkills = (analysisRow.matched_skills ?? []) as string[];
-  const missingSkills =
-    selectedMissingSkills && selectedMissingSkills.length > 0
-      ? selectedMissingSkills
-      : [];
+  const technical = selectedTechnicalSkills ?? [];
+  const behavioral = selectedBehavioralSkills ?? [];
+  const hasAnyMissing = technical.length > 0 || behavioral.length > 0;
 
   const synthesis = await synthesizeOptimizedResume(
     resumeData,
     jobSnapshot,
     matchedSkills,
-    missingSkills
+    hasAnyMissing ? { technical, behavioral } : undefined
   );
 
   if (!synthesis.success) {
