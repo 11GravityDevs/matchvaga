@@ -8,7 +8,13 @@ import {
 
 import { DashboardContent } from "./_components/dashboard-content";
 
-export default async function DashboardPage() {
+interface DashboardPageProps {
+  searchParams: Promise<{ from?: string }>;
+}
+
+export default async function DashboardPage({
+  searchParams,
+}: DashboardPageProps) {
   const queryClient = getQueryClient();
   await Promise.all([
     queryClient.prefetchQuery(resumeQueryOptions),
@@ -17,10 +23,12 @@ export default async function DashboardPage() {
   const { data } = queryClient.getQueryData(resumeQueryOptions.queryKey) ?? {};
 
   const name = data?.fullName.split(" ")[0] ?? "Usuário";
+  const { from } = await searchParams;
+  const fromOnboarding = from === "onboarding";
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <DashboardContent userName={name} />
+      <DashboardContent userName={name} fromOnboarding={fromOnboarding} />
     </HydrationBoundary>
   );
 }

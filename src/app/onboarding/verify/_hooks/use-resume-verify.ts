@@ -54,7 +54,7 @@ export function useResumeVerify({
   }
 
   function continueToDashboard() {
-    router.push(ROUTE_DASHBOARD);
+    router.push(`${ROUTE_DASHBOARD}?from=onboarding`);
   }
 
   return {
