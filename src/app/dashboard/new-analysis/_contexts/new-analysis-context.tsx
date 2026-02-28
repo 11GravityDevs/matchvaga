@@ -10,14 +10,16 @@ import {
 } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
+import { useQuery } from "@tanstack/react-query";
+
 import { getAnalysisById } from "@/app/actions/analysis";
 import { Loading } from "@/components/ui/loading";
 import {
   QUERY_CONTINUE_ANALYSIS,
   ROUTE_DASHBOARD_NEW_ANALYSIS,
 } from "@/constants/routes";
+import { resumeQueryOptions } from "@/lib/query/query-options";
 import type { ResumeData } from "@/types/resume";
-import { useResumeQuery } from "@/hooks/use-resume-query";
 
 export type WizardStep = 1 | 2 | 3;
 
@@ -122,18 +124,20 @@ export function NewAnalysisProvider({
 
   const continueLoadStartedRef = useRef(false);
 
-  const {
-    resumeId: queryResumeId,
-    resumeData: queryResumeData,
-    hasNoResume,
-    isLoading: isLoadingResume,
-    refetch: refetchResume,
-  } = useResumeQuery();
-
-  const resumeId = hasNoResume ? null : queryResumeId;
-  const resumeData = hasNoResume ? null : queryResumeData;
-
   const [step, setStep] = useState<WizardStep>(INITIAL_STATE.step);
+
+  const {
+    data: resumeQueryData,
+    isPending: isResumeQueryPending,
+    refetch: refetchResume,
+  } = useQuery({
+    ...resumeQueryOptions,
+    enabled: step >= 2,
+  });
+
+  const resumeId = step >= 2 ? (resumeQueryData?.resumeId ?? null) : null;
+  const resumeData = step >= 2 ? (resumeQueryData?.data ?? null) : null;
+  const isLoadingResume = step >= 2 && isResumeQueryPending;
   const [jobDescription, setJobDescription] = useState(
     INITIAL_STATE.jobDescription
   );

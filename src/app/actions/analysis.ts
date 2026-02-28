@@ -45,7 +45,6 @@ export interface GetAnalysesForUserResult {
 }
 
 export async function runGapAnalysis(
-  resumeId: string,
   jobDescription: string
 ): Promise<RunGapAnalysisResult> {
   const rawText = jobDescription.trim();
@@ -68,13 +67,17 @@ export async function runGapAnalysis(
 
   const { data: resumeRow, error: resumeError } = await supabase
     .from("resumes")
-    .select("parsed_data")
-    .eq("id", resumeId)
+    .select("id, parsed_data")
     .eq("user_id", user.id)
+    .limit(1)
     .single();
 
   if (resumeError || !resumeRow) {
-    return { success: false, error: "Currículo não encontrado." };
+    return {
+      success: false,
+      error:
+        "Nenhum currículo encontrado. Faça o upload do seu currículo para continuar.",
+    };
   }
 
   const resumeParsed = resumeDataSchema.safeParse(resumeRow.parsed_data);
@@ -103,7 +106,7 @@ export async function runGapAnalysis(
     .from("analyses")
     .insert({
       user_id: user.id,
-      resume_id: resumeId,
+      resume_id: resumeRow.id,
       job_snapshot: jobParsed.data as unknown as Record<string, unknown>,
       score: aiResult.data.score,
       matched_skills: aiResult.data.matched_skills,

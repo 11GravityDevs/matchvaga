@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Lightbulb, Loader2, Sparkles } from "lucide-react";
 
@@ -8,9 +7,7 @@ import { runGapAnalysis } from "@/app/actions/analysis";
 import { QUERY_KEY_ANALYSES } from "@/constants/query-keys";
 import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
-import { Loading } from "@/components/ui/loading";
 import { Textarea } from "@/components/ui/textarea";
-import { ROUTE_ONBOARDING_UPLOAD } from "@/constants/routes";
 import { StepIndicator } from "@/components/shared/step-indicator";
 import {
   useNewAnalysis,
@@ -20,8 +17,6 @@ import {
 export function StepJobInput() {
   const queryClient = useQueryClient();
   const {
-    resumeId,
-    isLoadingResume,
     jobDescription,
     setJobDescription,
     setJobRole,
@@ -35,9 +30,7 @@ export function StepJobInput() {
     error: analysisError,
   } = useMutation({
     mutationFn: async () => {
-      if (!resumeId) throw new Error("Currículo não encontrado.");
-
-      const result = await runGapAnalysis(resumeId, jobDescription.trim());
+      const result = await runGapAnalysis(jobDescription.trim());
 
       if (!result.success) {
         throw new Error(result.error ?? "Erro ao analisar. Tente novamente.");
@@ -67,8 +60,7 @@ export function StepJobInput() {
     },
   });
 
-  const canAnalyze =
-    jobDescription.trim().length > 0 && !!resumeId && !isAnalyzing;
+  const canAnalyze = jobDescription.trim().length > 0 && !isAnalyzing;
 
   const handleAnalyze = () => {
     runAnalysis();
@@ -80,29 +72,6 @@ export function StepJobInput() {
       : analysisError
         ? String(analysisError)
         : null;
-
-  if (isLoadingResume) {
-    return <Loading className="min-h-0 flex-1" />;
-  }
-
-  if (!resumeId) {
-    return (
-      <div className="mx-auto flex min-h-0 w-full max-w-content flex-1 flex-col section-gap overflow-hidden page-padding">
-        <div className="flex flex-col gap-4">
-          <h1 className="text-page-title">Nenhum currículo encontrado</h1>
-          <p className="text-page-subtitle">
-            Faça o upload do seu currículo para começar uma análise.
-          </p>
-          <Link
-            href={ROUTE_ONBOARDING_UPLOAD}
-            className="text-primary underline hover:no-underline"
-          >
-            Ir para upload
-          </Link>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="mx-auto flex min-h-0 w-full max-w-content flex-1 flex-col section-gap overflow-hidden page-padding">
