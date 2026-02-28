@@ -107,3 +107,4 @@ When the project changes, update these rules accordingly:
 | React purity, hooks, Thinking in React | See `react-rules.mdc` |
 | Editing rules | See `rule-writing-guidelines.mdc` |
 | New MCP server | Update `mcp-tools.mdc` and `.cursor/mcp.json` |
+| Linear task template change | Update `linear-task-template.mdc` |

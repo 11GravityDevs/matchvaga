@@ -1,0 +1,44 @@
+---
+description: Standard template and rules for GitHub pull requests created for this repo
+alwaysApply: false
+---
+
+# Pull Request Template
+
+Use this structure whenever the AI creates or updates a pull request for this repository (via MCP or CLI).
+
+## Template
+
+**PR Title**
+- Imperative mood, clearly stating the change (e.g. `Add gap analysis step UI`, `Fix resume parsing error handling`).
+- Include scope when helpful (e.g. `dashboard/new-analysis: ...`).
+- Prefer concise titles (~60 characters) while still being descriptive.
+
+**🎯 Context**  
+Describe why this change is being made and how it impacts users or the business.
+
+**🛠 Changes**  
+- Bullet list of the main code or behavior changes.  
+- Group related changes; avoid implementation noise.
+
+**✅ Acceptance Criteria**  
+List the behaviors that must hold true after this PR is merged — use checkboxes so they are trackable:
+- [ ] Behavior / user flow works as described  
+- [ ] Edge cases covered (e.g. empty state, error path)  
+- [ ] Test/Validate X  
+
+**🧪 Test Plan**  
+Explicitly state how the changes were or should be validated — also as checkboxes:
+- [ ] Manual QA steps (describe exact steps and expected outcomes)  
+
+**🔗 Links**  
+- Link at least one related Linear issue when applicable (e.g. `Linear: MAT-123`).  
+- Optional: other references.
+
+---
+
+**Rules:**
+- **Always** structure PR descriptions using the sections above, in this order.
+- **Acceptance criteria** and **Test Plan** must use `- [ ]` checkboxes so they render as real checklists in GitHub.
+- When a PR implements or changes a Linear task, reference the Linear issue ID in **🔗 Links** and ensure the Linear description uses `linear-task-template.mdc`.
+- When operating programmatically, use the GitHub MCP (`user-github`) for reading and reviewing pull requests (`pull_request_read`, `pull_request_review_write`), and follow this template when generating review bodies or PR descriptions.

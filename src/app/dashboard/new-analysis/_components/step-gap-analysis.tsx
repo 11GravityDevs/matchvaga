@@ -215,17 +215,6 @@ export function StepGapAnalysis() {
                     {selectedCount}/{missingSkills.length}
                   </span>
                 </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5">
-                    <div className="h-2 w-2 rounded-full bg-destructive" />
-                    <span className="text-small-leading text-muted-foreground">
-                      Experiência relevante
-                    </span>
-                  </div>
-                  <span className="text-small-semibold text-accent-warning">
-                    Parcial
-                  </span>
-                </div>
               </div>
             </div>
 
