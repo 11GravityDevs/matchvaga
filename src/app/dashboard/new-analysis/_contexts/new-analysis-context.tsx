@@ -1,7 +1,21 @@
 "use client";
 
-import { createContext, useContext, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
+import { getAnalysisById } from "@/app/actions/analysis";
+import { Loading } from "@/components/ui/loading";
+import {
+  QUERY_CONTINUE_ANALYSIS,
+  ROUTE_DASHBOARD_NEW_ANALYSIS,
+} from "@/constants/routes";
 import type { ResumeData } from "@/types/resume";
 import { useResumeQuery } from "@/hooks/use-resume-query";
 
@@ -88,7 +102,26 @@ const INITIAL_STATE = {
   selectedBehavioralSkills: [] as string[],
 };
 
-export function NewAnalysisProvider({ children }: { children: ReactNode }) {
+interface NewAnalysisProviderProps {
+  children: ReactNode;
+  initialContinueId?: string | null;
+}
+
+export function NewAnalysisProvider({
+  children,
+  initialContinueId = null,
+}: NewAnalysisProviderProps) {
+  const searchParams = useSearchParams();
+
+  const router = useRouter();
+
+  const continueAnalysisId =
+    searchParams.get(QUERY_CONTINUE_ANALYSIS) ?? initialContinueId ?? null;
+
+  const [hasFinishedContinueLoad, setHasFinishedContinueLoad] = useState(false);
+
+  const continueLoadStartedRef = useRef(false);
+
   const {
     resumeId: queryResumeId,
     resumeData: queryResumeData,
@@ -175,6 +208,47 @@ export function NewAnalysisProvider({ children }: { children: ReactNode }) {
     setSelectedTechnicalSkills(INITIAL_STATE.selectedTechnicalSkills);
     setSelectedBehavioralSkills(INITIAL_STATE.selectedBehavioralSkills);
     setOptimizedResumeData(INITIAL_STATE.optimizedResumeData);
+  }
+
+  useEffect(() => {
+    if (
+      !continueAnalysisId ||
+      hasFinishedContinueLoad ||
+      continueLoadStartedRef.current
+    )
+      return;
+    continueLoadStartedRef.current = true;
+
+    getAnalysisById(continueAnalysisId).then((result) => {
+      if (!result.success || !result.data) {
+        setHasFinishedContinueLoad(true);
+        router.replace(ROUTE_DASHBOARD_NEW_ANALYSIS);
+        return;
+      }
+      const analysis = result.data;
+      const job = analysis.job_snapshot;
+
+      setJobDescription(job.rawText);
+      setJobRole(job.title);
+
+      setAnalysisResult({
+        analysisId: analysis.id,
+        score: analysis.score,
+        matchedSkills: analysis.matched_skills,
+        technicalSkills: analysis.missing_skills.technical,
+        behavioralSkills: analysis.missing_skills.behavioral,
+      });
+      setStep(2);
+      setHasFinishedContinueLoad(true);
+      router.replace(ROUTE_DASHBOARD_NEW_ANALYSIS);
+    });
+  }, [continueAnalysisId, hasFinishedContinueLoad, router]);
+
+  const isLoadingContinueAnalysis =
+    Boolean(continueAnalysisId) && !hasFinishedContinueLoad;
+
+  if (isLoadingContinueAnalysis) {
+    return <Loading className="min-h-0 flex-1" />;
   }
 
   return (
