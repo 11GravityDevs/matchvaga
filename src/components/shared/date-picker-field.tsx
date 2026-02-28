@@ -42,6 +42,7 @@ interface DatePickerFieldProps {
   placeholder?: string;
   labelClassName?: string;
   className?: string;
+  error?: string;
 }
 
 export function DatePickerField({
@@ -53,6 +54,7 @@ export function DatePickerField({
   placeholder = "Selecione a data",
   labelClassName,
   className,
+  error,
 }: DatePickerFieldProps) {
   const [open, setOpen] = useState(false);
   const date = parseDateString(value);
@@ -70,6 +72,7 @@ export function DatePickerField({
       htmlFor={id}
       labelClassName={labelClassName}
       className={className}
+      error={error}
     >
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
@@ -77,9 +80,11 @@ export function DatePickerField({
             id={id}
             variant="outline"
             disabled={disabled}
+            aria-invalid={!!error}
             className={cn(
               "h-9 w-full justify-start text-left font-normal",
-              !date && "text-muted-foreground"
+              !date && "text-muted-foreground",
+              error && "border-destructive! ring-1! ring-destructive/30!"
             )}
           >
             <CalendarIcon className="mr-2 h-4 w-4" />

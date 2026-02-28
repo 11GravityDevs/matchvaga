@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { FormField } from "@/components/shared/form-field";
 import { DatePickerField } from "@/components/shared/date-picker-field";
 import type { ExperienceEntry } from "@/types/resume";
+import type { ExperienceEntryFieldErrors } from "@/hooks/use-resume-form";
 import { INPUT_CLASS } from "@/components/shared/resume-form-card";
 
 interface ResumeFormExperienceProps {
@@ -16,6 +17,7 @@ interface ResumeFormExperienceProps {
   removeExperience: (index: number) => void;
   isSaving?: boolean;
   experienceError?: string;
+  experienceEntryErrors?: ExperienceEntryFieldErrors[];
 }
 
 export function ResumeFormExperience({
@@ -25,13 +27,24 @@ export function ResumeFormExperience({
   removeExperience,
   isSaving,
   experienceError,
+  experienceEntryErrors,
 }: ResumeFormExperienceProps) {
   const hasCurrentExperience = experience.some((exp) => exp.isCurrent);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div
+      id="resume-form-experience"
+      className="flex scroll-mt-6 scroll-mb-6 flex-col gap-4"
+    >
       <div className="flex flex-col gap-1.5">
-        <h3 className="text-section-title">Experiência</h3>
+        <h3 className="text-section-title">
+          <span className="inline-flex items-baseline gap-1">
+            Experiência
+            <span className="align-baseline text-small font-normal text-muted-foreground">
+              (opcional)
+            </span>
+          </span>
+        </h3>
         {experienceError && (
           <p className="text-sm text-destructive" role="alert">
             {experienceError}
@@ -39,7 +52,11 @@ export function ResumeFormExperience({
         )}
       </div>
       {experience.map((exp, expIndex) => (
-        <div key={expIndex} className="flex flex-col gap-4">
+        <div
+          key={expIndex}
+          id={`resume-form-experience-entry-${expIndex}`}
+          className="flex scroll-mt-6 scroll-mb-6 flex-col gap-4"
+        >
           {experience.length > 1 && (
             <h4 className="text-section-item-label">
               Experiência {expIndex + 1}
@@ -51,6 +68,7 @@ export function ResumeFormExperience({
                 label="Empresa"
                 htmlFor={`exp-company-${expIndex}`}
                 className="flex-1"
+                error={experienceEntryErrors?.[expIndex]?.company}
               >
                 <Input
                   id={`exp-company-${expIndex}`}
@@ -60,13 +78,14 @@ export function ResumeFormExperience({
                   }
                   disabled={isSaving}
                   className={INPUT_CLASS}
-                  aria-invalid={!!experienceError && expIndex === 0}
+                  aria-invalid={!!experienceEntryErrors?.[expIndex]?.company}
                 />
               </FormField>
               <FormField
                 label="Cargo"
                 htmlFor={`exp-job-${expIndex}`}
                 className="flex-1"
+                error={experienceEntryErrors?.[expIndex]?.jobTitle}
               >
                 <Input
                   id={`exp-job-${expIndex}`}
@@ -76,6 +95,7 @@ export function ResumeFormExperience({
                   }
                   disabled={isSaving}
                   className={INPUT_CLASS}
+                  aria-invalid={!!experienceEntryErrors?.[expIndex]?.jobTitle}
                 />
               </FormField>
             </div>
@@ -91,6 +111,7 @@ export function ResumeFormExperience({
                 placeholder="Selecione a data de início"
                 labelClassName="text-sub-label"
                 className="flex-1"
+                error={experienceEntryErrors?.[expIndex]?.startDate}
               />
               {!exp.isCurrent ? (
                 <DatePickerField
@@ -104,6 +125,7 @@ export function ResumeFormExperience({
                   placeholder="Selecione a data de término"
                   labelClassName="text-sub-label"
                   className="flex-1"
+                  error={experienceEntryErrors?.[expIndex]?.endDate}
                 />
               ) : (
                 <div className="flex-1" />
@@ -131,6 +153,7 @@ export function ResumeFormExperience({
               label="Local"
               htmlFor={`exp-location-${expIndex}`}
               labelClassName="text-sub-label"
+              error={experienceEntryErrors?.[expIndex]?.location}
             >
               <Input
                 id={`exp-location-${expIndex}`}
@@ -140,12 +163,14 @@ export function ResumeFormExperience({
                 }
                 disabled={isSaving}
                 className={INPUT_CLASS}
+                aria-invalid={!!experienceEntryErrors?.[expIndex]?.location}
               />
             </FormField>
             <FormField
               label="Descrição"
               htmlFor={`exp-desc-${expIndex}`}
               labelClassName="text-sub-label"
+              error={experienceEntryErrors?.[expIndex]?.description}
             >
               <textarea
                 id={`exp-desc-${expIndex}`}
@@ -155,23 +180,22 @@ export function ResumeFormExperience({
                 }
                 disabled={isSaving}
                 className="h-32 w-full resize-none rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground shadow-none transition-[color,box-shadow] outline-none placeholder:text-muted-foreground focus-visible:border-accent-brand focus-visible:ring-1 focus-visible:ring-accent-brand/30 disabled:cursor-not-allowed disabled:opacity-50"
+                aria-invalid={!!experienceEntryErrors?.[expIndex]?.description}
               />
             </FormField>
           </div>
-          {experience.length > 1 && (
-            <div className="flex justify-end">
-              <Button
-                type="button"
-                variant="destructiveSolid"
-                size="sm"
-                onClick={() => removeExperience(expIndex)}
-                className="w-fit gap-1.5 text-small"
-              >
-                <Trash2 className="h-4 w-4" />
-                Remover
-              </Button>
-            </div>
-          )}
+          <div className="flex justify-end">
+            <Button
+              type="button"
+              variant="destructiveSolid"
+              size="sm"
+              onClick={() => removeExperience(expIndex)}
+              className="w-fit gap-1.5 text-small"
+            >
+              <Trash2 className="h-4 w-4" />
+              Remover
+            </Button>
+          </div>
         </div>
       ))}
 

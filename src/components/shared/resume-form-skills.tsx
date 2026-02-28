@@ -41,7 +41,10 @@ export function ResumeFormSkills({
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div
+      id="resume-form-skills"
+      className="flex scroll-mt-6 scroll-mb-6 flex-col gap-4"
+    >
       <div className="flex flex-col gap-1.5">
         <h3 className="text-section-title">Habilidades</h3>
         {skillsError && (

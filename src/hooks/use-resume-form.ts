@@ -9,6 +9,14 @@ import {
   type ResumeData,
 } from "@/types/resume";
 
+export type ExperienceEntryFieldErrors = Partial<
+  Record<keyof ExperienceEntry, string>
+>;
+
+export type EducationEntryFieldErrors = Partial<
+  Record<keyof EducationEntry, string>
+>;
+
 export interface ResumeValidationErrors {
   form?: string;
   fullName?: string;
@@ -18,7 +26,9 @@ export interface ResumeValidationErrors {
   summary?: string;
   skills?: string;
   experience?: string;
+  experienceEntryErrors?: ExperienceEntryFieldErrors[];
   education?: string;
+  educationEntryErrors?: EducationEntryFieldErrors[];
 }
 
 export interface UseResumeFormOptions {
@@ -148,38 +158,105 @@ export function useResumeForm({
     if (formData.skills.length === 0) {
       errors.skills = "Adicione pelo menos uma habilidade";
     }
-    const hasValidExperience = formData.experience.some(
-      (exp) => exp.company.trim() !== "" && exp.jobTitle.trim() !== ""
-    );
-    if (!hasValidExperience) {
-      errors.experience =
-        "Preencha pelo menos uma experiência com empresa e cargo";
-    } else {
-      const experiencesWithoutEndDate = formData.experience.filter(
-        (exp) => !exp.endDate?.trim()
+
+    if (formData.experience.length > 0) {
+      const experienceEntryErrors: ExperienceEntryFieldErrors[] =
+        formData.experience.map((exp) => {
+          const entryErrors: ExperienceEntryFieldErrors = {};
+          if (exp.company.trim() === "") {
+            entryErrors.company = "Empresa é obrigatória";
+          }
+          if (exp.jobTitle.trim() === "") {
+            entryErrors.jobTitle = "Cargo é obrigatório";
+          }
+          if (exp.startDate.trim() === "") {
+            entryErrors.startDate = "Data de início é obrigatória";
+          }
+          if (!exp.isCurrent && exp.endDate.trim() === "") {
+            entryErrors.endDate =
+              "Preencha a data de término ou marque como experiência atual.";
+          }
+          if (exp.location.trim() === "") {
+            entryErrors.location = "Local é obrigatório";
+          }
+          if (exp.description.trim() === "") {
+            entryErrors.description = "Descrição é obrigatória";
+          }
+          return entryErrors;
+        });
+      const hasAnyExperienceEntryErrors = experienceEntryErrors.some(
+        (e) => Object.keys(e).length > 0
       );
-      const currentExperiences = formData.experience.filter(
-        (exp) => exp.isCurrent === true
+      if (hasAnyExperienceEntryErrors) {
+        errors.experienceEntryErrors = experienceEntryErrors;
+      }
+
+      const hasValidExperience = formData.experience.some(
+        (exp) => exp.company.trim() !== "" && exp.jobTitle.trim() !== ""
       );
-      if (experiencesWithoutEndDate.length > 1) {
+      if (!hasValidExperience) {
         errors.experience =
-          "Apenas uma experiência pode estar em andamento (sem data de término). Preencha a data de término das demais.";
-      } else if (
-        experiencesWithoutEndDate.some((exp) => exp.isCurrent !== true)
-      ) {
-        errors.experience =
-          "Preencha a data de término ou marque como experiência atual.";
-      } else if (currentExperiences.length > 1) {
-        errors.experience =
-          "Apenas uma experiência pode ser marcada como atual.";
+          "Preencha pelo menos uma experiência com empresa e cargo";
+      } else {
+        const experiencesWithoutEndDate = formData.experience.filter(
+          (exp) => !exp.endDate?.trim()
+        );
+        const currentExperiences = formData.experience.filter(
+          (exp) => exp.isCurrent === true
+        );
+        if (experiencesWithoutEndDate.length > 1) {
+          errors.experience =
+            "Apenas uma experiência pode estar em andamento (sem data de término). Preencha a data de término das demais.";
+        } else if (
+          experiencesWithoutEndDate.some((exp) => exp.isCurrent !== true)
+        ) {
+          errors.experience =
+            "Preencha a data de término ou marque como experiência atual.";
+        } else if (currentExperiences.length > 1) {
+          errors.experience =
+            "Apenas uma experiência pode ser marcada como atual.";
+        }
       }
     }
 
     if (formData.education.length > 0) {
+      const educationEntryErrors: EducationEntryFieldErrors[] =
+        formData.education.map((edu) => {
+          const entryErrors: EducationEntryFieldErrors = {};
+
+          if (edu.course.trim() === "") {
+            entryErrors.course = "Curso é obrigatório";
+          }
+
+          if (edu.level.trim() === "") {
+            entryErrors.level = "Nível é obrigatório";
+          }
+
+          if (edu.institution.trim() === "") {
+            entryErrors.institution = "Instituição é obrigatória";
+          }
+
+          if (edu.startDate.trim() === "") {
+            entryErrors.startDate = "Data de início é obrigatória";
+          }
+
+          if (!edu.isCurrent && edu.completionDate.trim() === "") {
+            entryErrors.completionDate =
+              "Preencha a data de conclusão ou marque como formação atual.";
+          }
+
+          return entryErrors;
+        });
+      const hasAnyEducationEntryErrors = educationEntryErrors.some(
+        (e) => Object.keys(e).length > 0
+      );
+      if (hasAnyEducationEntryErrors) {
+        errors.educationEntryErrors = educationEntryErrors;
+      }
+
       const educationsWithoutCompletionDate = formData.education.filter(
         (edu) => !edu.completionDate?.trim()
       );
-
       const currentEducations = formData.education.filter(
         (edu) => edu.isCurrent === true
       );

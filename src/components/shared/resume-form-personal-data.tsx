@@ -29,69 +29,79 @@ export function ResumeFormPersonalData({
     <div className="flex flex-col gap-4">
       <h3 className="text-section-title">Dados pessoais</h3>
       <div className="flex gap-8">
-        <FormField
-          label="Nome completo"
-          htmlFor="fullName"
-          className="flex-1"
-          error={validationErrors?.fullName}
+        <div
+          id="resume-form-fullName"
+          className="flex-1 scroll-mt-6 scroll-mb-6"
         >
-          <Input
-            id="fullName"
-            value={data.fullName}
-            onChange={(e) => updateField("fullName", e.target.value)}
-            disabled={isSaving}
-            className={INPUT_CLASS}
-            aria-invalid={!!validationErrors?.fullName}
-          />
-        </FormField>
-        <FormField
-          label="E-mail"
-          htmlFor="email"
-          className="flex-1"
-          error={validationErrors?.email}
-        >
-          <Input
-            id="email"
-            type="email"
-            value={data.email}
-            onChange={(e) => updateField("email", e.target.value)}
-            disabled={isSaving}
-            className={INPUT_CLASS}
-            aria-invalid={!!validationErrors?.email}
-          />
-        </FormField>
+          <FormField
+            label="Nome completo"
+            htmlFor="fullName"
+            error={validationErrors?.fullName}
+          >
+            <Input
+              id="fullName"
+              value={data.fullName}
+              onChange={(e) => updateField("fullName", e.target.value)}
+              disabled={isSaving}
+              className={INPUT_CLASS}
+              aria-invalid={!!validationErrors?.fullName}
+            />
+          </FormField>
+        </div>
+        <div id="resume-form-email" className="flex-1 scroll-mt-6 scroll-mb-6">
+          <FormField
+            label="E-mail"
+            htmlFor="email"
+            error={validationErrors?.email}
+          >
+            <Input
+              id="email"
+              type="email"
+              value={data.email}
+              onChange={(e) => updateField("email", e.target.value)}
+              disabled={isSaving}
+              className={INPUT_CLASS}
+              aria-invalid={!!validationErrors?.email}
+            />
+          </FormField>
+        </div>
       </div>
       <div className="flex gap-8">
-        <FormField
-          label="Local"
-          htmlFor="location"
-          className="flex-1"
-          error={validationErrors?.location}
+        <div
+          id="resume-form-location"
+          className="flex-1 scroll-mt-6 scroll-mb-6"
         >
-          <Input
-            id="location"
-            value={data.location}
-            onChange={(e) => updateField("location", e.target.value)}
-            disabled={isSaving}
-            className={INPUT_CLASS}
-            aria-invalid={!!validationErrors?.location}
-          />
-        </FormField>
-        <FormField
-          label="Telefone"
-          htmlFor="phone"
-          className="flex-1"
-          error={validationErrors?.phone}
-        >
-          <Input
-            id="phone"
-            value={data.phone}
-            onChange={(e) => updateField("phone", e.target.value)}
-            disabled={isSaving}
-            className={INPUT_CLASS}
-            aria-invalid={!!validationErrors?.phone}
-          />
-        </FormField>
+          <FormField
+            label="Local"
+            htmlFor="location"
+            error={validationErrors?.location}
+          >
+            <Input
+              id="location"
+              value={data.location}
+              onChange={(e) => updateField("location", e.target.value)}
+              disabled={isSaving}
+              className={INPUT_CLASS}
+              aria-invalid={!!validationErrors?.location}
+            />
+          </FormField>
+        </div>
+        <div id="resume-form-phone" className="flex-1 scroll-mt-6 scroll-mb-6">
+          <FormField
+            label="Telefone"
+            htmlFor="phone"
+            error={validationErrors?.phone}
+          >
+            <Input
+              id="phone"
+              value={data.phone}
+              onChange={(e) => updateField("phone", e.target.value)}
+              disabled={isSaving}
+              className={INPUT_CLASS}
+              aria-invalid={!!validationErrors?.phone}
+            />
+          </FormField>
+        </div>
       </div>
       <div className="flex gap-8">
         <FormField

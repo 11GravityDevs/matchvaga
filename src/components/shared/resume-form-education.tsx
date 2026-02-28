@@ -15,6 +15,7 @@ import { FormField } from "@/components/shared/form-field";
 import { Textarea } from "@/components/ui/textarea";
 import { DatePickerField } from "@/components/shared/date-picker-field";
 import type { EducationEntry } from "@/types/resume";
+import type { EducationEntryFieldErrors } from "@/hooks/use-resume-form";
 import { INPUT_CLASS } from "@/components/shared/resume-form-card";
 
 const EDUCATION_LEVELS = [
@@ -37,6 +38,7 @@ interface ResumeFormEducationProps {
   removeEducation: (index: number) => void;
   isSaving?: boolean;
   educationError?: string;
+  educationEntryErrors?: EducationEntryFieldErrors[];
 }
 
 export function ResumeFormEducation({
@@ -46,11 +48,15 @@ export function ResumeFormEducation({
   removeEducation,
   isSaving,
   educationError,
+  educationEntryErrors,
 }: ResumeFormEducationProps) {
   const hasCurrentEducation = education.some((edu) => edu.isCurrent);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div
+      id="resume-form-education"
+      className="flex scroll-mt-6 scroll-mb-6 flex-col gap-4"
+    >
       <div className="flex flex-col gap-1.5">
         <h3 className="text-section-title">
           <span className="inline-flex items-baseline gap-1">
@@ -67,7 +73,11 @@ export function ResumeFormEducation({
         )}
       </div>
       {education.map((edu, eduIndex) => (
-        <div key={eduIndex} className="flex flex-col gap-4">
+        <div
+          key={eduIndex}
+          id={`resume-form-education-entry-${eduIndex}`}
+          className="flex scroll-mt-6 scroll-mb-6 flex-col gap-4"
+        >
           {education.length > 1 && (
             <h4 className="text-section-item-label">Formação {eduIndex + 1}</h4>
           )}
@@ -76,6 +86,7 @@ export function ResumeFormEducation({
               label="Curso"
               htmlFor={`edu-course-${eduIndex}`}
               labelClassName="text-sub-label"
+              error={educationEntryErrors?.[eduIndex]?.course}
             >
               <Input
                 id={`edu-course-${eduIndex}`}
@@ -85,7 +96,7 @@ export function ResumeFormEducation({
                 }
                 disabled={isSaving}
                 className={INPUT_CLASS}
-                aria-invalid={!!educationError && eduIndex === 0}
+                aria-invalid={!!educationEntryErrors?.[eduIndex]?.course}
               />
             </FormField>
 
@@ -95,6 +106,7 @@ export function ResumeFormEducation({
                 htmlFor={`edu-level-${eduIndex}`}
                 className="flex-1"
                 labelClassName="text-sub-label"
+                error={educationEntryErrors?.[eduIndex]?.level}
               >
                 <Select
                   value={edu.level || ""}
@@ -106,6 +118,7 @@ export function ResumeFormEducation({
                   <SelectTrigger
                     id={`edu-level-${eduIndex}`}
                     className={`${INPUT_CLASS} w-full`}
+                    aria-invalid={!!educationEntryErrors?.[eduIndex]?.level}
                   >
                     <SelectValue placeholder="Selecione o nível" />
                   </SelectTrigger>
@@ -131,6 +144,7 @@ export function ResumeFormEducation({
                 htmlFor={`edu-inst-${eduIndex}`}
                 className="flex-1"
                 labelClassName="text-sub-label"
+                error={educationEntryErrors?.[eduIndex]?.institution}
               >
                 <Input
                   id={`edu-inst-${eduIndex}`}
@@ -140,6 +154,7 @@ export function ResumeFormEducation({
                   }
                   disabled={isSaving}
                   className={INPUT_CLASS}
+                  aria-invalid={!!educationEntryErrors?.[eduIndex]?.institution}
                 />
               </FormField>
             </div>
@@ -156,6 +171,7 @@ export function ResumeFormEducation({
                 placeholder="Selecione a data de início"
                 labelClassName="text-sub-label"
                 className="flex-1"
+                error={educationEntryErrors?.[eduIndex]?.startDate}
               />
 
               {!edu.isCurrent ? (
@@ -170,6 +186,7 @@ export function ResumeFormEducation({
                   placeholder="Selecione a data de conclusão"
                   labelClassName="text-sub-label"
                   className="flex-1"
+                  error={educationEntryErrors?.[eduIndex]?.completionDate}
                 />
               ) : (
                 <div className="flex-1" />

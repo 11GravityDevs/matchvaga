@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import type {
   EducationEntry,
   ExperienceEntry,
@@ -52,6 +53,78 @@ const DEFAULT_HEADER_TITLE = "Verifique seus dados";
 const DEFAULT_HEADER_SUBTITLE =
   "Revisamos e extraimos as informações do seu currículo. Confira e edite se necessário.";
 
+const ERROR_FIELD_ORDER = [
+  "form",
+  "fullName",
+  "email",
+  "location",
+  "phone",
+  "summary",
+  "skills",
+  "education",
+  "experience",
+] as const;
+
+function getScrollTargetId(
+  key: (typeof ERROR_FIELD_ORDER)[number],
+  validationErrors: ResumeValidationErrors
+): string {
+  if (key === "form") return "resume-form-error";
+
+  if (key === "education") {
+    const firstErrorIndex = validationErrors.educationEntryErrors?.findIndex(
+      (e) => Object.keys(e).length > 0
+    );
+
+    if (firstErrorIndex !== undefined && firstErrorIndex >= 0) {
+      return `resume-form-education-entry-${firstErrorIndex}`;
+    }
+
+    return "resume-form-education";
+  }
+
+  if (key === "experience") {
+    const firstErrorIndex = validationErrors.experienceEntryErrors?.findIndex(
+      (e) => Object.keys(e).length > 0
+    );
+
+    if (firstErrorIndex !== undefined && firstErrorIndex >= 0) {
+      return `resume-form-experience-entry-${firstErrorIndex}`;
+    }
+
+    return "resume-form-experience";
+  }
+
+  return `resume-form-${key}`;
+}
+
+function hasValidationError(
+  key: (typeof ERROR_FIELD_ORDER)[number],
+  validationErrors: ResumeValidationErrors
+): boolean {
+  if (key === "education") {
+    return (
+      !!validationErrors.education ||
+      (!!validationErrors.educationEntryErrors?.length &&
+        validationErrors.educationEntryErrors.some(
+          (e) => Object.keys(e).length > 0
+        ))
+    );
+  }
+
+  if (key === "experience") {
+    return (
+      !!validationErrors.experience ||
+      (!!validationErrors.experienceEntryErrors?.length &&
+        validationErrors.experienceEntryErrors.some(
+          (e) => Object.keys(e).length > 0
+        ))
+    );
+  }
+
+  return !!validationErrors[key];
+}
+
 export function ResumeFormCard({
   data,
   updateField,
@@ -69,6 +142,24 @@ export function ResumeFormCard({
   hideHeader = false,
   validationErrors,
 }: ResumeFormCardProps) {
+  useEffect(() => {
+    if (!validationErrors) return;
+
+    const firstKey = ERROR_FIELD_ORDER.find((key) =>
+      hasValidationError(key, validationErrors)
+    );
+
+    if (!firstKey) return;
+
+    const id = getScrollTargetId(firstKey, validationErrors);
+    const timer = setTimeout(() => {
+      const el = document.getElementById(id);
+      el?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, [validationErrors]);
+
   return (
     <div className="w-content rounded-xl border border-border bg-card">
       {!hideHeader && (
@@ -82,9 +173,11 @@ export function ResumeFormCard({
         className={`flex flex-col gap-5 overflow-hidden p-7 ${hideHeader ? "" : "pt-0"}`}
       >
         {validationErrors?.form && (
-          <p className="text-sm text-destructive" role="alert">
-            {validationErrors.form}
-          </p>
+          <div id="resume-form-error" className="scroll-mt-6 scroll-mb-6">
+            <p className="text-sm text-destructive" role="alert">
+              {validationErrors.form}
+            </p>
+          </div>
         )}
         <ResumeFormPersonalData
           data={data}
@@ -93,7 +186,10 @@ export function ResumeFormCard({
           validationErrors={validationErrors}
         />
 
-        <div className="flex flex-col gap-4">
+        <div
+          id="resume-form-summary"
+          className="flex scroll-mt-6 scroll-mb-6 flex-col gap-4"
+        >
           <h3 className="text-section-title">Resumo profissional</h3>
           <Textarea
             id="summary"
@@ -131,6 +227,7 @@ export function ResumeFormCard({
           removeEducation={removeEducation}
           isSaving={isSaving}
           educationError={validationErrors?.education}
+          educationEntryErrors={validationErrors?.educationEntryErrors}
         />
 
         <ResumeFormExperience
@@ -140,6 +237,7 @@ export function ResumeFormCard({
           removeExperience={removeExperience}
           isSaving={isSaving}
           experienceError={validationErrors?.experience}
+          experienceEntryErrors={validationErrors?.experienceEntryErrors}
         />
 
         <div className="flex justify-end">
