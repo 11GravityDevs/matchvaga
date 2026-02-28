@@ -17,7 +17,6 @@ export interface ResumeValidationErrors {
   phone?: string;
   summary?: string;
   skills?: string;
-  languages?: string;
   experience?: string;
   education?: string;
 }
@@ -176,22 +175,26 @@ export function useResumeForm({
       }
     }
 
-    const educationsWithoutCompletionDate = formData.education.filter(
-      (edu) => !edu.completionDate?.trim()
-    );
-    const currentEducations = formData.education.filter(
-      (edu) => edu.isCurrent === true
-    );
-    if (educationsWithoutCompletionDate.length > 1) {
-      errors.education =
-        "Apenas uma formação pode estar em andamento (sem data de conclusão). Preencha a data de conclusão das demais.";
-    } else if (
-      educationsWithoutCompletionDate.some((edu) => edu.isCurrent !== true)
-    ) {
-      errors.education =
-        "Preencha a data de conclusão ou marque como formação atual.";
-    } else if (currentEducations.length > 1) {
-      errors.education = "Apenas uma formação pode ser marcada como atual.";
+    if (formData.education.length > 0) {
+      const educationsWithoutCompletionDate = formData.education.filter(
+        (edu) => !edu.completionDate?.trim()
+      );
+
+      const currentEducations = formData.education.filter(
+        (edu) => edu.isCurrent === true
+      );
+
+      if (educationsWithoutCompletionDate.length > 1) {
+        errors.education =
+          "Apenas uma formação pode estar em andamento (sem data de conclusão). Preencha a data de conclusão das demais.";
+      } else if (
+        educationsWithoutCompletionDate.some((edu) => edu.isCurrent !== true)
+      ) {
+        errors.education =
+          "Preencha a data de conclusão ou marque como formação atual.";
+      } else if (currentEducations.length > 1) {
+        errors.education = "Apenas uma formação pode ser marcada como atual.";
+      }
     }
 
     return Object.keys(errors).length > 0 ? errors : null;

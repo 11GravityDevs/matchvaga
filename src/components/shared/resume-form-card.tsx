@@ -102,6 +102,7 @@ export function ResumeFormCard({
             disabled={isSaving}
             variant="form"
             className="w-full"
+            aria-invalid={!!validationErrors?.summary}
           />
           {validationErrors?.summary && (
             <p className="text-sm text-destructive" role="alert">
@@ -121,7 +122,6 @@ export function ResumeFormCard({
           languages={data.languages ?? []}
           onChange={(languages) => updateField("languages", languages)}
           isSaving={isSaving}
-          languagesError={validationErrors?.languages}
         />
 
         <ResumeFormEducation

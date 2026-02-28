@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { cn } from "@/utils/style";
 
 interface FormFieldProps {
-  label: string;
+  label: ReactNode;
   htmlFor: string;
   className?: string;
   labelClassName?: string;
@@ -21,7 +21,13 @@ export function FormField({
 }: FormFieldProps) {
   return (
     <div className={cn("flex flex-col gap-1.5", className)}>
-      <label htmlFor={htmlFor} className={labelClassName ?? "text-form-label"}>
+      <label
+        htmlFor={htmlFor}
+        className={cn(
+          "flex items-baseline",
+          labelClassName ?? "text-form-label"
+        )}
+      >
         {label}
       </label>
       {children}

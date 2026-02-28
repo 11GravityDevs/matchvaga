@@ -10,14 +10,12 @@ interface ResumeFormLanguagesProps {
   languages: string[];
   onChange: (languages: string[]) => void;
   isSaving?: boolean;
-  languagesError?: string;
 }
 
 export function ResumeFormLanguages({
   languages,
   onChange,
   isSaving,
-  languagesError,
 }: ResumeFormLanguagesProps) {
   const [isAddingLanguage, setIsAddingLanguage] = useState(false);
   const [newLanguage, setNewLanguage] = useState("");
@@ -31,7 +29,12 @@ export function ResumeFormLanguages({
 
   const addLanguage = () => {
     const trimmed = newLanguage.trim();
-    if (trimmed && !languages.includes(trimmed)) {
+
+    const isDuplicate = languages.some(
+      (lang) => lang.toLowerCase() === trimmed.toLowerCase()
+    );
+
+    if (trimmed && !isDuplicate) {
       onChange([...languages, trimmed]);
       setNewLanguage("");
     }
@@ -43,13 +46,15 @@ export function ResumeFormLanguages({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-col gap-1.5">
-        <h3 className="text-section-title">Idiomas</h3>
-        {languagesError && (
-          <p className="text-sm text-destructive" role="alert">
-            {languagesError}
-          </p>
-        )}
+      <div className="flex flex-col justify-center gap-1.5">
+        <h3 className="text-section-title">
+          <span className="inline-flex items-baseline gap-1">
+            Idiomas
+            <span className="align-baseline text-small font-normal text-muted-foreground">
+              (opcional)
+            </span>
+          </span>
+        </h3>
       </div>
       <div className="flex flex-col gap-3">
         {languages.length > 0 && (
