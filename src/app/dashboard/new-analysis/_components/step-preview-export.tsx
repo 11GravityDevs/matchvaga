@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Download, FileText, Loader2, RefreshCw, Send } from "lucide-react";
+import { FileDown, FilePen, Loader2, RefreshCw, Send } from "lucide-react";
 
 import { applyCvRefinementInstruction } from "@/app/actions/chat";
 import { Button } from "@/components/ui/button";
@@ -244,16 +244,17 @@ export function StepPreviewExport() {
           <Button
             size="brand"
             variant="outline"
-            className="gap-1.5"
             disabled
+            className="gap-1.5"
             title="Em breve"
           >
-            <FileText className="h-4 w-4" />
-            Download PDF
-          </Button>
-          <Button size="brand" disabled className="gap-1.5" title="Em breve">
-            <Download className="h-4 w-4" />
+            <FilePen className="h-4 w-4" />
             Download DOCX
+          </Button>
+
+          <Button size="brand" className="gap-1.5" disabled title="Em breve">
+            <FileDown className="h-4 w-4" />
+            Download PDF
           </Button>
         </div>
       </div>
