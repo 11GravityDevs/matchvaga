@@ -18,6 +18,8 @@ interface OnboardingContextValue {
   setResumeId: (id: string | null) => void;
   parsedData: ResumeData | null;
   setParsedData: (data: ResumeData | null) => void;
+  skippedUpload: boolean;
+  setSkippedUpload: (value: boolean) => void;
 }
 
 const OnboardingContext = createContext<OnboardingContextValue | null>(null);
@@ -29,6 +31,7 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
   );
   const [resumeId, setResumeId] = useState<string | null>(null);
   const [parsedData, setParsedData] = useState<ResumeData | null>(null);
+  const [skippedUpload, setSkippedUpload] = useState(false);
 
   return (
     <OnboardingContext.Provider
@@ -41,6 +44,8 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
         setResumeId,
         parsedData,
         setParsedData,
+        skippedUpload,
+        setSkippedUpload,
       }}
     >
       {children}

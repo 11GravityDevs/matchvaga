@@ -23,6 +23,7 @@ export interface UseResumeUploadReturn {
   uploadFile: (file: File) => void;
   uploadFromPaste: (text: string) => void;
   analyze: () => Promise<void>;
+  continueWithoutUpload: () => void;
 }
 
 export function useResumeUpload(): UseResumeUploadReturn {
@@ -35,6 +36,7 @@ export function useResumeUpload(): UseResumeUploadReturn {
     setSelectedFile,
     setResumeId,
     setParsedData,
+    setSkippedUpload,
   } = useOnboardingContext();
 
   const {
@@ -86,6 +88,11 @@ export function useResumeUpload(): UseResumeUploadReturn {
     await uploadMutation(selectedFile.file);
   }
 
+  function continueWithoutUpload() {
+    setSkippedUpload(true);
+    router.push(ROUTE_ONBOARDING_VERIFY);
+  }
+
   return {
     resumeContent,
     setResumeContent,
@@ -100,5 +107,6 @@ export function useResumeUpload(): UseResumeUploadReturn {
     uploadFile,
     uploadFromPaste,
     analyze,
+    continueWithoutUpload,
   };
 }

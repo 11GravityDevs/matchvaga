@@ -8,6 +8,63 @@ import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
 import { translateAuthError } from "@/utils/auth";
 
+export interface CreateResumeWithDataResult {
+  success: boolean;
+  resumeId?: string;
+  parsedData?: ResumeData;
+  error?: string;
+}
+
+export async function createResumeWithData(
+  data: ResumeData
+): Promise<CreateResumeWithDataResult> {
+  const parsed = resumeDataSchema.safeParse(data);
+
+  if (!parsed.success) {
+    return { success: false, error: "Dados inválidos. Verifique os campos." };
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError) {
+    return { success: false, error: translateAuthError(authError) };
+  }
+
+  if (!user) {
+    return { success: false, error: "Faça login para continuar." };
+  }
+
+  const { data: row, error: insertError } = await supabase
+    .from("resumes")
+    .insert({
+      user_id: user.id,
+      parsed_data: parsed.data as unknown as Record<string, unknown>,
+    })
+    .select("id")
+    .single();
+
+  if (insertError) {
+    console.error("[createResumeWithData] insert error:", insertError.message);
+    return {
+      success: false,
+      error: "Erro ao salvar. Tente novamente.",
+    };
+  }
+
+  revalidatePath("/home");
+  revalidatePath("/onboarding");
+
+  return {
+    success: true,
+    resumeId: row.id,
+    parsedData: parsed.data as ResumeData,
+  };
+}
+
 export interface UploadResumeResult {
   success: boolean;
   resumeId?: string;
