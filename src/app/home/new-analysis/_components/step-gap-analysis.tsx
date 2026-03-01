@@ -98,6 +98,7 @@ export function StepGapAnalysis() {
   const {
     jobRole,
     score,
+    optimizedScore,
     matchedSkills,
     technicalSkills,
     behavioralSkills,
@@ -106,6 +107,7 @@ export function StepGapAnalysis() {
     setSelectedTechnicalSkills,
     setSelectedBehavioralSkills,
     setOptimizedResumeData,
+    setOptimizedScore,
     analysisId,
   } = useNewAnalysis();
 
@@ -146,6 +148,9 @@ export function StepGapAnalysis() {
       setSelectedBehavioralSkills(selectedBehavioral);
       if (result.data) {
         setOptimizedResumeData(result.data);
+      }
+      if (result.optimizedScore != null) {
+        setOptimizedScore(result.optimizedScore);
       }
       setStep(3);
     },

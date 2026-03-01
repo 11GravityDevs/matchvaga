@@ -79,12 +79,27 @@ ${JSON.stringify(resumeData, null, 2)}
 Return the optimized resume as JSON. Include skillsByCategory (array of { category, items }), skills (flat array), and all other fields. Experience and education descriptions: one bullet per line. Output only valid JSON.`;
 }
 
+// TODO: temporary mock — remove and restore real Anthropic call below
+const USE_SYNTHESIS_MOCK = true;
+
 export async function synthesizeOptimizedResume(
   resumeData: ResumeData,
   job: { title: string; company: string; rawText: string },
   matchedSkills: string[],
   missingSkills: { technical: string[]; behavioral: string[] } | undefined
 ): Promise<SynthesisOutput> {
+  if (USE_SYNTHESIS_MOCK) {
+    console.log("Using mock synthesis");
+    const validated = resumeDataSchema.parse({
+      ...resumeData,
+      skillsByCategory: resumeData.skillsByCategory ?? [
+        { category: "Skills", items: resumeData.skills },
+      ],
+      languages: resumeData.languages ?? [],
+    });
+    return { success: true, data: validated };
+  }
+
   const apiKey = process.env.ANTHROPIC_API_KEY;
 
   if (!apiKey) {

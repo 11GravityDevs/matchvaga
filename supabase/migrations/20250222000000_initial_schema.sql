@@ -27,6 +27,7 @@ CREATE TABLE analyses (
   resume_id UUID NOT NULL REFERENCES resumes(id) ON DELETE CASCADE,
   job_snapshot JSONB NOT NULL,
   score INTEGER NOT NULL CHECK (score >= 0 AND score <= 100),
+  optimized_score INTEGER CHECK (optimized_score >= 0 AND optimized_score <= 100),
   matched_skills JSONB NOT NULL DEFAULT '[]',
   missing_technical_skills JSONB NOT NULL DEFAULT '[]',
   missing_behavioral_skills JSONB NOT NULL DEFAULT '[]',

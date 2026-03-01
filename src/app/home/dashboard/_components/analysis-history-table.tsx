@@ -192,12 +192,18 @@ export function AnalysisHistoryTable({
 
               {/* After */}
               <div className="flex min-w-0 flex-1 items-center gap-2 border-r border-border p-4">
-                <span
-                  className="rounded-full px-2 py-0.5 text-caption-leading font-semibold text-on-accent-brand"
-                  style={{ backgroundColor: row.afterColor }}
-                >
-                  {row.after}
-                </span>
+                {row.after === "—" ? (
+                  <span className="text-caption-leading text-muted-foreground">
+                    {row.after}
+                  </span>
+                ) : (
+                  <span
+                    className="rounded-full px-2 py-0.5 text-caption-leading font-semibold text-on-accent-brand"
+                    style={{ backgroundColor: row.afterColor }}
+                  >
+                    {row.after}
+                  </span>
+                )}
               </div>
 
               {/* Status */}

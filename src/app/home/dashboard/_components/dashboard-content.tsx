@@ -42,14 +42,25 @@ export function DashboardContent({
   }
 
   const totalAnalyses = analyses.length;
+
+  const completedWithScore = analyses.filter(
+    (a) =>
+      a.status === "completed" &&
+      a.optimized_score != null &&
+      a.optimized_score != 0
+  );
+
   const avgScore =
-    totalAnalyses > 0
+    completedWithScore.length > 0
       ? Math.round(
-          analyses.reduce((sum, a) => sum + a.score, 0) / totalAnalyses
+          completedWithScore.reduce((sum, a) => sum + a.optimized_score, 0) /
+            completedWithScore.length
         )
       : 0;
+
   const scoreVariant =
     avgScore >= 75 ? "success" : avgScore >= 50 ? "primary" : "destructive";
+
   const scoreBadge =
     avgScore >= 75 ? "Alto" : avgScore >= 50 ? "Médio" : "Baixo";
 
@@ -58,6 +69,9 @@ export function DashboardContent({
     const { bg: companyBg, text: companyTextColor } = getCompanyColor(
       job.company
     );
+
+    const showOptimized = a.status === "completed" && a.optimized_score != 0;
+
     return {
       analysisId: a.id,
       role: job.title,
@@ -68,8 +82,10 @@ export function DashboardContent({
       date: formatAnalysisDate(a.created_at),
       before: `${a.score}%`,
       beforeColor: getScoreColorToken(a.score),
-      after: "—",
-      afterColor: "var(--muted-foreground)",
+      after: showOptimized ? `${a.optimized_score}%` : "—",
+      afterColor: showOptimized
+        ? getScoreColorToken(a.optimized_score!)
+        : "var(--muted-foreground)",
       status: a.status,
     };
   });
