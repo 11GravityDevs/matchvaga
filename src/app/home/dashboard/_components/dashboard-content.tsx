@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { TrendingUp, TriangleAlert, CircleCheck } from "lucide-react";
+import { Zap, Gauge, TrendingUp, CircleCheck } from "lucide-react";
 
 import { generateOptimizedDocument } from "@/app/actions/document";
 import { ROUTE_HOME_NEW_ANALYSIS } from "@/constants/routes";
@@ -21,7 +21,6 @@ import {
 } from "@/lib/query/query-options";
 import { useQuery } from "@tanstack/react-query";
 import { Loading } from "@/components/ui/loading";
-import { Zap } from "lucide-react";
 
 interface DashboardContentProps {
   userName: string;
@@ -54,15 +53,24 @@ export function DashboardContent({
   const analysis = displayData?.analysis ?? 0;
 
   const totalAnalyses = analyses.length;
+  const completedCount = analyses.filter(
+    (a) => a.status === "completed"
+  ).length;
+
+  const avgScoreInitial =
+    totalAnalyses > 0
+      ? Math.round(
+          analyses.reduce((sum, a) => sum + a.score, 0) / totalAnalyses
+        )
+      : 0;
 
   const completedWithScore = analyses.filter(
     (a) =>
       a.status === "completed" &&
       a.optimized_score != null &&
-      a.optimized_score != 0
+      a.optimized_score !== 0
   );
-
-  const avgScore =
+  const avgScoreFinal =
     completedWithScore.length > 0
       ? Math.round(
           completedWithScore.reduce((sum, a) => sum + a.optimized_score, 0) /
@@ -70,11 +78,10 @@ export function DashboardContent({
         )
       : 0;
 
-  const scoreVariant =
-    avgScore >= 75 ? "success" : avgScore >= 50 ? "primary" : "destructive";
-
-  const scoreBadge =
-    avgScore >= 75 ? "Alto" : avgScore >= 50 ? "Médio" : "Baixo";
+  const scoreVariant = (score: number) =>
+    score >= 75 ? "success" : score >= 50 ? "primary" : "destructive";
+  const scoreBadge = (score: number) =>
+    score >= 75 ? "Alto" : score >= 50 ? "Médio" : "Baixo";
 
   const tableRows = analyses.map((a) => {
     const job = a.job_snapshot;
@@ -106,34 +113,36 @@ export function DashboardContent({
     <main className="flex flex-1 flex-col section-gap page-padding">
       <DashboardHeader userName={userName} />
 
-      {/* KPI Row */}
-      <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <KpiCard
-          label="Análises Disponíveis"
-          value={String(analysis)}
-          variant="primary"
-          icon={<Zap className="h-6 w-6" />}
-        />
-        <KpiCard
-          label="Total de Otimizações"
-          value={String(totalAnalyses)}
-          variant="primary"
-          icon={<TrendingUp className="h-6 w-6" />}
-        />
-        <KpiCard
-          label="Score Médio"
-          value={`${avgScore}%`}
-          variant={scoreVariant}
-          icon={<TriangleAlert className="h-6 w-6" />}
-          badge={{ label: scoreBadge }}
-        />
-        <KpiCard
-          label="Análises Concluídas"
-          value={String(totalAnalyses)}
-          variant="success"
-          icon={<CircleCheck className="h-6 w-6" />}
-        />
-      </div>
+      {totalAnalyses > 0 && (
+        <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <KpiCard
+            label="Análises Disponíveis"
+            value={String(analysis)}
+            variant="primary"
+            icon={<Zap className="h-6 w-6" />}
+          />
+          <KpiCard
+            label="Score Médio Inicial"
+            value={`${avgScoreInitial}%`}
+            variant={scoreVariant(avgScoreInitial)}
+            icon={<Gauge className="h-6 w-6" />}
+            badge={{ label: scoreBadge(avgScoreInitial) }}
+          />
+          <KpiCard
+            label="Score Médio Final"
+            value={`${avgScoreFinal}%`}
+            variant={scoreVariant(avgScoreFinal)}
+            icon={<TrendingUp className="h-6 w-6" />}
+            badge={{ label: scoreBadge(avgScoreFinal) }}
+          />
+          <KpiCard
+            label="Análises Finalizadas"
+            value={String(completedCount)}
+            variant="success"
+            icon={<CircleCheck className="h-6 w-6" />}
+          />
+        </div>
+      )}
 
       <AnalysisHistoryTable
         rows={tableRows}

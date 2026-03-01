@@ -84,79 +84,83 @@ export function StepJobInput() {
 
   if (isAnalyzing) {
     return (
-      <div className="mx-auto flex min-h-0 w-full max-w-content flex-1 flex-col section-gap overflow-hidden page-padding">
-        <Loading
-          thinkingMessages={[...GAP_ANALYSIS_THINKING_MESSAGES]}
-          className="min-h-0 flex-1"
-        />
+      <div className="flex min-h-0 w-full flex-1 flex-col items-center section-gap overflow-hidden page-padding">
+        <div className="flex min-h-0 w-content flex-1 flex-col">
+          <Loading
+            thinkingMessages={[...GAP_ANALYSIS_THINKING_MESSAGES]}
+            className="min-h-0 flex-1"
+          />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="mx-auto flex min-h-0 w-full max-w-content flex-1 flex-col section-gap overflow-hidden page-padding">
-      {/* Page Header */}
-      <div className="flex w-full items-center justify-between">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-page-title">Nova Análise</h1>
-          <p className="text-page-subtitle">
-            Cole a descrição da vaga para analisar a compatibilidade.
-          </p>
-        </div>
-        <StepIndicator steps={WIZARD_STEPS} currentStepIndex={0} />
-      </div>
-
-      {/* Job Description Card */}
-      <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-border bg-card">
-        <div className="flex min-h-0 flex-1 flex-col gap-5 overflow-auto card-content-padding">
-          <Field className="flex min-h-0 flex-1 flex-col gap-1.5">
-            <FieldLabel className="text-base leading-snug font-semibold">
-              Descrição da Vaga
-            </FieldLabel>
-            <FieldDescription>
-              Cole aqui o texto completo da vaga que deseja analisar
-            </FieldDescription>
-            <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-input bg-background">
-              <Textarea
-                className="h-full min-h-0 resize-none border-0 bg-transparent p-4 text-sm leading-relaxed shadow-none focus-visible:ring-0"
-                placeholder="Exemplo: Estamos procurando um desenvolvedor full-stack com experiência em React e Node.js para trabalhar em nosso time de produto..."
-                value={jobDescription}
-                onChange={(e) => setJobDescription(e.target.value)}
-              />
-            </div>
-          </Field>
-
-          {analysisErrorDisplay && (
-            <div
-              role="alert"
-              className="rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive"
-            >
-              {analysisErrorDisplay}
-            </div>
-          )}
-
-          {/* Tip Banner */}
-          <div className="flex items-start gap-2 self-start rounded-lg border border-accent-success-border bg-accent-success-light tip-banner-padding">
-            <Lightbulb className="mt-0.5 h-4 w-4 shrink-0 text-accent-success" />
-            <p className="text-small-leading text-accent-success-text">
-              <span className="font-semibold">Dica:</span> Cole a descrição
-              completa da vaga. Cargo e empresa são identificados
-              automaticamente.
+    <div className="flex min-h-0 w-full flex-1 flex-col items-center section-gap overflow-hidden page-padding">
+      <div className="flex min-h-0 w-content flex-1 flex-col section-gap">
+        {/* Page Header */}
+        <div className="flex w-full items-center justify-between">
+          <div className="flex flex-col gap-1">
+            <h1 className="text-page-title">Nova Análise</h1>
+            <p className="text-page-subtitle">
+              Cole a descrição da vaga para analisar a compatibilidade.
             </p>
           </div>
+          <StepIndicator steps={WIZARD_STEPS} currentStepIndex={0} />
         </div>
-      </div>
 
-      <div className="flex justify-end">
-        <Button
-          size="brand"
-          disabled={!canAnalyze}
-          onClick={handleAnalyze}
-          className="gap-1.5"
-        >
-          <Sparkles className="h-4 w-4" />
-          Analisar vaga
-        </Button>
+        {/* Job Description Card */}
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-border bg-card">
+          <div className="flex min-h-0 flex-1 flex-col gap-5 overflow-auto card-content-padding">
+            <Field className="flex min-h-0 flex-1 flex-col gap-1.5">
+              <FieldLabel className="text-base leading-snug font-semibold">
+                Descrição da Vaga
+              </FieldLabel>
+              <FieldDescription>
+                Cole aqui o texto completo da vaga que deseja analisar
+              </FieldDescription>
+              <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-input bg-background">
+                <Textarea
+                  className="h-full min-h-0 resize-none border-0 bg-transparent p-4 text-sm leading-relaxed shadow-none focus-visible:ring-0"
+                  placeholder="Exemplo: Estamos procurando um desenvolvedor full-stack com experiência em React e Node.js para trabalhar em nosso time de produto..."
+                  value={jobDescription}
+                  onChange={(e) => setJobDescription(e.target.value)}
+                />
+              </div>
+            </Field>
+
+            {analysisErrorDisplay && (
+              <div
+                role="alert"
+                className="rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive"
+              >
+                {analysisErrorDisplay}
+              </div>
+            )}
+
+            {/* Tip Banner */}
+            <div className="flex items-start gap-2 self-start rounded-lg border border-accent-success-border bg-accent-success-light tip-banner-padding">
+              <Lightbulb className="mt-0.5 h-4 w-4 shrink-0 text-accent-success" />
+              <p className="text-small-leading text-accent-success-text">
+                <span className="font-semibold">Dica:</span> Cole a descrição
+                completa da vaga. Cargo e empresa são identificados
+                automaticamente.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex justify-end">
+          <Button
+            size="brand"
+            disabled={!canAnalyze}
+            onClick={handleAnalyze}
+            className="gap-1.5"
+          >
+            <Sparkles className="h-4 w-4" />
+            Analisar vaga
+          </Button>
+        </div>
       </div>
     </div>
   );

@@ -17,11 +17,15 @@ export default async function DashboardPage({
   searchParams,
 }: DashboardPageProps) {
   const queryClient = getQueryClient();
-  await queryClient.prefetchQuery(analysesQueryOptions);
+  await Promise.all([
+    queryClient.prefetchQuery(analysesQueryOptions),
+    queryClient.prefetchQuery(currentUserDisplayQueryOptions),
+  ]);
 
   const displayData = queryClient.getQueryData<GetCurrentUserDisplayResult>(
     currentUserDisplayQueryOptions.queryKey
   );
+
   const name = displayData?.fullName?.split(" ")[0] ?? "Usuário";
   const { from } = await searchParams;
 
