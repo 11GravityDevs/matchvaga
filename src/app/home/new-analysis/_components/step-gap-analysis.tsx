@@ -156,7 +156,7 @@ export function StepGapAnalysis() {
     },
   });
 
-  const displayScore = optimizedScore ?? score ?? 0;
+  const displayScore = score ?? 0;
   const feedback = getScoreFeedback(displayScore);
   const feedbackClasses = FEEDBACK_BADGE_CLASSES[feedback.variant];
 

@@ -10,8 +10,18 @@ import {
   useNewAnalysis,
   WIZARD_STEPS,
 } from "../_contexts/new-analysis-context";
+import { getScoreFeedback } from "../_utils/analysis";
 import { StepIndicator } from "@/components/shared/step-indicator";
 import { ResumePreviewDocument } from "./resume-preview-document";
+import { cn } from "@/utils/style";
+
+const FEEDBACK_BADGE_CLASSES = {
+  success:
+    "border-accent-success-border bg-accent-success-light text-accent-success-text",
+  warning:
+    "border-accent-warning-border bg-accent-warning-light text-accent-warning-text",
+  low: "border-accent-low-border bg-accent-low-light text-accent-low-text",
+} as const;
 
 interface ChatMessage {
   role: "user" | "assistant";
@@ -79,6 +89,8 @@ export function StepPreviewExport() {
   }
 
   const displayScore = optimizedScore ?? 0;
+  const feedback = getScoreFeedback(displayScore);
+  const feedbackBadgeClasses = FEEDBACK_BADGE_CLASSES[feedback.variant];
 
   return (
     <div className="flex flex-1 flex-col gap-4 overflow-hidden page-padding">
@@ -101,8 +113,13 @@ export function StepPreviewExport() {
               <span className="text-base font-semibold text-foreground">
                 Visualização do Currículo
               </span>
-              <div className="flex items-center justify-center rounded-full bg-accent-success px-2.5 py-1">
-                <span className="text-xs font-semibold text-white">
+              <div
+                className={cn(
+                  "flex items-center justify-center rounded-full border px-2.5 py-1",
+                  feedbackBadgeClasses
+                )}
+              >
+                <span className="text-xs font-semibold">
                   {displayScore}% Match
                 </span>
               </div>
