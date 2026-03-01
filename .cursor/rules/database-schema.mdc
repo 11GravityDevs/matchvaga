@@ -1,5 +1,5 @@
 ---
-description: DB tables resumes, analyses, optimized_documents — use when writing Server Actions
+description: DB tables resumes, analyses, user_credits, optimized_documents — use when writing Server Actions
 globs: src/app/actions/**/*.ts,src/app/**/_actions/**/*.ts,supabase/migrations/**/*.sql
 alwaysApply: false
 ---
