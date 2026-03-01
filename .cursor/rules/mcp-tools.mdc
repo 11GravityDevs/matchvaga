@@ -94,7 +94,7 @@ You have access to these MCPs.
 
 | Scenario | Action |
 |---------|--------|
-| **Creating a new task** | Use `save_issue` to create the issue; description must follow the Linear Task Template with icons (🎯 Context, ✅ Acceptance Criteria, 🔗 Implementation Notes) and assign the correct label (Bug, Feature, Business, QA, Marketing). |
+| **Creating a new task** | Use `save_issue` to create the issue; description must follow the Linear Task Template: use **headings** `## 🎯 Contexto`, `## ✅ Critérios de aceite`, `## 🔗 Notas de implementação` (não só negrito) para o Linear exibir espaço entre seções; assign the correct label (Bug, Feature, Business, QA, Marketing). |
 | **Updating an existing task** | Use `save_issue` to update description, status, or other fields instead of editing in the UI. |
 | **Listing / finding tasks** | Use `list_issues` to search, filter, or list issues; use `get_issue` for full details. |
 | **Starting work on a task** | When the user says they will start a task: pull main, create a `feat/` or `fix/` branch, then use `save_issue` with `assignee: "me"` and `state: "In Progress"`. See `linear-task-branch.mdc`. |
