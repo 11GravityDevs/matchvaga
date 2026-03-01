@@ -1,44 +1,45 @@
 ---
-description: Standard template and rules for GitHub pull requests created for this repo
+description: Template e regras padrão para pull requests no GitHub deste repositório
 alwaysApply: false
 ---
 
-# Pull Request Template
+# Template de Pull Request
 
-Use this structure whenever the AI creates or updates a pull request for this repository (via MCP or CLI).
+Use esta estrutura sempre que a IA criar ou atualizar um pull request neste repositório via MCP.
 
 ## Template
 
-**PR Title**
-- Imperative mood, clearly stating the change (e.g. `Add gap analysis step UI`, `Fix resume parsing error handling`).
-- Include scope when helpful (e.g. `dashboard/new-analysis: ...`).
-- Prefer concise titles (~60 characters) while still being descriptive.
+**Título do PR**
+- Modo imperativo, deixando claro o que mudou (ex.: `Adiciona UI da etapa de análise de gap`, `Corrige tratamento de erro no parsing do currículo`).
+- Inclua o escopo quando ajudar (ex.: `dashboard/new-analysis: ...`).
+- Prefira títulos concisos (~60 caracteres), mas ainda descritivos.
 
-**🎯 Context**  
-Describe why this change is being made and how it impacts users or the business.
+**🎯 Contexto**  
+Descreva por que esta mudança está sendo feita e como impacta usuários ou o negócio.
 
-**🛠 Changes**  
-- Bullet list of the main code or behavior changes.  
-- Group related changes; avoid implementation noise.
+**🛠 Alterações**  
+- Lista em tópicos das principais mudanças de código ou comportamento.  
+- Agrupe alterações relacionadas; evite ruído de implementação.
 
-**✅ Acceptance Criteria**  
-List the behaviors that must hold true after this PR is merged — use checkboxes so they are trackable:
-- [ ] Behavior / user flow works as described  
-- [ ] Edge cases covered (e.g. empty state, error path)  
-- [ ] Test/Validate X  
+**✅ Critérios de aceite**  
+Liste os comportamentos que devem ser verdade após o merge deste PR — use checkboxes para serem rastreáveis:
+- [ ] Comportamento / fluxo do usuário funciona como descrito  
+- [ ] Casos de borda cobertos (ex.: estado vazio, fluxo de erro)  
+- [ ] Testar/validar X  
 
-**🧪 Test Plan**  
-Explicitly state how the changes were or should be validated — also as checkboxes:
-- [ ] Manual QA steps (describe exact steps and expected outcomes)  
+**🧪 Plano de testes**  
+Descreva explicitamente como as mudanças foram ou devem ser validadas — também em checkboxes:
+- [ ] Passos de QA manual (descreva os passos exatos e resultados esperados)  
 
 **🔗 Links**  
-- Link at least one related Linear issue when applicable (e.g. `Linear: MAT-123`).  
-- Optional: other references.
+- Linke ao menos um issue do Linear relacionado quando aplicável (ex.: `Linear: MAT-123`).  
+- Opcional: outras referências.
 
 ---
 
-**Rules:**
-- **Always** structure PR descriptions using the sections above, in this order.
-- **Acceptance criteria** and **Test Plan** must use `- [ ]` checkboxes so they render as real checklists in GitHub.
-- When a PR implements or changes a Linear task, reference the Linear issue ID in **🔗 Links** and ensure the Linear description uses `linear-task-template.mdc`.
-- When using GitHub MCP (if configured), use it for reading and reviewing pull requests and follow this template when generating review bodies or PR descriptions.
+**Regras:**
+- **Sempre** estruture a descrição do PR com as seções acima, nesta ordem.
+- **Critérios de aceite** e **Plano de testes** devem usar checkboxes `- [ ]` para renderizar como checklist no GitHub.
+- Quando um PR implementar ou alterar uma tarefa do Linear, referencie o ID do issue em **🔗 Links** e garanta que a descrição no Linear use `linear-task-template.mdc`.
+- Ao usar o GitHub MCP (se configurado), use-o para ler e revisar pull requests e siga este template ao gerar corpos de review ou descrições de PR.
+- **Idioma:** Títulos e descrições de PR devem ser sempre em **português (PT-BR)**.
