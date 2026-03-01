@@ -4,7 +4,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 import { saveResumeData } from "@/app/actions/resume";
-import { QUERY_KEY_RESUME } from "@/constants/query-keys";
+import {
+  QUERY_KEY_CURRENT_USER_DISPLAY,
+  QUERY_KEY_RESUME,
+} from "@/constants/query-keys";
 import { ROUTE_DASHBOARD } from "@/constants/routes";
 import type { ResumeData } from "@/types/resume";
 import { useOnboardingContext } from "../../_contexts/onboarding-context";
@@ -48,6 +51,12 @@ export function useResumeVerify({
         success: true,
         resumeId: result.resumeId,
         data: result.data,
+      });
+
+      queryClient.setQueryData(QUERY_KEY_CURRENT_USER_DISPLAY, {
+        success: true,
+        fullName: result.data.fullName,
+        email: result.data.email,
       });
     },
   });

@@ -29,7 +29,7 @@ import {
   ROUTE_DASHBOARD_RESUME,
 } from "@/constants/routes";
 import { useSignOut } from "@/hooks/use-sign-out";
-import { resumeQueryOptions } from "@/lib/query/query-options";
+import { currentUserDisplayQueryOptions } from "@/lib/query/query-options";
 import { cn } from "@/utils/style";
 
 function getInitials(fullName: string): string {
@@ -59,14 +59,14 @@ const navItems: NavItem[] = [
 
 export function Sidebar() {
   const pathname = usePathname();
-  const { data: resumeResult } = useQuery(resumeQueryOptions);
+  const { data: displayData } = useQuery(currentUserDisplayQueryOptions);
   const { signOut, isPending } = useSignOut();
 
-  const resumeData = resumeResult?.data;
-  const displayName = resumeData?.fullName?.split(" ")[0] ?? "Usuário";
-  const email = resumeData?.email ?? "—";
-  const initials = resumeData?.fullName
-    ? getInitials(resumeData.fullName)
+  const displayName = displayData?.fullName?.split(" ")[0] ?? "Usuário";
+  const email = displayData?.email ?? "—";
+
+  const initials = displayData?.fullName
+    ? getInitials(displayData.fullName)
     : "?";
 
   return (

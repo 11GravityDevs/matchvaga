@@ -4,7 +4,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import type { ResumeData } from "@/types/resume";
 import { saveResumeData } from "@/app/actions/resume";
-import { QUERY_KEY_RESUME } from "@/constants/query-keys";
+import {
+  QUERY_KEY_CURRENT_USER_DISPLAY,
+  QUERY_KEY_RESUME,
+} from "@/constants/query-keys";
 import {
   useResumeQuery,
   type UseResumeQueryReturn,
@@ -42,6 +45,12 @@ export function useResume(): UseResumeReturn {
         success: true,
         resumeId: result.resumeId,
         data: result.data,
+      });
+
+      queryClient.setQueryData(QUERY_KEY_CURRENT_USER_DISPLAY, {
+        success: true,
+        fullName: result.data.fullName,
+        email: result.data.email,
       });
     },
   });

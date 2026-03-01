@@ -155,6 +155,7 @@ export async function getResumeForUser(): Promise<GetResumeForUserResult> {
     if (error?.code === "PGRST116") {
       return { success: true, resumeId: undefined, data: undefined };
     }
+
     console.error("[getResumeForUser] select error:", error?.message);
     return { success: false, error: "Erro ao carregar currículo." };
   }

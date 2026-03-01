@@ -4,7 +4,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 import { uploadResume } from "@/app/actions/resume";
-import { QUERY_KEY_RESUME } from "@/constants/query-keys";
+import {
+  QUERY_KEY_CURRENT_USER_DISPLAY,
+  QUERY_KEY_RESUME,
+} from "@/constants/query-keys";
 import { ROUTE_ONBOARDING_VERIFY } from "@/constants/routes";
 import {
   useOnboardingContext,
@@ -54,6 +57,12 @@ export function useResumeUpload(): UseResumeUploadReturn {
           success: true,
           resumeId: result.resumeId,
           data: result.parsedData,
+        });
+
+        queryClient.setQueryData(QUERY_KEY_CURRENT_USER_DISPLAY, {
+          success: true,
+          fullName: result.parsedData.fullName,
+          email: result.parsedData.email,
         });
         setResumeId(result.resumeId);
         setParsedData(result.parsedData);
