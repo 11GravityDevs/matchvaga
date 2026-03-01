@@ -139,37 +139,20 @@ export interface GenerateOptimizedDocumentResult {
   error?: string;
 }
 
-export async function downloadOptimizedDocument(
-  analysisId: string,
-  format: "pdf" | "docx"
-): Promise<GenerateOptimizedDocumentResult> {
-  return { success: false, error: "Não implementado ainda." };
-}
+type SupabaseServer = Awaited<ReturnType<typeof createClient>>;
 
-export async function generateOptimizedDocument(
+async function generateOptimizedDocumentWithContext(
+  supabase: SupabaseServer,
+  userId: string,
   analysisId: string,
   format: "pdf" | "docx",
   resumeData: ResumeData
 ): Promise<GenerateOptimizedDocumentResult> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-    error: authError,
-  } = await supabase.auth.getUser();
-
-  if (authError) {
-    return { success: false, error: translateAuthError(authError) };
-  }
-
-  if (!user) {
-    return { success: false, error: "Faça login para continuar." };
-  }
-
   const { data: analysisRow, error: analysisError } = await supabase
     .from("analyses")
     .select("id")
     .eq("id", analysisId)
-    .eq("user_id", user.id)
+    .eq("user_id", userId)
     .single();
 
   if (analysisError || !analysisRow) {
@@ -225,7 +208,7 @@ export async function generateOptimizedDocument(
     buffer = await buildResumeDocx(validResumeData);
   }
 
-  const filePath = `${user.id}/${analysisId}.${format}`;
+  const filePath = `${userId}/${analysisId}.${format}`;
 
   const { error: uploadError } = await supabase.storage
     .from(BUCKET)
@@ -285,4 +268,86 @@ export async function generateOptimizedDocument(
     success: true,
     url: signedData.signedUrl,
   };
+}
+
+export async function downloadOptimizedDocument(
+  analysisId: string,
+  format: "pdf" | "docx"
+): Promise<GenerateOptimizedDocumentResult> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError) {
+    return { success: false, error: translateAuthError(authError) };
+  }
+
+  if (!user) {
+    return { success: false, error: "Faça login para continuar." };
+  }
+
+  const { data: analysisRow, error: analysisError } = await supabase
+    .from("analyses")
+    .select("id, resume_id")
+    .eq("id", analysisId)
+    .eq("user_id", user.id)
+    .single();
+
+  if (analysisError || !analysisRow) {
+    return { success: false, error: "Análise não encontrada." };
+  }
+
+  const { data: resumeRow, error: resumeError } = await supabase
+    .from("resumes")
+    .select("parsed_data")
+    .eq("id", analysisRow.resume_id)
+    .eq("user_id", user.id)
+    .single();
+
+  if (resumeError || !resumeRow) {
+    return { success: false, error: "Currículo não encontrado." };
+  }
+
+  const resumeParsed = resumeDataSchema.safeParse(resumeRow.parsed_data);
+  if (!resumeParsed.success) {
+    return { success: false, error: "Dados do currículo inválidos." };
+  }
+
+  return generateOptimizedDocumentWithContext(
+    supabase,
+    user.id,
+    analysisId,
+    format,
+    resumeParsed.data
+  );
+}
+
+export async function generateOptimizedDocument(
+  analysisId: string,
+  format: "pdf" | "docx",
+  resumeData: ResumeData
+): Promise<GenerateOptimizedDocumentResult> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError) {
+    return { success: false, error: translateAuthError(authError) };
+  }
+
+  if (!user) {
+    return { success: false, error: "Faça login para continuar." };
+  }
+
+  return generateOptimizedDocumentWithContext(
+    supabase,
+    user.id,
+    analysisId,
+    format,
+    resumeData
+  );
 }
