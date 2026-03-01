@@ -7,15 +7,14 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   FileText,
-  Zap,
   Search,
+  ShoppingCart,
   ChevronsUpDown,
   LogOut,
   Moon,
 } from "lucide-react";
 
 import { Logo } from "@/components/shared/logo";
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,10 +23,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
+  ROUTE_HOME_CHECKOUT,
   ROUTE_HOME_DASHBOARD,
   ROUTE_HOME_NEW_ANALYSIS,
   ROUTE_HOME_RESUME,
 } from "@/constants/routes";
+import { SidebarAnalysis } from "./sidebar-analysis";
 import { useSignOut } from "@/hooks/use-sign-out";
 import { currentUserDisplayQueryOptions } from "@/lib/query/query-options";
 import { cn } from "@/utils/style";
@@ -55,6 +56,11 @@ const navItems: NavItem[] = [
   },
   { label: "Dashboard", href: ROUTE_HOME_DASHBOARD, icon: LayoutDashboard },
   { label: "Meu Currículo", href: ROUTE_HOME_RESUME, icon: FileText },
+  {
+    label: "Comprar Análises",
+    href: ROUTE_HOME_CHECKOUT,
+    icon: ShoppingCart,
+  },
 ];
 
 export function Sidebar() {
@@ -108,23 +114,8 @@ export function Sidebar() {
           );
         })}
 
-        {/* Pro Upgrade Card */}
-        <div className="mt-auto rounded-xl bg-accent-brand p-4">
-          <div className="flex flex-col gap-3">
-            <Zap className="h-6 w-6 text-primary-foreground" />
-            <p className="text-sm font-semibold text-primary-foreground">
-              Upgrade para Pro
-            </p>
-            <p className="text-xs font-normal text-primary-foreground">
-              Desbloqueie análises ilimitadas e recursos avançados.
-            </p>
-            <Button
-              variant="secondary"
-              className="w-full bg-primary-foreground text-primary hover:bg-primary-foreground/90"
-            >
-              Saiba Mais
-            </Button>
-          </div>
+        <div className="mt-4">
+          <SidebarAnalysis analysis={displayData?.analysis ?? 0} />
         </div>
       </div>
 
@@ -133,7 +124,7 @@ export function Sidebar() {
         <DropdownMenuTrigger asChild aria-label="Abrir menu da conta">
           <button
             type="button"
-            className="flex w-full cursor-pointer items-center justify-between gap-2 rounded-md bg-sidebar p-2 transition-colors hover:bg-sidebar-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar"
+            className="flex w-full cursor-pointer items-center justify-between gap-2 rounded-md bg-sidebar p-2 transition-colors outline-none hover:bg-sidebar-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar"
           >
             <div className="flex items-center gap-2">
               <div className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-muted">
@@ -153,7 +144,12 @@ export function Sidebar() {
             <ChevronsUpDown className="h-4 w-4 shrink-0 text-muted-foreground" />
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="start" side="top" className="w-56">
+        <DropdownMenuContent
+          align="start"
+          side="top"
+          className="w-56"
+          onCloseAutoFocus={(e) => e.preventDefault()}
+        >
           <DropdownMenuItem
             disabled
             className="cursor-pointer text-muted-foreground"

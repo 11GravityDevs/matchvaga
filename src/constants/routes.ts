@@ -1,8 +1,3 @@
-/**
- * Route paths used across multiple files.
- * Single-file constants stay local to their file.
- */
-
 export const ROUTE_LOGIN = "/login";
 
 export const ROUTE_HOME = "/home";
@@ -12,6 +7,8 @@ export const ROUTE_HOME_DASHBOARD = "/home/dashboard";
 export const ROUTE_HOME_NEW_ANALYSIS = "/home/new-analysis";
 
 export const ROUTE_HOME_RESUME = "/home/resume";
+
+export const ROUTE_HOME_CHECKOUT = "/home/checkout";
 
 export const ROUTE_ONBOARDING = "/onboarding";
 
