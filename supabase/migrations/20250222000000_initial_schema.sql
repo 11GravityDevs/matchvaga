@@ -2,15 +2,6 @@
 -- Run via Supabase CLI: supabase db push
 -- Or apply manually in Supabase Dashboard SQL Editor
 
--- profiles (optional, FK auth.users)
-CREATE TABLE profiles (
-  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-  full_name TEXT,
-  avatar_url TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
 -- resumes (parsed_data only, no file storage)
 CREATE TABLE resumes (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -45,16 +36,11 @@ CREATE TABLE optimized_documents (
 );
 
 -- RLS
-ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE resumes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE analyses ENABLE ROW LEVEL SECURITY;
 ALTER TABLE optimized_documents ENABLE ROW LEVEL SECURITY;
 
 -- Policies: users access only their own rows
-CREATE POLICY "profiles_select_own" ON profiles FOR SELECT USING (auth.uid() = id);
-CREATE POLICY "profiles_insert_own" ON profiles FOR INSERT WITH CHECK (auth.uid() = id);
-CREATE POLICY "profiles_update_own" ON profiles FOR UPDATE USING (auth.uid() = id);
-
 CREATE POLICY "resumes_all_own" ON resumes FOR ALL USING (auth.uid() = user_id);
 CREATE POLICY "analyses_all_own" ON analyses FOR ALL USING (auth.uid() = user_id);
 
