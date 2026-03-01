@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Zap, Gauge, TrendingUp, CircleCheck } from "lucide-react";
 
-import { generateOptimizedDocument } from "@/app/actions/document";
+import { downloadOptimizedDocument } from "@/app/actions/document";
 import { ROUTE_HOME_NEW_ANALYSIS } from "@/constants/routes";
 import { DashboardHeader } from "./dashboard-header";
 import { AnalysisHistoryTable } from "./analysis-history-table";
@@ -147,7 +147,7 @@ export function DashboardContent({
       <AnalysisHistoryTable
         rows={tableRows}
         activeFilter="todos"
-        onDownload={generateOptimizedDocument}
+        onDownload={downloadOptimizedDocument}
       />
     </main>
   );

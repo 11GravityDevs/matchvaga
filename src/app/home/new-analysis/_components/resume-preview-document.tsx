@@ -2,16 +2,13 @@ import type { ResumeData } from "@/types/resume";
 import {
   formatResumeDateBr,
   getSkillsByCategoryForDisplay,
+  formatLinkLabel,
 } from "@/utils/resume";
 
 function ensureHttps(url: string): string {
   const trimmed = url.trim();
   if (!trimmed) return "";
   return trimmed.startsWith("http") ? trimmed : `https://${trimmed}`;
-}
-
-function formatLinkLabel(url: string): string {
-  return url.replace(/^https?:\/\//, "").replace(/\/$/, "");
 }
 
 export function ResumePreviewDocument({ data }: { data: ResumeData }) {
@@ -39,10 +36,10 @@ export function ResumePreviewDocument({ data }: { data: ResumeData }) {
   const separator = <div className="h-px w-full border-b border-border" />;
 
   return (
-    <div className="flex flex-col gap-6">
-      {/* Header — centered */}
-      <div className="flex flex-col items-center gap-1 text-center">
-        <h2 className="text-card-title text-foreground">
+    <div className="flex flex-col gap-5">
+      {/* Header — centered, framed */}
+      <div className="flex flex-col items-center gap-2 border-b border-border pb-6 text-center">
+        <h2 className="text-section-title text-foreground">
           {data.fullName || "—"}
         </h2>
         {contactItems.length > 0 && (
@@ -71,7 +68,6 @@ export function ResumePreviewDocument({ data }: { data: ResumeData }) {
           </p>
         )}
       </div>
-      {separator}
 
       {/* Resumo Profissional */}
       <div className="flex flex-col gap-2">

@@ -43,3 +43,19 @@ export function getSkillsByCategoryForDisplay(
   }
   return [];
 }
+
+export function formatLinkLabel(url: string): string {
+  const trimmed = url?.trim() ?? "";
+  if (!trimmed) return "";
+  return trimmed.replace(/^https?:\/\//, "").replace(/\/$/, "");
+}
+
+export function getContactLineForDisplay(data: ResumeData): string {
+  const parts: string[] = [];
+  if (data.location) parts.push(data.location);
+  if (data.phone) parts.push(data.phone);
+  if (data.linkedin) parts.push(formatLinkLabel(data.linkedin));
+  if (data.github) parts.push(formatLinkLabel(data.github));
+  if (data.email) parts.push(data.email);
+  return parts.join(" | ");
+}
