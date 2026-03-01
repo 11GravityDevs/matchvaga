@@ -8,7 +8,6 @@ import {
   LayoutDashboard,
   FileText,
   Search,
-  ShoppingCart,
   ChevronsUpDown,
   LogOut,
   Moon,
@@ -23,7 +22,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
-  ROUTE_HOME_CHECKOUT,
   ROUTE_HOME_DASHBOARD,
   ROUTE_HOME_NEW_ANALYSIS,
   ROUTE_HOME_RESUME,
@@ -56,11 +54,6 @@ const navItems: NavItem[] = [
   },
   { label: "Dashboard", href: ROUTE_HOME_DASHBOARD, icon: LayoutDashboard },
   { label: "Meu Currículo", href: ROUTE_HOME_RESUME, icon: FileText },
-  {
-    label: "Comprar Análises",
-    href: ROUTE_HOME_CHECKOUT,
-    icon: ShoppingCart,
-  },
 ];
 
 export function Sidebar() {
@@ -114,7 +107,7 @@ export function Sidebar() {
           );
         })}
 
-        <div className="mt-4">
+        <div className="mt-auto">
           <SidebarAnalysis analysis={displayData?.analysis ?? 0} />
         </div>
       </div>

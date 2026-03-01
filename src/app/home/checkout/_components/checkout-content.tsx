@@ -110,7 +110,7 @@ export function CheckoutContent() {
                 "relative flex flex-col overflow-visible transition-all",
                 pkg.recommended
                   ? "border-2 border-accent-brand"
-                  : "border border-border hover:border-accent-brand/40"
+                  : "border border-border hover:border-accent-brand/80"
               )}
             >
               {pkg.recommended && (
@@ -174,7 +174,7 @@ export function CheckoutContent() {
                   loading={loadingPackageId === pkg.id}
                   onClick={() => handleSelectPackage(pkg.id)}
                 >
-                  Selecionar
+                  Comprar
                 </Button>
               </CardFooter>
             </Card>
