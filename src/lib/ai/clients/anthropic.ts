@@ -89,6 +89,7 @@ export async function synthesizeOptimizedResume(
   missingSkills: { technical: string[]; behavioral: string[] } | undefined
 ): Promise<SynthesisOutput> {
   if (USE_SYNTHESIS_MOCK) {
+    console.log("Using mock synthesis");
     const validated = resumeDataSchema.parse({
       ...resumeData,
       skillsByCategory: resumeData.skillsByCategory ?? [

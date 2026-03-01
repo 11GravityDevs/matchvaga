@@ -42,11 +42,16 @@ export function DashboardContent({
   }
 
   const totalAnalyses = analyses.length;
+  const completedWithScore = analyses.filter(
+    (a) => a.status === "completed" && a.optimized_score != null
+  );
   const avgScore =
-    totalAnalyses > 0
+    completedWithScore.length > 0
       ? Math.round(
-          analyses.reduce((sum, a) => sum + a.optimized_score, 0) /
-            totalAnalyses
+          completedWithScore.reduce(
+            (sum, a) => sum + (a.optimized_score ?? 0),
+            0
+          ) / completedWithScore.length
         )
       : 0;
   const scoreVariant =
@@ -59,6 +64,7 @@ export function DashboardContent({
     const { bg: companyBg, text: companyTextColor } = getCompanyColor(
       job.company
     );
+    const showOptimized = a.status === "completed" && a.optimized_score != 0;
     return {
       analysisId: a.id,
       role: job.title,
@@ -69,8 +75,10 @@ export function DashboardContent({
       date: formatAnalysisDate(a.created_at),
       before: `${a.score}%`,
       beforeColor: getScoreColorToken(a.score),
-      after: `${a.optimized_score}%`,
-      afterColor: getScoreColorToken(a.optimized_score),
+      after: showOptimized ? `${a.optimized_score}%` : "—",
+      afterColor: showOptimized
+        ? getScoreColorToken(a.optimized_score!)
+        : "var(--muted-foreground)",
       status: a.status,
     };
   });
