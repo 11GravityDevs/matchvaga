@@ -7,7 +7,11 @@ import { Check, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Loading } from "@/components/ui/loading";
 import { useResumeUpload } from "../_hooks/use-resume-upload";
-import { formatFileSize } from "../_utils/file";
+import {
+  formatFileSize,
+  isFileWithinSizeLimit,
+  MAX_FILE_SIZE_BYTES,
+} from "../_utils/file";
 import { cn } from "@/utils/style";
 
 const UPLOAD_THINKING_MESSAGES = [
@@ -21,6 +25,7 @@ const UPLOAD_THINKING_MESSAGES = [
 export function UploadContent() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDraggingOver, setIsDraggingOver] = useState(false);
+  const [fileSizeError, setFileSizeError] = useState<string | null>(null);
   const {
     isUploading,
     uploadError,
@@ -41,16 +46,23 @@ export function UploadContent() {
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
-    if (file) {
-      void uploadFile(file);
-    }
     e.target.value = "";
+    if (!file) return;
+    if (!isFileWithinSizeLimit(file)) {
+      setFileSizeError(
+        `Arquivo muito grande. Máximo: ${formatFileSize(MAX_FILE_SIZE_BYTES)}.`
+      );
+      return;
+    }
+    setFileSizeError(null);
+    void uploadFile(file);
   }
 
   function handlePaste(e: React.ClipboardEvent<HTMLDivElement>) {
     const text = e.clipboardData.getData("text");
     if (text) {
       e.preventDefault();
+      setFileSizeError(null);
       uploadFromPaste(text);
     }
   }
@@ -73,9 +85,15 @@ export function UploadContent() {
     e.preventDefault();
     setIsDraggingOver(false);
     const file = e.dataTransfer.files?.[0];
-    if (file) {
-      void uploadFile(file);
+    if (!file) return;
+    if (!isFileWithinSizeLimit(file)) {
+      setFileSizeError(
+        `Arquivo muito grande. Máximo: ${formatFileSize(MAX_FILE_SIZE_BYTES)}.`
+      );
+      return;
     }
+    setFileSizeError(null);
+    void uploadFile(file);
   }
 
   function handleDragOver(e: React.DragEvent<HTMLDivElement>) {
@@ -167,7 +185,8 @@ export function UploadContent() {
                 Arraste seu curriculo aqui
               </p>
               <p className="text-center text-sm text-muted-foreground">
-                Suportamos PDF e DOCX
+                Suportamos PDF e DOCX (Máx.{" "}
+                {formatFileSize(MAX_FILE_SIZE_BYTES)})
               </p>
               <p className="text-small text-muted-foreground">ou</p>
               <Button variant="secondary" size="lg" onClick={handleBrowseClick}>
@@ -177,9 +196,9 @@ export function UploadContent() {
           )}
         </div>
 
-        {uploadError && (
+        {(fileSizeError || uploadError) && (
           <p className="text-sm text-destructive" role="alert">
-            {uploadError}
+            {fileSizeError ?? uploadError}
           </p>
         )}
         <div className="flex justify-end">
