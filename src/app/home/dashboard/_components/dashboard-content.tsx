@@ -42,20 +42,25 @@ export function DashboardContent({
   }
 
   const totalAnalyses = analyses.length;
+
   const completedWithScore = analyses.filter(
-    (a) => a.status === "completed" && a.optimized_score != null
+    (a) =>
+      a.status === "completed" &&
+      a.optimized_score != null &&
+      a.optimized_score != 0
   );
+
   const avgScore =
     completedWithScore.length > 0
       ? Math.round(
-          completedWithScore.reduce(
-            (sum, a) => sum + (a.optimized_score ?? 0),
-            0
-          ) / completedWithScore.length
+          completedWithScore.reduce((sum, a) => sum + a.optimized_score, 0) /
+            completedWithScore.length
         )
       : 0;
+
   const scoreVariant =
     avgScore >= 75 ? "success" : avgScore >= 50 ? "primary" : "destructive";
+
   const scoreBadge =
     avgScore >= 75 ? "Alto" : avgScore >= 50 ? "Médio" : "Baixo";
 
@@ -64,7 +69,9 @@ export function DashboardContent({
     const { bg: companyBg, text: companyTextColor } = getCompanyColor(
       job.company
     );
+
     const showOptimized = a.status === "completed" && a.optimized_score != 0;
+
     return {
       analysisId: a.id,
       role: job.title,
