@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { FileDown, FilePen, Loader2, RefreshCw, Send } from "lucide-react";
+import { FileCheck, FileText, Loader2, RefreshCw, Send } from "lucide-react";
 
 import { applyCvRefinementInstruction } from "@/app/actions/chat";
+import { generateOptimizedDocument } from "@/app/actions/document";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -45,6 +46,37 @@ export function StepPreviewExport() {
   const [input, setInput] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [chatError, setChatError] = useState<string | null>(null);
+
+  const [downloadingFormat, setDownloadingFormat] = useState<
+    "pdf" | "docx" | null
+  >(null);
+  const [downloadError, setDownloadError] = useState<string | null>(null);
+
+  async function handleDownload(format: "pdf" | "docx") {
+    if (!analysisId || !displayResumeData || downloadingFormat) return;
+
+    setDownloadingFormat(format);
+    setDownloadError(null);
+
+    try {
+      const result = await generateOptimizedDocument(
+        analysisId,
+        format,
+        displayResumeData
+      );
+
+      if (result.success && result.url) {
+        window.open(result.url, "_blank");
+      } else {
+        setDownloadError(result.error ?? "Erro ao gerar documento.");
+      }
+    } catch (error) {
+      console.error("[handleDownload] error:", error);
+      setDownloadError("Erro inesperado ao gerar documento.");
+    } finally {
+      setDownloadingFormat(null);
+    }
+  }
 
   async function handleSend() {
     const trimmed = input.trim();
@@ -258,19 +290,35 @@ export function StepPreviewExport() {
         </Button>
 
         <div className="flex items-center gap-3">
+          {downloadError && (
+            <span className="text-sm text-destructive">{downloadError}</span>
+          )}
           <Button
             size="brand"
             variant="outline"
-            disabled
+            disabled={!displayResumeData || downloadingFormat !== null}
+            onClick={() => handleDownload("docx")}
             className="gap-1.5"
-            title="Em breve"
           >
-            <FilePen className="h-4 w-4" />
+            {downloadingFormat === "docx" ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <FileText className="h-4 w-4" />
+            )}
             Download DOCX
           </Button>
 
-          <Button size="brand" className="gap-1.5" disabled title="Em breve">
-            <FileDown className="h-4 w-4" />
+          <Button
+            size="brand"
+            disabled={!displayResumeData || downloadingFormat !== null}
+            onClick={() => handleDownload("pdf")}
+            className="gap-1.5"
+          >
+            {downloadingFormat === "pdf" ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <FileCheck className="h-4 w-4" />
+            )}
             Download PDF
           </Button>
         </div>

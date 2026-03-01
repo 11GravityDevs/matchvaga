@@ -2,7 +2,7 @@
 
 import React from "react";
 import { revalidatePath } from "next/cache";
-import ReactPDF from "@react-pdf/renderer";
+import { renderToBuffer } from "@react-pdf/renderer";
 
 import { createClient } from "@/lib/supabase/server";
 import { synthesizeOptimizedResume } from "@/lib/ai/clients/anthropic";
@@ -139,11 +139,17 @@ export interface GenerateOptimizedDocumentResult {
   error?: string;
 }
 
+export async function downloadOptimizedDocument(
+  analysisId: string,
+  format: "pdf" | "docx"
+): Promise<GenerateOptimizedDocumentResult> {
+  return { success: false, error: "Não implementado ainda." };
+}
+
 export async function generateOptimizedDocument(
   analysisId: string,
   format: "pdf" | "docx",
-  selectedTechnicalSkills?: string[],
-  selectedBehavioralSkills?: string[]
+  resumeData: ResumeData
 ): Promise<GenerateOptimizedDocumentResult> {
   const supabase = await createClient();
   const {
@@ -154,15 +160,14 @@ export async function generateOptimizedDocument(
   if (authError) {
     return { success: false, error: translateAuthError(authError) };
   }
+
   if (!user) {
     return { success: false, error: "Faça login para continuar." };
   }
 
   const { data: analysisRow, error: analysisError } = await supabase
     .from("analyses")
-    .select(
-      "id, resume_id, job_snapshot, matched_skills, missing_technical_skills, missing_behavioral_skills"
-    )
+    .select("id")
     .eq("id", analysisId)
     .eq("user_id", user.id)
     .single();
@@ -171,59 +176,56 @@ export async function generateOptimizedDocument(
     return { success: false, error: "Análise não encontrada." };
   }
 
-  const { data: resumeRow, error: resumeError } = await supabase
-    .from("resumes")
-    .select("parsed_data")
-    .eq("id", analysisRow.resume_id)
-    .eq("user_id", user.id)
-    .single();
+  const { data: existingDoc, error: docLookupError } = await supabase
+    .from("optimized_documents")
+    .select("file_path")
+    .eq("analysis_id", analysisId)
+    .eq("format", format)
+    .maybeSingle();
 
-  if (resumeError || !resumeRow) {
-    return { success: false, error: "Currículo não encontrado." };
+  if (!docLookupError && existingDoc?.file_path) {
+    const { data: signedData, error: signedError } = await supabase.storage
+      .from(BUCKET)
+      .createSignedUrl(existingDoc.file_path, SIGNED_URL_EXPIRES_IN);
+
+    if (!signedError && signedData?.signedUrl) {
+      return {
+        success: true,
+        url: signedData.signedUrl,
+      };
+    }
+    console.error(
+      "[generateOptimizedDocument] signedUrl for existing document:",
+      signedError?.message
+    );
+  } else if (docLookupError) {
+    console.error(
+      "[generateOptimizedDocument] optimized_documents lookup error:",
+      docLookupError.message
+    );
   }
 
-  const resumeParsed = resumeDataSchema.safeParse(resumeRow.parsed_data);
+  const resumeParsed = resumeDataSchema.safeParse(resumeData);
   if (!resumeParsed.success) {
     return { success: false, error: "Dados do currículo inválidos." };
   }
 
-  const resumeData = resumeParsed.data as ResumeData;
-  const jobSnapshot = analysisRow.job_snapshot as {
-    title: string;
-    company: string;
-    rawText: string;
-  };
-  const matchedSkills = (analysisRow.matched_skills ?? []) as string[];
-  const technical = selectedTechnicalSkills ?? [];
-  const behavioral = selectedBehavioralSkills ?? [];
-  const hasAnyMissing = technical.length > 0 || behavioral.length > 0;
-
-  const synthesis = await synthesizeOptimizedResume(
-    resumeData,
-    jobSnapshot,
-    matchedSkills,
-    hasAnyMissing ? { technical, behavioral } : undefined
-  );
-
-  if (!synthesis.success) {
-    return { success: false, error: synthesis.error };
-  }
+  const validResumeData = resumeParsed.data as ResumeData;
 
   let buffer: Buffer;
 
   if (format === "pdf") {
     const docElement = React.createElement(ResumeDocument, {
-      data: synthesis.data,
+      data: validResumeData,
     });
-    buffer = await ReactPDF.renderToBuffer(
-      docElement as Parameters<typeof ReactPDF.renderToBuffer>[0]
+    buffer = await renderToBuffer(
+      docElement as Parameters<typeof renderToBuffer>[0]
     );
   } else {
-    buffer = await buildResumeDocx(synthesis.data);
+    buffer = await buildResumeDocx(validResumeData);
   }
 
-  const ext = format;
-  const filePath = `${user.id}/${analysisId}.${ext}`;
+  const filePath = `${user.id}/${analysisId}.${format}`;
 
   const { error: uploadError } = await supabase.storage
     .from(BUCKET)
@@ -260,10 +262,6 @@ export async function generateOptimizedDocument(
       "[generateOptimizedDocument] insert error:",
       insertError.message
     );
-    return {
-      success: false,
-      error: "Erro ao registrar documento.",
-    };
   }
 
   const { data: signedData, error: signedError } = await supabase.storage
