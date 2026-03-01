@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/card";
 import { cn } from "@/utils/style";
 
+import { createCheckoutSession } from "../_actions/checkout";
+
 interface Package {
   id: string;
   name: string;
@@ -57,7 +59,7 @@ const PACKAGES: Package[] = [
     recommended: true,
   },
   {
-    id: "job-hunter",
+    id: "profissional",
     name: "Profissional",
     count: 50,
     price: 49,
@@ -72,7 +74,7 @@ const FEATURES: Record<string, string[]> = {
   entrada: ["Ideal para experimentar", "Sem validade"],
   basico: ["Bom para busca ativa", "Sem validade"],
   padrao: ["Melhor custo-benefício", "Sem validade", "Prioridade no suporte"],
-  "job-hunter": [
+  profissional: [
     "Para quem aplica constantemente",
     "Sem validade",
     "Prioridade no suporte",
@@ -81,13 +83,23 @@ const FEATURES: Record<string, string[]> = {
 
 export function CheckoutContent() {
   const [loadingPackageId, setLoadingPackageId] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const handleSelectPackage = (id: string) => {
+  const handleSelectPackage = async (id: string) => {
     setLoadingPackageId(id);
+    setErrorMessage(null);
 
-    setTimeout(() => {
-      setLoadingPackageId(null);
-    }, 2000);
+    const result = await createCheckoutSession({ packageId: id });
+
+    if (result.success && result.checkoutUrl) {
+      window.location.assign(result.checkoutUrl);
+      return;
+    }
+
+    setLoadingPackageId(null);
+    setErrorMessage(
+      result.error ?? "Erro ao iniciar checkout. Tente novamente."
+    );
   };
 
   return (
@@ -97,6 +109,11 @@ export function CheckoutContent() {
         <p className="text-page-subtitle">
           Escolha o pacote ideal para seu momento.
         </p>
+        {errorMessage && (
+          <p className="text-small text-destructive" role="alert">
+            {errorMessage}
+          </p>
+        )}
       </div>
 
       <div className="grid w-full grid-cols-1 items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -193,7 +210,7 @@ export function CheckoutContent() {
         </span>
         <span className="inline-flex items-center gap-1.5">
           <CreditCard className="size-3.5" />
-          Cartão, Pix ou boleto
+          Cartão ou PIX
         </span>
       </div>
     </main>
