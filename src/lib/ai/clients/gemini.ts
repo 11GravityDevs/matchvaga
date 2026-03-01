@@ -6,7 +6,7 @@ import { resumeExtractionResponseSchema } from "@/lib/ai/config/resume-extractio
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
 
-const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5MB
+const MAX_FILE_SIZE_BYTES = 2 * 1024 * 1024; // 2MB
 const ALLOWED_MIME_TYPES = [
   "application/pdf",
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // DOCX
@@ -33,7 +33,7 @@ export async function extractResumeFromFile(
   }
 
   if (file.size > MAX_FILE_SIZE_BYTES) {
-    return { success: false, error: "Arquivo muito grande. Máximo 5MB." };
+    return { success: false, error: "Arquivo muito grande. Máximo 2 MB." };
   }
 
   const mimeType = file.type;
