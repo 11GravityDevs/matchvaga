@@ -15,9 +15,13 @@ import {
   getCompanyInitials,
 } from "../_utils/format";
 import { getScoreColorToken } from "../../new-analysis/_utils/analysis";
-import { analysesQueryOptions } from "@/lib/query/query-options";
+import {
+  analysesQueryOptions,
+  currentUserDisplayQueryOptions,
+} from "@/lib/query/query-options";
 import { useQuery } from "@tanstack/react-query";
 import { Loading } from "@/components/ui/loading";
+import { Zap } from "lucide-react";
 
 interface DashboardContentProps {
   userName: string;
@@ -29,7 +33,13 @@ export function DashboardContent({
   fromOnboarding = false,
 }: DashboardContentProps) {
   const router = useRouter();
-  const { data: analyses = [], isLoading } = useQuery(analysesQueryOptions);
+  const { data: analyses = [], isLoading: isAnalysesLoading } =
+    useQuery(analysesQueryOptions);
+  const { data: displayData, isLoading: isUserLoading } = useQuery(
+    currentUserDisplayQueryOptions
+  );
+
+  const isLoading = isAnalysesLoading || isUserLoading;
 
   useEffect(() => {
     if (!isLoading && fromOnboarding) {
@@ -40,6 +50,8 @@ export function DashboardContent({
   if (isLoading || fromOnboarding) {
     return <Loading className="min-h-0 flex-1" />;
   }
+
+  const analysis = displayData?.analysis ?? 0;
 
   const totalAnalyses = analyses.length;
 
@@ -95,7 +107,13 @@ export function DashboardContent({
       <DashboardHeader userName={userName} />
 
       {/* KPI Row */}
-      <div className="flex w-full gap-4">
+      <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <KpiCard
+          label="Análises Disponíveis"
+          value={String(analysis)}
+          variant="primary"
+          icon={<Zap className="h-6 w-6" />}
+        />
         <KpiCard
           label="Total de Otimizações"
           value={String(totalAnalyses)}

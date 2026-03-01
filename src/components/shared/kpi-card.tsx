@@ -44,7 +44,6 @@ interface KpiCardProps {
     label: string;
     color?: string;
   };
-  /** Optional override for accent/icon/badge when variant is not enough */
   accentColor?: string;
   iconBgColor?: string;
 }
@@ -74,12 +73,12 @@ export function KpiCard({
           <span className="text-sm font-medium text-muted-foreground">
             {label}
           </span>
-          <div className="flex items-end gap-2">
+          <div className="flex items-end gap-3">
             <span className="text-kpi">{value}</span>
             {badge && (
               <span
                 className={cn(
-                  "mb-0.5 rounded-full px-2 py-0.5 text-badge",
+                  "mb-0.5 rounded-md px-2 py-0.5 text-badge text-sm font-medium",
                   !badge.color && tokens.badge,
                   !badge.color ? tokens.badgeText : "text-on-accent-brand"
                 )}

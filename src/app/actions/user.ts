@@ -14,6 +14,7 @@ export interface GetCurrentUserDisplayResult {
   success: boolean;
   fullName?: string;
   email?: string;
+  analysis?: number;
   error?: string;
 }
 
@@ -59,5 +60,6 @@ export async function getCurrentUserDisplay(): Promise<GetCurrentUserDisplayResu
     success: true,
     fullName: parsed.data.fullName,
     email: parsed.data.email,
+    analysis: 3,
   };
 }
