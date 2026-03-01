@@ -1,9 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-
-import { FileQuestion, Upload } from "lucide-react";
 
 import { useResumeVerify } from "../_hooks/use-resume-verify";
 import {
@@ -13,10 +10,8 @@ import {
 import { useResumeQuery } from "@/hooks/use-resume-query";
 import type { ResumeData } from "@/types/resume";
 import { createEmptyEducation, createEmptyExperience } from "@/types/resume";
-import { Button } from "@/components/ui/button";
 import { ResumeFormCard } from "@/components/shared/resume-form-card";
 import { Loading } from "@/components/ui/loading";
-import { ROUTE_ONBOARDING_UPLOAD } from "@/constants/routes";
 import { useOnboardingContext } from "../../_contexts/onboarding-context";
 
 const VERIFY_THINKING_MESSAGES = [
@@ -33,6 +28,7 @@ export function VerifyContent() {
     setResumeContent,
     parsedData,
     resumeId: contextResumeId,
+    skippedUpload,
   } = useOnboardingContext();
   const {
     resumeId: queryResumeId,
@@ -46,6 +42,7 @@ export function VerifyContent() {
 
   const { isSaving, save, continueToDashboard } = useResumeVerify({
     resumeId: effectiveResumeId,
+    skippedUpload,
   });
   const [validationErrors, setValidationErrors] =
     useState<ResumeValidationErrors | null>(null);
@@ -150,7 +147,7 @@ export function VerifyContent() {
     }
   }
 
-  if (isLoadingResume && !parsedData) {
+  if (isLoadingResume && !parsedData && !skippedUpload) {
     return <Loading className="min-h-0 flex-1" />;
   }
 
@@ -160,34 +157,6 @@ export function VerifyContent() {
         thinkingMessages={[...VERIFY_THINKING_MESSAGES]}
         className="min-h-0 flex-1"
       />
-    );
-  }
-
-  if (!effectiveResumeId) {
-    return (
-      <main className="w-form rounded-xl border border-border bg-card">
-        <div className="flex flex-col gap-1 px-7 pt-7">
-          <h2 className="text-card-title">Nenhum currículo encontrado</h2>
-          <p className="text-card-description">
-            Faça o upload do seu currículo para verificá-lo e continuar.
-          </p>
-        </div>
-
-        <div className="flex flex-col items-center gap-6 p-7">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-secondary">
-            <FileQuestion className="h-7 w-7 text-muted-foreground" />
-          </div>
-          <p className="text-center text-sm text-muted-foreground">
-            Envie um arquivo PDF ou DOCX para começar o processo de verificação.
-          </p>
-          <Button variant="brand" size="brand" className="rounded-lg" asChild>
-            <Link href={ROUTE_ONBOARDING_UPLOAD} className="gap-2">
-              <Upload className="h-4 w-4" />
-              Ir para upload
-            </Link>
-          </Button>
-        </div>
-      </main>
     );
   }
 

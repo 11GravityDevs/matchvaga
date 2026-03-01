@@ -5,6 +5,14 @@ import { useRef, useState } from "react";
 import { Check, Upload } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Loading } from "@/components/ui/loading";
 import { useResumeUpload } from "../_hooks/use-resume-upload";
 import {
@@ -26,6 +34,7 @@ export function UploadContent() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDraggingOver, setIsDraggingOver] = useState(false);
   const [fileSizeError, setFileSizeError] = useState<string | null>(null);
+  const [isSkipUploadModalOpen, setIsSkipUploadModalOpen] = useState(false);
   const {
     isUploading,
     uploadError,
@@ -33,6 +42,7 @@ export function UploadContent() {
     uploadFile,
     uploadFromPaste,
     analyze,
+    continueWithoutUpload,
   } = useResumeUpload();
 
   async function handleAnalyze() {
@@ -201,7 +211,16 @@ export function UploadContent() {
             {fileSizeError ?? uploadError}
           </p>
         )}
-        <div className="flex justify-end">
+        <div className="flex justify-end gap-4">
+          <Button
+            type="button"
+            variant="outline"
+            size="brand"
+            className="rounded-lg"
+            onClick={() => setIsSkipUploadModalOpen(true)}
+          >
+            Continuar sem currículo
+          </Button>
           <Button
             type="button"
             onClick={handleAnalyze}
@@ -214,6 +233,43 @@ export function UploadContent() {
           </Button>
         </div>
       </div>
+
+      <Dialog
+        open={isSkipUploadModalOpen}
+        onOpenChange={setIsSkipUploadModalOpen}
+      >
+        <DialogContent className="rounded-xl">
+          <DialogHeader>
+            <DialogTitle className="text-card-title">Tem certeza?</DialogTitle>
+            <DialogDescription className="pt-1 text-muted-foreground">
+              Enviar seu currículo torna o processo muito mais simples.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex flex-row gap-2 pt-2 sm:justify-end">
+            <Button
+              type="button"
+              variant="outline"
+              size="brand"
+              className="rounded-lg"
+              onClick={() => setIsSkipUploadModalOpen(false)}
+            >
+              Cancelar
+            </Button>
+            <Button
+              type="button"
+              variant="brand"
+              size="brand"
+              className="rounded-lg"
+              onClick={() => {
+                setIsSkipUploadModalOpen(false);
+                continueWithoutUpload();
+              }}
+            >
+              Continuar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 }

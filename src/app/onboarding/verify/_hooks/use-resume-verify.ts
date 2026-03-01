@@ -3,7 +3,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
-import { saveResumeData } from "@/app/actions/resume";
+import { createResumeWithData, saveResumeData } from "@/app/actions/resume";
 import {
   QUERY_KEY_CURRENT_USER_DISPLAY,
   QUERY_KEY_RESUME,
@@ -14,6 +14,7 @@ import { useOnboardingContext } from "../../_contexts/onboarding-context";
 
 export interface UseResumeVerifyOptions {
   resumeId: string | null;
+  skippedUpload: boolean;
 }
 
 export interface UseResumeVerifyReturn {
@@ -26,25 +27,43 @@ export interface UseResumeVerifyReturn {
 
 export function useResumeVerify({
   resumeId,
+  skippedUpload,
 }: UseResumeVerifyOptions): UseResumeVerifyReturn {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const { resumeContent, setResumeContent } = useOnboardingContext();
+  const { resumeContent, setResumeContent, setResumeId, setParsedData } =
+    useOnboardingContext();
 
   const { mutateAsync: saveMutation, isPending: isSaving } = useMutation({
     mutationFn: async (data: ResumeData) => {
-      if (!resumeId) {
-        throw new Error(
-          "Resumo não encontrado. Volte e envie o arquivo novamente."
-        );
+      if (resumeId) {
+        const result = await saveResumeData(resumeId, data);
+        if (!result.success) {
+          throw new Error(result.error ?? "Erro ao salvar.");
+        }
+        return { resumeId, data };
       }
 
-      const result = await saveResumeData(resumeId, data);
-      if (!result.success) {
-        throw new Error(result.error ?? "Erro ao salvar.");
+      if (skippedUpload) {
+        const result = await createResumeWithData(data);
+
+        if (!result.success) {
+          throw new Error(result.error ?? "Erro ao salvar.");
+        }
+
+        if (!result.resumeId || !result.parsedData) {
+          throw new Error("Erro ao criar currículo.");
+        }
+
+        return {
+          resumeId: result.resumeId,
+          data: result.parsedData,
+        };
       }
 
-      return { resumeId, data };
+      throw new Error(
+        "Resumo não encontrado. Volte e envie o arquivo novamente."
+      );
     },
     onSuccess: (result) => {
       queryClient.setQueryData(QUERY_KEY_RESUME, {
@@ -58,6 +77,9 @@ export function useResumeVerify({
         fullName: result.data.fullName,
         email: result.data.email,
       });
+
+      setResumeId(result.resumeId);
+      setParsedData(result.data);
     },
   });
 
