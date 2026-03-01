@@ -10,6 +10,7 @@ alwaysApply: false
 
 | Term | Definition |
 |------|------------|
+| **Brazilian Market Context** | The platform targets users in Brazil. All user-facing text, resumes, job descriptions, AI generations, and currency (BRL) should be handled in Portuguese (PT-BR). |
 | **Resume** | User's CV/curriculum — input document to analyze |
 | **Job Description** | Target role posting — defines required skills and criteria |
 | **Gap Analysis** | AI-powered comparison (GPT-4o-mini) identifying missing skills; includes compatibility score (0–100) |
@@ -34,6 +35,7 @@ alwaysApply: false
 - **Optimize** — AI generates improved resume/document
 - **Export** — Download optimized PDF or DOCX
 - **Lateral Chat** — User converses with AI to get suggestions; AI can apply edits to resume
+- **Checkout** — Monetization step where the user pays (in BRL) to unlock features or generations
 
 ## Naming Conventions
 

@@ -1,51 +1,52 @@
 ---
-description: Standard template for Linear issues; use when creating or describing tasks
+description: Template padrão para issues no Linear; use ao criar ou descrever tarefas
 alwaysApply: false
 ---
 
-# Linear Task Template
+# Template de Tarefa Linear
 
-Use this structure when creating or updating Linear issues so that context, scope, and implementation hints are clear.
+Use esta estrutura ao criar ou atualizar issues no Linear para que contexto, escopo e dicas de implementação fiquem claros.
 
-## Template Structure
+## Estrutura do template
 
-**🎯 Context**
+**🎯 Contexto**
 
-Describe what needs to be done and why this matters to the user or the company.
-
-
-**✅ Acceptance Criteria**
-
-- [ ] Step 1  
-- [ ] Step 2  
-- [ ] Test/Validate X  
+Descreva o que precisa ser feito e por que isso importa para o usuário ou para a empresa.
 
 
-**🔗 Implementation Notes**
+**✅ Critérios de aceite**
 
-e.g. I think we can use Library X so we don't have to build this from scratch.
+- [ ] Passo 1  
+- [ ] Passo 2  
+- [ ] Testar/validar X  
+
+
+**🔗 Notas de implementação**
+
+ex.: Acho que podemos usar a biblioteca X para não precisar construir isso do zero.
 
 ---
 
 ## Labels
 
-Assign the correct label to each issue based on its type:
+Atribua o label correto a cada issue conforme o tipo:
 
-| Label | Use For |
-|-------|---------|
-| **Bug** | Fixes for incorrect behavior, bugs, regressions |
-| **Feature** | New functionality, UI changes, enhancements |
-| **Business** | Credit logic, billing, subscription, product rules |
-| **QA** | Quality assurance, prompt review, accuracy validation |
-| **Marketing** | Marketing-related tasks, campaigns, copy |
+| Label | Usar para |
+|-------|-----------|
+| **Bug** | Correções de comportamento incorreto, bugs, regressões |
+| **Feature** | Nova funcionalidade, mudanças de UI, melhorias |
+| **Business** | Lógica de crédito, faturamento, assinatura, regras de produto |
+| **QA** | Garantia de qualidade, revisão de prompts, validação de precisão |
+| **Marketing** | Tarefas de marketing, campanhas, copy |
 
 ---
 
-## Rules
+## Regras
 
-- **Icons:** Use 🎯 (Context), ✅ (Acceptance Criteria), 🔗 (Implementation Notes) as section headers.
-- **Spacing:** Add a blank line after each section header and a blank line between each of the three sections (Context, Acceptance Criteria, Implementation Notes).
-- **Acceptance criteria** are checkboxes in Linear (use `- [ ]` in descriptions so they render as unchecked).
-- **Labels** are required; assign one of Bug, Feature, Business, QA, or Marketing per task.
-- Keep context brief but sufficient for anyone picking up the task.
-- Implementation notes are optional but encouraged when they unblock or guide implementation.
+- **Ícones:** Use 🎯 (Contexto), ✅ (Critérios de aceite), 🔗 (Notas de implementação) como títulos das seções.
+- **Espaçamento:** Uma linha em branco após cada título de seção e entre as três seções (Contexto, Critérios de aceite, Notas de implementação).
+- **Critérios de aceite** são checkboxes no Linear (use `- [ ]` na descrição para renderizar como desmarcado).
+- **Labels** são obrigatórios; atribua um entre Bug, Feature, Business, QA ou Marketing por tarefa.
+- Mantenha o contexto breve, mas suficiente para quem for pegar a tarefa.
+- Notas de implementação são opcionais, mas recomendadas quando desbloqueiam ou orientam a implementação.
+- **Idioma:** Descrições de issues no Linear devem ser sempre em **português (PT-BR)**.
