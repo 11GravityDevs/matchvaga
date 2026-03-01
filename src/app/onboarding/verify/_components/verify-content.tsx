@@ -19,6 +19,14 @@ import { Loading } from "@/components/ui/loading";
 import { ROUTE_ONBOARDING_UPLOAD } from "@/constants/routes";
 import { useOnboardingContext } from "../../_contexts/onboarding-context";
 
+const VERIFY_THINKING_MESSAGES = [
+  "Salvando alterações...",
+  "Validando dados...",
+  "Atualizando seu perfil...",
+  "Finalizando...",
+  "Redirecionando...",
+] as const;
+
 export function VerifyContent() {
   const {
     resumeContent,
@@ -146,6 +154,15 @@ export function VerifyContent() {
     return <Loading className="min-h-0 flex-1" />;
   }
 
+  if (isSaving) {
+    return (
+      <Loading
+        thinkingMessages={[...VERIFY_THINKING_MESSAGES]}
+        className="min-h-0 flex-1"
+      />
+    );
+  }
+
   if (!effectiveResumeId) {
     return (
       <main className="w-form rounded-xl border border-border bg-card">
@@ -190,7 +207,6 @@ export function VerifyContent() {
         label: "Continuar",
         onClick: handleContinue,
         disabled: isSaving,
-        loading: isSaving,
       }}
       validationErrors={validationErrors}
     />

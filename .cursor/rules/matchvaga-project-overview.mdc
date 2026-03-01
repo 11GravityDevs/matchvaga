@@ -55,7 +55,7 @@ src/
 | `(auth)/` | Full-screen, brand primary override | Login (email → token flow) |
 | `(legal)/` | Minimal `bg-background` wrapper | Privacy policy, Terms of service |
 | `onboarding/` | Top bar + step indicator | Resume upload → verify flow |
-| `dashboard/` | *(TBD — sidebar layout)* | Main app after onboarding |
+| `home/` | Sidebar layout | Main app after onboarding; `/home` redirects to `/home/dashboard`; routes: dashboard, new-analysis, resume |
 
 Route groups `(auth)` and `(legal)` use parenthesized folders to share layouts without affecting the URL.
 

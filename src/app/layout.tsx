@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
     default: "MatchVaga - Chega de perder tempo com candidaturas",
-    template: "%s | MatchVaga",
+    template: "%s • MatchVaga",
   },
   description: DEFAULT_DESCRIPTION,
   keywords: KEYWORDS,

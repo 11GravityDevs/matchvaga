@@ -1,7 +1,7 @@
 import { Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { ROUTE_DASHBOARD_NEW_ANALYSIS } from "@/constants/routes";
+import { ROUTE_HOME_NEW_ANALYSIS } from "@/constants/routes";
 import Link from "next/link";
 
 interface DashboardHeaderProps {
@@ -19,7 +19,7 @@ export function DashboardHeader({
           Aqui está um resumo das suas otimizações.
         </p>
       </div>
-      <Link href={ROUTE_DASHBOARD_NEW_ANALYSIS}>
+      <Link href={ROUTE_HOME_NEW_ANALYSIS}>
         <Button size="lg" className="gap-1.5">
           <Plus className="h-4 w-4" />
           Nova Análise

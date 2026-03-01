@@ -6,18 +6,16 @@ import { getQueryClient } from "@/lib/query/get-query-client";
 import { currentUserDisplayQueryOptions } from "@/lib/query/query-options";
 
 export const metadata: Metadata = {
-  title: "Dashboard",
+  title: "MatchVaga",
   description: "Gerencie suas análises de currículo e documentos otimizados.",
   robots: { index: false, follow: false },
 };
 
-interface DashboardLayoutProps {
+interface HomeLayoutProps {
   children: React.ReactNode;
 }
 
-export default async function DashboardLayout({
-  children,
-}: DashboardLayoutProps) {
+export default async function HomeLayout({ children }: HomeLayoutProps) {
   const queryClient = getQueryClient();
   await queryClient.prefetchQuery(currentUserDisplayQueryOptions);
 

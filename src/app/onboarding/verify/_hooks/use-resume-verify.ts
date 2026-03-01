@@ -8,7 +8,7 @@ import {
   QUERY_KEY_CURRENT_USER_DISPLAY,
   QUERY_KEY_RESUME,
 } from "@/constants/query-keys";
-import { ROUTE_DASHBOARD } from "@/constants/routes";
+import { ROUTE_HOME_DASHBOARD } from "@/constants/routes";
 import type { ResumeData } from "@/types/resume";
 import { useOnboardingContext } from "../../_contexts/onboarding-context";
 
@@ -66,7 +66,7 @@ export function useResumeVerify({
   }
 
   function continueToDashboard() {
-    router.push(`${ROUTE_DASHBOARD}?from=onboarding`);
+    router.push(`${ROUTE_HOME_DASHBOARD}?from=onboarding`);
   }
 
   return {

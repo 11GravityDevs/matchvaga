@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { TrendingUp, TriangleAlert, CircleCheck } from "lucide-react";
 
 import { generateOptimizedDocument } from "@/app/actions/document";
-import { ROUTE_DASHBOARD_NEW_ANALYSIS } from "@/constants/routes";
+import { ROUTE_HOME_NEW_ANALYSIS } from "@/constants/routes";
 import { DashboardHeader } from "./dashboard-header";
 import { AnalysisHistoryTable } from "./analysis-history-table";
 import { KpiCard } from "@/components/shared/kpi-card";
@@ -14,7 +14,7 @@ import {
   getCompanyColor,
   getCompanyInitials,
 } from "../_utils/format";
-import { getScoreColorToken } from "../new-analysis/_utils/analysis";
+import { getScoreColorToken } from "../../new-analysis/_utils/analysis";
 import { analysesQueryOptions } from "@/lib/query/query-options";
 import { useQuery } from "@tanstack/react-query";
 import { Loading } from "@/components/ui/loading";
@@ -33,7 +33,7 @@ export function DashboardContent({
 
   useEffect(() => {
     if (!isLoading && fromOnboarding) {
-      router.replace(ROUTE_DASHBOARD_NEW_ANALYSIS);
+      router.replace(ROUTE_HOME_NEW_ANALYSIS);
     }
   }, [isLoading, fromOnboarding, router]);
 

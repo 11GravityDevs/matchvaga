@@ -1,10 +1,11 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
-import { Check, Lightbulb, Loader2, RefreshCw, Sparkles } from "lucide-react";
+import { Check, Lightbulb, RefreshCw, Sparkles } from "lucide-react";
 
 import { synthesizeOptimizedResumeForPreview } from "@/app/actions/document";
 import { Button } from "@/components/ui/button";
+import { Loading } from "@/components/ui/loading";
 import { cn } from "@/utils/style";
 import { getScoreFeedback } from "../_utils/analysis";
 import {
@@ -13,6 +14,14 @@ import {
 } from "../_contexts/new-analysis-context";
 import { ScoreRing } from "./score-ring";
 import { StepIndicator } from "@/components/shared/step-indicator";
+
+const GENERATE_RESUME_THINKING_MESSAGES = [
+  "Gerando currículo otimizado...",
+  "Incorporando habilidades selecionadas...",
+  "Ajustando formatação...",
+  "Revisando conteúdo...",
+  "Quase pronto...",
+] as const;
 
 const FEEDBACK_BADGE_CLASSES = {
   success:
@@ -157,6 +166,17 @@ export function StepGapAnalysis() {
     generateDocument();
   };
 
+  if (isGenerating) {
+    return (
+      <div className="flex flex-1 flex-col gap-10 overflow-hidden page-padding">
+        <Loading
+          thinkingMessages={[...GENERATE_RESUME_THINKING_MESSAGES]}
+          className="min-h-0 flex-1"
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-1 flex-col gap-10 overflow-hidden page-padding">
       {/* Header strip */}
@@ -281,11 +301,7 @@ export function StepGapAnalysis() {
                 disabled={!analysisId || isGenerating}
                 className="gap-1.5 rounded-lg bg-accent-brand px-7 py-3 text-base font-bold hover:bg-accent-brand-hover"
               >
-                {isGenerating ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <Sparkles className="h-4 w-4" />
-                )}
+                <Sparkles className="h-4 w-4" />
                 Gerar Currículo
               </Button>
             </div>

@@ -2,12 +2,21 @@
 
 import { useRef, useState } from "react";
 
-import { Check, Loader2, Upload } from "lucide-react";
+import { Check, Upload } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Loading } from "@/components/ui/loading";
 import { useResumeUpload } from "../_hooks/use-resume-upload";
 import { formatFileSize } from "../_utils/file";
 import { cn } from "@/utils/style";
+
+const UPLOAD_THINKING_MESSAGES = [
+  "Enviando currículo...",
+  "Extraindo informações do documento...",
+  "Identificando habilidades e experiências...",
+  "Processando dados...",
+  "Quase lá...",
+] as const;
 
 export function UploadContent() {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -79,6 +88,17 @@ export function UploadContent() {
     inputRef.current?.click();
   }
 
+  if (isUploading) {
+    return (
+      <main className="flex min-h-0 w-form flex-1 flex-col rounded-xl border border-border bg-card">
+        <Loading
+          thinkingMessages={[...UPLOAD_THINKING_MESSAGES]}
+          className="min-h-0 flex-1"
+        />
+      </main>
+    );
+  }
+
   return (
     <main className="w-form rounded-xl border border-border bg-card">
       <div className="flex flex-col gap-1 px-7 pt-7">
@@ -119,15 +139,13 @@ export function UploadContent() {
             aria-label="Selecionar arquivo do curriculo"
           />
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-secondary">
-            {isUploading ? (
-              <Loader2 className="h-7 w-7 animate-spin text-accent-brand" />
-            ) : selectedFile ? (
+            {selectedFile ? (
               <Check className="h-7 w-7 text-accent-success" />
             ) : (
               <Upload className="h-7 w-7 text-muted-foreground" />
             )}
           </div>
-          {selectedFile && !isUploading ? (
+          {selectedFile ? (
             <>
               <p className="text-center text-lg font-semibold text-foreground">
                 {selectedFile.name}

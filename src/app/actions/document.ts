@@ -258,7 +258,7 @@ export async function generateOptimizedDocument(
     };
   }
 
-  revalidatePath("/dashboard");
+  revalidatePath("/home");
 
   return {
     success: true,

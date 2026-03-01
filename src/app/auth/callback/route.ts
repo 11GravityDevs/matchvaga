@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import {
-  ROUTE_DASHBOARD,
+  ROUTE_HOME_DASHBOARD,
   ROUTE_LOGIN,
   ROUTE_ONBOARDING_UPLOAD,
 } from "@/constants/routes";
@@ -23,7 +23,7 @@ export async function GET(request: Request) {
 
     if (!error) {
       if (await hasResume()) {
-        next = ROUTE_DASHBOARD;
+        next = ROUTE_HOME_DASHBOARD;
       }
 
       const forwardedHost = request.headers.get("x-forwarded-host");

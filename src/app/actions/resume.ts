@@ -60,7 +60,7 @@ export async function uploadResume(
     };
   }
 
-  revalidatePath("/dashboard");
+  revalidatePath("/home");
   revalidatePath("/onboarding");
 
   return {
@@ -117,7 +117,7 @@ export async function saveResumeData(
     };
   }
 
-  revalidatePath("/dashboard");
+  revalidatePath("/home");
   revalidatePath("/onboarding");
 
   return { success: true };

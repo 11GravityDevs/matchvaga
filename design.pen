@@ -9063,6 +9063,8 @@
           "type": "frame",
           "id": "unGe6",
           "name": "Item Content Right",
+          "width": "fit_content(0)",
+          "height": "fit_content(0)",
           "gap": 8,
           "justifyContent": "end",
           "alignItems": "center",
@@ -9174,6 +9176,8 @@
           "type": "frame",
           "id": "9XzSB",
           "name": "Item Content Right",
+          "width": "fit_content(0)",
+          "height": "fit_content(0)",
           "gap": 8,
           "justifyContent": "end",
           "alignItems": "center",
@@ -9986,6 +9990,12 @@
                   "content": "Meu Curriculo"
                 }
               }
+            },
+            {
+              "id": "j64BN",
+              "type": "ref",
+              "ref": "0sll9",
+              "name": "sCredits"
             },
             {
               "id": "6ulUc",
@@ -17251,6 +17261,801 @@
                   "fontFamily": "Inter",
                   "fontSize": 14,
                   "fontWeight": "500"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "0sll9",
+      "x": 6599,
+      "y": 153,
+      "name": "component/Sidebar Credits",
+      "reusable": true,
+      "width": 240,
+      "fill": "$--muted",
+      "cornerRadius": 8,
+      "layout": "vertical",
+      "gap": 10,
+      "padding": 12,
+      "children": [
+        {
+          "type": "frame",
+          "id": "cMzGl",
+          "name": "creditsInfo",
+          "width": "fill_container",
+          "gap": 8,
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "IrzWW",
+              "name": "creditsLeft",
+              "gap": 6,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "mXSmJ",
+                  "name": "creditsIcon",
+                  "width": 16,
+                  "height": 16,
+                  "iconFontName": "coins",
+                  "iconFontFamily": "lucide",
+                  "fill": "$--accent-brand"
+                },
+                {
+                  "type": "text",
+                  "id": "0a69y",
+                  "name": "creditsLabel",
+                  "fill": "$--sidebar-foreground",
+                  "content": "3 análises",
+                  "fontFamily": "Inter",
+                  "fontSize": 13,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "YEwUo",
+              "name": "buyLink",
+              "fill": "$--accent-brand",
+              "content": "Comprar",
+              "fontFamily": "Inter",
+              "fontSize": 12,
+              "fontWeight": "500"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "ti2bA",
+          "name": "progressBar",
+          "width": "fill_container",
+          "height": 4,
+          "fill": "$--border",
+          "cornerRadius": 100,
+          "layout": "none",
+          "children": [
+            {
+              "type": "rectangle",
+              "cornerRadius": 100,
+              "id": "dfs2X",
+              "x": 0,
+              "y": 0,
+              "name": "progressFill",
+              "fill": "$--accent-brand",
+              "width": 65,
+              "height": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "d9oIR",
+      "x": 10844,
+      "y": -390,
+      "name": "Pricing Screen - Desktop",
+      "width": 1440,
+      "height": 900,
+      "fill": "$--background",
+      "children": [
+        {
+          "id": "BF3IB",
+          "type": "ref",
+          "ref": "xlPb4",
+          "height": "fill_container",
+          "name": "pricingSidebar"
+        },
+        {
+          "type": "frame",
+          "id": "0R7XB",
+          "name": "mainContent",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "gap": 32,
+          "padding": [
+            40,
+            48
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "LnYxa",
+              "name": "pageHeader",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 8,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "dnMps",
+                  "name": "pageTitle",
+                  "fill": "$--foreground",
+                  "content": "Comprar Análises",
+                  "fontFamily": "Inter",
+                  "fontSize": 28,
+                  "fontWeight": "700"
+                },
+                {
+                  "type": "text",
+                  "id": "H7Q2T",
+                  "name": "pageSubtitle",
+                  "fill": "$--muted-foreground",
+                  "content": "Escolha o pacote ideal para turbinar suas análises de compatibilidade.",
+                  "fontFamily": "Inter",
+                  "fontSize": 15
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "dIPsd",
+              "name": "cardsGrid",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 20,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "W7kLA",
+                  "name": "topRow-small",
+                  "width": "fill_container",
+                  "gap": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "yphG2",
+                      "name": "card-entrada",
+                      "width": "fill_container",
+                      "fill": "$--card",
+                      "cornerRadius": 12,
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 1,
+                        "fill": "$--border"
+                      },
+                      "layout": "vertical",
+                      "gap": 16,
+                      "padding": 24,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "YeIPc",
+                          "name": "n1",
+                          "fill": "$--foreground",
+                          "content": "Entrada",
+                          "textAlign": "center",
+                          "fontFamily": "Inter",
+                          "fontSize": 15,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "frqwj",
+                          "name": "cb1",
+                          "layout": "vertical",
+                          "gap": 2,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "IdCfZ",
+                              "name": "cn1",
+                              "fill": "$--accent-brand",
+                              "content": "1",
+                              "textAlign": "center",
+                              "fontFamily": "Inter",
+                              "fontSize": 36,
+                              "fontWeight": "700"
+                            },
+                            {
+                              "type": "text",
+                              "id": "umL5b",
+                              "name": "cl1",
+                              "fill": "$--muted-foreground",
+                              "content": "análise",
+                              "textAlign": "center",
+                              "fontFamily": "Inter",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "1pioH",
+                          "name": "pb1",
+                          "layout": "vertical",
+                          "gap": 2,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "bpOA6",
+                              "name": "p1",
+                              "fill": "$--foreground",
+                              "content": "R$ 9,90",
+                              "textAlign": "center",
+                              "fontFamily": "Inter",
+                              "fontSize": 22,
+                              "fontWeight": "700"
+                            },
+                            {
+                              "type": "text",
+                              "id": "tMBcH",
+                              "name": "pp1",
+                              "fill": "$--muted-foreground",
+                              "content": "R$ 9,90 / análise",
+                              "textAlign": "center",
+                              "fontFamily": "Inter",
+                              "fontSize": 11,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "id": "Jp9Yk",
+                          "type": "ref",
+                          "ref": "k0bhb",
+                          "width": "fill_container",
+                          "name": "btn1",
+                          "descendants": {
+                            "sv6Rn": {
+                              "enabled": false
+                            },
+                            "XYKjR": {
+                              "content": "Selecionar"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "JoarA",
+                      "name": "card-basico",
+                      "width": "fill_container",
+                      "fill": "$--card",
+                      "cornerRadius": 12,
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 1,
+                        "fill": "$--border"
+                      },
+                      "layout": "vertical",
+                      "gap": 16,
+                      "padding": 24,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "R8bWg",
+                          "name": "n2",
+                          "fill": "$--foreground",
+                          "content": "Básico",
+                          "textAlign": "center",
+                          "fontFamily": "Inter",
+                          "fontSize": 15,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "IZ4JL",
+                          "name": "cb2",
+                          "layout": "vertical",
+                          "gap": 2,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Qngmi",
+                              "name": "cn2",
+                              "fill": "$--accent-brand",
+                              "content": "3",
+                              "textAlign": "center",
+                              "fontFamily": "Inter",
+                              "fontSize": 36,
+                              "fontWeight": "700"
+                            },
+                            {
+                              "type": "text",
+                              "id": "NUrtO",
+                              "name": "cl2",
+                              "fill": "$--muted-foreground",
+                              "content": "análises",
+                              "textAlign": "center",
+                              "fontFamily": "Inter",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "RbW9v",
+                          "name": "pb2",
+                          "layout": "vertical",
+                          "gap": 2,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "tlVMJ",
+                              "name": "p2",
+                              "fill": "$--foreground",
+                              "content": "R$ 24,90",
+                              "textAlign": "center",
+                              "fontFamily": "Inter",
+                              "fontSize": 22,
+                              "fontWeight": "700"
+                            },
+                            {
+                              "type": "text",
+                              "id": "mOnwV",
+                              "name": "pp2",
+                              "fill": "$--muted-foreground",
+                              "content": "R$ 8,30 / análise",
+                              "textAlign": "center",
+                              "fontFamily": "Inter",
+                              "fontSize": 11,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "id": "wk6AQ",
+                          "type": "ref",
+                          "ref": "k0bhb",
+                          "width": "fill_container",
+                          "name": "btn2",
+                          "descendants": {
+                            "sv6Rn": {
+                              "enabled": false
+                            },
+                            "XYKjR": {
+                              "content": "Selecionar"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "AUP0s",
+                      "name": "card-popular",
+                      "width": "fill_container",
+                      "fill": "$--card",
+                      "cornerRadius": 12,
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 1,
+                        "fill": "$--border"
+                      },
+                      "layout": "vertical",
+                      "gap": 16,
+                      "padding": 24,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "bgf7W",
+                          "name": "n3",
+                          "fill": "$--foreground",
+                          "content": "Popular",
+                          "textAlign": "center",
+                          "fontFamily": "Inter",
+                          "fontSize": 15,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "1EUVn",
+                          "name": "cb3",
+                          "layout": "vertical",
+                          "gap": 2,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "8tQOO",
+                              "name": "cn3",
+                              "fill": "$--accent-brand",
+                              "content": "5",
+                              "textAlign": "center",
+                              "fontFamily": "Inter",
+                              "fontSize": 36,
+                              "fontWeight": "700"
+                            },
+                            {
+                              "type": "text",
+                              "id": "XsX6R",
+                              "name": "cl3",
+                              "fill": "$--muted-foreground",
+                              "content": "análises",
+                              "textAlign": "center",
+                              "fontFamily": "Inter",
+                              "fontSize": 13,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "M4y8w",
+                          "name": "pb3",
+                          "layout": "vertical",
+                          "gap": 2,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "TosGi",
+                              "name": "p3",
+                              "fill": "$--foreground",
+                              "content": "R$ 34,90",
+                              "textAlign": "center",
+                              "fontFamily": "Inter",
+                              "fontSize": 22,
+                              "fontWeight": "700"
+                            },
+                            {
+                              "type": "text",
+                              "id": "mQc4u",
+                              "name": "pp3",
+                              "fill": "$--muted-foreground",
+                              "content": "R$ 6,98 / análise",
+                              "textAlign": "center",
+                              "fontFamily": "Inter",
+                              "fontSize": 11,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "id": "qiiIW",
+                          "type": "ref",
+                          "ref": "k0bhb",
+                          "width": "fill_container",
+                          "name": "btn3",
+                          "descendants": {
+                            "sv6Rn": {
+                              "enabled": false
+                            },
+                            "XYKjR": {
+                              "content": "Selecionar"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "WTh3l",
+                  "name": "bottomRow-big",
+                  "width": "fill_container",
+                  "gap": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "PvzHa",
+                      "name": "card-profissional",
+                      "width": "fill_container",
+                      "fill": "$--card",
+                      "cornerRadius": 12,
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 2,
+                        "fill": "$--accent-brand"
+                      },
+                      "layout": "vertical",
+                      "gap": 20,
+                      "padding": 32,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "2MTGD",
+                          "name": "badge4",
+                          "fill": "$--accent-brand",
+                          "cornerRadius": 100,
+                          "padding": [
+                            4,
+                            14
+                          ],
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "DdXYD",
+                              "name": "badgeTxt4",
+                              "fill": "$--primary-foreground",
+                              "content": "Recomendado",
+                              "textAlign": "center",
+                              "fontFamily": "Inter",
+                              "fontSize": 11,
+                              "fontWeight": "600"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "ySL31",
+                          "name": "n4",
+                          "fill": "$--foreground",
+                          "content": "Profissional",
+                          "textAlign": "center",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "rL1VJ",
+                          "name": "cb4",
+                          "layout": "vertical",
+                          "gap": 4,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "kAN3s",
+                              "name": "cn4",
+                              "fill": "$--accent-brand",
+                              "content": "15",
+                              "textAlign": "center",
+                              "fontFamily": "Inter",
+                              "fontSize": 48,
+                              "fontWeight": "700"
+                            },
+                            {
+                              "type": "text",
+                              "id": "lBqlc",
+                              "name": "cl4",
+                              "fill": "$--muted-foreground",
+                              "content": "análises",
+                              "textAlign": "center",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "YJTh9",
+                          "name": "pb4",
+                          "layout": "vertical",
+                          "gap": 2,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "6J14K",
+                              "name": "p4",
+                              "fill": "$--foreground",
+                              "content": "R$ 89,90",
+                              "textAlign": "center",
+                              "fontFamily": "Inter",
+                              "fontSize": 28,
+                              "fontWeight": "700"
+                            },
+                            {
+                              "type": "text",
+                              "id": "P7tdK",
+                              "name": "pp4",
+                              "fill": "$--muted-foreground",
+                              "content": "R$ 5,99 / análise",
+                              "textAlign": "center",
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "dsv4K",
+                          "name": "features",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "K4lx5",
+                              "name": "f4a",
+                              "fill": "$--accent-brand",
+                              "content": "Melhor custo-benefício",
+                              "textAlign": "center",
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "id": "nJbOQ",
+                          "type": "ref",
+                          "ref": "o9PMm",
+                          "width": "fill_container",
+                          "name": "btn4",
+                          "descendants": {
+                            "vynbS": {
+                              "enabled": false
+                            },
+                            "rtgD8": {
+                              "content": "Selecionar"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "cEdrk",
+                      "name": "card-maximo",
+                      "width": "fill_container",
+                      "fill": "$--card",
+                      "cornerRadius": 12,
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 1,
+                        "fill": "$--border"
+                      },
+                      "layout": "vertical",
+                      "gap": 20,
+                      "padding": 32,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "wf5F0",
+                          "name": "n5",
+                          "fill": "$--foreground",
+                          "content": "Máximo",
+                          "textAlign": "center",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "zEDXm",
+                          "name": "cb5",
+                          "layout": "vertical",
+                          "gap": 4,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "AS8xP",
+                              "name": "cn5",
+                              "fill": "$--accent-brand",
+                              "content": "30",
+                              "textAlign": "center",
+                              "fontFamily": "Inter",
+                              "fontSize": 48,
+                              "fontWeight": "700"
+                            },
+                            {
+                              "type": "text",
+                              "id": "mkyqT",
+                              "name": "cl5",
+                              "fill": "$--muted-foreground",
+                              "content": "análises",
+                              "textAlign": "center",
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "K8jI4",
+                          "name": "pb5",
+                          "layout": "vertical",
+                          "gap": 2,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "R5m4n",
+                              "name": "p5",
+                              "fill": "$--foreground",
+                              "content": "R$ 149,90",
+                              "textAlign": "center",
+                              "fontFamily": "Inter",
+                              "fontSize": 28,
+                              "fontWeight": "700"
+                            },
+                            {
+                              "type": "text",
+                              "id": "CC3gi",
+                              "name": "pp5",
+                              "fill": "$--muted-foreground",
+                              "content": "R$ 5,00 / análise",
+                              "textAlign": "center",
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "UPsni",
+                          "name": "features",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 8,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "ypn0l",
+                              "name": "f5a",
+                              "fill": "$--accent-brand",
+                              "content": "Maior economia por análise",
+                              "textAlign": "center",
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "500"
+                            }
+                          ]
+                        },
+                        {
+                          "id": "Z3txv",
+                          "type": "ref",
+                          "ref": "k0bhb",
+                          "width": "fill_container",
+                          "name": "btn5",
+                          "descendants": {
+                            "sv6Rn": {
+                              "enabled": false
+                            },
+                            "XYKjR": {
+                              "content": "Selecionar"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
                 }
               ]
             }

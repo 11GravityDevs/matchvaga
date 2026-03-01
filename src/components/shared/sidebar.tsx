@@ -24,9 +24,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
-  ROUTE_DASHBOARD,
-  ROUTE_DASHBOARD_NEW_ANALYSIS,
-  ROUTE_DASHBOARD_RESUME,
+  ROUTE_HOME_DASHBOARD,
+  ROUTE_HOME_NEW_ANALYSIS,
+  ROUTE_HOME_RESUME,
 } from "@/constants/routes";
 import { useSignOut } from "@/hooks/use-sign-out";
 import { currentUserDisplayQueryOptions } from "@/lib/query/query-options";
@@ -50,11 +50,11 @@ interface NavItem {
 const navItems: NavItem[] = [
   {
     label: "Nova Análise",
-    href: ROUTE_DASHBOARD_NEW_ANALYSIS,
+    href: ROUTE_HOME_NEW_ANALYSIS,
     icon: Search,
   },
-  { label: "Dashboard", href: ROUTE_DASHBOARD, icon: LayoutDashboard },
-  { label: "Meu Currículo", href: ROUTE_DASHBOARD_RESUME, icon: FileText },
+  { label: "Dashboard", href: ROUTE_HOME_DASHBOARD, icon: LayoutDashboard },
+  { label: "Meu Currículo", href: ROUTE_HOME_RESUME, icon: FileText },
 ];
 
 export function Sidebar() {

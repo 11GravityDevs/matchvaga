@@ -125,7 +125,7 @@ export async function runGapAnalysis(
     };
   }
 
-  revalidatePath("/dashboard");
+  revalidatePath("/home");
 
   return {
     success: true,

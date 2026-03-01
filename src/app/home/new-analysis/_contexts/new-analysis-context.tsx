@@ -16,7 +16,7 @@ import { getAnalysisById } from "@/app/actions/analysis";
 import { Loading } from "@/components/ui/loading";
 import {
   QUERY_CONTINUE_ANALYSIS,
-  ROUTE_DASHBOARD_NEW_ANALYSIS,
+  ROUTE_HOME_NEW_ANALYSIS,
 } from "@/constants/routes";
 import { resumeQueryOptions } from "@/lib/query/query-options";
 import type { ResumeData } from "@/types/resume";
@@ -226,7 +226,7 @@ export function NewAnalysisProvider({
     getAnalysisById(continueAnalysisId).then((result) => {
       if (!result.success || !result.data) {
         setHasFinishedContinueLoad(true);
-        router.replace(ROUTE_DASHBOARD_NEW_ANALYSIS);
+        router.replace(ROUTE_HOME_NEW_ANALYSIS);
         return;
       }
       const analysis = result.data;
@@ -244,7 +244,7 @@ export function NewAnalysisProvider({
       });
       setStep(2);
       setHasFinishedContinueLoad(true);
-      router.replace(ROUTE_DASHBOARD_NEW_ANALYSIS);
+      router.replace(ROUTE_HOME_NEW_ANALYSIS);
     });
   }, [continueAnalysisId, hasFinishedContinueLoad, router]);
 

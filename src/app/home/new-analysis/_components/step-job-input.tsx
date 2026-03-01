@@ -1,18 +1,27 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Lightbulb, Loader2, Sparkles } from "lucide-react";
+import { Lightbulb, Sparkles } from "lucide-react";
 
 import { runGapAnalysis } from "@/app/actions/analysis";
 import { QUERY_KEY_ANALYSES } from "@/constants/query-keys";
 import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
+import { Loading } from "@/components/ui/loading";
 import { StepIndicator } from "@/components/shared/step-indicator";
 import {
   useNewAnalysis,
   WIZARD_STEPS,
 } from "../_contexts/new-analysis-context";
+
+const GAP_ANALYSIS_THINKING_MESSAGES = [
+  "Analisando descrição da vaga...",
+  "Comparando com seu currículo...",
+  "Calculando compatibilidade...",
+  "Identificando habilidades em falta...",
+  "Quase lá...",
+] as const;
 
 export function StepJobInput() {
   const queryClient = useQueryClient();
@@ -72,6 +81,17 @@ export function StepJobInput() {
       : analysisError
         ? String(analysisError)
         : null;
+
+  if (isAnalyzing) {
+    return (
+      <div className="mx-auto flex min-h-0 w-full max-w-content flex-1 flex-col section-gap overflow-hidden page-padding">
+        <Loading
+          thinkingMessages={[...GAP_ANALYSIS_THINKING_MESSAGES]}
+          className="min-h-0 flex-1"
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto flex min-h-0 w-full max-w-content flex-1 flex-col section-gap overflow-hidden page-padding">
@@ -134,11 +154,7 @@ export function StepJobInput() {
           onClick={handleAnalyze}
           className="gap-1.5"
         >
-          {isAnalyzing ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            <Sparkles className="h-4 w-4" />
-          )}
+          <Sparkles className="h-4 w-4" />
           Analisar vaga
         </Button>
       </div>

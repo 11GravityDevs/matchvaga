@@ -3,14 +3,14 @@ import { NextResponse, type NextRequest } from "next/server";
 
 import {
   ROUTE_AUTH_CALLBACK,
-  ROUTE_DASHBOARD,
+  ROUTE_HOME,
   ROUTE_LOGIN,
   ROUTE_ONBOARDING,
   ROUTE_ONBOARDING_PREVIEW,
   ROUTE_ONBOARDING_UPLOAD,
 } from "@/constants/routes";
 
-const PROTECTED_PATH_PREFIXES = [ROUTE_DASHBOARD, ROUTE_ONBOARDING];
+const PROTECTED_PATH_PREFIXES = [ROUTE_HOME, ROUTE_ONBOARDING];
 const GUEST_ONLY_PATH_PREFIXES = [ROUTE_LOGIN];
 
 function isProtectedPath(pathname: string): boolean {
@@ -82,13 +82,7 @@ export async function proxy(request: NextRequest) {
     const userHasResume = !error && (resumes?.length ?? 0) > 0;
     const pathname = request.nextUrl.pathname;
 
-    if (pathname.startsWith(ROUTE_ONBOARDING) && userHasResume) {
-      const url = request.nextUrl.clone();
-      url.pathname = ROUTE_DASHBOARD;
-      return NextResponse.redirect(url);
-    }
-
-    if (pathname.startsWith(ROUTE_DASHBOARD) && !userHasResume) {
+    if (pathname.startsWith(ROUTE_HOME) && !userHasResume) {
       const url = request.nextUrl.clone();
       url.pathname = ROUTE_ONBOARDING_UPLOAD;
       return NextResponse.redirect(url);

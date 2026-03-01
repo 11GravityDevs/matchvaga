@@ -14,7 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import {
   QUERY_CONTINUE_ANALYSIS,
-  ROUTE_DASHBOARD_NEW_ANALYSIS,
+  ROUTE_HOME_NEW_ANALYSIS,
 } from "@/constants/routes";
 
 type FilterType = "todos" | "recentes" | "score-alto";
@@ -217,7 +217,7 @@ export function AnalysisHistoryTable({
                     title="Continuar"
                   >
                     <Link
-                      href={`${ROUTE_DASHBOARD_NEW_ANALYSIS}?${QUERY_CONTINUE_ANALYSIS}=${row.analysisId}`}
+                      href={`${ROUTE_HOME_NEW_ANALYSIS}?${QUERY_CONTINUE_ANALYSIS}=${row.analysisId}`}
                     >
                       <Play className="size-5" />
                     </Link>

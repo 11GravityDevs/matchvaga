@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-import { ROUTE_DASHBOARD, ROUTE_LOGIN } from "@/constants/routes";
+import { ROUTE_HOME_DASHBOARD, ROUTE_LOGIN } from "@/constants/routes";
 
 import { useIsLoggedIn } from "../_hooks/use-is-logged-in";
 
@@ -22,7 +22,7 @@ export function AuthAwareLink({
   labelClassName,
 }: AuthAwareLinkProps) {
   const isLoggedIn = useIsLoggedIn();
-  const href = isLoggedIn ? ROUTE_DASHBOARD : ROUTE_LOGIN;
+  const href = isLoggedIn ? ROUTE_HOME_DASHBOARD : ROUTE_LOGIN;
   const label = isLoggedIn ? loggedInLabel : loggedOutLabel;
 
   return (
