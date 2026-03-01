@@ -26,6 +26,13 @@ CREATE TABLE analyses (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- user_credits (analysis credits per user; row created on resume upload)
+CREATE TABLE user_credits (
+  user_id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  credits INTEGER NOT NULL DEFAULT 3 CHECK (credits >= 0),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- optimized_documents (generated PDF/DOCX for download)
 CREATE TABLE optimized_documents (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -38,11 +45,15 @@ CREATE TABLE optimized_documents (
 -- RLS
 ALTER TABLE resumes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE analyses ENABLE ROW LEVEL SECURITY;
+ALTER TABLE user_credits ENABLE ROW LEVEL SECURITY;
 ALTER TABLE optimized_documents ENABLE ROW LEVEL SECURITY;
 
 -- Policies: users access only their own rows
 CREATE POLICY "resumes_all_own" ON resumes FOR ALL USING (auth.uid() = user_id);
 CREATE POLICY "analyses_all_own" ON analyses FOR ALL USING (auth.uid() = user_id);
+CREATE POLICY "user_credits_all_own" ON user_credits FOR ALL
+  USING (auth.uid() = user_id)
+  WITH CHECK (auth.uid() = user_id);
 
 CREATE POLICY "optimized_documents_select_via_analysis" ON optimized_documents FOR SELECT
   USING (EXISTS (SELECT 1 FROM analyses a WHERE a.id = analysis_id AND a.user_id = auth.uid()));

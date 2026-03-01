@@ -50,7 +50,7 @@ export function DashboardContent({
     return <Loading className="min-h-0 flex-1" />;
   }
 
-  const analysis = displayData?.analysis ?? 0;
+  const credits = displayData?.credits ?? 0;
 
   const totalAnalyses = analyses.length;
   const completedCount = analyses.filter(
@@ -117,7 +117,7 @@ export function DashboardContent({
         <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
           <KpiCard
             label="Análises Disponíveis"
-            value={String(analysis)}
+            value={String(credits)}
             variant="primary"
             icon={<Zap className="h-6 w-6" />}
           />

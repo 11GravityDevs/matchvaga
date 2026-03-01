@@ -88,6 +88,20 @@ export async function runGapAnalysis(
 
   const resumeData = resumeParsed.data as ResumeData;
 
+  const { data: creditsRow } = await supabase
+    .from("user_credits")
+    .select("credits")
+    .eq("user_id", user.id)
+    .single();
+
+  const credits = creditsRow?.credits ?? 0;
+  if (credits < 1) {
+    return {
+      success: false,
+      error: "Sem créditos disponíveis",
+    };
+  }
+
   const aiResult = await runGapAnalysisAI(resumeData, rawText);
   if (!aiResult.success) {
     return { success: false, error: aiResult.error };
@@ -125,6 +139,22 @@ export async function runGapAnalysis(
       success: false,
       error: "Erro ao salvar análise. Tente novamente.",
     };
+  }
+
+  const { error: decrementError } = await supabase
+    .from("user_credits")
+    .update({
+      credits: credits - 1,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("user_id", user.id)
+    .gte("credits", 1);
+
+  if (decrementError) {
+    console.error(
+      "[runGapAnalysis] credit decrement error:",
+      decrementError.message
+    );
   }
 
   revalidatePath("/home");

@@ -61,10 +61,16 @@ export function useResumeUpload(): UseResumeUploadReturn {
           data: result.parsedData,
         });
 
+        const prevDisplay = queryClient.getQueryData<{
+          credits?: number;
+        }>(QUERY_KEY_CURRENT_USER_DISPLAY);
+        const credits = prevDisplay?.credits ?? 3;
+
         queryClient.setQueryData(QUERY_KEY_CURRENT_USER_DISPLAY, {
           success: true,
           fullName: result.parsedData.fullName,
           email: result.parsedData.email,
+          credits,
         });
         setResumeId(result.resumeId);
         setParsedData(result.parsedData);

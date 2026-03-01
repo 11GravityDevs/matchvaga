@@ -108,7 +108,7 @@ export function Sidebar() {
         })}
 
         <div className="mt-auto">
-          <SidebarAnalysis analysis={displayData?.analysis ?? 0} />
+          <SidebarAnalysis analysis={displayData?.credits ?? 0} />
         </div>
       </div>
 

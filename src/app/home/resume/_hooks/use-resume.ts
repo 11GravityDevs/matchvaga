@@ -47,10 +47,16 @@ export function useResume(): UseResumeReturn {
         data: result.data,
       });
 
+      const prevDisplay = queryClient.getQueryData<{
+        credits?: number;
+      }>(QUERY_KEY_CURRENT_USER_DISPLAY);
+      const credits = prevDisplay?.credits ?? 0;
+
       queryClient.setQueryData(QUERY_KEY_CURRENT_USER_DISPLAY, {
         success: true,
         fullName: result.data.fullName,
         email: result.data.email,
+        credits,
       });
     },
   });

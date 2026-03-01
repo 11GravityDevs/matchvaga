@@ -1,10 +1,14 @@
 "use client";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Lightbulb, Sparkles } from "lucide-react";
 
 import { runGapAnalysis } from "@/app/actions/analysis";
-import { QUERY_KEY_ANALYSES } from "@/constants/query-keys";
+import {
+  QUERY_KEY_ANALYSES,
+  QUERY_KEY_CURRENT_USER_DISPLAY,
+} from "@/constants/query-keys";
+import { currentUserDisplayQueryOptions } from "@/lib/query/query-options";
 import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
@@ -25,6 +29,9 @@ const GAP_ANALYSIS_THINKING_MESSAGES = [
 
 export function StepJobInput() {
   const queryClient = useQueryClient();
+  const { data: displayData } = useQuery(currentUserDisplayQueryOptions);
+  const credits = displayData?.credits ?? 0;
+
   const {
     jobDescription,
     setJobDescription,
@@ -49,6 +56,9 @@ export function StepJobInput() {
     },
     onSuccess: (result) => {
       void queryClient.invalidateQueries({ queryKey: QUERY_KEY_ANALYSES });
+      void queryClient.invalidateQueries({
+        queryKey: QUERY_KEY_CURRENT_USER_DISPLAY,
+      });
 
       const roleLabel =
         result.job_title && result.job_company
@@ -69,7 +79,8 @@ export function StepJobInput() {
     },
   });
 
-  const canAnalyze = jobDescription.trim().length > 0 && !isAnalyzing;
+  const canAnalyze =
+    jobDescription.trim().length > 0 && !isAnalyzing && credits > 0;
 
   const handleAnalyze = () => {
     runAnalysis();
@@ -128,6 +139,15 @@ export function StepJobInput() {
                 />
               </div>
             </Field>
+
+            {credits === 0 && (
+              <div
+                role="alert"
+                className="rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive"
+              >
+                Sem créditos disponíveis. Compre mais créditos para continuar.
+              </div>
+            )}
 
             {analysisErrorDisplay && (
               <div
