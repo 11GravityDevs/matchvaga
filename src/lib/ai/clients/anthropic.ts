@@ -7,6 +7,8 @@ import { SYNTHESIS_SYSTEM_PROMPT } from "@/lib/ai/prompts/synthesis";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
 
+import optimizedMock from "../../../../optimized-mock.json";
+
 const MODEL = "claude-haiku-4-5-20251001";
 
 export interface SynthesisResult {
@@ -79,7 +81,6 @@ ${JSON.stringify(resumeData, null, 2)}
 Return the optimized resume as JSON. Include skillsByCategory (array of { category, items }), skills (flat array), and all other fields. Experience and education descriptions: one bullet per line. Output only valid JSON.`;
 }
 
-// TODO: temporary mock — remove and restore real Anthropic call below
 const USE_SYNTHESIS_MOCK = true;
 
 export async function synthesizeOptimizedResume(
@@ -89,14 +90,8 @@ export async function synthesizeOptimizedResume(
   missingSkills: { technical: string[]; behavioral: string[] } | undefined
 ): Promise<SynthesisOutput> {
   if (USE_SYNTHESIS_MOCK) {
-    console.log("Using mock synthesis");
-    const validated = resumeDataSchema.parse({
-      ...resumeData,
-      skillsByCategory: resumeData.skillsByCategory ?? [
-        { category: "Skills", items: resumeData.skills },
-      ],
-      languages: resumeData.languages ?? [],
-    });
+    const data = (optimizedMock as { success: boolean; data: unknown }).data;
+    const validated = resumeDataSchema.parse(data);
     return { success: true, data: validated };
   }
 
