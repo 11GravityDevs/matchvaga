@@ -72,10 +72,16 @@ export function useResumeVerify({
         data: result.data,
       });
 
+      const prevDisplay = queryClient.getQueryData<{
+        credits?: number;
+      }>(QUERY_KEY_CURRENT_USER_DISPLAY);
+      const credits = prevDisplay?.credits ?? 3;
+
       queryClient.setQueryData(QUERY_KEY_CURRENT_USER_DISPLAY, {
         success: true,
         fullName: result.data.fullName,
         email: result.data.email,
+        credits,
       });
 
       setResumeId(result.resumeId);

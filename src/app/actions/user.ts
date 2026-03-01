@@ -14,7 +14,7 @@ export interface GetCurrentUserDisplayResult {
   success: boolean;
   fullName?: string;
   email?: string;
-  analysis?: number;
+  credits?: number;
   error?: string;
 }
 
@@ -34,6 +34,14 @@ export async function getCurrentUserDisplay(): Promise<GetCurrentUserDisplayResu
     return { success: false, error: "Faça login para continuar." };
   }
 
+  const { data: creditsRow } = await supabase
+    .from("user_credits")
+    .select("credits")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  const credits = creditsRow?.credits ?? 0;
+
   const { data: row, error } = await supabase
     .from("resumes")
     .select("parsed_data")
@@ -43,7 +51,7 @@ export async function getCurrentUserDisplay(): Promise<GetCurrentUserDisplayResu
 
   if (error || !row) {
     if (error?.code === "PGRST116") {
-      return { success: true, fullName: undefined, email: undefined };
+      return { success: true, fullName: undefined, email: undefined, credits };
     }
 
     console.error("[getCurrentUserDisplay] select error:", error?.message);
@@ -53,13 +61,13 @@ export async function getCurrentUserDisplay(): Promise<GetCurrentUserDisplayResu
   const parsed = displayDataSchema.safeParse(row.parsed_data);
 
   if (!parsed.success) {
-    return { success: true, fullName: undefined, email: undefined };
+    return { success: true, fullName: undefined, email: undefined, credits };
   }
 
   return {
     success: true,
     fullName: parsed.data.fullName,
     email: parsed.data.email,
-    analysis: 3,
+    credits,
   };
 }
