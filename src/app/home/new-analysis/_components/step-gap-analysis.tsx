@@ -98,6 +98,7 @@ export function StepGapAnalysis() {
   const {
     jobRole,
     score,
+    optimizedScore,
     matchedSkills,
     technicalSkills,
     behavioralSkills,
@@ -106,6 +107,7 @@ export function StepGapAnalysis() {
     setSelectedTechnicalSkills,
     setSelectedBehavioralSkills,
     setOptimizedResumeData,
+    setOptimizedScore,
     analysisId,
   } = useNewAnalysis();
 
@@ -147,11 +149,14 @@ export function StepGapAnalysis() {
       if (result.data) {
         setOptimizedResumeData(result.data);
       }
+      if (result.optimizedScore != null) {
+        setOptimizedScore(result.optimizedScore);
+      }
       setStep(3);
     },
   });
 
-  const displayScore = score ?? 0;
+  const displayScore = optimizedScore ?? score ?? 0;
   const feedback = getScoreFeedback(displayScore);
   const feedbackClasses = FEEDBACK_BADGE_CLASSES[feedback.variant];
 

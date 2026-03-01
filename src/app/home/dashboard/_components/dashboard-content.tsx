@@ -45,7 +45,8 @@ export function DashboardContent({
   const avgScore =
     totalAnalyses > 0
       ? Math.round(
-          analyses.reduce((sum, a) => sum + a.score, 0) / totalAnalyses
+          analyses.reduce((sum, a) => sum + a.optimized_score, 0) /
+            totalAnalyses
         )
       : 0;
   const scoreVariant =
@@ -68,8 +69,8 @@ export function DashboardContent({
       date: formatAnalysisDate(a.created_at),
       before: `${a.score}%`,
       beforeColor: getScoreColorToken(a.score),
-      after: "—",
-      afterColor: "var(--muted-foreground)",
+      after: `${a.optimized_score}%`,
+      afterColor: getScoreColorToken(a.optimized_score),
       status: a.status,
     };
   });

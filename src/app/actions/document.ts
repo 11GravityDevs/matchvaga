@@ -6,6 +6,7 @@ import ReactPDF from "@react-pdf/renderer";
 
 import { createClient } from "@/lib/supabase/server";
 import { synthesizeOptimizedResume } from "@/lib/ai/clients/anthropic";
+import { runGapAnalysisAI } from "@/lib/ai/clients/openai";
 import { ResumeDocument } from "@/lib/document/resume-to-pdf";
 import { buildResumeDocx } from "@/lib/document/resume-to-docx";
 import { resumeDataSchema } from "@/schemas/resume";
@@ -18,6 +19,7 @@ const SIGNED_URL_EXPIRES_IN = 3600;
 export interface SynthesizeOptimizedResumeResult {
   success: boolean;
   data?: ResumeData;
+  optimizedScore?: number;
   error?: string;
 }
 
@@ -91,9 +93,29 @@ export async function synthesizeOptimizedResumeForPreview(
     return { success: false, error: synthesis.error };
   }
 
+  let optimizedScore: number | undefined;
+
+  const aiResult = await runGapAnalysisAI(synthesis.data, jobSnapshot.rawText);
+
+  if (aiResult.success) {
+    optimizedScore = aiResult.data.score;
+  } else {
+    console.error(
+      "[synthesizeOptimizedResumeForPreview] re-score error:",
+      aiResult.error
+    );
+  }
+
+  const updatePayload: { status: string; optimized_score?: number } = {
+    status: "completed",
+  };
+  if (optimizedScore != null) {
+    updatePayload.optimized_score = optimizedScore;
+  }
+
   const { error: updateStatusError } = await supabase
     .from("analyses")
-    .update({ status: "completed" })
+    .update(updatePayload)
     .eq("id", analysisId)
     .eq("user_id", user.id);
 
@@ -107,6 +129,7 @@ export async function synthesizeOptimizedResumeForPreview(
   return {
     success: true,
     data: synthesis.data,
+    ...(optimizedScore != null && { optimizedScore }),
   };
 }
 

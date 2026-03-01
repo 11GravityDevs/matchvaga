@@ -25,7 +25,7 @@ export function StepPreviewExport() {
     optimizedResumeData,
     setOptimizedResumeData,
     analysisId,
-    score,
+    optimizedScore,
     reset,
   } = useNewAnalysis();
 
@@ -78,7 +78,7 @@ export function StepPreviewExport() {
     ]);
   }
 
-  const displayScore = score ?? 0;
+  const displayScore = optimizedScore ?? 0;
 
   return (
     <div className="flex flex-1 flex-col gap-4 overflow-hidden page-padding">

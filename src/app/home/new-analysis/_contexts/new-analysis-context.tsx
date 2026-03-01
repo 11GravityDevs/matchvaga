@@ -45,6 +45,7 @@ interface NewAnalysisContextValue {
   jobRole: string;
   analysisId: string | null;
   score: number | null;
+  optimizedScore: number | null;
   matchedSkills: string[];
   technicalSkills: MissingSkill[];
   behavioralSkills: MissingSkill[];
@@ -61,6 +62,7 @@ interface NewAnalysisContextValue {
     behavioralSkills: string[];
   }) => void;
   setOptimizedResumeData: (data: ResumeData | null) => void;
+  setOptimizedScore: (value: number | null) => void;
   toggleSkill: (id: string) => void;
   setSelectedTechnicalSkills: (skills: string[]) => void;
   setSelectedBehavioralSkills: (skills: string[]) => void;
@@ -97,6 +99,7 @@ const INITIAL_STATE = {
   jobRole: "",
   analysisId: null as string | null,
   score: null as number | null,
+  optimizedScore: null as number | null,
   matchedSkills: [] as string[],
   technicalSkills: [] as MissingSkill[],
   behavioralSkills: [] as MissingSkill[],
@@ -163,6 +166,9 @@ export function NewAnalysisProvider({
   >(INITIAL_STATE.selectedBehavioralSkills);
   const [optimizedResumeData, setOptimizedResumeData] =
     useState<ResumeData | null>(INITIAL_STATE.optimizedResumeData);
+  const [optimizedScore, setOptimizedScore] = useState<number | null>(
+    INITIAL_STATE.optimizedScore
+  );
 
   function setAnalysisResult(result: {
     analysisId: string;
@@ -212,6 +218,7 @@ export function NewAnalysisProvider({
     setSelectedTechnicalSkills(INITIAL_STATE.selectedTechnicalSkills);
     setSelectedBehavioralSkills(INITIAL_STATE.selectedBehavioralSkills);
     setOptimizedResumeData(INITIAL_STATE.optimizedResumeData);
+    setOptimizedScore(INITIAL_STATE.optimizedScore);
   }
 
   useEffect(() => {
@@ -242,6 +249,7 @@ export function NewAnalysisProvider({
         technicalSkills: analysis.missing_skills.technical,
         behavioralSkills: analysis.missing_skills.behavioral,
       });
+      setOptimizedScore(analysis.optimized_score ?? null);
       setStep(2);
       setHasFinishedContinueLoad(true);
       router.replace(ROUTE_HOME_NEW_ANALYSIS);
@@ -267,6 +275,7 @@ export function NewAnalysisProvider({
         jobRole,
         analysisId,
         score,
+        optimizedScore,
         matchedSkills,
         technicalSkills,
         behavioralSkills,
@@ -277,6 +286,7 @@ export function NewAnalysisProvider({
         setJobRole,
         setAnalysisResult,
         setOptimizedResumeData,
+        setOptimizedScore,
         toggleSkill,
         setSelectedTechnicalSkills,
         setSelectedBehavioralSkills,

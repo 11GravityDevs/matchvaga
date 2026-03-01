@@ -32,6 +32,7 @@ export interface AnalysisRow {
   resume_id: string;
   job_snapshot: { title: string; company: string; rawText: string };
   score: number;
+  optimized_score: number;
   matched_skills: string[];
   missing_skills: MissingSkillsByCategory;
   created_at: string;
@@ -109,6 +110,7 @@ export async function runGapAnalysis(
       resume_id: resumeRow.id,
       job_snapshot: jobParsed.data as unknown as Record<string, unknown>,
       score: aiResult.data.score,
+      optimized_score: 0,
       matched_skills: aiResult.data.matched_skills,
       missing_technical_skills: aiResult.data.missing_technical_skills,
       missing_behavioral_skills: aiResult.data.missing_behavioral_skills,
@@ -156,7 +158,7 @@ export async function getAnalysesForUser(): Promise<GetAnalysesForUserResult> {
   const { data, error } = await supabase
     .from("analyses")
     .select(
-      "id, resume_id, job_snapshot, score, matched_skills, missing_technical_skills, missing_behavioral_skills, created_at, status"
+      "id, resume_id, job_snapshot, score, optimized_score, matched_skills, missing_technical_skills, missing_behavioral_skills, created_at, status"
     )
     .eq("user_id", user.id)
     .order("created_at", { ascending: false });
@@ -180,6 +182,7 @@ export async function getAnalysesForUser(): Promise<GetAnalysesForUserResult> {
         rawText: string;
       },
       score: row.score,
+      optimized_score: row.optimized_score ?? null,
       matched_skills: (row.matched_skills ?? []) as string[],
       missing_skills: missingSkillsFromColumns(
         row.missing_technical_skills,
@@ -216,7 +219,7 @@ export async function getAnalysisById(
   const { data: row, error } = await supabase
     .from("analyses")
     .select(
-      "id, resume_id, job_snapshot, score, matched_skills, missing_technical_skills, missing_behavioral_skills, created_at, status"
+      "id, resume_id, job_snapshot, score, optimized_score, matched_skills, missing_technical_skills, missing_behavioral_skills, created_at, status"
     )
     .eq("id", analysisId)
     .eq("user_id", user.id)
@@ -237,6 +240,7 @@ export async function getAnalysisById(
         rawText: string;
       },
       score: row.score,
+      optimized_score: row.optimized_score,
       matched_skills: (row.matched_skills ?? []) as string[],
       missing_skills: missingSkillsFromColumns(
         row.missing_technical_skills,
