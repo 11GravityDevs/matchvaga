@@ -141,20 +141,28 @@ export async function runGapAnalysis(
     };
   }
 
-  const { error: decrementError } = await supabase
+  const { data: updatedCredits, error: decrementError } = await supabase
     .from("user_credits")
     .update({
       credits: credits - 1,
       updated_at: new Date().toISOString(),
     })
     .eq("user_id", user.id)
-    .gte("credits", 1);
+    .gte("credits", 1)
+    .select("credits");
 
-  if (decrementError) {
-    console.error(
-      "[runGapAnalysis] credit decrement error:",
-      decrementError.message
-    );
+  if (decrementError || !updatedCredits?.length) {
+    if (decrementError) {
+      console.error(
+        "[runGapAnalysis] credit decrement error:",
+        decrementError.message
+      );
+    }
+    await supabase.from("analyses").delete().eq("id", analysisRow.id);
+    return {
+      success: false,
+      error: "Sem créditos disponíveis",
+    };
   }
 
   revalidatePath("/home");
