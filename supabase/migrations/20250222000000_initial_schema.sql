@@ -42,11 +42,22 @@ CREATE TABLE optimized_documents (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- purchases (Stripe checkout idempotency and audit; written by webhook via secret-key client only; no RLS policies)
+CREATE TABLE purchases (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  stripe_session_id TEXT NOT NULL UNIQUE,
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  package_id TEXT NOT NULL,
+  credits_granted INTEGER NOT NULL CHECK (credits_granted > 0),
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- RLS
 ALTER TABLE resumes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE analyses ENABLE ROW LEVEL SECURITY;
 ALTER TABLE user_credits ENABLE ROW LEVEL SECURITY;
 ALTER TABLE optimized_documents ENABLE ROW LEVEL SECURITY;
+ALTER TABLE purchases ENABLE ROW LEVEL SECURITY;
 
 -- Policies: users access only their own rows
 CREATE POLICY "resumes_all_own" ON resumes FOR ALL USING (auth.uid() = user_id);

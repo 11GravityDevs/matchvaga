@@ -4,17 +4,11 @@
  * Local testing: stripe listen --forward-to localhost:3000/api/webhooks/stripe
  * (CLI prints a whsec_... secret to use as STRIPE_WEBHOOK_SECRET for that session.)
  */
-import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
-function getStripe(): Stripe {
-  const key = process.env.STRIPE_SECRET_KEY;
-  if (!key?.trim()) {
-    throw new Error("STRIPE_SECRET_KEY is not set");
-  }
-  return new Stripe(key);
-}
+import { handleCheckoutSessionCompleted } from "./_utils/handle-checkout-session-completed";
+import { verifyStripeWebhook } from "./_utils/verify-webhook";
 
 export async function POST(request: Request) {
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -26,45 +20,27 @@ export async function POST(request: Request) {
     );
   }
 
-  let event: Stripe.Event;
+  const result = await verifyStripeWebhook(request, webhookSecret);
 
-  try {
-    const body = await request.text();
-    const headersList = await headers();
-    const signature = headersList.get("stripe-signature");
-
-    if (!signature) {
-      return NextResponse.json(
-        { message: "Missing stripe-signature header" },
-        { status: 400 }
-      );
-    }
-
-    event = getStripe().webhooks.constructEvent(body, signature, webhookSecret);
-  } catch (err) {
-    const message = err instanceof Error ? err.message : "Unknown error";
-    console.error("[stripe webhook] Signature verification failed:", message);
-    return NextResponse.json(
-      { message: "Webhook signature verification failed" },
-      { status: 400 }
-    );
+  if ("errorResponse" in result) {
+    return result.errorResponse;
   }
+
+  const { event } = result;
 
   switch (event.type) {
     case "checkout.session.completed": {
       const session = event.data.object as Stripe.Checkout.Session;
       if (session.payment_status === "paid") {
-        const { packageId, userId } = session.metadata ?? {};
-        console.log("[stripe webhook] checkout.session.completed", event.id, {
-          packageId,
-          userId,
-        });
-        // TODO: persist purchase / grant credits when user_credits or purchases table exists
+        const errorResponse = await handleCheckoutSessionCompleted(session);
+
+        if (errorResponse) {
+          return errorResponse;
+        }
       }
       break;
     }
     default:
-      // Unhandled event type; return 200 so Stripe does not retry
       break;
   }
 
