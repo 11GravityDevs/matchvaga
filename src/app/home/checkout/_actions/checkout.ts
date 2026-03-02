@@ -1,9 +1,9 @@
 "use server";
 
-import Stripe from "stripe";
 import { z } from "zod";
 
 import { createClient } from "@/lib/supabase/server";
+import { getStripe } from "@/lib/stripe/client";
 import { SITE_URL } from "@/constants/site";
 import { translateAuthError } from "@/utils/auth";
 import {
@@ -49,17 +49,16 @@ export async function createCheckoutSession(input: {
     return { success: false, error: "Faça login para continuar." };
   }
 
-  const secretKey = process.env.STRIPE_SECRET_KEY;
-
-  if (!secretKey || secretKey.trim() === "") {
+  let stripe;
+  try {
+    stripe = getStripe();
+  } catch {
     console.error("[createCheckoutSession] STRIPE_SECRET_KEY is not set");
     return { success: false, error: "Configuração de pagamento indisponível." };
   }
 
   const priceCentavos = getPackagePriceCentavos(packageId);
   const packageName = getPackageName(packageId);
-
-  const stripe = new Stripe(secretKey);
 
   try {
     const session = await stripe.checkout.sessions.create({
