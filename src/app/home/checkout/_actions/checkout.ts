@@ -8,10 +8,10 @@ import { SITE_URL } from "@/constants/site";
 import { translateAuthError } from "@/utils/auth";
 import {
   type CheckoutPackageId,
+  CHECKOUT_PACKAGE_IDS,
   getPackageName,
   getPackagePriceCentavos,
-  CHECKOUT_PACKAGE_IDS,
-} from "../_constants/packages";
+} from "@/constants/checkout-packages";
 
 const createCheckoutSessionSchema = z.object({
   packageId: z.enum(CHECKOUT_PACKAGE_IDS),

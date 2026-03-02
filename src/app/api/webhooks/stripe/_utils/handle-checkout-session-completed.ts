@@ -5,7 +5,7 @@ import {
   type CheckoutPackageId,
   getCreditsForPackage,
   isCheckoutPackageId,
-} from "@/app/home/checkout/_constants/packages";
+} from "@/constants/checkout-packages";
 import { createAdminSupabaseClient } from "@/lib/supabase/service";
 
 /**

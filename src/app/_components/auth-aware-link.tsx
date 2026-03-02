@@ -3,12 +3,13 @@
 import Link from "next/link";
 
 import { ROUTE_HOME_DASHBOARD, ROUTE_LOGIN } from "@/constants/routes";
-
-import { useIsLoggedIn } from "../_hooks/use-is-logged-in";
+import { useAuthContext } from "@/contexts/auth-context";
 
 interface AuthAwareLinkProps {
   loggedOutLabel: string;
   loggedInLabel: string;
+  loggedInHref?: string;
+  loggedOutHref?: string;
   icon?: React.ReactNode;
   className?: string;
   labelClassName?: string;
@@ -17,12 +18,17 @@ interface AuthAwareLinkProps {
 export function AuthAwareLink({
   loggedOutLabel,
   loggedInLabel,
+  loggedInHref,
+  loggedOutHref,
   icon,
   className,
   labelClassName,
 }: AuthAwareLinkProps) {
-  const isLoggedIn = useIsLoggedIn();
-  const href = isLoggedIn ? ROUTE_HOME_DASHBOARD : ROUTE_LOGIN;
+  const { isLoggedIn } = useAuthContext();
+
+  const href = isLoggedIn
+    ? (loggedInHref ?? ROUTE_HOME_DASHBOARD)
+    : (loggedOutHref ?? ROUTE_LOGIN);
   const label = isLoggedIn ? loggedInLabel : loggedOutLabel;
 
   return (
