@@ -2,10 +2,15 @@ import { getScoreColorToken } from "../_utils/analysis";
 
 interface ScoreRingProps {
   score: number;
+  size?: number;
+  fontSize?: number;
 }
 
-export function ScoreRing({ score }: ScoreRingProps) {
-  const size = 180;
+export function ScoreRing({
+  score,
+  size = 180,
+  fontSize = 44,
+}: ScoreRingProps) {
   const strokeWidth = 10;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
@@ -15,7 +20,10 @@ export function ScoreRing({ score }: ScoreRingProps) {
   const strokeColor = getScoreColorToken(score);
 
   return (
-    <div className="relative size-[180px]">
+    <div
+      className="relative"
+      style={{ width: `${size}px`, height: `${size}px` }}
+    >
       <svg width={size} height={size} className="rotate-135">
         <circle
           cx={size / 2}
@@ -40,7 +48,9 @@ export function ScoreRing({ score }: ScoreRingProps) {
         />
       </svg>
       <div className="absolute inset-0 flex items-center justify-center">
-        <span className="text-score">{score}%</span>
+        <span className="text-score" style={{ fontSize: `${fontSize}px` }}>
+          {score}%
+        </span>
       </div>
     </div>
   );

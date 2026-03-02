@@ -286,29 +286,31 @@ export function StepGapAnalysis() {
               </div>
             </div>
 
-            {/* Action buttons — shared with score column */}
-            <div className="flex shrink-0 items-center justify-between card-content-padding py-4">
-              <Button
-                type="button"
-                size="brand"
-                variant="outline"
-                onClick={() => setStep(1)}
-                className="gap-1.5"
-                disabled={isGenerating}
-              >
-                <RefreshCw className="h-4 w-4" />
-                Nova Análise
-              </Button>
+            {/* Action buttons — mesma largura/estrutura do card do próximo step */}
+            <div className="flex shrink-0 flex-col gap-3 p-6">
+              <div className="flex gap-3">
+                <Button
+                  type="button"
+                  size="brand"
+                  variant="outline"
+                  onClick={() => setStep(1)}
+                  className="flex-1 gap-1.5"
+                  disabled={isGenerating}
+                >
+                  <RefreshCw className="h-4 w-4" />
+                  Nova Análise
+                </Button>
 
-              <Button
-                size="brand"
-                onClick={handleGenerate}
-                disabled={!analysisId || isGenerating}
-                className="gap-1.5 rounded-lg bg-accent-brand px-7 py-3 text-base font-bold hover:bg-accent-brand-hover"
-              >
-                <Sparkles className="h-4 w-4" />
-                Gerar Currículo
-              </Button>
+                <Button
+                  size="brand"
+                  onClick={handleGenerate}
+                  disabled={!analysisId || isGenerating}
+                  className="flex-1 gap-1.5 rounded-lg bg-accent-brand text-base font-bold hover:bg-accent-brand-hover"
+                >
+                  <Sparkles className="h-4 w-4" />
+                  Gerar Currículo
+                </Button>
+              </div>
             </div>
           </div>
         </div>

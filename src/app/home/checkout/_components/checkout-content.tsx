@@ -156,9 +156,12 @@ export function CheckoutContent() {
                     </span>
                   </div>
 
-                  <span className="text-small text-muted-foreground">
-                    {pkg.count} análises • R${" "}
-                    {pkg.pricePerAnalysis.toFixed(2).replace(".", ",")} cada
+                  <span className="text-md text-muted-foreground">
+                    <span className="font-semibold text-accent-brand">
+                      {pkg.count} análises
+                    </span>{" "}
+                    • R$ {pkg.pricePerAnalysis.toFixed(2).replace(".", ",")}{" "}
+                    cada
                   </span>
 
                   {pkg.savingsPercent > 0 && (

@@ -1,12 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { File, FileText, Loader2, RefreshCw, Send } from "lucide-react";
+import { File, FileText, Loader2, MoveRight, RefreshCw } from "lucide-react";
 
-import { applyCvRefinementInstruction } from "@/app/actions/chat";
 import { generateOptimizedDocument } from "@/app/actions/document";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   useNewAnalysis,
   WIZARD_STEPS,
@@ -14,6 +12,7 @@ import {
 import { getScoreFeedback } from "../_utils/analysis";
 import { StepIndicator } from "@/components/shared/step-indicator";
 import { ResumePreviewDocument } from "./resume-preview-document";
+import { ScoreRing } from "./score-ring";
 import { cn } from "@/utils/style";
 
 const FEEDBACK_BADGE_CLASSES = {
@@ -24,28 +23,21 @@ const FEEDBACK_BADGE_CLASSES = {
   low: "border-accent-low-border bg-accent-low-light text-accent-low-text",
 } as const;
 
-interface ChatMessage {
-  role: "user" | "assistant";
-  content: string;
-}
-
 export function StepPreviewExport() {
   const {
     jobRole,
     resumeData,
     optimizedResumeData,
-    setOptimizedResumeData,
     analysisId,
+    score,
     optimizedScore,
+    matchedSkills,
+    selectedTechnicalSkills,
+    selectedBehavioralSkills,
     reset,
   } = useNewAnalysis();
 
   const displayResumeData = optimizedResumeData ?? resumeData;
-
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [input, setInput] = useState("");
-  const [isSending, setIsSending] = useState(false);
-  const [chatError, setChatError] = useState<string | null>(null);
 
   const [downloadingFormat, setDownloadingFormat] = useState<
     "pdf" | "docx" | null
@@ -78,51 +70,17 @@ export function StepPreviewExport() {
     }
   }
 
-  async function handleSend() {
-    const trimmed = input.trim();
-    if (!trimmed || !analysisId || !displayResumeData || isSending) return;
+  const initialScore = score ?? 0;
+  const finalScore = optimizedScore ?? score ?? 0;
+  const hasGain = finalScore > initialScore;
+  const gainPoints = hasGain ? finalScore - initialScore : 0;
 
-    setChatError(null);
-    setInput("");
-    const userMessage: ChatMessage = { role: "user", content: trimmed };
-    setMessages((prev) => [...prev, userMessage]);
-    setIsSending(true);
-
-    const prevMessages = messages.map((m) => ({
-      role: m.role,
-      content: m.content,
-    }));
-
-    const result = await applyCvRefinementInstruction(
-      analysisId,
-      displayResumeData,
-      trimmed,
-      prevMessages
-    );
-    setIsSending(false);
-
-    if (!result.success) {
-      setChatError(result.error ?? "Erro ao aplicar alteração.");
-      setMessages((prev) => prev.slice(0, -1));
-      setInput(trimmed);
-      return;
-    }
-
-    if (result.modifiedResume) {
-      setOptimizedResumeData(result.modifiedResume);
-    }
-    setMessages((prev) => [
-      ...prev,
-      {
-        role: "assistant" as const,
-        content: result.summary ?? "Alterações aplicadas.",
-      },
-    ]);
-  }
-
-  const displayScore = optimizedScore ?? 0;
-  const feedback = getScoreFeedback(displayScore);
+  const feedback = getScoreFeedback(finalScore);
   const feedbackBadgeClasses = FEEDBACK_BADGE_CLASSES[feedback.variant];
+
+  const skillsPresentCount = matchedSkills.length;
+  const skillsAddedCount =
+    selectedTechnicalSkills.length + selectedBehavioralSkills.length;
 
   return (
     <div className="flex flex-1 flex-col gap-4 overflow-hidden page-padding">
@@ -152,7 +110,7 @@ export function StepPreviewExport() {
                 )}
               >
                 <span className="text-xs font-semibold">
-                  {displayScore}% Match
+                  {finalScore}% Match
                 </span>
               </div>
             </div>
@@ -169,158 +127,143 @@ export function StepPreviewExport() {
             </div>
           </div>
 
-          {/* Right — Refinement chat (fixed, non-scrolling) */}
+          {/* Right — Painel de dopamina (Resultado da Otimização) */}
           <div className="flex w-column shrink-0 flex-col self-stretch overflow-hidden rounded-xl border border-border bg-card">
-            {/* Chat header */}
-            <div className="flex shrink-0 flex-col gap-1 border-b border-border card-header-padding">
-              <span className="text-base font-semibold text-foreground">
-                Refinamento
-              </span>
-              <span className="text-small-leading text-muted-foreground">
-                Ajuste o currículo com instruções
-              </span>
-            </div>
-
-            {/* Messages */}
-            <div className="flex flex-1 flex-col gap-3 overflow-auto card-content-padding">
-              {messages.length === 0 && (
-                <p className="text-sm text-muted-foreground">
-                  Envie uma mensagem para obter sugestões de melhoria no
-                  currículo.
-                </p>
-              )}
-              {messages.map((msg, i) => (
-                <div
-                  key={i}
-                  className={
-                    msg.role === "user"
-                      ? "flex justify-end"
-                      : "flex justify-start"
-                  }
-                >
-                  <div
-                    className={
-                      msg.role === "assistant"
-                        ? "flex max-w-[90%] flex-col gap-1 rounded-xl rounded-bl-md bg-muted px-4 py-3"
-                        : "flex max-w-[90%] flex-col gap-1 rounded-xl rounded-br-md bg-accent-brand px-4 py-3"
-                    }
-                  >
-                    <span
-                      className={
-                        msg.role === "assistant"
-                          ? "text-badge text-accent-brand"
-                          : "text-badge text-white/70"
-                      }
-                    >
-                      {msg.role === "assistant" ? "Assistente" : "Você"}
-                    </span>
-                    <p
-                      className={
-                        msg.role === "assistant"
-                          ? "text-small-leading leading-relaxed text-foreground"
-                          : "text-small-leading leading-relaxed text-white"
-                      }
-                    >
-                      {msg.content}
-                    </p>
-                  </div>
-                </div>
-              ))}
-              {isSending && (
-                <div className="flex justify-start">
-                  <div className="flex items-center gap-2 rounded-xl rounded-bl-md bg-muted px-4 py-3">
-                    <Loader2 className="h-4 w-4 animate-spin text-accent-brand" />
-                    <span className="text-sm text-muted-foreground">
-                      Pensando...
-                    </span>
-                  </div>
-                </div>
-              )}
-              {chatError && (
-                <p className="text-sm text-destructive">{chatError}</p>
-              )}
-            </div>
-
-            {/* Input row */}
-            <div className="flex shrink-0 items-center gap-2 px-7 pt-0 pb-7">
-              <div className="flex flex-1 items-center rounded-lg border border-input bg-background px-3">
-                <Input
-                  className="h-10 flex-1 border-0 bg-transparent shadow-none focus-visible:ring-0"
-                  placeholder={
-                    displayResumeData
-                      ? "Digite uma instrução..."
-                      : "Aguarde o currículo carregar..."
-                  }
-                  disabled={!displayResumeData}
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault();
-                      handleSend();
-                    }
-                  }}
-                />
+            {/* Panel header — mesmo estilo do header de apresentação de currículo */}
+            <div className="flex shrink-0 items-center justify-between border-b border-border card-header-padding">
+              <div className="flex flex-col gap-0.5">
+                <span className="text-base font-semibold text-foreground">
+                  Resultado da Otimização
+                </span>
               </div>
+            </div>
+
+            <div className="flex flex-1 flex-col gap-5 overflow-hidden card-content-padding">
+              {/* Score row: inicial → final + gain badge */}
+              <div className="flex items-center justify-between gap-2 self-end">
+                {true && (
+                  <span className="rounded-lg bg-accent-success px-3 py-2 text-xs font-semibold text-on-accent-success">
+                    +{gainPoints}%
+                  </span>
+                )}
+              </div>
+
+              <div className="flex flex-col items-center gap-4">
+                <div className="flex w-full items-center justify-between gap-4">
+                  <div className="flex flex-1 flex-col items-center gap-1">
+                    <ScoreRing score={initialScore} size={120} fontSize={28} />
+                    <span className="text-small-leading text-muted-foreground">
+                      Antes
+                    </span>
+                  </div>
+
+                  <MoveRight size={40} />
+
+                  <div className="flex flex-1 flex-col items-center gap-1">
+                    <ScoreRing score={finalScore} size={120} fontSize={28} />
+                    <span className="text-small-leading text-muted-foreground">
+                      Depois
+                    </span>
+                  </div>
+                </div>
+                <div
+                  className={cn(
+                    "flex items-center justify-center rounded-full border px-4 py-1.5",
+                    feedbackBadgeClasses
+                  )}
+                >
+                  <span className="text-small-semibold">{feedback.label}</span>
+                </div>
+              </div>
+
+              {/* Skills breakdown (same structure as step-gap-analysis) */}
+              <div className="flex flex-col gap-2.5 border-t border-border pt-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <div className="h-2 w-2 shrink-0 rounded-full bg-accent-success" />
+                    <span className="text-small-leading text-muted-foreground">
+                      Habilidades presentes
+                    </span>
+                  </div>
+                  <span className="text-small-semibold font-bold text-foreground">
+                    {skillsPresentCount}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <div className="h-2 w-2 shrink-0 rounded-full bg-accent-success" />
+                    <span className="text-small-leading text-muted-foreground">
+                      Habilidades adicionadas
+                    </span>
+                  </div>
+                  <span className="text-small-semibold font-bold text-accent-success">
+                    {skillsAddedCount}
+                  </span>
+                </div>
+              </div>
+
+              {/* Copy block — comentário principal (versão azul consistente com o design) */}
+              <div className="rounded-lg bg-accent-brand-light/40 px-4 py-3">
+                <p className="text-small-leading leading-relaxed text-blue-800">
+                  Você saiu de{" "}
+                  <span className="font-semibold">{initialScore}%</span> para{" "}
+                  <span className="font-semibold">{finalScore}%</span> de
+                  compatibilidade nesta vaga. Continue repetindo esse fluxo em
+                  todas as vagas para{" "}
+                  <span className="font-semibold">multiplicar</span> suas
+                  chances.
+                </p>
+              </div>
+            </div>
+
+            {/* Actions (inside card) */}
+            <div className="flex shrink-0 flex-col gap-3 p-6">
+              <div className="flex gap-3">
+                <Button
+                  type="button"
+                  size="brand"
+                  variant="outline"
+                  onClick={reset}
+                  className="flex-1 gap-1.5"
+                >
+                  <RefreshCw className="h-4 w-4" />
+                  Nova Análise
+                </Button>
+                <Button
+                  size="brand"
+                  variant="outline"
+                  disabled={!displayResumeData || downloadingFormat !== null}
+                  onClick={() => handleDownload("docx")}
+                  className="flex-1 gap-1.5"
+                >
+                  {downloadingFormat === "docx" ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <FileText className="h-4 w-4" />
+                  )}
+                  Download DOCX
+                </Button>
+              </div>
+              {downloadError && (
+                <span className="text-sm text-destructive">
+                  {downloadError}
+                </span>
+              )}
               <Button
-                type="button"
-                size="icon"
-                className="shrink-0 rounded-lg bg-accent-brand hover:bg-accent-brand-hover"
-                disabled={!input.trim() || isSending || !displayResumeData}
-                onClick={handleSend}
+                size="brand"
+                disabled={!displayResumeData || downloadingFormat !== null}
+                onClick={() => handleDownload("pdf")}
+                className="w-full gap-1.5"
               >
-                <Send className="h-4 w-4" />
+                {downloadingFormat === "pdf" ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <File className="h-4 w-4" />
+                )}
+                Download PDF
               </Button>
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Footer action row */}
-      <div className="flex shrink-0 items-center justify-between border-border">
-        <Button
-          type="button"
-          size="lg"
-          variant="outline"
-          onClick={reset}
-          className="gap-1.5"
-        >
-          <RefreshCw className="h-4 w-4" />
-          Nova Análise
-        </Button>
-
-        <div className="flex items-center gap-3">
-          {downloadError && (
-            <span className="text-sm text-destructive">{downloadError}</span>
-          )}
-          <Button
-            size="brand"
-            variant="outline"
-            disabled={!displayResumeData || downloadingFormat !== null}
-            onClick={() => handleDownload("docx")}
-            className="gap-1.5"
-          >
-            {downloadingFormat === "docx" ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <FileText className="h-4 w-4" />
-            )}
-            Download DOCX
-          </Button>
-
-          <Button
-            size="brand"
-            disabled={!displayResumeData || downloadingFormat !== null}
-            onClick={() => handleDownload("pdf")}
-            className="gap-1.5"
-          >
-            {downloadingFormat === "pdf" ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <File className="h-4 w-4" />
-            )}
-            Download PDF
-          </Button>
         </div>
       </div>
     </div>
