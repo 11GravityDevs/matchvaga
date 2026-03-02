@@ -123,41 +123,32 @@ export async function POST(request: Request) {
             .eq("user_id", userId)
             .single();
 
-          if (creditsRow != null) {
-            const { error: updateError } = await supabase
-              .from("user_credits")
-              .update({
-                credits: creditsRow.credits + creditsToGrant,
-                updated_at: new Date().toISOString(),
-              })
-              .eq("user_id", userId);
+          if (creditsRow == null) {
+            console.error("[stripe webhook] user_credits not found", userId);
 
-            if (updateError) {
-              console.error(
-                "[stripe webhook] user_credits update error:",
-                updateError.message
-              );
-              return NextResponse.json(
-                { message: "Database error" },
-                { status: 500 }
-              );
-            }
-          } else {
-            const { error: insertError } = await supabase
-              .from("user_credits")
-              .insert({ user_id: userId, credits: creditsToGrant });
+            return NextResponse.json(
+              { message: "Database error" },
+              { status: 500 }
+            );
+          }
 
-            if (insertError) {
-              console.error(
-                "[stripe webhook] user_credits insert error:",
-                insertError.message
-              );
+          const { error: updateError } = await supabase
+            .from("user_credits")
+            .update({
+              credits: creditsRow.credits + creditsToGrant,
+              updated_at: new Date().toISOString(),
+            })
+            .eq("user_id", userId);
 
-              return NextResponse.json(
-                { message: "Database error" },
-                { status: 500 }
-              );
-            }
+          if (updateError) {
+            console.error(
+              "[stripe webhook] user_credits update error:",
+              updateError.message
+            );
+            return NextResponse.json(
+              { message: "Database error" },
+              { status: 500 }
+            );
           }
         } catch (err) {
           const message = err instanceof Error ? err.message : "Unknown error";
