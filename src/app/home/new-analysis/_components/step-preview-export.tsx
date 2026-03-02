@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { FileCheck, FileText, Loader2, RefreshCw, Send } from "lucide-react";
+import { File, FileText, Loader2, RefreshCw, Send } from "lucide-react";
 
 import { applyCvRefinementInstruction } from "@/app/actions/chat";
 import { generateOptimizedDocument } from "@/app/actions/document";
@@ -317,7 +317,7 @@ export function StepPreviewExport() {
             {downloadingFormat === "pdf" ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
-              <FileCheck className="h-4 w-4" />
+              <File className="h-4 w-4" />
             )}
             Download PDF
           </Button>
