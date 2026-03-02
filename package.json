@@ -26,6 +26,7 @@
     "docx": "^9.5.3",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.574.0",
+    "mammoth": "^1.11.0",
     "next": "16.1.6",
     "openai": "^6.22.0",
     "radix-ui": "^1.4.3",
