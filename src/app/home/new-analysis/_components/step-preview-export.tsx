@@ -1,13 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  FileCheck,
-  FileText,
-  Loader2,
-  MoveRight,
-  RefreshCw,
-} from "lucide-react";
+import { File, FileText, Loader2, MoveRight, RefreshCw } from "lucide-react";
 
 import { generateOptimizedDocument } from "@/app/actions/document";
 import { Button } from "@/components/ui/button";
@@ -264,7 +258,7 @@ export function StepPreviewExport() {
                 {downloadingFormat === "pdf" ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
-                  <FileCheck className="h-4 w-4" />
+                  <File className="h-4 w-4" />
                 )}
                 Download PDF
               </Button>

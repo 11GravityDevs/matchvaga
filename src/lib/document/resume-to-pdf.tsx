@@ -56,9 +56,13 @@ const styles = StyleSheet.create({
   separator: {
     height: 1,
     backgroundColor: colors.border,
-    marginVertical: space.md,
+    marginTop: space.md,
+    marginBottom: space.md,
   },
   section: {
+    marginBottom: 0,
+  },
+  sectionLast: {
     marginBottom: space.md,
   },
   sectionTitle: {
@@ -82,6 +86,9 @@ const styles = StyleSheet.create({
     marginBottom: space.sm,
     fontSize: 10,
   },
+  skillItemLast: {
+    marginBottom: 0,
+  },
   skillBullet: {
     color: colors.foreground,
   },
@@ -94,6 +101,9 @@ const styles = StyleSheet.create({
   },
   experienceItem: {
     marginBottom: space.md,
+  },
+  experienceItemLast: {
+    marginBottom: 0,
   },
   jobLine: {
     flexDirection: "row",
@@ -120,6 +130,9 @@ const styles = StyleSheet.create({
   },
   educationItem: {
     marginBottom: space.md,
+  },
+  educationItemLast: {
+    marginBottom: 0,
   },
   eduLine: {
     flexDirection: "row",
@@ -176,7 +189,15 @@ export function ResumeDocument({ data }: ResumeDocumentProps) {
               <Text style={styles.sectionTitle}>Habilidades Técnicas</Text>
               <View style={styles.skillList}>
                 {skillsForDisplay.map((cat, i) => (
-                  <View key={i} style={styles.skillItem}>
+                  <View
+                    key={i}
+                    style={[
+                      styles.skillItem,
+                      ...(i === skillsForDisplay.length - 1
+                        ? [styles.skillItemLast]
+                        : []),
+                    ]}
+                  >
                     <Text style={styles.skillBullet}>• </Text>
                     <Text style={styles.skillCategoryLabel}>
                       {cat.category}:{" "}
@@ -215,7 +236,15 @@ export function ResumeDocument({ data }: ResumeDocumentProps) {
                   .filter(Boolean);
 
                 return (
-                  <View key={i} style={styles.experienceItem}>
+                  <View
+                    key={i}
+                    style={[
+                      styles.experienceItem,
+                      ...(hasEducation && i === data.experience.length - 1
+                        ? [styles.experienceItemLast]
+                        : []),
+                    ]}
+                  >
                     <View style={styles.jobLine}>
                       <Text style={styles.jobTitle}>
                         {(exp.jobTitle || "—") + " "}
@@ -240,7 +269,7 @@ export function ResumeDocument({ data }: ResumeDocumentProps) {
         )}
 
         {hasEducation && (
-          <View style={styles.section}>
+          <View style={[styles.section, styles.sectionLast]}>
             <Text style={styles.sectionTitle}>Formação</Text>
             {data.education.map((edu, i) => {
               const dateEnd =
@@ -263,7 +292,15 @@ export function ResumeDocument({ data }: ResumeDocumentProps) {
                 : [];
 
               return (
-                <View key={i} style={styles.educationItem}>
+                <View
+                  key={i}
+                  style={[
+                    styles.educationItem,
+                    ...(i === data.education.length - 1
+                      ? [styles.educationItemLast]
+                      : []),
+                  ]}
+                >
                   <View style={styles.eduLine}>
                     <Text style={styles.course}>
                       {(edu.course || "—") + " "}

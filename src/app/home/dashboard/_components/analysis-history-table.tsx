@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Download, FileCheck, FileText, Loader2, Play } from "lucide-react";
+import { Download, File, FileText, Loader2, Play } from "lucide-react";
 
 import {
   Dialog,
@@ -283,7 +283,7 @@ export function AnalysisHistoryTable({
                 openAnalysisId && handleDownload(openAnalysisId, "pdf")
               }
             >
-              <FileCheck className="h-4 w-4" />
+              <File className="h-4 w-4" />
               Baixar PDF
             </Button>
           </DialogFooter>

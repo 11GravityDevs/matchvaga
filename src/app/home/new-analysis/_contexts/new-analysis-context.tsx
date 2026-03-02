@@ -126,6 +126,7 @@ export function NewAnalysisProvider({
   const [hasFinishedContinueLoad, setHasFinishedContinueLoad] = useState(false);
 
   const continueLoadStartedRef = useRef(false);
+  const lastLoadedContinueIdRef = useRef<string | null>(null);
 
   const [step, setStep] = useState<WizardStep>(INITIAL_STATE.step);
 
@@ -224,6 +225,18 @@ export function NewAnalysisProvider({
   useEffect(() => {
     if (
       !continueAnalysisId ||
+      continueAnalysisId === lastLoadedContinueIdRef.current
+    )
+      return;
+    queueMicrotask(() => {
+      setHasFinishedContinueLoad(false);
+      continueLoadStartedRef.current = false;
+    });
+  }, [continueAnalysisId]);
+
+  useEffect(() => {
+    if (
+      !continueAnalysisId ||
       hasFinishedContinueLoad ||
       continueLoadStartedRef.current
     )
@@ -251,6 +264,7 @@ export function NewAnalysisProvider({
       });
       setOptimizedScore(analysis.optimized_score ?? null);
       setStep(2);
+      lastLoadedContinueIdRef.current = continueAnalysisId;
       setHasFinishedContinueLoad(true);
       router.replace(ROUTE_HOME_NEW_ANALYSIS);
     });
