@@ -7,9 +7,15 @@ alwaysApply: false
 
 Use esta estrutura ao criar ou atualizar issues no Linear para que contexto, escopo e dicas de implementação fiquem claros.
 
+Sempre que for criar ou atualizar uma issue, use o MCP do Linear (ferramenta `save_issue`).
+
+As issues também devem receber uma **prioridade numérica de 1 a 4**, onde `1` é muito importante e `4` é pouco importante; essa prioridade é um campo próprio da issue no Linear (não entra no título nem na descrição) e será sempre informada por você no momento de criar ou atualizar a tarefa.
+
 ## Estrutura do template
 
 Use **headings markdown** (`##`) nos títulos das seções — o Linear renderiza headings com margem vertical, evitando texto “colado”. Use duas quebras de linha entre cada seção.
+
+Toda tarefa deve ter um **título claro e objetivo**, que resuma em uma frase o que será feito (ex.: `Implementar tela de checkout do plano Pro`).
 
 ## 🎯 Contexto
 
@@ -48,6 +54,8 @@ Atribua o label correto a cada issue conforme o tipo:
 - **Ícones:** Use 🎯 (Contexto), ✅ (Critérios de aceite), 🔗 (Notas de implementação) nos títulos das seções.
 - **Títulos como heading:** Use `##` antes do ícone e do nome da seção (ex.: `## 🎯 Contexto`) para o Linear exibir margem vertical entre as seções; do contrário o texto fica colado.
 - **Labels** são obrigatórios; atribua um entre Bug, Feature, Business, QA ou Marketing por tarefa.
+- **Criação via MCP:** Crie e atualize issues utilizando sempre o MCP do Linear (`save_issue`), incluindo título, descrição no template acima, labels corretos **e a prioridade (campo próprio de prioridade do Linear, de 1–4, definida por você)**.
+- **Título obrigatório:** Não deixe tarefas sem título; o título deve deixar claro o objetivo principal da issue.
 - Mantenha o contexto breve, mas suficiente para quem for pegar a tarefa.
 - Notas de implementação são opcionais, mas recomendadas quando desbloqueiam ou orientam a implementação.
 - **Idioma:** Descrições de issues no Linear devem ser sempre em **português (PT-BR)**.
