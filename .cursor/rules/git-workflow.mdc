@@ -1,25 +1,15 @@
 ---
-description: Git workflow — branches, commits, PRs; points to branch, commit, and PR rules
+description: Índice Git — start/finish issue, commits, PR
 alwaysApply: false
 ---
 
 # Git Workflow
 
-Single entry point for git-related operations. Use the rule that matches the scenario.
+| Cenário | Regra |
+|---------|--------|
+| Começar tarefa | `start-issue.mdc` |
+| Commitar + abrir PR | `finish-issue.mdc` |
+| Mensagem de commit | `commit-messages.mdc` |
+| Template PR | `pull-request-template.mdc` |
 
-## When to use which rule
-
-| Scenario | Rule |
-|----------|------|
-| Starting a task / creating a branch | `linear-task-branch.mdc` |
-| Writing commit messages | `commit-messages.mdc` |
-| Creating or updating a PR | `pull-request-template.mdc` |
-
-## Conventions
-
-- **Default branch:** `main`. Use the repo default; confirm in the project if unsure. Do not force-push to the default branch.
-- **Branch prefix:** Must be `feat/`, `fix/`, or `chore/` (no username prefix). See `linear-task-branch.mdc`.
-
-## Tooling
-
-Pre-commit runs **lint-staged** (ESLint fix + Prettier format). See `matchvaga-project-overview.mdc` (DX Tooling).
+Branch padrão: `main`. Pre-commit: lint-staged.

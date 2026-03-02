@@ -1,41 +1,17 @@
 ---
-description: Colocation por rota — _utils, _hooks, _constants, _contexts; quando usar compartilhado vs específico de rota
+description: Onde colocar utils, constants, hooks — rota vs compartilhado
 alwaysApply: true
 ---
 
-# Regra de Colocation
+# Colocation
 
-## Princípio central
+**Princípio:** Não coloque utils/constants/hooks dentro de arquivo de componente, exceto se trivial (1–8 linhas) ou constante única usada só ali.
 
-Utils, constants, hooks e components **NÃO** devem viver dentro de arquivos de componente, EXCETO quando:
-- O comportamento for simples (ex.: 1–3 linhas)
-- Não adicionar volume significativo ao arquivo
-- For uma única constante usada apenas por aquele componente (ou seus filhos) — não crie um arquivo de constants dedicado para uma única constante
+| Escopo | Local |
+|--------|--------|
+| Rota única | `app/<route>/_utils/`, `_hooks/`, `_constants/`, `_contexts/`, `_actions/` |
+| 2+ rotas | `src/utils/`, `src/hooks/`, `src/constants/`, `src/contexts/` |
 
-## Localização por escopo
+**Locais de rota:** _utils (funções puras), _hooks, _constants, _contexts, _actions. Imports relativos (`./_hooks/...`). Server Actions compartilhadas: `@/app/actions/`.
 
-| Escopo | Local | Exemplo |
-|--------|-------|---------|
-| **Rota única** | `app/<route>/_utils/`, `_hooks/`, `_constants/`, `_contexts/` | `(auth)/login/_hooks/use-login.ts` |
-| **Múltiplas rotas (2+)** | `src/utils/`, `src/hooks/`, `src/constants/`, `src/contexts/` | `src/hooks/use-resume-form.ts` |
-
-## Pastas locais de rota
-
-Crie estas pastas dentro de uma rota quando o código pertencer apenas àquela rota:
-
-- `_utils/` — Funções puras (formatar, validar, fazer parse) usadas somente nessa rota
-- `_hooks/` — Hooks customizados usados somente nessa rota
-- `_constants/` — Constantes usadas somente nessa rota
-- `_contexts/` — Providers de React Context usados somente nessa rota
-- `_actions/` — Server Actions usadas somente nessa rota (ex.: `dashboard/_actions/analysis.ts`)
-
-**Imports:** Use paths relativos: `./_hooks/use-login`, `../_utils/route`, `../../_contexts/onboarding-context` (sem path aliases para código local de rota). Para Server Actions compartilhadas, use `@/app/actions/` ou `src/app/actions/`.
-
-## Constants
-
-- **Constants vs Utils:** Constants = dados estáticos (rotas, config, magic strings, storage keys). Utils = funções puras (formatação, validação, parsing).
-- **Quando mover:** Mesma lógica de escopo da tabela — 2+ rotas → `src/constants/<domain>.ts`; rota única → `_constants/`; arquivo único → mantenha inline.
-- **Constante única:** Não crie um arquivo de constants dedicado para apenas uma constante; mantenha no componente/módulo dono.
-- **Exemplo:** `import { ROUTE_LOGIN } from "@/constants/routes"` — prefira isso a usar diretamente `router.push("/login")`.
-
-Veja `check-before-add.mdc` antes de adicionar novos utils, constants, hooks ou components.
+**Constants vs Utils:** Constants = dados estáticos; Utils = funções puras. 2+ rotas → `src/constants/<domain>.ts`; rota única → `_constants/`; uma constante → inline. Antes de adicionar: `check-before-add.mdc`.

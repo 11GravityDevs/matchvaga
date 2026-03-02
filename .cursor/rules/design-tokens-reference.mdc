@@ -1,131 +1,26 @@
 ---
-description: Design tokens — all in globals.css; use semantic utilities
+description: Tokens em globals.css — cores, tipografia, spacing, layout
 globs: src/**/*.css,src/**/*.tsx
 alwaysApply: false
 ---
 
-# Design Tokens Reference
+# Design Tokens
 
-All design tokens live in `globals.css`. Use semantic utility classes directly — no imports.
+Tudo em `globals.css`. Usar classes semânticas; não hardcode hex.
 
----
+<example>
+✅ primary → bg-primary, text-primary-foreground
+✅ destructive → bg-destructive, text-on-destructive
+✅ accent-brand → bg-accent-brand, text-on-accent-brand, hover:bg-accent-brand-hover
+❌ bg-[#2563eb], px-[13px]
+</example>
 
-## Color Tokens (globals.css → Tailwind)
+**Cores (Tailwind):** primary, primary-foreground, secondary, muted, muted-foreground, accent, accent-brand, on-accent-brand, accent-brand-hover, accent-brand-light, accent-success, destructive, on-destructive, foreground, background, card, border, input, ring, sidebar, sidebar-foreground, sidebar-border.
 
-| Token | Usage | Tailwind |
-|-------|-------|----------|
-| `--primary` | Primary actions, brand, active nav | `bg-primary`, `text-primary` |
-| `--primary-foreground` | Text on primary | `text-primary-foreground` |
-| `--secondary` | Secondary surfaces | `bg-secondary` |
-| `--muted` | Subtle backgrounds | `bg-muted` |
-| `--muted-foreground` | Secondary text, placeholders | `text-muted-foreground` |
-| `--accent` | Hover states | `bg-accent` |
-| `--accent-brand` | Brand accent (blue) | `bg-accent-brand` |
-| `--on-accent-brand` | Text on solid accent-brand | `text-on-accent-brand` |
-| `--accent-brand-hover` | Brand accent hover | `hover:bg-accent-brand-hover` |
-| `--accent-brand-light` | Active nav background | `bg-accent-brand-light` |
-| `--accent-success` | Success states | `bg-accent-success` |
-| `--destructive` | Danger actions | `bg-destructive`, `text-destructive` |
-| `--on-destructive` | Text on solid destructive | `text-on-destructive` |
-| `--foreground` | Primary text | `text-foreground` |
-| `--background` | Page background | `bg-background` |
-| `--card` | Card surfaces | `bg-card` |
-| `--border` | Borders, dividers | `border-border` |
-| `--input` | Input borders | `border-input` |
-| `--ring` | Focus rings | `ring-ring` |
-| `--sidebar` | Sidebar background | `bg-sidebar` |
-| `--sidebar-foreground` | Sidebar text | `text-sidebar-foreground` |
-| `--sidebar-border` | Sidebar divider | `border-sidebar-border` |
+**Tipografia:** text-page-title, text-page-subtitle, text-section-header, text-section-header-large, text-card-title, text-card-description, text-form-label, text-small, text-small-medium, text-small-semibold, text-caption-leading, text-kpi, text-score, text-hero, text-badge, text-cta-title. Font: Inter (font-sans).
 
-**Note:** Use design tokens only; never hardcode hex values.
+**Spacing:** page-padding, section-gap, column-gap, card-header-padding, card-content-padding, table-cell-padding, tip-banner-padding, footer-padding. Escala: gap-1–12, p-1–12.
 
-```tsx
-// ✅ Good: design tokens
-<div className="bg-primary text-primary-foreground" />
-<div className="bg-accent-brand text-on-accent-brand hover:bg-accent-brand-hover" />
-<div className="bg-destructive text-on-destructive" />
+**Layout:** w-form, w-content, max-w-content, w-sidebar, w-column, w-action; max-w-hero-title, max-w-login-form, max-w-preview-title, max-w-section-header, max-w-faq, max-w-cta, max-w-footer-brand.
 
-// ❌ Bad: hardcoded values
-<div className="bg-[#2563eb] text-white" />
-```
-
----
-
-## Typography (semantic utilities in globals.css)
-
-| Role | Utility |
-|------|---------|
-| Page title | `text-page-title` |
-| Page subtitle | `text-page-subtitle` |
-| Section header | `text-section-header` |
-| Section header large | `text-section-header-large` |
-| Card title | `text-card-title` |
-| Card description | `text-card-description` |
-| Section title | `text-section-title` |
-| Section item label | `text-section-item-label` |
-| Form label | `text-form-label` |
-| Sub label | `text-sub-label` |
-| Small | `text-small`, `text-small-medium`, `text-small-semibold`, `text-small-leading` |
-| Caption | `text-caption-leading` |
-| KPI value | `text-kpi` |
-| Score | `text-score` |
-| Hero | `text-hero`, `text-hero-large` |
-| Badge | `text-badge` |
-| CTA title | `text-cta-title` |
-
-**Font:** Inter via `@fontsource-variable/inter` (self-hosted). Use `font-sans` or `var(--font-sans)`.
-
----
-
-## Spacing (semantic utilities)
-
-| Utility | Usage |
-|---------|-------|
-| `page-padding` | Page-level container |
-| `section-gap` | Gap between major sections |
-| `column-gap` | Two-column layouts |
-| `card-header-padding` | Card header |
-| `card-content-padding` | Card body |
-| `table-cell-padding` | Table cells |
-| `tip-banner-padding` | Tip banners |
-| `footer-padding` | Footer action row |
-
-Standard Tailwind scale: `gap-1`–`gap-12`, `p-1`–`p-12`.
-
----
-
-## Layout (semantic utilities)
-
-| Utility | Usage |
-|---------|-------|
-| `w-form` | Form/card width |
-| `w-content` | Content width |
-| `max-w-content` | Max content (centered) |
-| `w-sidebar` | Sidebar width |
-| `w-column` | Column in two-column |
-| `w-action` | Action column |
-| `max-w-hero-title`, `max-w-hero-desc` | Hero section |
-| `max-w-login-form`, `max-w-login-hero-title` | Login |
-| `max-w-preview-title`, `max-w-preview-desc` | Onboarding preview |
-| `max-w-section-header`, `max-w-section-desc` | Section headers |
-| `max-w-faq`, `max-w-cta`, `max-w-cta-desc`, `max-w-footer-brand` | Various |
-
----
-
-## Radius
-
-Use `rounded-md`, `rounded-lg`, `rounded-xl` — or `card-base` for cards.
-
----
-
-## No Shadows
-
-Cards and surfaces: `rounded-xl border border-border bg-card`. No shadows.
-
----
-
-## Tailwind v4
-
-- `@import "tailwindcss"` in globals.css (no `@tailwind` directives)
-- Use `@theme inline` for mapping CSS vars to Tailwind
-- Fonts: utility classes in `@layer base`
+**Radius:** rounded-md, rounded-lg, rounded-xl, card-base. Sem sombras: border border-border bg-card.

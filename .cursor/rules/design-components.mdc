@@ -1,142 +1,18 @@
 ---
-description: Design component catalog, UX principles, shadcn usage
+description: Catálogo componentes, hierarquia de botão, Loading, shadcn
 globs: src/**/*.tsx
 alwaysApply: false
 ---
 
 # Design Components
 
-See `design-tokens-reference.mdc` for tokens.
+Tokens: `design-tokens-reference.mdc`. **Catálogo:** Button default/outline/ghost | Card + CardHeader (header, content, actions) | Field + FieldLabel + Input | KPI Card | Sidebar 256px, brand, nav (ativo: bg-accent-brand-light border-l-2 border-primary), section title, Pro upgrade, footer. **Botões:** 1 Primary, 2 Outline, 3 Ghost, 4 Destructive; um primário por seção. **Card:** header 28px, content 28px, actions 24px. **Ícones:** lucide-react; 16px nav/botão, 24px KPI; text-muted-foreground / text-primary.
 
----
+**Loading full-screen:** `@/components/ui/loading`. Não usar Loader2/spinner próprio para tela cheia; Loader2 só inline (botão, seção).
 
-## Component Catalog (Design → Code)
+<example>
+✅ &lt;Loading /&gt; ou &lt;Loading className="min-h-0 flex-1" /&gt;
+❌ div + Loader2 animate-spin para tela cheia (usar só inline)
+</example>
 
-| Design Component | Code Implementation | Notes |
-|------------------|---------------------|-------|
-| **Button/Primary** | `Button` variant `default` | Main CTA; padding 12×16, radius 8 |
-| **Button/Outline** | `Button` variant `outline` | Secondary actions |
-| **Button/Ghost** | `Button` variant `ghost` | Tertiary, inline actions |
-| **Card** | `Card` + `CardHeader` | Slots: header, content, actions |
-| **Input Field** | `Field` + `FieldLabel` + `Input` | Label above input; gap 6 |
-| **KPI Card** | Custom or `Card` + metric layout | Accent bar, label, value, icon |
-| **Sidebar** | Custom layout | Width 256px; padding 8; gap 16 |
-| **Sidebar Brand** | Custom | Logo + "MatchVaga"; padding 12×8 |
-| **Sidebar Nav Item** | Custom | Default: `text-sidebar-foreground`; Active: `bg-accent-brand-light` `border-l-2 border-primary` |
-| **Sidebar Section Title** | Custom | `text-muted-foreground` `text-xs font-medium` |
-| **Sidebar Pro Upgrade** | Custom | Gradient primary→ring; CTA "Saiba Mais" |
-| **Sidebar Footer** | Custom | Avatar + name + email + chevron |
-
----
-
-## Button Hierarchy (UX)
-
-| Priority | Variant | Use For |
-|----------|---------|---------|
-| 1 | Primary | Main action (Save, Submit, Nova Análise) |
-| 2 | Outline | Secondary, Cancel, Back |
-| 3 | Ghost | Inline, tertiary actions |
-| 4 | Destructive | Delete, Remove |
-
-One primary action per section. Right-align actions in cards/modals; left-align in toolbars.
-
----
-
-## Card Slots
-
-| Slot | Content | Padding |
-|------|---------|---------|
-| Header | Title (22px, bold) + description (14px, muted) | 28px |
-| Content | Main body | 28px |
-| Actions | Buttons | 24px |
-
----
-
-## Icons
-
-- **Library:** lucide-react
-- **Size:** 16px (nav, buttons), 24px (KPI, Pro upgrade)
-- **Color:** `text-muted-foreground` (default), `text-primary` (active)
-
-**Common:** `layout-dashboard`, `file-text`, `search`, `file-search`, `trending-up`, `zap`, `chevrons-up-down`, `chevron-right`.
-
----
-
-## UI/UX Principles
-
-### Visual Hierarchy
-
-- One primary focal point per section
-- Use size, weight, and color for importance
-- Primary actions visually dominant
-
-### Accessibility
-
-- WCAG AA contrast
-- Focus rings: `focus-visible:ring-2 focus-visible:ring-ring`
-- Touch targets ≥ 44×44px
-- Semantic HTML: `button`, `label`, `fieldset`
-
-### Content Density
-
-- Avoid overcrowding
-- Cards: one primary idea per card
-- Tables: 4–7 columns typically
-
-### Error & Loading States
-
-- Use `text-destructive` for errors
-- Use `FieldError` for form validation
-- Provide loading feedback for async actions
-
-**Full-screen loading:** When a route or section shows a loading state that replaces the main content (e.g. `if (isLoading) return ...`), use the `Loading` component from `@/components/ui/loading`. Do not use inline `Loader2` or custom spinners for this pattern.
-
-```tsx
-// ✅ Good: full-screen loading
-if (isLoading) {
-  return <Loading className="min-h-0 flex-1" />; // flex child: fills available space
-}
-// or
-if (isLoading) {
-  return <Loading />; // page-level: uses default min-h-screen
-}
-
-// ❌ Bad: custom spinner for full-screen loading
-if (isLoading) {
-  return (
-    <div className="flex min-h-0 flex-1 items-center justify-center">
-      <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-    </div>
-  );
-}
-```
-
-Use `Loader2` or similar only for **inline** loading (e.g. inside a button, small section).
-
-### Responsive
-
-- Sidebar: 256px fixed; collapse to icon-only on mobile (if implemented)
-- Content: `flex-1` to fill
-- Use `min-h-0` on flex children that scroll
-
----
-
-## Project-Specific Components
-
-| Component | Location | Purpose |
-|-----------|----------|---------|
-| **Loading** | `@/components/ui/loading` | Full-screen or inline loading (Logo + spinner); use for content-replacement loading states |
-| **BrandName** | `@/components/shared/brand-name` | MatchVaga branding |
-| **FormField** | `@/components/shared/form-field` | Label + input wrapper |
-| **StepIndicator** | `@/components/shared/step-indicator` | Onboarding step progress |
-| **KPI Card** | `@/components/shared/kpi-card` | Metric display |
-| **Sidebar Brand** | `@/components/shared/sidebar` (Brand section; uses `@/components/shared/logo`) | Logo + name |
-
----
-
-## shadcn / Radix
-
-- Import from `@/components/ui/*` — Button, Card, Field, Input, Select
-- Use `Field` + `FieldLabel` + `Input`/`Select` for forms
-- Use `cn()` from `@/utils/style` for conditional classes
-- Prefer composition over custom wrappers
+**Projeto:** Loading, BrandName, FormField, StepIndicator, KPI Card, Sidebar (shared/sidebar, shared/logo). shadcn: `@/components/ui/*`; Field+Label+Input; cn() de `@/utils/style`. A11y: WCAG AA, focus-visible:ring-2, alvo ≥44px, HTML semântico.

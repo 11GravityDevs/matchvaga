@@ -1,45 +1,19 @@
 ---
-description: Template e regras padrão para pull requests no GitHub deste repositório
+description: Template de PR (corpo e título); fluxo completo em finish-issue.mdc
 alwaysApply: false
 ---
 
 # Template de Pull Request
 
-Use esta estrutura sempre que a IA criar ou atualizar um pull request neste repositório via MCP.
+Fluxo commitar + abrir PR: `finish-issue.mdc`. Use as seções abaixo no corpo. PT-BR.
 
-## Template
+**Título:** imperativo, ~60 chars (ex. `Adiciona estado vazio quando não há análises`).
 
-**Título do PR**
-- Modo imperativo, deixando claro o que mudou (ex.: `Adiciona UI da etapa de análise de gap`, `Corrige tratamento de erro no parsing do currículo`).
-- Inclua o escopo quando ajudar (ex.: `dashboard/new-analysis: ...`).
-- Prefira títulos concisos (~60 caracteres), mas ainda descritivos.
+**Corpo — seções nesta ordem:**
+- **Contexto** — por quê e impacto.
+- **Alterações** — tópicos das mudanças.
+- **Critérios de aceite** — checkboxes `- [ ]`.
+- **Plano de testes** — checkboxes `- [ ]`.
+- **Links** — ex. Linear: MAT-123.
 
-**🎯 Contexto**  
-Descreva por que esta mudança está sendo feita e como impacta usuários ou o negócio.
-
-**🛠 Alterações**  
-- Lista em tópicos das principais mudanças de código ou comportamento.  
-- Agrupe alterações relacionadas; evite ruído de implementação.
-
-**✅ Critérios de aceite**  
-Liste os comportamentos que devem ser verdade após o merge deste PR — use checkboxes para serem rastreáveis:
-- [ ] Comportamento / fluxo do usuário funciona como descrito  
-- [ ] Casos de borda cobertos (ex.: estado vazio, fluxo de erro)  
-- [ ] Testar/validar X  
-
-**🧪 Plano de testes**  
-Descreva explicitamente como as mudanças foram ou devem ser validadas — também em checkboxes:
-- [ ] Passos de QA manual (descreva os passos exatos e resultados esperados)  
-
-**🔗 Links**  
-- Linke ao menos um issue do Linear relacionado quando aplicável (ex.: `Linear: MAT-123`).  
-- Opcional: outras referências.
-
----
-
-**Regras:**
-- **Sempre** estruture a descrição do PR com as seções acima, nesta ordem.
-- **Critérios de aceite** e **Plano de testes** devem usar checkboxes `- [ ]` para renderizar como checklist no GitHub.
-- Quando um PR implementar ou alterar uma tarefa do Linear, referencie o ID do issue em **🔗 Links** e garanta que a descrição no Linear use `linear-task-template.mdc`.
-- Ao usar o GitHub MCP (se configurado), use-o para ler e revisar pull requests e siga este template ao gerar corpos de review ou descrições de PR.
-- **Idioma:** Títulos e descrições de PR devem ser sempre em **português (PT-BR)**.
+Issue do Linear: referenciar em Links; descrição da issue segue `linear-task-template.mdc`.

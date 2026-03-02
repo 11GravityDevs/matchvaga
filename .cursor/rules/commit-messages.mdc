@@ -1,48 +1,15 @@
 ---
-description: Commit message format and good practices (Conventional Commits, Linear refs)
+description: Conventional Commits + Linear refs
 alwaysApply: false
 ---
 
 # Commit Messages
 
-Follow this format so every commit is consistent and traceable.
+**Formato:** `type(scope?): subject`; opcional body; footer `Refs MAT-123` ou `Closes MAT-123`. Type: feat|fix|chore|docs|style|refactor|test|perf. Subject: imperativo, minúsculo, ~50–72 chars, sem ponto final. Um cambio lógico por commit.
 
-## Format
-
-**Structure:** `type(scope?): subject` on the first line; optional body; optional footer.
-
-- **Type (required):** One of `feat`, `fix`, `chore`, `docs`, `style`, `refactor`, `test`, `perf`. Align with branch prefix when working on a feature branch.
-- **Scope (optional):** Short area (e.g. `auth`, `dashboard`, `resume-form`). Keep it brief.
-- **Subject:** Imperative mood, lowercase after the colon, ~50–72 characters, no period at the end.
-- **Body (optional):** Wrap at 72 characters. Explain what and why; skip obvious how.
-- **Footer (optional):** For Linear: `Refs MAT-123` or `Closes MAT-123` when the commit relates to or completes an issue.
-
-## Rules
-
-- One logical change per commit. No "and" or "also" in the subject.
-- When working on a Linear task, include the issue in the footer when helpful.
-
-## Examples
-
-**✅ Good (one-line):**
-```
-feat(auth): add email OTP verification step
-fix(resume-form): prevent duplicate education entries
-```
-
-**✅ Good (with body and footer):**
-```
-fix(dashboard): handle empty analysis list
-
-Show empty state and CTA instead of broken layout when user has no analyses.
-
-Refs MAT-14
-```
-
-**❌ Bad:**
-```
-Fixed bug in login
-feat: add stuff and also fix the form
-```
-
-See `git-workflow.mdc` for the full git index.
+<example>
+✅ feat(auth): add email OTP step
+✅ fix(dashboard): handle empty list
+❌ Fixed bug in login
+❌ feat: add stuff and also fix the form
+</example>

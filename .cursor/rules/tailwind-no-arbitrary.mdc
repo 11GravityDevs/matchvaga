@@ -1,35 +1,9 @@
 ---
-description: Tailwind — no arbitrary values for spacing, typography, layout
+description: Sem valores arbitrários Tailwind; usar utilities de globals.css
 globs: src/**/*.tsx,src/**/*.css
 alwaysApply: false
 ---
 
-# No Arbitrary Tailwind Values
+# No Arbitrary Tailwind
 
-Never use Tailwind arbitrary values `[value]` for spacing, typography, or layout.
-
-## Use Semantic Utilities from globals.css
-
-All design tokens live in `globals.css`. Use these utilities directly:
-
-- **Layout:** `w-form`, `w-content`, `max-w-content`, `w-sidebar`, `w-column`, `w-action`
-- **Typography:** `text-page-title`, `text-card-title`, `text-small`, `text-small-medium`, `text-small-semibold`, `text-small-leading`, `text-caption-leading`, `text-form-label`, `text-kpi`, `text-score`, `text-hero`, `text-badge`, `text-section-header-large`
-- **Spacing:** `page-padding`, `section-gap`, `card-content-padding`, `card-header-padding`, `tip-banner-padding`, `footer-padding`, `table-cell-padding`
-- **Radius:** `rounded-md`, `rounded-lg`, `rounded-xl`, `card-base`
-
-## Allowed
-
-- Standard Tailwind scale: `gap-1`–`gap-12`, `p-1`–`p-12`, `rounded-md`, `rounded-lg`, `rounded-xl`
-- Semantic utilities from `globals.css` (see design-tokens-reference.mdc)
-
-## Forbidden
-
-- `p-[13px]`, `w-[900px]`, `text-[22px]`, `rounded-[10px]`, `h-[304px]`, `max-w-[420px]`
-- Any `[value]` for spacing, typography, width, height, or radius
-
-## Exceptions
-
-- **`globals.css`** — Arbitrary values allowed only here to define the design scale (e.g. in `@utility` blocks)
-- **`@/components/shared/resume-form-card`** — `INPUT_CLASS` for resume form inputs
-- shadcn/Radix component internals (e.g. `rounded-[min(var(--radius-md),8px)]`)
-- Complex asymmetric radius (e.g. chat bubbles) — prefer `rounded-xl rounded-bl-md` over `rounded-[12px_12px_12px_4px]`
+Proibido `[value]` para spacing, tipografia, layout. Usar utilities de `globals.css`: layout (w-form, w-content, max-w-content, w-sidebar, w-column), tipografia (text-page-title, text-card-title, text-small, text-form-label, text-kpi, text-hero, etc.), spacing (page-padding, section-gap, card-*-padding, etc.), radius (rounded-md/lg/xl, card-base). Permitido: escala padrão gap-1–12, p-1–12, rounded-md/lg/xl. **Exceções:** definições em globals.css; INPUT_CLASS em resume-form-card; internos shadcn/Radix; radius assimétrico (preferir classes utilitárias).

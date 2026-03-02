@@ -1,65 +1,17 @@
 ---
-description: Security — API keys, env vars, Supabase client usage
+description: Secrets, env (NEXT_PUBLIC_ só client), Supabase, Server Actions
 globs: src/**/*.ts,src/**/*.tsx
 alwaysApply: false
 ---
 
 # Security
 
-## API Keys and Secrets
+**Secrets:** Nunca hardcode. `.env.local` (gitignored); documentar em `.env.example`. `NEXT_PUBLIC_` só para client (ex. Supabase URL). Nunca prefixar secrets com NEXT_PUBLIC_.
 
-- **Never hardcode** API keys, secrets, or tokens in source code.
-- Use environment variables. Add to `.env.local` (gitignored); document in `.env.example`.
+**AI keys:** Server-only (GOOGLE_AI_API_KEY, OPENAI_API_KEY, ANTHROPIC_API_KEY). Chamadas AI só server-side. Documentar em .env.example.
 
-## Environment Variables
+**Supabase:** Client = `@/lib/supabase/client`. Server = `@/lib/supabase/server` (RLS, cookies). Admin/bypass RLS = `@/lib/supabase/service` (SUPABASE_SECRET_KEY), só server, nunca client.
 
-- **NEXT_PUBLIC_** — Only for values safe to expose to the client (e.g. Supabase URL, publishable key).
-- **Never** prefix server-only secrets (Supabase secret key, API keys, AI keys) with `NEXT_PUBLIC_`.
+**Stripe:** STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET só server (Actions/Route Handlers).
 
-```ts
-// ✅ Good: client-safe vars
-const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-
-// ❌ Bad: secret exposed to client
-const key = process.env.NEXT_PUBLIC_SUPABASE_SECRET_KEY;
-const aiKey = process.env.NEXT_PUBLIC_OPENAI_API_KEY;
-```
-
-## AI API Keys
-
-- Store AI provider keys in server-only env vars (never `NEXT_PUBLIC_`):
-  - `GOOGLE_AI_API_KEY` — Gemini 1.5 Flash (extraction)
-  - `OPENAI_API_KEY` — GPT-4o-mini (scoring, lateral chat)
-  - `ANTHROPIC_API_KEY` — Claude 3.5 Sonnet (synthesis)
-- All AI calls must run server-side (Server Actions, server utilities). Never call AI APIs from Client Components.
-- Document required keys in `.env.example`; never commit actual keys.
-
-## Supabase Client
-
-- **Client-side:** Use `createClient()` from `@/lib/supabase/client` — uses publishable (anon) key.
-- **Server-side:** Use `createClient()` from `@/lib/supabase/server` — RLS applies; cookies for auth.
-- **Secret key client:** Use `createAdminSupabaseClient()` from `@/lib/supabase/service` only in server-only code that must bypass RLS (e.g. Stripe webhook granting credits). Requires `SUPABASE_SECRET_KEY` in env (Supabase dashboard: secret key, replaces legacy service role key). Never import in client code or expose via `NEXT_PUBLIC_`.
-- **Never** import the Supabase secret key in client code or expose it via `NEXT_PUBLIC_`.
-
-See `@/lib/supabase/client.ts`, `@/lib/supabase/server.ts`, and `@/lib/supabase/service.ts` for the canonical setup.
-
-## Stripe
-
-- Store Stripe keys in server-only env vars (never `NEXT_PUBLIC_`):
-  - `STRIPE_SECRET_KEY` — Server-side API calls (Checkout Session, retrieve session).
-  - `STRIPE_WEBHOOK_SECRET` — Webhook signature verification (e.g. from Dashboard or `stripe listen`).
-- All Stripe API calls and secret usage only in Server Actions or Route Handlers (e.g. webhook).
-
-## Server Actions
-
-- **Public endpoints:** Exported Server Actions create public HTTP endpoints. Treat them like API routes.
-- **Validate input:** Never trust client data (form data, URL params, headers). Use Zod before business logic.
-- **Re-authorize:** Check auth inside each action, not only at the route level.
-
-See [Data Security](https://nextjs.org/docs/app/guides/data-security).
-
-## Error Exposure
-
-- **Never expose** raw AI errors, DB errors, or stack traces to the client.
-- Return user-friendly messages (e.g. via `translateAuthError`, or generic "Tente novamente").
-- Log raw errors server-side with `console.error` for debugging.
+**Server Actions:** Endpoints públicos. Validar input (Zod); reautorizar em cada action. Não expor erros/stack ao client; mensagem amigável; log server-side.

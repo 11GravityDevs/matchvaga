@@ -98,7 +98,7 @@ export async function runGapAnalysis(
   if (credits < 1) {
     return {
       success: false,
-      error: "Sem créditos disponíveis",
+      error: "Sem análises disponíveis",
     };
   }
 
@@ -161,7 +161,7 @@ export async function runGapAnalysis(
     await supabase.from("analyses").delete().eq("id", analysisRow.id);
     return {
       success: false,
-      error: "Sem créditos disponíveis",
+      error: "Sem análises disponíveis",
     };
   }
 

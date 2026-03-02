@@ -1,0 +1,12 @@
+---
+description: Começar issue Linear — branch prefixo/issue-key/slug, Linear MCP, push
+alwaysApply: false
+---
+
+# Start issue
+
+**Gatilho:** "começar/trabalhar em" tarefa Linear (ex. MAT-40).
+
+**Branch:** `<prefixo>/<issue-key-lower>/<slug-curto>` — ex. `feat/mat-40/no-analysis-button`. Prefixo: `feat`|`fix`|`chore`. Slug: um segmento kebab-case do título.
+
+**Passos:** 1) get_issue(id) → prefixo/slug do título. 2) git checkout main && git pull. 3) git checkout -b `<branch>`. 4) save_issue(id, assignee: "me", state: "In Progress"). 5) git push -u origin `<branch>`.

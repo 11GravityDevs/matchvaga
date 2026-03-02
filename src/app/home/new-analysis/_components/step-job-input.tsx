@@ -2,12 +2,14 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Lightbulb, Sparkles } from "lucide-react";
+import Link from "next/link";
 
 import { runGapAnalysis } from "@/app/actions/analysis";
 import {
   QUERY_KEY_ANALYSES,
   QUERY_KEY_CURRENT_USER_DISPLAY,
 } from "@/constants/query-keys";
+import { ROUTE_HOME_CHECKOUT } from "@/constants/routes";
 import { currentUserDisplayQueryOptions } from "@/lib/query/query-options";
 import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
@@ -106,6 +108,24 @@ export function StepJobInput() {
     );
   }
 
+  if (credits === 0) {
+    return (
+      <div className="flex min-h-0 w-full flex-1 flex-col items-center section-gap overflow-hidden page-padding">
+        <div className="flex min-h-0 w-content flex-1 flex-col items-center justify-center gap-6">
+          <h2 className="text-center text-page-title text-foreground">
+            Você não tem análises disponíveis.
+          </h2>
+          <p className="max-w-content text-center text-page-subtitle text-muted-foreground">
+            Clique no botão abaixo para comprar mais análises e continuar.
+          </p>
+          <Button size="brand" className="gap-1.5" asChild>
+            <Link href={ROUTE_HOME_CHECKOUT}>Comprar análises</Link>
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-0 w-full flex-1 flex-col items-center section-gap overflow-hidden page-padding">
       <div className="flex min-h-0 w-content flex-1 flex-col section-gap">
@@ -139,15 +159,6 @@ export function StepJobInput() {
                 />
               </div>
             </Field>
-
-            {credits === 0 && (
-              <div
-                role="alert"
-                className="rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive"
-              >
-                Sem créditos disponíveis. Compre mais créditos para continuar.
-              </div>
-            )}
 
             {analysisErrorDisplay && (
               <div

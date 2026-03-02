@@ -1,122 +1,30 @@
 ---
-description: Ferramentas MCP disponíveis — use quando relevante
+description: MCPs disponíveis — preferir MCP à busca na web quando relevante
 alwaysApply: true
 ---
 
 # Ferramentas MCP
 
-Você tem acesso a estas MCPs.
-
-**Regra:** Quando existir uma MCP relevante para a tarefa, **prefira as ferramentas MCP em vez de busca na web**. MCPs fornecem acesso estruturado e específico ao domínio para documentação, schemas e APIs ativas. Use busca na web apenas quando nenhuma MCP se aplicar ou quando a MCP falhar.
-
----
+Preferir MCP à web quando aplicável.
 
 ## next-devtools
-
-**Requisitos:** Next.js 16+ com servidor de desenvolvimento rodando (`npm run dev`). A MCP descobre o app via `/_next/mcp`.
-
-### Quando usar
-
-| Cenário | Ação |
-|---------|------|
-| **Diagnóstico de erros** | Quando houver erros relatados, problemas de hidratação ou falhas de build → use `get_errors` para recuperar os erros atuais de build/runtime/tipos do dev server |
-| **Antes de implementar mudanças** | Use `nextjs_index` para descobrir rotas, componentes e estrutura do app; entenda onde adicionar código |
-| **Dúvidas sobre a API do Next.js** | Use `nextjs_docs` para documentação atualizada (ex.: "when to use use client", Server Actions, caching) |
-| **Upgrades & migrações** | Use para ajudar na migração para Next.js 16, codemods e breaking changes |
-| **Auditoria de estrutura e conformidade** | Use `nextjs_index` para inspecionar a estrutura do app; use `nextjs_docs` para a estrutura oficial do projeto e convenções de arquivos |
-| **Inspeção de pages/layouts** | Use `get_page_metadata` e `get_project_metadata` para informações de rotas, componentes e tipo de renderização |
-| **Localizar Server Actions** | Use `get_server_action_by_id` para encontrar o arquivo fonte e o nome da função |
-
-### Principais ferramentas
-
-- `nextjs_index` — Descobre servidores Next.js rodando e ferramentas MCP disponíveis; chame antes de implementar
-- `nextjs_docs` — Busca documentação do Next.js por path (leia antes o recurso `nextjs-docs://llms-index` para saber os paths corretos)
-- `nextjs_call` — Executa ferramentas expostas pelo app em execução (get_errors, get_logs, get_page_metadata, etc.)
-
----
+Requer `npm run dev`. Erros/build → `get_errors`. Rotas e estrutura → `nextjs_index`. Docs Next.js → `nextjs_docs`. Server Actions → `get_server_action_by_id`.
 
 ## supabase
-
-**Config:** `https://mcp.supabase.com/mcp`.
-
-### Quando usar
-
-| Cenário | Ação |
-|---------|------|
-| **Docs do Supabase** | Use `search_docs` para auth, SSR, RLS, Edge Functions — a documentação muda com frequência |
-| **Consultas de banco** | Liste tabelas, execute SQL, aplique migrations |
-| **Gestão de projeto** | Liste projetos, obtenha a URL do projeto, gerencie branches |
-| **Debug de auth** | Busque docs para Next.js + Supabase Auth, `@supabase/ssr`, configuração de proxy |
-| **Edge Functions** | Fazer deploy, listar e obter código de Edge Functions |
-
-### Principais ferramentas
-
-- `search_docs` — Busca GraphQL na documentação do Supabase
-- `list_tables`, `execute_sql`, `apply_migration` — Operações de banco de dados
-- `list_projects` — Descobre IDs de projetos
-
----
+Docs/auth/SSR → `search_docs`. Banco → `list_tables`, `execute_sql`, `apply_migration`. Projetos → `list_projects`.
 
 ## shadcn
-
-**Config:** `npx shadcn@latest mcp`.
-
-### Quando usar
-
-| Cenário | Ação |
-|---------|------|
-| **Adicionar componentes de UI** | "Add a login form" → pesquise nos registries, obtenha o comando de add e instale |
-| **Navegar por componentes** | Liste itens de `@shadcn` ou de outros registries |
-| **Encontrar componentes** | Busque por nome ou funcionalidade em todos os registries configurados |
-| **Checar disponibilidade** | Antes de criar algo do zero, verifique se já existe um componente no registry |
-
-### Principais ferramentas
-
-- `search_items_in_registries` — Busca fuzzy (ex.: `registries: ["@shadcn"]`, `query: "dialog"`)
-- `list_items_in_registries` — Lista todos os itens de um registry
-- `get_add_command_for_items` — Retorna o comando de CLI para adicionar itens específicos
-- `get_item_examples_from_registries` — Exemplos de uso dos componentes
-- `view_items_in_registries` — Detalhes completos de um item
-
-### Workflow sugerido
-
-1. Use search ou list para encontrar o componente
-2. Use `get_add_command_for_items` para obter o comando de instalação
-3. Use `get_item_examples_from_registries` para ver exemplos de uso, se necessário
-
----
+Componente UI → `search_items_in_registries` → `get_add_command_for_items`. Exemplos → `get_item_examples_from_registries`.
 
 ## Linear
-
-**Config:** `https://mcp.linear.app/mcp` (veja `.cursor/mcp.json`). **Regra:** Ao criar ou atualizar tarefas no Linear para este projeto, você deve usar a MCP do Linear. Siga `linear-task-template.mdc` para o template da issue.
-
-### Quando usar
-
-| Cenário | Ação |
-|---------|------|
-| **Criar uma nova tarefa** | Use `save_issue` para criar a issue; a descrição deve seguir o Linear Task Template: use os **headings** `## 🎯 Contexto`, `## ✅ Critérios de aceite`, `## 🔗 Notas de implementação` (não só negrito) para o Linear exibir espaço entre seções; atribua o label correto (Bug, Feature, Business, QA, Marketing). |
-| **Atualizar uma tarefa existente** | Use `save_issue` para atualizar descrição, status ou outros campos em vez de editar direto na UI. |
-| **Listar / encontrar tarefas** | Use `list_issues` para buscar, filtrar ou listar issues; use `get_issue` para detalhes completos. |
-| **Começar a trabalhar em uma tarefa** | Quando o usuário disser que vai começar uma tarefa: dê pull na main, crie uma branch `feat/` ou `fix/` e então use `save_issue` com `assignee: "me"` e `state: "In Progress"`. Veja `linear-task-branch.mdc`. |
-
-### Principais ferramentas
-
-- `save_issue` — Cria ou atualiza uma issue (para issues novas ou existentes)
-- `get_issue` — Retorna detalhes completos de uma issue por ID
-- `list_issues` — Lista ou filtra issues (ex.: por projeto, status)
-- `list_projects`, `list_teams` — Descobre IDs de projetos e times para criar ou filtrar issues
-
----
+Criar/atualizar issue → `save_issue` (template em `linear-task-template.mdc`). Listar/buscar → `list_issues`, `get_issue`. **Começar tarefa** → `start-issue.mdc` (get_issue, pull, branch, save_issue assignee+In Progress, push).
 
 ## Referência rápida
-
 | Tarefa | MCP | Ferramenta |
 |--------|-----|------------|
-| Corrigir erros em uma página | next-devtools | `nextjs_call` → `get_errors` |
-| Dúvida sobre API do Next.js | next-devtools | `nextjs_docs` |
-| Auditar estrutura / conformidade com Next.js | next-devtools | `nextjs_index` + `nextjs_docs` |
-| Ajuda com auth/SSR do Supabase | supabase | `search_docs` |
-| Adicionar componente do shadcn | shadcn | `search_items_in_registries` → `get_add_command_for_items` |
-| Criar ou atualizar tarefa no Linear | Linear | `save_issue` (seguindo `linear-task-template.mdc`) |
-| Listar / encontrar issues no Linear | Linear | `list_issues`, `get_issue` |
-| Inspecionar estrutura do app | next-devtools | `nextjs_index` (dev server deve estar rodando) |
+| Erros/build | next-devtools | get_errors |
+| Docs Next.js | next-devtools | nextjs_docs |
+| Estrutura app | next-devtools | nextjs_index |
+| Auth/SSR Supabase | supabase | search_docs |
+| Componente shadcn | shadcn | search_items_in_registries, get_add_command_for_items |
+| Issue Linear | Linear | save_issue, get_issue, list_issues |

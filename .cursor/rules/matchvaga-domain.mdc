@@ -1,53 +1,15 @@
 ---
-description: MatchVaga domain concepts and feature vocabulary
+description: Domínio MatchVaga — termos, AI por fluxo, vocabulário
 globs: src/**/*.ts,src/**/*.tsx
 alwaysApply: false
 ---
 
 # MatchVaga Domain
 
-## Core Concepts
+**Conceitos:** PT-BR, BRL. Resume = currículo; Job = vaga; Gap Analysis = comparação (GPT-4o-mini, score 0–100); Optimized Document = PDF/DOCX (Claude); Lateral Chat = painel AI (GPT-4o-mini) para sugestões/edições.
 
-| Term | Definition |
-|------|------------|
-| **Brazilian Market Context** | The platform targets users in Brazil. All user-facing text, resumes, job descriptions, AI generations, and currency (BRL) should be handled in Portuguese (PT-BR). |
-| **Resume** | User's CV/curriculum — input document to analyze |
-| **Job Description** | Target role posting — defines required skills and criteria |
-| **Gap Analysis** | AI-powered comparison (GPT-4o-mini) identifying missing skills; includes compatibility score (0–100) |
-| **Optimized Document** | PDF/DOCX tailored to the job, AI-generated on export (Claude 3.5 Sonnet) |
-| **Lateral Chat** | Sidebar/panel where user asks AI (GPT-4o-mini) to suggest or apply edits to the resume (e.g. rephrase summary, add skills) |
+**AI por fluxo:** Extraction → Gemini 1.5 Flash. Scoring → GPT-4o-mini. Synthesis → Claude 3.5 Sonnet. Chat → GPT-4o-mini.
 
-## AI Model Strategy (MVP)
+**Vocabulário:** Upload, Extract (ResumeData), Analyze (gap), Skills Match, Optimize, Export, Lateral Chat, Checkout (BRL). Naming: resume, jobDescription/job, gapAnalysis/analysis, optimizedResume/optimizedDocument, lateralChat/chat.
 
-| Flow | Model | Purpose |
-|------|-------|---------|
-| **Extraction** | Gemini 1.5 Flash | High volume, unstructured; lowest cost, 1M context |
-| **Scoring** | GPT-4o-mini | Reasoning, semantic matching; reliable at low cost |
-| **Synthesis** | Claude 3.5 Sonnet | High quality prose and formatting |
-| **Interaction** | GPT-4o-mini | Low latency, conversational chat |
-
-## Feature Vocabulary
-
-- **Upload** — Resume and/or job description (file or paste)
-- **Extract** — AI parses uploaded resume into structured `ResumeData`
-- **Analyze** — AI runs gap analysis (resume vs job); returns score, matched skills, missing skills
-- **Skills Match** — Present matched vs missing skills from analysis
-- **Optimize** — AI generates improved resume/document
-- **Export** — Download optimized PDF or DOCX
-- **Lateral Chat** — User converses with AI to get suggestions; AI can apply edits to resume
-- **Checkout** — Monetization step where the user pays (in BRL) to unlock features or generations
-
-## Naming Conventions
-
-- Use `resume` (not CV/curriculum) for the user's document
-- Use `jobDescription` or `job` for the target role
-- Use `gapAnalysis` or `analysis` for the comparison result
-- Use `optimizedResume` or `optimizedDocument` for the output
-- Use `lateralChat` or `chat` for the AI-assisted editing conversation
-
-## AI Implementation
-
-- **Structured outputs:** AI responses validated via Zod. Schemas in `src/lib/ai/config/` (gap-analysis, resume-extraction, refinement-response).
-- **Flow:** Extraction (Gemini) → Scoring (GPT) → Synthesis (Claude). See AI Model Strategy table.
-- **Validation:** Use `schema.safeParse()` on AI output before use. Never trust raw AI response shape.
-- **Error handling:** Never expose raw AI or DB errors to client. Return user-friendly messages via `{ success: false, error: "..." }`.
+**AI impl:** Outputs validados com Zod (`src/lib/ai/config/`). safeParse antes de usar. Erros: nunca expor raw; retornar `{ success: false, error: "..." }`.
