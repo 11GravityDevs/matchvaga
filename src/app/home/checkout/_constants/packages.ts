@@ -21,12 +21,23 @@ const PACKAGE_NAMES: Record<CheckoutPackageId, string> = {
   profissional: "Profissional",
 };
 
+const PACKAGE_CREDITS: Record<CheckoutPackageId, number> = {
+  entrada: 3,
+  basico: 10,
+  padrao: 25,
+  profissional: 50,
+};
+
 export function getPackagePriceCentavos(packageId: CheckoutPackageId): number {
   return PACKAGE_PRICE_CENTAVOS[packageId];
 }
 
 export function getPackageName(packageId: CheckoutPackageId): string {
   return PACKAGE_NAMES[packageId];
+}
+
+export function getCreditsForPackage(packageId: CheckoutPackageId): number {
+  return PACKAGE_CREDITS[packageId];
 }
 
 export function isCheckoutPackageId(id: string): id is CheckoutPackageId {

@@ -14,7 +14,8 @@ Reference: `supabase/migrations/20250222000000_initial_schema.sql`
 |-------|-------------|-------|
 | **resumes** | `id`, `user_id`, `parsed_data` (JSONB) | No file storage; `parsed_data` matches `ResumeData` |
 | **analyses** | `id`, `user_id`, `resume_id`, `job_snapshot` (JSONB), `score`, `matched_skills`, `missing_technical_skills`, `missing_behavioral_skills`, `status` | Job stored as snapshot; `status`: pending \| completed \| abandoned |
-| **user_credits** | `user_id`, `credits`, `updated_at` | One row per user; created when user uploads or creates a resume (3 credits); decremented on successful analysis |
+| **user_credits** | `user_id`, `credits`, `updated_at` | One row per user; created when user uploads or creates a resume (3 credits); decremented on successful analysis; incremented by Stripe webhook on purchase |
+| **purchases** | `id`, `stripe_session_id` (UNIQUE), `user_id`, `package_id`, `credits_granted`, `created_at` | Stripe webhook idempotency; written only via secret-key client (no RLS policies) |
 | **optimized_documents** | `id`, `analysis_id`, `file_path`, `format` ('pdf'\|'docx') | Access via analysis ownership |
 
 ## Column Mapping
@@ -28,5 +29,6 @@ Reference: `supabase/migrations/20250222000000_initial_schema.sql`
 ## RLS
 
 - resumes, analyses, user_credits: users access only their own rows (`auth.uid() = user_id`)
+- purchases: RLS enabled, no policies — access only via secret-key client (Stripe webhook)
 - optimized_documents: SELECT/INSERT via analysis ownership
         

@@ -8,6 +8,13 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
+import { createAdminSupabaseClient } from "@/lib/supabase/service";
+import {
+  type CheckoutPackageId,
+  getCreditsForPackage,
+  isCheckoutPackageId,
+} from "@/app/home/checkout/_constants/packages";
+
 function getStripe(): Stripe {
   const key = process.env.STRIPE_SECRET_KEY;
   if (!key?.trim()) {
@@ -55,16 +62,116 @@ export async function POST(request: Request) {
       const session = event.data.object as Stripe.Checkout.Session;
       if (session.payment_status === "paid") {
         const { packageId, userId } = session.metadata ?? {};
-        console.log("[stripe webhook] checkout.session.completed", event.id, {
-          packageId,
-          userId,
-        });
-        // TODO: persist purchase / grant credits when user_credits or purchases table exists
+
+        if (!packageId || !userId) {
+          console.error(
+            "[stripe webhook] checkout.session.completed missing metadata",
+            event.id,
+            { packageId, userId }
+          );
+          break;
+        }
+
+        if (!isCheckoutPackageId(packageId)) {
+          console.error(
+            "[stripe webhook] checkout.session.completed invalid packageId",
+            event.id,
+            { packageId }
+          );
+          break;
+        }
+
+        const creditsToGrant = getCreditsForPackage(
+          packageId as CheckoutPackageId
+        );
+
+        try {
+          const supabase = createAdminSupabaseClient();
+
+          const { error: purchaseError } = await supabase
+            .from("purchases")
+            .insert({
+              stripe_session_id: session.id,
+              user_id: userId,
+              package_id: packageId,
+              credits_granted: creditsToGrant,
+            });
+
+          if (purchaseError) {
+            if (purchaseError.code === "23505") {
+              console.log(
+                "[stripe webhook] session already processed",
+                session.id
+              );
+              break;
+            }
+
+            console.error(
+              "[stripe webhook] purchase insert error:",
+              purchaseError.message
+            );
+
+            return NextResponse.json(
+              { message: "Database error" },
+              { status: 500 }
+            );
+          }
+
+          const { data: creditsRow } = await supabase
+            .from("user_credits")
+            .select("credits")
+            .eq("user_id", userId)
+            .single();
+
+          if (creditsRow != null) {
+            const { error: updateError } = await supabase
+              .from("user_credits")
+              .update({
+                credits: creditsRow.credits + creditsToGrant,
+                updated_at: new Date().toISOString(),
+              })
+              .eq("user_id", userId);
+
+            if (updateError) {
+              console.error(
+                "[stripe webhook] user_credits update error:",
+                updateError.message
+              );
+              return NextResponse.json(
+                { message: "Database error" },
+                { status: 500 }
+              );
+            }
+          } else {
+            const { error: insertError } = await supabase
+              .from("user_credits")
+              .insert({ user_id: userId, credits: creditsToGrant });
+
+            if (insertError) {
+              console.error(
+                "[stripe webhook] user_credits insert error:",
+                insertError.message
+              );
+
+              return NextResponse.json(
+                { message: "Database error" },
+                { status: 500 }
+              );
+            }
+          }
+        } catch (err) {
+          const message = err instanceof Error ? err.message : "Unknown error";
+          console.error("[stripe webhook] unexpected error:", message);
+
+          return NextResponse.json(
+            { message: "Server error" },
+            { status: 500 }
+          );
+        }
       }
       break;
     }
     default:
-      // Unhandled event type; return 200 so Stripe does not retry
       break;
   }
 
