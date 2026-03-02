@@ -9,19 +9,21 @@ Use esta estrutura ao criar ou atualizar issues no Linear para que contexto, esc
 
 ## Estrutura do template
 
-**🎯 Contexto**
+Use **headings markdown** (`##`) nos títulos das seções — o Linear renderiza headings com margem vertical, evitando texto “colado”. Use duas quebras de linha entre cada seção.
+
+## 🎯 Contexto
 
 Descreva o que precisa ser feito e por que isso importa para o usuário ou para a empresa.
 
 
-**✅ Critérios de aceite**
+## ✅ Critérios de aceite
 
 - [ ] Passo 1  
 - [ ] Passo 2  
 - [ ] Testar/validar X  
 
 
-**🔗 Notas de implementação**
+## 🔗 Notas de implementação
 
 ex.: Acho que podemos usar a biblioteca X para não precisar construir isso do zero.
 
@@ -43,9 +45,8 @@ Atribua o label correto a cada issue conforme o tipo:
 
 ## Regras
 
-- **Ícones:** Use 🎯 (Contexto), ✅ (Critérios de aceite), 🔗 (Notas de implementação) como títulos das seções.
-- **Espaçamento:** Uma linha em branco após cada título de seção e entre as três seções (Contexto, Critérios de aceite, Notas de implementação).
-- **Critérios de aceite** são checkboxes no Linear (use `- [ ]` na descrição para renderizar como desmarcado).
+- **Ícones:** Use 🎯 (Contexto), ✅ (Critérios de aceite), 🔗 (Notas de implementação) nos títulos das seções.
+- **Títulos como heading:** Use `##` antes do ícone e do nome da seção (ex.: `## 🎯 Contexto`) para o Linear exibir margem vertical entre as seções; do contrário o texto fica colado.
 - **Labels** são obrigatórios; atribua um entre Bug, Feature, Business, QA ou Marketing por tarefa.
 - Mantenha o contexto breve, mas suficiente para quem for pegar a tarefa.
 - Notas de implementação são opcionais, mas recomendadas quando desbloqueiam ou orientam a implementação.

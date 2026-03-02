@@ -10,6 +10,8 @@ export const ROUTE_HOME_RESUME = "/home/resume";
 
 export const ROUTE_HOME_CHECKOUT = "/home/checkout";
 
+export const ROUTE_HOME_CHECKOUT_SUCCESS = "/home/checkout/success";
+
 export const ROUTE_ONBOARDING = "/onboarding";
 
 export const ROUTE_ONBOARDING_PREVIEW = "/onboarding/preview";

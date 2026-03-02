@@ -1,0 +1,105 @@
+"use server";
+
+import Stripe from "stripe";
+import { z } from "zod";
+
+import { createClient } from "@/lib/supabase/server";
+import { SITE_URL } from "@/constants/site";
+import { translateAuthError } from "@/utils/auth";
+import {
+  type CheckoutPackageId,
+  getPackageName,
+  getPackagePriceCentavos,
+  CHECKOUT_PACKAGE_IDS,
+} from "../_constants/packages";
+
+const createCheckoutSessionSchema = z.object({
+  packageId: z.enum(CHECKOUT_PACKAGE_IDS),
+});
+
+export interface CreateCheckoutSessionResult {
+  success: boolean;
+  checkoutUrl?: string;
+  error?: string;
+}
+
+export async function createCheckoutSession(input: {
+  packageId: string;
+}): Promise<CreateCheckoutSessionResult> {
+  const parsed = createCheckoutSessionSchema.safeParse(input);
+
+  if (!parsed.success) {
+    return { success: false, error: "Pacote inválido." };
+  }
+
+  const { packageId } = parsed.data as { packageId: CheckoutPackageId };
+
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError) {
+    return { success: false, error: translateAuthError(authError) };
+  }
+
+  if (!user) {
+    return { success: false, error: "Faça login para continuar." };
+  }
+
+  const secretKey = process.env.STRIPE_SECRET_KEY;
+
+  if (!secretKey || secretKey.trim() === "") {
+    console.error("[createCheckoutSession] STRIPE_SECRET_KEY is not set");
+    return { success: false, error: "Configuração de pagamento indisponível." };
+  }
+
+  const priceCentavos = getPackagePriceCentavos(packageId);
+  const packageName = getPackageName(packageId);
+
+  const stripe = new Stripe(secretKey);
+
+  try {
+    const session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      currency: "brl",
+      line_items: [
+        {
+          price_data: {
+            currency: "brl",
+            unit_amount: priceCentavos,
+            product_data: {
+              name: `MatchVaga — ${packageName}`,
+            },
+          },
+          quantity: 1,
+        },
+      ],
+      payment_method_types: ["card"],
+      success_url: `${SITE_URL}/home/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${SITE_URL}/home/checkout`,
+      metadata: {
+        packageId,
+        userId: user.id,
+      },
+    });
+
+    if (!session.url) {
+      console.error("[createCheckoutSession] Stripe session has no url");
+      return {
+        success: false,
+        error: "Erro ao iniciar checkout. Tente novamente.",
+      };
+    }
+
+    return { success: true, checkoutUrl: session.url };
+  } catch (err) {
+    console.error("[createCheckoutSession] Stripe error:", err);
+    return {
+      success: false,
+      error: "Erro ao iniciar checkout. Tente novamente.",
+    };
+  }
+}

@@ -1,0 +1,34 @@
+export const CHECKOUT_PACKAGE_IDS = [
+  "entrada",
+  "basico",
+  "padrao",
+  "profissional",
+] as const;
+
+export type CheckoutPackageId = (typeof CHECKOUT_PACKAGE_IDS)[number];
+
+const PACKAGE_PRICE_CENTAVOS: Record<CheckoutPackageId, number> = {
+  entrada: 590, // R$ 5,90
+  basico: 1490, // R$ 14,90
+  padrao: 2990, // R$ 29,90
+  profissional: 4990, // R$ 49,90
+};
+
+const PACKAGE_NAMES: Record<CheckoutPackageId, string> = {
+  entrada: "Entrada",
+  basico: "Básico",
+  padrao: "Padrão",
+  profissional: "Profissional",
+};
+
+export function getPackagePriceCentavos(packageId: CheckoutPackageId): number {
+  return PACKAGE_PRICE_CENTAVOS[packageId];
+}
+
+export function getPackageName(packageId: CheckoutPackageId): string {
+  return PACKAGE_NAMES[packageId];
+}
+
+export function isCheckoutPackageId(id: string): id is CheckoutPackageId {
+  return CHECKOUT_PACKAGE_IDS.includes(id as CheckoutPackageId);
+}

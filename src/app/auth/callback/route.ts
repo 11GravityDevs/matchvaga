@@ -5,7 +5,6 @@ import {
   ROUTE_LOGIN,
   ROUTE_ONBOARDING_UPLOAD,
 } from "@/constants/routes";
-import { hasResume } from "@/app/actions/resume";
 import { createClient } from "@/lib/supabase/server";
 
 export async function GET(request: Request) {
@@ -22,8 +21,20 @@ export async function GET(request: Request) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error) {
-      if (await hasResume()) {
-        next = ROUTE_HOME_DASHBOARD;
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (user) {
+        const { data: resumeRows } = await supabase
+          .from("resumes")
+          .select("id")
+          .eq("user_id", user.id)
+          .limit(1);
+
+        if ((resumeRows?.length ?? 0) > 0) {
+          next = ROUTE_HOME_DASHBOARD;
+        }
       }
 
       const forwardedHost = request.headers.get("x-forwarded-host");
