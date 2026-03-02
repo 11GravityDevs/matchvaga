@@ -6,6 +6,14 @@ alwaysApply: false
 
 # Next.js App Router
 
+## Instruções-chave
+
+- Prefira **Server Components** por padrão; use `"use client"` apenas em componentes realmente interativos.
+- Use **Server Actions** para mutações internas da aplicação; evite criar Route Handlers apenas para consumo de Client Components.
+- Mantenha `page.tsx` como Server Component e mova lógica de hooks/estado para componentes `*Content` em `_components/`.
+- Após mutações relevantes, **sempre revalide** dados com `revalidatePath` ou `revalidateTag` (e invalidar queries do TanStack Query quando aplicável).
+- Para loading de página ou seção principal, use o componente `Loading` de `@/components/ui/loading` via `loading.tsx` ou Suspense.
+
 Reference: [Next.js Docs](https://nextjs.org/docs), [Vercel: Common App Router Mistakes](https://vercel.com/blog/common-mistakes-with-the-next-js-app-router-and-how-to-fix-them)
 
 ---

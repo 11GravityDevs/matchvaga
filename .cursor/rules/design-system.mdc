@@ -6,6 +6,12 @@ alwaysApply: false
 
 # MatchVaga Design System
 
+## Instruções-chave
+
+- Use sempre **tokens de design** definidos em `globals.css` (cores, tipografia, spacing, layout); nunca hardcode valores (`#hex`, `px`) em componentes.
+- Antes de criar um novo componente visual, confira o catálogo em `design-components.mdc` e os componentes shadcn disponíveis (via MCP `shadcn`).
+- Evite valores arbitrários do Tailwind em componentes; siga `tailwind-no-arbitrary.mdc` para spacing, tipografia e layout.
+
 Design tokens and components are defined in the rules below. All tokens live in `globals.css`; components follow the catalog in `design-components.mdc`.
 
 ## Rule Index

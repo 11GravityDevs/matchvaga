@@ -1,49 +1,48 @@
 ---
-description: When to use: creating or editing .cursor/rules; MDC frontmatter, scoping, and instruction style
+description: Quando usar: criar ou editar .cursor/rules; frontmatter MDC, escopo e estilo de instrução
 alwaysApply: false
 ---
 
-# Rule Writing Guidelines
+# Diretrizes para escrever regras
 
-Standards for editing `.cursor/rules/*.mdc`. See `matchvaga-project-overview.mdc` "Keeping Rules Updated" for when to update each rule.
+Padrões para edição de arquivos `.cursor/rules/*.mdc`. Veja a seção "Manter estas regras atualizadas" em `matchvaga-project-overview.mdc` para saber quando atualizar cada regra.
 
-**Agent Requested rules:** Must have a clear `description` so the AI can decide when to include them. Prefer "When to use: …" or a short scenario (e.g. "Commit message format and good practices").
+**Regras Agent Requested:** Devem ter uma `description` clara para que a IA consiga decidir quando incluí-las. Prefira "Quando usar: …" ou um cenário curto (ex.: "Formato de commit e boas práticas").
 
-## Instruction Style
+## Estilo das instruções
 
-- **Imperative, minimal:** Use "Do X", "Never Y", "Use Z from @/path". Avoid long prose.
-- **One idea per bullet:** No compound sentences.
-- **No redundancy:** If rule A references rule B, do not repeat B's content.
+- **Imperativo, minimalista:** Use "Faça X", "Nunca Y", "Use Z de @/path". Evite prosa longa.
+- **Uma ideia por bullet:** Não combine várias ideias na mesma frase.
+- **Sem redundância:** Se a regra A referencia a regra B, não repita o conteúdo de B.
 
-## Examples
+## Exemplos
 
-- **When:** For non-obvious constraints (purity, arbitrary values, security).
-- **Format:** Use ✅/❌ code blocks. One good, one bad—max 5 lines each.
-- **Where:** Inline in the rule, not a separate "Examples" section unless many.
+- **Quando usar:** Para restrições não óbvias (pureza, valores arbitrários, segurança).
+- **Formato:** Use blocos de código ✅/❌. Um exemplo bom, um ruim — máximo 5 linhas cada.
+- **Onde ficar:** Inline na própria regra, não em uma seção "Exemplos" separada (a menos que haja muitos).
 
-## Scoping
+## Escopo
 
-| Rule type | Frontmatter | When included |
-|-----------|-------------|----------------|
-| **Always** | `alwaysApply: true` | Every conversation |
-| **Auto Attached** | `globs: path` | When referenced files match the glob |
-| **Agent Requested** | `alwaysApply: false`, optional globs, **description required** | AI includes when description matches task |
+| Tipo de regra | Frontmatter | Quando é incluída |
+|---------------|-------------|--------------------|
+| **Always** | `alwaysApply: true` | Em toda conversa |
+| **Auto Attached** | `globs: path` | Quando os arquivos referenciados batem com o glob |
+| **Agent Requested** | `alwaysApply: false`, globs opcionais, **description obrigatória** | A IA inclui quando a descrição combina com a tarefa |
 
-| Use Case | Setting | Example |
-|----------|---------|---------|
-| Foundational context | alwaysApply: true | matchvaga-project-overview, colocation, composer-workflow, mcp-tools |
-| Domain-specific | globs: path | nextjs-app-router (src/app/**), tailwind-no-arbitrary |
-| Task-triggered | globs: broad | check-before-add (src/**/*.ts) |
+| Caso de uso | Configuração | Exemplo |
+|-------------|-------------|---------|
+| Contexto fundacional | `alwaysApply: true` | matchvaga-project-overview, colocation, mcp-tools |
+| Domínio específico | `globs: path` | nextjs-app-router (`src/app/**`), tailwind-no-arbitrary |
+| Disparado por tarefa | `globs: broad` | check-before-add (`src/**/*.ts`) |
 
-**Guideline:** Prefer glob-scoped over always-apply when the rule applies only to specific file types.
+**Diretriz:** Prefira regras com glob (escopo por caminho) em vez de `alwaysApply` quando a regra se aplica só a tipos específicos de arquivo.
 
-## Cross-References
+## Referências cruzadas
 
-- Use `See rule-name.mdc` for related rules.
-- Use `@/path` for code references.
-- Avoid circular references (A → B → A).
+- Use `Veja rule-name.mdc` para regras relacionadas.
+- Use `@/path` para referências de código.
+- Evite referências circulares (A → B → A).
 
-## File Size
+## Tamanho de arquivo
 
-- **Target:** <100 lines per rule. <50 for focused rules.
-- **Max:** 150 lines. If larger, split into multiple rules.
+- **Máximo:** 160 linhas. Se ficar maior, divida em múltiplas regras.

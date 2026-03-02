@@ -1,115 +1,122 @@
 ---
-description: MatchVaga project overview and core context
+description: Visão geral do projeto MatchVaga e contexto principal
 alwaysApply: true
 ---
 
-# MatchVaga Project Overview
+# Visão geral do projeto MatchVaga
 
-## Product
+## Instruções-chave
 
-**MatchVaga** is a SaaS platform tailored for the **Brazilian market** (content in Portuguese (PT-BR), currency in BRL) that:
-1. **Analyzes the gap** between a user's resume and a job description
-2. **Identifies missing skills** required for the target role
-3. **Generates an optimized document** (PDF/DOCX) tailored to the job
+- **Mercado brasileiro primeiro:** todo fluxo e texto voltado para o usuário deve considerar o mercado de trabalho no Brasil, em **português (PT-BR)** e moeda **BRL**.
+- **Arquitetura base:** use a stack e a estrutura de pastas abaixo como referência padrão para novas features.
+- **Colocation:** siga `colocation.mdc` e `check-before-add.mdc` para decidir onde colocar novos hooks, utils, constants e componentes.
+- **Regras relacionadas:** para detalhes de App Router, pureza em React, segurança, design system e AI, veja as demais regras indexadas na seção “Manter estas regras atualizadas”.
 
-## Tech Stack
+## Produto
 
-| Layer | Technology |
-|-------|------------|
+**MatchVaga** é uma plataforma SaaS voltada para o **mercado brasileiro** (conteúdo em português (PT-BR), moeda em BRL) que:
+1. **Analisa o gap** entre o currículo da pessoa usuária e a vaga desejada
+2. **Identifica habilidades faltantes** para o cargo alvo
+3. **Gera um documento otimizado** (PDF/DOCX) adaptado para aquela vaga
+
+## Stack de tecnologia
+
+| Camada | Tecnologia |
+|--------|------------|
 | Framework | Next.js 16 (App Router) |
 | React | React 19 |
 | Auth | Supabase Auth (email OTP, Google OAuth) |
 | Backend | Server Actions, Supabase (Postgres + Storage) |
 | AI/LLM | Gemini 1.5 Flash (extraction), GPT-4o-mini (scoring, chat), Claude 3.5 Sonnet (synthesis) |
-| Validation | Zod |
+| Validação | Zod |
 | Data fetching (client) | TanStack Query v5 |
-| Styling | Tailwind CSS v4 |
-| UI Components | shadcn/ui (radix-vega style), Base UI, Radix UI |
-| Icons | lucide-react |
+| Estilização | Tailwind CSS v4 |
+| Componentes de UI | shadcn/ui |
+| Ícones | lucide-react |
 | Utils | clsx, tailwind-merge, class-variance-authority |
 
-## Project Structure
+## Estrutura do projeto
 
 ```
 src/
-├── app/           # App Router pages, layouts, route groups; route-specific in _components/, _utils/, _hooks/, _constants/, _contexts/, _actions/
-│   └── actions/   # Shared Server Actions (resume, job, analysis, document, chat)
-├── components/    # ui/ (shadcn primitives) + shared/ (cross-feature components)
-├── constants/     # Shared constants (auth, design-tokens, routes, etc.)
-├── contexts/      # React Context providers
-├── hooks/         # Shared custom hooks (logic layer)
-├── lib/           # Supabase client (client.ts, server.ts) + AI utilities (server-only) + query/ (get-query-client, query-options)
-├── schemas/       # Zod schemas for Server Action validation
-├── utils/         # Shared utilities (style, auth, etc.)
-└── types/         # Shared TypeScript interfaces
+├── app/           # Páginas do App Router, layouts, route groups; código específico de rota em _components/, _utils/, _hooks/, _constants/, _contexts/, _actions/
+│   └── actions/   # Server Actions compartilhadas (currículo, vaga, análise, documento, chat)
+├── components/    # ui/ (primitivos do shadcn) + shared/ (componentes compartilhados entre features)
+├── constants/     # Constantes compartilhadas (auth, design tokens, rotas, etc.)
+├── contexts/      # Providers de React Context
+├── hooks/         # Hooks customizados compartilhados (camada de lógica)
+├── lib/           # Cliente do Supabase (client.ts, server.ts) + utilitários de AI (apenas server) + query/ (get-query-client, query-options)
+├── schemas/       # Schemas Zod para validação de Server Actions
+├── utils/         # Utilitários compartilhados (estilo, auth, etc.)
+└── types/         # Tipos TypeScript compartilhados
 ```
 
-**Component colocation:** See `colocation.mdc`.
+**Colocation de componentes:** veja `colocation.mdc`.
 
-**Utils, constants, hooks:** See `colocation.mdc` for placement. See `check-before-add.mdc` before adding new ones.
+**Utils, constants, hooks:** veja `colocation.mdc` para o lugar correto. Veja `check-before-add.mdc` antes de adicionar novos.
 
-## Route Architecture
+## Arquitetura de rotas
 
-| Route Group | Layout | Purpose |
-|-------------|--------|---------|
-| `(auth)/` | Full-screen, brand primary override | Login (email → token flow) |
-| `(legal)/` | Minimal `bg-background` wrapper | Privacy policy, Terms of service |
-| `onboarding/` | Top bar + step indicator | Resume upload → verify flow |
-| `home/` | Sidebar layout | Main app after onboarding; `/home` redirects to `/home/dashboard`; routes: dashboard, new-analysis, resume, checkout |
+| Grupo de rota | Layout | Propósito |
+|---------------|--------|-----------|
+| `(auth)/` | Tela cheia, override da cor primária da marca | Login (fluxo email → token) |
+| `(legal)/` | Wrapper mínimo com `bg-background` | Política de privacidade, Termos de uso |
+| `onboarding/` | Top bar + indicador de etapas | Fluxo de upload → verificação de currículo |
+| `home/` | Layout com sidebar | App principal após o onboarding; `/home` redireciona para `/home/dashboard`; rotas: dashboard, new-analysis, resume, checkout |
 
-Route groups `(auth)` and `(legal)` use parenthesized folders to share layouts without affecting the URL.
+Os route groups `(auth)` e `(legal)` usam pastas entre parênteses para compartilhar layouts sem afetar a URL.
 
-## Path Aliases
+## Path aliases
 
-- `@/components` — Components (ui/, shared/)
-- `@/constants` — Shared constants (auth, design-tokens, routes, etc.)
-- `@/components/ui` — shadcn UI primitives
-- `@/lib/supabase` — Supabase client (client, server)
-- `@/lib/ai` — AI prompts and client wrappers (server-only)
-- `@/lib/query` — Query client, query options
-- `@/components/shared` — Cross-feature components (e.g. brand)
-- `@/contexts` — Context providers
-- `@/hooks` — Custom hooks
-- `@/utils/style` — cn() helper (clsx + tailwind-merge)
-- `@/utils/auth` — Auth utilities (translateAuthError for Supabase errors)
-- `@/types` — Shared type definitions
+- `@/components` — Componentes (ui/, shared/)
+- `@/constants` — Constantes compartilhadas (auth, design tokens, rotas, etc.)
+- `@/components/ui` — Primitivos de UI do shadcn
+- `@/lib/supabase` — Cliente do Supabase (client e server)
+- `@/lib/ai` — Prompts e wrappers de cliente de AI (apenas server)
+- `@/lib/query` — Cliente de queries e opções de query
+- `@/components/shared` — Componentes compartilhados entre features (ex.: marca)
+- `@/contexts` — Providers de contexto
+- `@/hooks` — Hooks customizados
+- `@/utils/style` — Helper `cn()` (clsx + tailwind-merge)
+- `@/utils/auth` — Utilitários de auth (ex.: `translateAuthError` para erros do Supabase)
+- `@/types` — Tipos TypeScript compartilhados
 
-Route-local utils/hooks/constants use relative imports (e.g. `./_utils/...`, `../_hooks/...`). See `colocation.mdc`.
+Utils/hooks/constants específicos de rota usam imports relativos (ex.: `./_utils/...`, `../_hooks/...`). Veja `colocation.mdc`.
 
-## DX Tooling
+## Ferramentas de DX
 
-| Tool | Purpose |
-|------|---------|
-| **Husky** + **lint-staged** | Pre-commit: ESLint fix + Prettier format |
-| **Prettier** + `prettier-plugin-tailwindcss` | Auto-format; Tailwind class sorting |
-| **ESLint** + `eslint-config-next` | Linting with Next.js rules |
+| Ferramenta | Finalidade |
+|------------|-----------|
+| **Husky** + **lint-staged** | Pre-commit: ESLint fix + formatação com Prettier |
+| **Prettier** + `prettier-plugin-tailwindcss` | Autoformatação; ordenação de classes Tailwind |
+| **ESLint** + `eslint-config-next` | Linting com regras do Next.js |
 
-- **Cursor rules:** Types (Always / Auto Attached / Agent Requested) and editing standards: see `rule-writing-guidelines.mdc`.
-- **Git:** Workflow and commit format: see `git-workflow.mdc`, `commit-messages.mdc`.
+- **Regras do Cursor:** Tipos (Always / Auto Attached / Agent Requested) e padrões de edição: veja `rule-writing-guidelines.mdc`.
+- **Git:** Workflow e formato de commits: veja `git-workflow.mdc`, `commit-messages.mdc`.
 
-## Keeping Rules Updated
+## Manter estas regras atualizadas
 
-When the project changes, update these rules accordingly:
+Quando o projeto mudar, atualize estas regras de acordo:
 
-| Change | Update |
-|--------|--------|
-| New important library | Add to Tech Stack table |
-| New folder in `src/` | Add to Project Structure; update path aliases if new |
-| New path alias | Add to Path Aliases; update `components.json` reference |
-| New util function | Add to `utils/<domain>.ts` (shared) or `_utils/` (route-specific); see `colocation.mdc` |
-| New shared constant (2+ routes) | Add to `constants/<domain>.ts`; route-specific → `_constants/`; single constant → keep in component/module |
-| New query options/keys/hooks | Add to `lib/query/`, `constants/query-keys.ts`, or `hooks/` per colocation; update this rule |
-| New route group or flow | Add to Route Architecture |
-| New domain concept | Add to `matchvaga-domain.mdc` |
-| New AI flow or provider | Add to `matchvaga-domain.mdc`; document env vars in `security.mdc` |
-| New design components or tokens | Update `design-tokens-reference.mdc`, `design-components.mdc`, and `globals.css` / `design-tokens.ts` |
-| New security surface | Update `security.mdc` |
-| New Server Action | Add to `app/actions/` or route `_actions/`; validate with Zod |
-| New DB table or migration | Update `database-schema.mdc` |
-| App Router patterns, loading/error, use cache | See `nextjs-app-router.mdc` |
-| React purity, hooks, Thinking in React | See `react-rules.mdc` |
-| Editing rules | See `rule-writing-guidelines.mdc` |
-| New MCP server | Update `mcp-tools.mdc` and `.cursor/mcp.json` |
-| Linear task template change | Update `linear-task-template.mdc` |
-| Branch + Linear workflow (start task) | Update `linear-task-branch.mdc` |
-| Git workflow or commit message convention | Update `git-workflow.mdc` or `commit-messages.mdc`; keep branch workflow in `linear-task-branch.mdc` |
+| Mudança | Atualização |
+|---------|------------|
+| Nova biblioteca importante | Adicione na tabela de Stack de tecnologia |
+| Nova pasta em `src/` | Adicione em Estrutura do projeto; atualize path aliases se necessário |
+| Novo path alias | Adicione em Path aliases; atualize a referência em `components.json` |
+| Nova função utilitária | Adicione em `utils/<domain>.ts` (compartilhado) ou `_utils/` (específico de rota); veja `colocation.mdc` |
+| Nova constante compartilhada (2+ rotas) | Adicione em `constants/<domain>.ts`; se for específica de rota → `_constants/`; se for única → mantenha no próprio componente/módulo |
+| Novas query options/keys/hooks | Adicione em `lib/query/`, `constants/query-keys.ts` ou `hooks/` seguindo colocation; atualize esta regra |
+| Novo route group ou fluxo | Atualize em Arquitetura de rotas |
+| Novo conceito de domínio | Adicione em `matchvaga-domain.mdc` |
+| Novo fluxo de AI ou provider | Adicione em `matchvaga-domain.mdc`; documente env vars em `security.mdc` |
+| Novos componentes ou tokens de design | Atualize `design-tokens-reference.mdc`, `design-components.mdc` e `globals.css` / `design-tokens.ts` |
+| Nova superfície de segurança | Atualize `security.mdc` |
+| Nova Server Action | Adicione em `app/actions/` ou `_actions/` da rota; valide com Zod |
+| Nova tabela de banco ou migration | Atualize `database-schema.mdc` |
+| Padrões de App Router, loading/error, uso de cache | Veja `nextjs-app-router.mdc` |
+| Regras de pureza em React, hooks, Thinking in React | Veja `react-rules.mdc` |
+| Regras de edição | Veja `rule-writing-guidelines.mdc` |
+| Nova MCP | Atualize `mcp-tools.mdc` e `.cursor/mcp.json` |
+| Mudança no template de tarefas do Linear | Atualize `linear-task-template.mdc` |
+| Workflow de branch + Linear (início de tarefa) | Atualize `linear-task-branch.mdc` |
+| Mudança no workflow de Git ou convenção de commits | Atualize `git-workflow.mdc` ou `commit-messages.mdc`; mantenha o workflow de branch em `linear-task-branch.mdc` |
