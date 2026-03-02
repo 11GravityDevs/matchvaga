@@ -346,7 +346,6 @@
   color: var(--foreground);
 }
 @utility text-score {
-  font-size: 44px;
   line-height: 1;
   font-weight: 700;
   color: var(--foreground);

@@ -118,7 +118,7 @@ export function UploadContent() {
 
   if (isUploading) {
     return (
-      <main className="flex min-h-0 w-form flex-1 flex-col rounded-xl border border-border bg-card">
+      <main className="flex w-form flex-1 flex-col">
         <Loading
           thinkingMessages={[...UPLOAD_THINKING_MESSAGES]}
           className="min-h-0 flex-1"
@@ -128,148 +128,156 @@ export function UploadContent() {
   }
 
   return (
-    <main className="w-form rounded-xl border border-border bg-card">
-      <div className="flex flex-col gap-1 px-7 pt-7">
-        <h2 className="text-card-title">Upload do Curriculo</h2>
-        <p className="text-card-description">
-          Envie seu curriculo para começar
-        </p>
-      </div>
+    <main className="w-form">
+      <div className="rounded-xl border border-border bg-card">
+        <div className="flex flex-col gap-1 px-7 pt-7">
+          <h2 className="text-card-title">Upload do Curriculo</h2>
+          <p className="text-card-description">
+            Envie seu curriculo para começar
+          </p>
+        </div>
 
-      <div className="flex flex-col gap-6 p-7">
-        <div
-          className={cn(
-            "flex min-h-80 cursor-pointer flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed border-border bg-card transition-colors",
-            "hover:border-accent-brand/50 hover:bg-muted/20",
-            isDraggingOver && "border-accent-brand bg-muted/20"
-          )}
-          onPaste={handlePaste}
-          onDrop={handleDrop}
-          onDragEnter={handleDragEnter}
-          onDragLeave={handleDragLeave}
-          onDragOver={handleDragOver}
-          tabIndex={0}
-          role="button"
-          onClick={() => inputRef.current?.click()}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              inputRef.current?.click();
-            }
-          }}
-        >
-          <input
-            ref={inputRef}
-            type="file"
-            accept=".txt,.pdf,.doc,.docx"
-            onChange={handleFileChange}
-            className="sr-only"
-            aria-label="Selecionar arquivo do curriculo"
-          />
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-secondary">
+        <div className="flex flex-col gap-6 p-7">
+          <div
+            className={cn(
+              "flex min-h-80 cursor-pointer flex-col items-center justify-center gap-4 rounded-xl border-2 border-dashed border-border bg-card transition-colors",
+              "hover:border-accent-brand/50 hover:bg-muted/20",
+              isDraggingOver && "border-accent-brand bg-muted/20"
+            )}
+            onPaste={handlePaste}
+            onDrop={handleDrop}
+            onDragEnter={handleDragEnter}
+            onDragLeave={handleDragLeave}
+            onDragOver={handleDragOver}
+            tabIndex={0}
+            role="button"
+            onClick={() => inputRef.current?.click()}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                inputRef.current?.click();
+              }
+            }}
+          >
+            <input
+              ref={inputRef}
+              type="file"
+              accept=".txt,.pdf,.doc,.docx"
+              onChange={handleFileChange}
+              className="sr-only"
+              aria-label="Selecionar arquivo do curriculo"
+            />
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-secondary">
+              {selectedFile ? (
+                <Check className="h-7 w-7 text-accent-success" />
+              ) : (
+                <Upload className="h-7 w-7 text-muted-foreground" />
+              )}
+            </div>
             {selectedFile ? (
-              <Check className="h-7 w-7 text-accent-success" />
+              <>
+                <p className="text-center text-lg font-semibold text-foreground">
+                  {selectedFile.name}
+                </p>
+                <p className="text-center text-sm text-muted-foreground">
+                  {formatFileSize(selectedFile.size)}
+                </p>
+                <button
+                  type="button"
+                  onClick={handleBrowseClick}
+                  className="cursor-pointer rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+                >
+                  Selecionar outro arquivo
+                </button>
+              </>
             ) : (
-              <Upload className="h-7 w-7 text-muted-foreground" />
+              <>
+                <p className="text-center text-lg font-semibold text-foreground">
+                  Arraste seu curriculo aqui
+                </p>
+                <p className="text-center text-sm text-muted-foreground">
+                  Suportamos PDF e DOCX (Máx.{" "}
+                  {formatFileSize(MAX_FILE_SIZE_BYTES)})
+                </p>
+                <p className="text-small text-muted-foreground">ou</p>
+                <Button
+                  variant="secondary"
+                  size="lg"
+                  onClick={handleBrowseClick}
+                >
+                  Selecionar arquivo
+                </Button>
+              </>
             )}
           </div>
-          {selectedFile ? (
-            <>
-              <p className="text-center text-lg font-semibold text-foreground">
-                {selectedFile.name}
-              </p>
-              <p className="text-center text-sm text-muted-foreground">
-                {formatFileSize(selectedFile.size)}
-              </p>
-              <button
-                type="button"
-                onClick={handleBrowseClick}
-                className="cursor-pointer rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted"
-              >
-                Selecionar outro arquivo
-              </button>
-            </>
-          ) : (
-            <>
-              <p className="text-center text-lg font-semibold text-foreground">
-                Arraste seu curriculo aqui
-              </p>
-              <p className="text-center text-sm text-muted-foreground">
-                Suportamos PDF e DOCX (Máx.{" "}
-                {formatFileSize(MAX_FILE_SIZE_BYTES)})
-              </p>
-              <p className="text-small text-muted-foreground">ou</p>
-              <Button variant="secondary" size="lg" onClick={handleBrowseClick}>
-                Selecionar arquivo
-              </Button>
-            </>
+
+          {(fileSizeError || uploadError) && (
+            <p className="text-sm text-destructive" role="alert">
+              {fileSizeError ?? uploadError}
+            </p>
           )}
-        </div>
-
-        {(fileSizeError || uploadError) && (
-          <p className="text-sm text-destructive" role="alert">
-            {fileSizeError ?? uploadError}
-          </p>
-        )}
-        <div className="flex justify-end gap-4">
-          <Button
-            type="button"
-            variant="outline"
-            size="brand"
-            className="rounded-lg"
-            onClick={() => setIsSkipUploadModalOpen(true)}
-          >
-            Continuar sem currículo
-          </Button>
-          <Button
-            type="button"
-            onClick={handleAnalyze}
-            disabled={!selectedFile || isUploading}
-            variant="brand"
-            size="brand"
-            className="rounded-lg"
-          >
-            Continuar
-          </Button>
-        </div>
-      </div>
-
-      <Dialog
-        open={isSkipUploadModalOpen}
-        onOpenChange={setIsSkipUploadModalOpen}
-      >
-        <DialogContent className="rounded-xl">
-          <DialogHeader>
-            <DialogTitle className="text-card-title">Tem certeza?</DialogTitle>
-            <DialogDescription className="pt-1 text-muted-foreground">
-              Enviar seu currículo torna o processo muito mais simples.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="flex flex-row gap-2 pt-2 sm:justify-end">
+          <div className="flex justify-end gap-4">
             <Button
               type="button"
               variant="outline"
               size="brand"
               className="rounded-lg"
-              onClick={() => setIsSkipUploadModalOpen(false)}
+              onClick={() => setIsSkipUploadModalOpen(true)}
             >
-              Cancelar
+              Continuar sem currículo
             </Button>
             <Button
               type="button"
+              onClick={handleAnalyze}
+              disabled={!selectedFile || isUploading}
               variant="brand"
               size="brand"
               className="rounded-lg"
-              onClick={() => {
-                setIsSkipUploadModalOpen(false);
-                continueWithoutUpload();
-              }}
             >
               Continuar
             </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+          </div>
+        </div>
+
+        <Dialog
+          open={isSkipUploadModalOpen}
+          onOpenChange={setIsSkipUploadModalOpen}
+        >
+          <DialogContent className="rounded-xl">
+            <DialogHeader>
+              <DialogTitle className="text-card-title">
+                Tem certeza?
+              </DialogTitle>
+              <DialogDescription className="pt-1 text-muted-foreground">
+                Enviar seu currículo torna o processo muito mais simples.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter className="flex flex-row gap-2 pt-2 sm:justify-end">
+              <Button
+                type="button"
+                variant="outline"
+                size="brand"
+                className="rounded-lg"
+                onClick={() => setIsSkipUploadModalOpen(false)}
+              >
+                Cancelar
+              </Button>
+              <Button
+                type="button"
+                variant="brand"
+                size="brand"
+                className="rounded-lg"
+                onClick={() => {
+                  setIsSkipUploadModalOpen(false);
+                  continueWithoutUpload();
+                }}
+              >
+                Continuar
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
     </main>
   );
 }
