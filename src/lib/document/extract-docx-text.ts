@@ -1,5 +1,3 @@
-"use server";
-
 import mammoth from "mammoth";
 
 export async function extractTextFromDocx(
