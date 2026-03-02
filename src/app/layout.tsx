@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 
 import { Analytics } from "@vercel/analytics/next";
-import { SITE_URL } from "@/constants/site";
+
 import { CookieConsent } from "@/components/shared/cookie-consent";
 import { QueryProvider } from "@/components/providers/query-provider";
+import { AuthProvider } from "@/contexts/auth-context";
+import { SITE_URL } from "@/constants/site";
 
 import "./globals.css";
 
@@ -63,9 +65,11 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className="min-h-screen font-sans antialiased">
         <QueryProvider>
-          {children}
-          <CookieConsent />
-          <Analytics />
+          <AuthProvider>
+            {children}
+            <CookieConsent />
+            <Analytics />
+          </AuthProvider>
         </QueryProvider>
       </body>
     </html>

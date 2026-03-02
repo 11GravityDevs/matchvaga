@@ -10,9 +10,9 @@ export const FAQ_ITEMS = [
       "Nossa IA analisa os requisitos da vaga e identifica as palavras-chave que os sistemas ATS procuram. Em seguida, reorganiza e adapta seu currículo para maximizar a pontuação nos filtros automatizados.",
   },
   {
-    question: "Posso cancelar meu plano a qualquer momento?",
+    question: "Minhas análises expiram?",
     answer:
-      "Sim, você pode cancelar a qualquer momento sem taxas adicionais. Seu acesso continuará até o final do período já pago.",
+      "Não. Suas análises não têm validade: você pode usar quando quiser, no seu tempo.",
   },
   {
     question: "Meus dados estão seguros?",
