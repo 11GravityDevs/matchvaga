@@ -1,8 +1,3 @@
-/**
- * Supabase client with secret key. Bypasses RLS.
- * Use only in server-side code that must act without a user session (e.g. webhooks).
- * Never expose or use in client code.
- */
 import { createClient } from "@supabase/supabase-js";
 
 export function createAdminSupabaseClient() {
