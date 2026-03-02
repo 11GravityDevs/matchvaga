@@ -1,34 +1,15 @@
 ---
-description: DB tables resumes, analyses, user_credits, optimized_documents — use when writing Server Actions
+description: Tabelas Supabase — resumes, analyses, user_credits, purchases, optimized_documents
 globs: src/app/actions/**/*.ts,src/app/**/_actions/**/*.ts,supabase/migrations/**/*.sql
 alwaysApply: false
 ---
 
 # Database Schema
 
-Reference: `supabase/migrations/20250222000000_initial_schema.sql`
+Ref: `supabase/migrations/20250222000000_initial_schema.sql`
 
-## Tables
+**Tabelas:** resumes (id, user_id, parsed_data JSONB → ResumeData). analyses (id, user_id, resume_id, job_snapshot, score, matched_skills, missing_technical_skills, missing_behavioral_skills, status pending|completed|abandoned). user_credits (user_id, credits). purchases (id, stripe_session_id UNIQUE, user_id, package_id, credits_granted) — só service client. optimized_documents (id, analysis_id, file_path, format pdf|docx).
 
-| Table | Key Columns | Notes |
-|-------|-------------|-------|
-| **resumes** | `id`, `user_id`, `parsed_data` (JSONB) | No file storage; `parsed_data` matches `ResumeData` |
-| **analyses** | `id`, `user_id`, `resume_id`, `job_snapshot` (JSONB), `score`, `matched_skills`, `missing_technical_skills`, `missing_behavioral_skills`, `status` | Job stored as snapshot; `status`: pending \| completed \| abandoned |
-| **user_credits** | `user_id`, `credits`, `updated_at` | One row per user; created when user uploads or creates a resume (3 credits); decremented on successful analysis; incremented by Stripe webhook on purchase |
-| **purchases** | `id`, `stripe_session_id` (UNIQUE), `user_id`, `package_id`, `credits_granted`, `created_at` | Stripe webhook idempotency; written only via secret-key client (no RLS policies) |
-| **optimized_documents** | `id`, `analysis_id`, `file_path`, `format` ('pdf'\|'docx') | Access via analysis ownership |
+**Mapping:** parsed_data → resumeDataSchema; job_snapshot → jobSnapshotSchema; matched/missing_skills = string[]; status em runGapAnalysis/synthesizeOptimizedResumeForPreview.
 
-## Column Mapping
-
-- **resumes.parsed_data** — Validated with `resumeDataSchema` from `@/schemas/resume`
-- **analyses.job_snapshot** — `{ title, company, rawText }`; validated with `jobSnapshotSchema` from `@/schemas/job`
-- **analyses.matched_skills** — `string[]` in JSONB
-- **analyses.missing_technical_skills**, **missing_behavioral_skills** — `string[]` in JSONB; set from gap analysis AI result; used by synthesis and chat
-- **analyses.status** — `'pending' | 'completed' | 'abandoned'`; set in `runGapAnalysis` (pending) and `synthesizeOptimizedResumeForPreview` (completed)
-
-## RLS
-
-- resumes, analyses, user_credits: users access only their own rows (`auth.uid() = user_id`)
-- purchases: RLS enabled, no policies — access only via secret-key client (Stripe webhook)
-- optimized_documents: SELECT/INSERT via analysis ownership
-        
+**RLS:** resumes, analyses, user_credits = auth.uid()=user_id. purchases = sem policies, só service client. optimized_documents = via analysis.

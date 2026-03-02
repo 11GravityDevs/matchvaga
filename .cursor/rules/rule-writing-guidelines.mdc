@@ -1,48 +1,8 @@
 ---
-description: Quando usar: criar ou editar .cursor/rules; frontmatter MDC, escopo e estilo de instrução
+description: Quando usar: criar/editar .cursor/rules; frontmatter, estilo
 alwaysApply: false
 ---
 
-# Diretrizes para escrever regras
+# Regras — escrita
 
-Padrões para edição de arquivos `.cursor/rules/*.mdc`. Veja a seção "Manter estas regras atualizadas" em `matchvaga-project-overview.mdc` para saber quando atualizar cada regra.
-
-**Regras Agent Requested:** Devem ter uma `description` clara para que a IA consiga decidir quando incluí-las. Prefira "Quando usar: …" ou um cenário curto (ex.: "Formato de commit e boas práticas").
-
-## Estilo das instruções
-
-- **Imperativo, minimalista:** Use "Faça X", "Nunca Y", "Use Z de @/path". Evite prosa longa.
-- **Uma ideia por bullet:** Não combine várias ideias na mesma frase.
-- **Sem redundância:** Se a regra A referencia a regra B, não repita o conteúdo de B.
-
-## Exemplos
-
-- **Quando usar:** Para restrições não óbvias (pureza, valores arbitrários, segurança).
-- **Formato:** Use blocos de código ✅/❌. Um exemplo bom, um ruim — máximo 5 linhas cada.
-- **Onde ficar:** Inline na própria regra, não em uma seção "Exemplos" separada (a menos que haja muitos).
-
-## Escopo
-
-| Tipo de regra | Frontmatter | Quando é incluída |
-|---------------|-------------|--------------------|
-| **Always** | `alwaysApply: true` | Em toda conversa |
-| **Auto Attached** | `globs: path` | Quando os arquivos referenciados batem com o glob |
-| **Agent Requested** | `alwaysApply: false`, globs opcionais, **description obrigatória** | A IA inclui quando a descrição combina com a tarefa |
-
-| Caso de uso | Configuração | Exemplo |
-|-------------|-------------|---------|
-| Contexto fundacional | `alwaysApply: true` | matchvaga-project-overview, colocation, mcp-tools |
-| Domínio específico | `globs: path` | nextjs-app-router (`src/app/**`), tailwind-no-arbitrary |
-| Disparado por tarefa | `globs: broad` | check-before-add (`src/**/*.ts`) |
-
-**Diretriz:** Prefira regras com glob (escopo por caminho) em vez de `alwaysApply` quando a regra se aplica só a tipos específicos de arquivo.
-
-## Referências cruzadas
-
-- Use `Veja rule-name.mdc` para regras relacionadas.
-- Use `@/path` para referências de código.
-- Evite referências circulares (A → B → A).
-
-## Tamanho de arquivo
-
-- **Máximo:** 160 linhas. Se ficar maior, divida em múltiplas regras.
+**Agent Requested:** description clara ("Quando usar: …"). **Estilo:** imperativo, uma ideia por bullet, sem repetir regra referenciada. **Escopo:** alwaysApply | globs | description. Preferir globs a always quando só para certos arquivos. **Refs:** "Veja X.mdc", @/path; evitar circular. **Tamanho:** máx ~160 linhas; dividir se maior. Ver "Manter regras atualizadas" em matchvaga-project-overview.mdc.

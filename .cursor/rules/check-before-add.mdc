@@ -1,19 +1,9 @@
 ---
-description: Search before implementing — check for existing utils, constants, hooks, components
+description: Antes de adicionar util/constant/hook/component — buscar existente
 globs: src/**/*.ts,src/**/*.tsx
 alwaysApply: false
 ---
 
 # Check Before Adding
 
-Applies when adding new utils, constants, hooks, or components.
-
-Before implementing:
-
-1. **Search** for similar behavior (e.g., `formatFileSize`, `isValidEmail`, `parseLoginStep`, `getStepIndexFromPathname`, `query-options`, `query-keys`, `use-resume-query`)
-2. **Prefer** existing `@/utils/*`, `@/constants/*`, `@/hooks/*`, `@/components/*`
-3. If **route-specific** and not found → use `_utils`, `_hooks`, `_constants`, `_contexts` in that route
-4. If **shared** and not found → add to `src/` with domain-specific file (e.g., `utils/file.ts`, `constants/auth.ts`)
-5. **Single constant:** Do not create a new constants file for one constant. Keep it in the component or module that uses it.
-
-See `colocation.mdc` for where to place and when to use dedicated constants files.
+Ao adicionar util, constant, hook ou component: (1) Buscar comportamento similar. (2) Preferir `@/utils/*`, `@/constants/*`, `@/hooks/*`, `@/components/*`. (3) Específico de rota e não encontrado → `_utils`, `_hooks`, `_constants` na rota. (4) Compartilhado e não encontrado → `src/` com arquivo por domínio. (5) Uma constante só → manter no componente/módulo, não criar arquivo. Ver `colocation.mdc`.

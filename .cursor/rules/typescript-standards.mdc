@@ -1,59 +1,17 @@
 ---
-description: TypeScript strict mode — no any, explicit types, named exports
+description: Strict — no any, Props interface, named exports
 globs: src/**/*.ts,src/**/*.tsx
 alwaysApply: false
 ---
 
-# TypeScript Standards
+# TypeScript
 
-## Strict Mode
+**Strict:** Sem `any`; usar `unknown` + type guards. Props: `interface Props`. Named exports (`export const`).
 
-- **No `any`** — Use `unknown` with type guards when type is uncertain.
-- **Explicit prop interfaces** — Define `interface Props` for component props.
-- **Named exports** — Prefer `export const foo` over `export default`.
+**Inferência:** Preferir inferido. Tipar: props exportadas, inputs/outputs de Server Actions, generics/type guards, retornos não triviais. Evitar anotações redundantes.
 
-## Type Inference
-
-- **Prefer inferred types.** Do not add explicit types when TypeScript infers correctly.
-- **Avoid redundant annotations:**
-  - Variables: `const x = "foo"` not `const x: string = "foo"`
-  - Function returns: omit when obvious — `function getId() { return "abc" }` not `function getId(): string { ... }`
-  - Parameters in simple cases when inference flows from usage
-- **Add explicit types when:**
-  - Public API: exported component props (`interface Props`)
-  - Server Action inputs/outputs (clarity for callers)
-  - Complex generics or type guards
-  - Return type aids readability for non-trivial functions
-
-## Examples
-
-```ts
-// ❌ Bad
-function parse(data: any) {
-  return data.value;
-}
-
-// ✅ Good
-function parse(data: unknown): { value: string } {
-  if (typeof data === "object" && data !== null && "value" in data) {
-    return { value: String((data as { value: unknown }).value) };
-  }
-  throw new Error("Invalid data");
-}
-```
-
-```tsx
-// ❌ Bad
-export default function Card({ title }: { title: string }) {
-  return <div>{title}</div>;
-}
-
-// ✅ Good
-interface CardProps {
-  title: string;
-}
-
-export function Card({ title }: CardProps) {
-  return <div>{title}</div>;
-}
-```
+<example>
+✅ interface Props { title: string }
+✅ export function Card({ title }: Props)
+❌ default export, any, props inline sem interface
+</example>

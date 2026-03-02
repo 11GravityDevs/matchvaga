@@ -1,111 +1,17 @@
 ---
-description: React rules, patterns, purity, hooks, and Thinking in React workflow
+description: React — pureza, hooks, UI vs lógica; máx 400 linhas por arquivo
 globs: src/**/*.tsx,src/**/*.ts
 alwaysApply: false
 ---
 
-# React Rules & Patterns
+# React Rules
 
-Reference: [Rules of React](https://react.dev/reference/rules), [Thinking in React](https://react.dev/learn/thinking-in-react), [Keeping Components Pure](https://react.dev/learn/keeping-components-pure)
+**Estrutura:** Props tipadas (`interface Props`). UI presentacional; lógica em hooks/serviços. Máx 400 linhas; extrair hooks/componentes.
 
----
+**Pureza:** Não mutar props/state. Efeitos fora do render (useEffect/handlers); sem fetch/Date/random no render. Mutar variável local no render é OK. Ex.: document.title no render ❌ → useEffect ✅. Hooks em condicional/loop ❌; sempre top level.
 
-## Component Structure
+**Hooks:** Só em componentes ou custom hooks; sempre no top level (não em condicionais/loops). Componentes como JSX `<Foo />`, não Foo().
 
-```tsx
-interface ResumeUploadProps {
-  onUpload: (file: File) => void;
-  isUploading?: boolean;
-}
+**Purity checklist:** fetch → useQuery/useEffect/Server await. document.title → useEffect. Mutar props/state → novos valores/setters.
 
-export function ResumeUpload({ onUpload, isUploading }: ResumeUploadProps) {
-  return (/* ... */);
-}
-```
-
-- **UI components**: Presentational only; receive data via props
-- **Logic**: Custom hooks (`useLogin`, `useResumeUpload`) or services — not inside JSX
-- **Hooks/utils placement**: See `colocation.mdc`
-- **File Size Limit**: Maximum **400 lines**. If a file exceeds this limit, extract code into custom hooks or smaller components colocated in the same directory.
-
----
-
-## Rules of React
-
-These are rules—not guidelines. Breaking them often causes bugs. Use Strict Mode and [eslint-plugin-react-hooks](https://www.npmjs.com/package/eslint-plugin-react-hooks).
-
-### 1. Components and Hooks must be pure
-
-- **Props and state are immutable** — Never mutate them. Use setters for state; pass new props down.
-- **Side effects outside render** — No `fetch`, `document.title`, mutations, or non-idempotent calls (`new Date()`, `Math.random()`) during render. Use event handlers or `useEffect`.
-- **Idempotent** — Same inputs (props, state, context) → same output. Avoid `new Date()` or `Math.random()` in render.
-- **Local mutation is OK** — Mutating a variable created inside the component (e.g. building an array) is fine. Mutating values from outside (props, globals) is not.
-
-```tsx
-// ❌ Bad: side effect in render
-function Page({ product }) {
-  document.title = product.title;
-  return <h1>{product.name}</h1>;
-}
-
-// ✅ Good: use useEffect
-function Page({ product }) {
-  useEffect(() => {
-    document.title = product.title;
-  }, [product.title]);
-  return <h1>{product.name}</h1>;
-}
-```
-
-### 2. React calls Components and Hooks
-
-- **Never pass hooks as values** — Hooks only inside components.
-- **Never call components as functions** — Use JSX: `<MyComponent />`, not `MyComponent()`.
-
-### 3. Rules of Hooks
-
-- **Only from React functions** — Call hooks from components or custom hooks, not from plain JS.
-- **Only at top level** — No hooks inside loops, conditions, or nested functions. Call them before any early returns.
-
-```tsx
-// ❌ Bad
-if (condition) {
-  const [x, setX] = useState(0);
-}
-
-// ✅ Good
-const [x, setX] = useState(0);
-if (!condition) return null;
-```
-
----
-
-## Thinking in React (5 steps)
-
-1. **Break UI into component hierarchy** — Map mockup to components; match data model shape.
-2. **Build static version first** — No state; pass data via props. Top-down or bottom-up.
-3. **Identify minimal state** — What changes? Where does it live? (Lift state up if needed.)
-4. **Determine where state lives** — Single source of truth; often the nearest common parent.
-5. **Add inverse data flow** — Callbacks from children to parents to update state.
-
----
-
-## Purity checklist
-
-| In render                      | Use instead                                                                 |
-| ------------------------------ | --------------------------------------------------------------------------- |
-| `fetch()`                      | `useQuery` (TanStack Query) or `useEffect` or Server Component `await`    |
-| `document.title = x`           | `useEffect`                               |
-| `new Date()`, `Math.random()`  | `useState` + `useEffect` or event handler |
-| Mutating props/state           | New values, setters                       |
-| Mutating objects passed to JSX | Create new objects before passing         |
-
----
-
-## Learn more
-
-- [Rules of React](https://react.dev/reference/rules)
-- [Components and Hooks must be pure](https://react.dev/reference/rules/components-and-hooks-must-be-pure)
-- [Rules of Hooks](https://react.dev/reference/rules/rules-of-hooks)
-- [Thinking in React](https://react.dev/learn/thinking-in-react)
-- [Keeping Components Pure](https://react.dev/learn/keeping-components-pure)
+**Thinking in React:** (1) Hierarquia de componentes (2) Versão estática (3) Estado mínimo (4) Onde vive o estado (5) Fluxo inverso (callbacks).
