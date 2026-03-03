@@ -14,6 +14,7 @@ import {
 } from "../_contexts/new-analysis-context";
 import { ScoreRing } from "./score-ring";
 import { StepIndicator } from "@/components/shared/step-indicator";
+import { useToastNotification } from "@/hooks/useToastNotification";
 
 const GENERATE_RESUME_THINKING_MESSAGES = [
   "Gerando currículo otimizado...",
@@ -98,7 +99,6 @@ export function StepGapAnalysis() {
   const {
     jobRole,
     score,
-    optimizedScore,
     matchedSkills,
     technicalSkills,
     behavioralSkills,
@@ -110,6 +110,7 @@ export function StepGapAnalysis() {
     setOptimizedScore,
     analysisId,
   } = useNewAnalysis();
+  const { showErrorToastNotification } = useToastNotification();
 
   const selectedTechnical = technicalSkills
     .filter((s) => s.selected)
@@ -122,13 +123,10 @@ export function StepGapAnalysis() {
     behavioralSkills.filter((s) => s.selected).length;
   const totalSkillsCount = technicalSkills.length + behavioralSkills.length;
 
-  const {
-    mutate: generateDocument,
-    isPending: isGenerating,
-    error: generateError,
-  } = useMutation({
+  const { mutate: generateDocument, isPending: isGenerating } = useMutation({
     mutationFn: async () => {
       if (!analysisId) throw new Error("Análise não encontrada.");
+
       const result = await synthesizeOptimizedResumeForPreview(
         analysisId,
         selectedTechnical,
@@ -154,18 +152,18 @@ export function StepGapAnalysis() {
       }
       setStep(3);
     },
+    onError: (error) => {
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Erro ao gerar currículo. Tente novamente.";
+      showErrorToastNotification(message);
+    },
   });
 
   const displayScore = score ?? 0;
   const feedback = getScoreFeedback(displayScore);
   const feedbackClasses = FEEDBACK_BADGE_CLASSES[feedback.variant];
-
-  const generateErrorDisplay =
-    generateError instanceof Error
-      ? generateError.message
-      : generateError
-        ? String(generateError)
-        : null;
 
   const handleGenerate = () => {
     generateDocument();
@@ -315,15 +313,6 @@ export function StepGapAnalysis() {
           </div>
         </div>
       </div>
-
-      {generateErrorDisplay && (
-        <div
-          role="alert"
-          className="rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive"
-        >
-          {generateErrorDisplay}
-        </div>
-      )}
     </div>
   );
 }

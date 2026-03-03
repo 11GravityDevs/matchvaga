@@ -9021,6 +9021,8 @@
           "type": "frame",
           "id": "unGe6",
           "name": "Item Content Right",
+          "width": "fit_content(0)",
+          "height": "fit_content(0)",
           "gap": 8,
           "justifyContent": "end",
           "alignItems": "center",
@@ -9132,6 +9134,8 @@
           "type": "frame",
           "id": "9XzSB",
           "name": "Item Content Right",
+          "width": "fit_content(0)",
+          "height": "fit_content(0)",
           "gap": 8,
           "justifyContent": "end",
           "alignItems": "center",
@@ -17914,6 +17918,1718 @@
                   ]
                 }
               ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "6aip4",
+      "x": -685,
+      "y": 12482,
+      "name": "LinkedIn Post 1 - Curriculo Invisivel",
+      "clip": true,
+      "width": 1200,
+      "height": 1200,
+      "fill": "#FFFFFF",
+      "layout": "vertical",
+      "padding": 80,
+      "justifyContent": "space_between",
+      "children": [
+        {
+          "type": "frame",
+          "id": "r8290",
+          "name": "topArea",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "gap": 40,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "4sifl",
+              "name": "iconFrame",
+              "width": 100,
+              "height": 100,
+              "fill": "#FEE2E2",
+              "cornerRadius": 20,
+              "layout": "vertical",
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "v6kiz",
+                  "name": "iconX",
+                  "width": 48,
+                  "height": 48,
+                  "iconFontName": "file-x",
+                  "iconFontFamily": "lucide",
+                  "fill": "#DC2626"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "0f1bH",
+              "name": "headline",
+              "fill": "#0F172A",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Você envia 50 currículos\ne ninguém responde.",
+              "lineHeight": 1.2,
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 52,
+              "fontWeight": "800",
+              "letterSpacing": -1.5
+            },
+            {
+              "type": "text",
+              "id": "RhH0L",
+              "name": "subtext",
+              "fill": "#64748B",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "O problema não é você.\n75% dos currículos são eliminados por robôs (ATS)\nantes de um humano sequer ler.",
+              "lineHeight": 1.5,
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 22
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "r3gvE",
+          "name": "bottomBar",
+          "width": "fill_container",
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "KoPiQ",
+              "name": "ctaText",
+              "fill": "#2563EB",
+              "content": "Descubra como resolver → matchvaga.com",
+              "fontFamily": "Inter",
+              "fontSize": 20,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "0YRdq",
+              "name": "logoText",
+              "fill": "#94A3B8",
+              "content": "MatchVaga",
+              "fontFamily": "Inter",
+              "fontSize": 18,
+              "fontWeight": "700"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "Fk41d",
+      "x": 715,
+      "y": 12482,
+      "name": "LinkedIn Post 2 - Horas Jogadas Fora",
+      "clip": true,
+      "width": 1200,
+      "height": 1200,
+      "fill": "#0F172A",
+      "layout": "vertical",
+      "padding": 80,
+      "justifyContent": "space_between",
+      "children": [
+        {
+          "type": "frame",
+          "id": "bILlI",
+          "name": "topArea2",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "gap": 48,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "wyopy",
+              "name": "compRow",
+              "width": "fill_container",
+              "gap": 32,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "6dPIX",
+                  "name": "leftSide",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "003M9",
+                      "name": "leftNum",
+                      "fill": "#EF4444",
+                      "content": "4 horas",
+                      "textAlign": "center",
+                      "fontFamily": "Inter",
+                      "fontSize": 72,
+                      "fontWeight": "800",
+                      "letterSpacing": -2
+                    },
+                    {
+                      "type": "text",
+                      "id": "ed2NP",
+                      "name": "leftLabel",
+                      "fill": "#94A3B8",
+                      "content": "por candidatura\nadaptando manualmente",
+                      "lineHeight": 1.4,
+                      "textAlign": "center",
+                      "fontFamily": "Inter",
+                      "fontSize": 18
+                    }
+                  ]
+                },
+                {
+                  "type": "icon_font",
+                  "id": "rEYAz",
+                  "name": "arrowIcon",
+                  "width": 40,
+                  "height": 40,
+                  "iconFontName": "arrow-right",
+                  "iconFontFamily": "lucide",
+                  "fill": "#64748B"
+                },
+                {
+                  "type": "frame",
+                  "id": "D0cxT",
+                  "name": "rightSide",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "TcH28",
+                      "name": "rightNum",
+                      "fill": "#22C55E",
+                      "content": "2 min",
+                      "textAlign": "center",
+                      "fontFamily": "Inter",
+                      "fontSize": 72,
+                      "fontWeight": "800",
+                      "letterSpacing": -2
+                    },
+                    {
+                      "type": "text",
+                      "id": "AuOT7",
+                      "name": "rightLabel",
+                      "fill": "#94A3B8",
+                      "content": "com o MatchVaga\ntudo pronto automaticamente",
+                      "lineHeight": 1.4,
+                      "textAlign": "center",
+                      "fontFamily": "Inter",
+                      "fontSize": 18
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "LTUTM",
+              "name": "subtext2",
+              "fill": "#CBD5E1",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Adaptar currículo, escrever carta, personalizar mensagem...\nO trabalho manual trava sua busca por emprego.",
+              "lineHeight": 1.5,
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 20
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Ayou5",
+          "name": "bottomBar2",
+          "width": "fill_container",
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "6c1WY",
+              "name": "cta2",
+              "fill": "#60A5FA",
+              "content": "Automatize com MatchVaga → matchvaga.com",
+              "fontFamily": "Inter",
+              "fontSize": 20,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "Ta7CQ",
+              "name": "logo2",
+              "fill": "#475569",
+              "content": "MatchVaga",
+              "fontFamily": "Inter",
+              "fontSize": 18,
+              "fontWeight": "700"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "EFh5z",
+      "x": 2115,
+      "y": 12482,
+      "name": "LinkedIn Post 3 - Feito Sob Medida",
+      "clip": true,
+      "width": 1200,
+      "height": 1200,
+      "fill": "#F8FAFC",
+      "layout": "vertical",
+      "padding": 80,
+      "justifyContent": "space_between",
+      "children": [
+        {
+          "type": "frame",
+          "id": "8bVnf",
+          "name": "top3",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "gap": 48,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "GYhDk",
+              "name": "hl3",
+              "fill": "#0F172A",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Um currículo diferente\npara cada vaga.\nAutomático.",
+              "lineHeight": 1.2,
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 48,
+              "fontWeight": "800",
+              "letterSpacing": -1.5
+            },
+            {
+              "type": "frame",
+              "id": "iwlWQ",
+              "name": "docsRow",
+              "width": "fill_container",
+              "gap": 24,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Jjb8V",
+                  "name": "doc1",
+                  "width": 280,
+                  "height": 180,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 12,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "#E2E8F0"
+                  },
+                  "layout": "vertical",
+                  "gap": 12,
+                  "padding": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "OuQOh",
+                      "name": "doc1tag",
+                      "fill": "#DBEAFE",
+                      "cornerRadius": 6,
+                      "gap": 6,
+                      "padding": [
+                        4,
+                        10
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "8lc8Y",
+                          "name": "doc1tagIcon",
+                          "width": 12,
+                          "height": 12,
+                          "iconFontName": "briefcase",
+                          "iconFontFamily": "lucide",
+                          "fill": "#2563EB"
+                        },
+                        {
+                          "type": "text",
+                          "id": "U92Zf",
+                          "name": "doc1tagText",
+                          "fill": "#2563EB",
+                          "content": "Marketing",
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "lnE2G",
+                      "name": "doc1line1",
+                      "width": "fill_container",
+                      "height": 8,
+                      "fill": "#CBD5E1",
+                      "cornerRadius": 4
+                    },
+                    {
+                      "type": "frame",
+                      "id": "9w9E5",
+                      "name": "doc1line2",
+                      "width": 160,
+                      "height": 8,
+                      "fill": "#E2E8F0",
+                      "cornerRadius": 4
+                    },
+                    {
+                      "type": "frame",
+                      "id": "mUcG4",
+                      "name": "doc1line3",
+                      "width": 200,
+                      "height": 8,
+                      "fill": "#E2E8F0",
+                      "cornerRadius": 4
+                    },
+                    {
+                      "type": "frame",
+                      "id": "zHf4t",
+                      "name": "doc1line4",
+                      "width": 120,
+                      "height": 8,
+                      "fill": "#E2E8F0",
+                      "cornerRadius": 4
+                    },
+                    {
+                      "type": "frame",
+                      "id": "1lU1u",
+                      "name": "doc1check",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "imO9p",
+                          "name": "doc1checkIc",
+                          "width": 14,
+                          "height": 14,
+                          "iconFontName": "circle-check",
+                          "iconFontFamily": "lucide",
+                          "fill": "#22C55E"
+                        },
+                        {
+                          "type": "text",
+                          "id": "j5VSS",
+                          "name": "doc1checkTx",
+                          "fill": "#22C55E",
+                          "content": "ATS otimizado",
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "nRIKg",
+                  "name": "doc2",
+                  "width": 280,
+                  "height": 180,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 12,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "#E2E8F0"
+                  },
+                  "layout": "vertical",
+                  "gap": 12,
+                  "padding": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "NAFFW",
+                      "name": "doc2tag",
+                      "fill": "#DCFCE7",
+                      "cornerRadius": 6,
+                      "gap": 6,
+                      "padding": [
+                        4,
+                        10
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "tzu8g",
+                          "name": "doc2tagIcon",
+                          "width": 12,
+                          "height": 12,
+                          "iconFontName": "code",
+                          "iconFontFamily": "lucide",
+                          "fill": "#16A34A"
+                        },
+                        {
+                          "type": "text",
+                          "id": "PKAir",
+                          "name": "doc2tagText",
+                          "fill": "#16A34A",
+                          "content": "Dev Frontend",
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "nqZ3q",
+                      "name": "doc2line1",
+                      "width": "fill_container",
+                      "height": 8,
+                      "fill": "#CBD5E1",
+                      "cornerRadius": 4
+                    },
+                    {
+                      "type": "frame",
+                      "id": "iGLGT",
+                      "name": "doc2line2",
+                      "width": 180,
+                      "height": 8,
+                      "fill": "#E2E8F0",
+                      "cornerRadius": 4
+                    },
+                    {
+                      "type": "frame",
+                      "id": "vZr74",
+                      "name": "doc2line3",
+                      "width": 140,
+                      "height": 8,
+                      "fill": "#E2E8F0",
+                      "cornerRadius": 4
+                    },
+                    {
+                      "type": "frame",
+                      "id": "nGpKz",
+                      "name": "doc2line4",
+                      "width": 200,
+                      "height": 8,
+                      "fill": "#E2E8F0",
+                      "cornerRadius": 4
+                    },
+                    {
+                      "type": "frame",
+                      "id": "E84sv",
+                      "name": "doc2check",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "6wEgq",
+                          "name": "doc2checkIc",
+                          "width": 14,
+                          "height": 14,
+                          "iconFontName": "circle-check",
+                          "iconFontFamily": "lucide",
+                          "fill": "#22C55E"
+                        },
+                        {
+                          "type": "text",
+                          "id": "dcWJI",
+                          "name": "doc2checkTx",
+                          "fill": "#22C55E",
+                          "content": "ATS otimizado",
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "fzY0P",
+                  "name": "doc3",
+                  "width": 280,
+                  "height": 180,
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 12,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "#E2E8F0"
+                  },
+                  "layout": "vertical",
+                  "gap": 12,
+                  "padding": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "leXay",
+                      "name": "doc3tag",
+                      "fill": "#FEF3C7",
+                      "cornerRadius": 6,
+                      "gap": 6,
+                      "padding": [
+                        4,
+                        10
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "Djdys",
+                          "name": "doc3tagIcon",
+                          "width": 12,
+                          "height": 12,
+                          "iconFontName": "users",
+                          "iconFontFamily": "lucide",
+                          "fill": "#D97706"
+                        },
+                        {
+                          "type": "text",
+                          "id": "s2Q8a",
+                          "name": "doc3tagText",
+                          "fill": "#D97706",
+                          "content": "Ger. Projetos",
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "0XDnM",
+                      "name": "doc3l1",
+                      "width": "fill_container",
+                      "height": 8,
+                      "fill": "#CBD5E1",
+                      "cornerRadius": 4
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ut7Tw",
+                      "name": "doc3l2",
+                      "width": 150,
+                      "height": 8,
+                      "fill": "#E2E8F0",
+                      "cornerRadius": 4
+                    },
+                    {
+                      "type": "frame",
+                      "id": "g058y",
+                      "name": "doc3l3",
+                      "width": 190,
+                      "height": 8,
+                      "fill": "#E2E8F0",
+                      "cornerRadius": 4
+                    },
+                    {
+                      "type": "frame",
+                      "id": "BrbtO",
+                      "name": "doc3l4",
+                      "width": 130,
+                      "height": 8,
+                      "fill": "#E2E8F0",
+                      "cornerRadius": 4
+                    },
+                    {
+                      "type": "frame",
+                      "id": "wbOlV",
+                      "name": "doc3check",
+                      "gap": 6,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "0jjWR",
+                          "name": "doc3checkIc",
+                          "width": 14,
+                          "height": 14,
+                          "iconFontName": "circle-check",
+                          "iconFontFamily": "lucide",
+                          "fill": "#22C55E"
+                        },
+                        {
+                          "type": "text",
+                          "id": "gX2Cf",
+                          "name": "doc3checkTx",
+                          "fill": "#22C55E",
+                          "content": "ATS otimizado",
+                          "fontFamily": "Inter",
+                          "fontSize": 11,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "hab9r",
+              "name": "sub3",
+              "fill": "#64748B",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "A IA do MatchVaga reorganiza e otimiza seu currículo\ncom as palavras-chave que cada vaga exige.",
+              "lineHeight": 1.5,
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 20
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "4ZAuV",
+          "name": "bottom3",
+          "width": "fill_container",
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "0CMTN",
+              "name": "cta3",
+              "fill": "#2563EB",
+              "content": "Teste agora → matchvaga.com",
+              "fontFamily": "Inter",
+              "fontSize": 20,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "t5xKQ",
+              "name": "logo3",
+              "fill": "#94A3B8",
+              "content": "MatchVaga",
+              "fontFamily": "Inter",
+              "fontSize": 18,
+              "fontWeight": "700"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "X86Ia",
+      "x": 3515,
+      "y": 12482,
+      "name": "LinkedIn Post 4 - 2x Mais Entrevistas",
+      "clip": true,
+      "width": 1200,
+      "height": 1200,
+      "fill": {
+        "type": "gradient",
+        "gradientType": "linear",
+        "enabled": true,
+        "rotation": 150,
+        "size": {
+          "height": 1
+        },
+        "colors": [
+          {
+            "color": "#1E3A8A",
+            "position": 0
+          },
+          {
+            "color": "#2563EB",
+            "position": 0.6
+          },
+          {
+            "color": "#3B82F6",
+            "position": 1
+          }
+        ]
+      },
+      "layout": "vertical",
+      "padding": 80,
+      "justifyContent": "space_between",
+      "children": [
+        {
+          "type": "frame",
+          "id": "1u2h8",
+          "name": "top4",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "gap": 32,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "Ad3Q8",
+              "name": "bigNum",
+              "fill": "#FFFFFF",
+              "content": "2x",
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 180,
+              "fontWeight": "900",
+              "letterSpacing": -8
+            },
+            {
+              "type": "text",
+              "id": "2gsrd",
+              "name": "hl4",
+              "fill": "#FFFFFF",
+              "content": "mais entrevistas.",
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 48,
+              "fontWeight": "700",
+              "letterSpacing": -1
+            },
+            {
+              "type": "text",
+              "id": "hGtO7",
+              "name": "sub4",
+              "fill": "#FFFFFFCC",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Mesmo currículo, estratégia diferente.\nCom otimização ATS, seu currículo finalmente\nchega até o recrutador.",
+              "lineHeight": 1.5,
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 20
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "lsUIr",
+          "name": "bottom4",
+          "width": "fill_container",
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "2dzU4",
+              "name": "cta4",
+              "fill": "#FFFFFFEE",
+              "content": "Comece grátis → matchvaga.com",
+              "fontFamily": "Inter",
+              "fontSize": 20,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "U1IHX",
+              "name": "logo4",
+              "fill": "#FFFFFF99",
+              "content": "MatchVaga",
+              "fontFamily": "Inter",
+              "fontSize": 18,
+              "fontWeight": "700"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "uH7ry",
+      "x": -685,
+      "y": 13896,
+      "name": "LinkedIn Post 5 - Tres Passos",
+      "clip": true,
+      "width": 1200,
+      "height": 1200,
+      "fill": "#FFFFFF",
+      "layout": "vertical",
+      "padding": 80,
+      "justifyContent": "space_between",
+      "children": [
+        {
+          "type": "frame",
+          "id": "8vA63",
+          "name": "top5",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "gap": 48,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "IS86N",
+              "name": "hl5",
+              "fill": "#0F172A",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Do upload à candidatura\npronta em 3 passos.",
+              "lineHeight": 1.2,
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 44,
+              "fontWeight": "800",
+              "letterSpacing": -1.5
+            },
+            {
+              "type": "frame",
+              "id": "bFS7Z",
+              "name": "stepsCol",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 28,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "glJmA",
+                  "name": "step1row",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "Hzk47",
+                      "name": "step1num",
+                      "width": 56,
+                      "height": 56,
+                      "fill": "#DBEAFE",
+                      "cornerRadius": 14,
+                      "layout": "vertical",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "cVtf3",
+                          "name": "step1numTx",
+                          "fill": "#2563EB",
+                          "content": "1",
+                          "fontFamily": "Inter",
+                          "fontSize": 24,
+                          "fontWeight": "800"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "tXvPm",
+                      "name": "step1txt",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "ePt2I",
+                          "name": "step1title",
+                          "fill": "#0F172A",
+                          "content": "Suba seu currículo",
+                          "fontFamily": "Inter",
+                          "fontSize": 24,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "0AmcN",
+                          "name": "step1desc",
+                          "fill": "#64748B",
+                          "content": "Faça upload do seu currículo ou perfil LinkedIn.",
+                          "lineHeight": 1.4,
+                          "fontFamily": "Inter",
+                          "fontSize": 18
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "KiANf",
+                  "name": "step2row",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "uMio7",
+                      "name": "step2num",
+                      "width": 56,
+                      "height": 56,
+                      "fill": "#DBEAFE",
+                      "cornerRadius": 14,
+                      "layout": "vertical",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "0ZuXx",
+                          "name": "step2numTx",
+                          "fill": "#2563EB",
+                          "content": "2",
+                          "fontFamily": "Inter",
+                          "fontSize": 24,
+                          "fontWeight": "800"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "2TEyp",
+                      "name": "step2txt",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "4h0Dc",
+                          "name": "step2title",
+                          "fill": "#0F172A",
+                          "content": "Cole a vaga desejada",
+                          "fontFamily": "Inter",
+                          "fontSize": 24,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "LZQBN",
+                          "name": "step2desc",
+                          "fill": "#64748B",
+                          "content": "A IA identifica palavras-chave e requisitos do ATS.",
+                          "lineHeight": 1.4,
+                          "fontFamily": "Inter",
+                          "fontSize": 18
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "0IcsG",
+                  "name": "step3row",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "Iyhak",
+                      "name": "step3num",
+                      "width": 56,
+                      "height": 56,
+                      "fill": "#DBEAFE",
+                      "cornerRadius": 14,
+                      "layout": "vertical",
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "MNeCb",
+                          "name": "step3numTx",
+                          "fill": "#2563EB",
+                          "content": "3",
+                          "fontFamily": "Inter",
+                          "fontSize": 24,
+                          "fontWeight": "800"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "pthqT",
+                      "name": "step3txt",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "GwII2",
+                          "name": "step3title",
+                          "fill": "#0F172A",
+                          "content": "Receba tudo pronto",
+                          "fontFamily": "Inter",
+                          "fontSize": 24,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "Sifye",
+                          "name": "step3desc",
+                          "fill": "#64748B",
+                          "content": "Currículo adaptado, carta e mensagem de abordagem.",
+                          "lineHeight": 1.4,
+                          "fontFamily": "Inter",
+                          "fontSize": 18
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "W3dHX",
+          "name": "bottom5",
+          "width": "fill_container",
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "CVRtr",
+              "name": "cta5",
+              "fill": "#2563EB",
+              "content": "Experimente grátis → matchvaga.com",
+              "fontFamily": "Inter",
+              "fontSize": 20,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "X9T7T",
+              "name": "logo5",
+              "fill": "#94A3B8",
+              "content": "MatchVaga",
+              "fontFamily": "Inter",
+              "fontSize": 18,
+              "fontWeight": "700"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "5rjma",
+      "x": 715,
+      "y": 13882,
+      "name": "LinkedIn Post 6 - O Que Esta Faltando",
+      "clip": true,
+      "width": 1200,
+      "height": 1200,
+      "fill": "#F8FAFC",
+      "layout": "vertical",
+      "padding": 80,
+      "justifyContent": "space_between",
+      "children": [
+        {
+          "type": "frame",
+          "id": "pJMlW",
+          "name": "top6",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "gap": 48,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "Z8Cvz",
+              "name": "hl6",
+              "fill": "#0F172A",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Você sabe o que falta\nno seu currículo\npara essa vaga?",
+              "lineHeight": 1.2,
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 44,
+              "fontWeight": "800",
+              "letterSpacing": -1.5
+            },
+            {
+              "type": "frame",
+              "id": "WSTNf",
+              "name": "checklistFrame",
+              "width": 700,
+              "fill": "#FFFFFF",
+              "cornerRadius": 16,
+              "stroke": {
+                "align": "inside",
+                "thickness": 1,
+                "fill": "#E2E8F0"
+              },
+              "layout": "vertical",
+              "gap": 16,
+              "padding": 32,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "7TUhx",
+                  "name": "row1",
+                  "width": "fill_container",
+                  "gap": 14,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "EnoIn",
+                      "name": "row1ic",
+                      "width": 22,
+                      "height": 22,
+                      "iconFontName": "check",
+                      "iconFontFamily": "lucide",
+                      "fill": "#22C55E"
+                    },
+                    {
+                      "type": "text",
+                      "id": "6JeNC",
+                      "name": "row1tx",
+                      "fill": "#0F172A",
+                      "content": "Experiência com gestão de projetos",
+                      "fontFamily": "Inter",
+                      "fontSize": 20,
+                      "fontWeight": "500"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "EzbSK",
+                  "name": "row2",
+                  "width": "fill_container",
+                  "gap": 14,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "ywYI3",
+                      "name": "row2ic",
+                      "width": 22,
+                      "height": 22,
+                      "iconFontName": "check",
+                      "iconFontFamily": "lucide",
+                      "fill": "#22C55E"
+                    },
+                    {
+                      "type": "text",
+                      "id": "taS6W",
+                      "name": "row2tx",
+                      "fill": "#0F172A",
+                      "content": "Domínio de ferramentas analíticas",
+                      "fontFamily": "Inter",
+                      "fontSize": 20,
+                      "fontWeight": "500"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "69qvg",
+                  "name": "row3",
+                  "width": "fill_container",
+                  "gap": 14,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "Yy0Ox",
+                      "name": "row3ic",
+                      "width": 22,
+                      "height": 22,
+                      "iconFontName": "x",
+                      "iconFontFamily": "lucide",
+                      "fill": "#EF4444"
+                    },
+                    {
+                      "type": "text",
+                      "id": "3kfqL",
+                      "name": "row3tx",
+                      "fill": "#EF4444",
+                      "content": "Certificação PMP não mencionada",
+                      "fontFamily": "Inter",
+                      "fontSize": 20,
+                      "fontWeight": "600"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "XEjVD",
+                  "name": "row4",
+                  "width": "fill_container",
+                  "gap": 14,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "vU4IJ",
+                      "name": "row4ic",
+                      "width": 22,
+                      "height": 22,
+                      "iconFontName": "x",
+                      "iconFontFamily": "lucide",
+                      "fill": "#EF4444"
+                    },
+                    {
+                      "type": "text",
+                      "id": "KSBBx",
+                      "name": "row4tx",
+                      "fill": "#EF4444",
+                      "content": "Palavras-chave ATS ausentes",
+                      "fontFamily": "Inter",
+                      "fontSize": 20,
+                      "fontWeight": "600"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "N4ibz",
+                  "name": "row5",
+                  "width": "fill_container",
+                  "gap": 14,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "Az5pU",
+                      "name": "row5ic",
+                      "width": 22,
+                      "height": 22,
+                      "iconFontName": "check",
+                      "iconFontFamily": "lucide",
+                      "fill": "#22C55E"
+                    },
+                    {
+                      "type": "text",
+                      "id": "gyBKh",
+                      "name": "row5tx",
+                      "fill": "#0F172A",
+                      "content": "Formação acadêmica compatível",
+                      "fontFamily": "Inter",
+                      "fontSize": 20,
+                      "fontWeight": "500"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "HK1bH",
+              "name": "sub6",
+              "fill": "#64748B",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "O MatchVaga compara seu perfil com a vaga\ne mostra exatamente o que ajustar.",
+              "lineHeight": 1.5,
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 20
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "8rfGR",
+          "name": "bottom6",
+          "width": "fill_container",
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "YHLzP",
+              "name": "cta6",
+              "fill": "#2563EB",
+              "content": "Descubra seus gaps → matchvaga.com",
+              "fontFamily": "Inter",
+              "fontSize": 20,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "e2Ws5",
+              "name": "logo6",
+              "fill": "#94A3B8",
+              "content": "MatchVaga",
+              "fontFamily": "Inter",
+              "fontSize": 18,
+              "fontWeight": "700"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "ivHAX",
+      "x": 2115,
+      "y": 13882,
+      "name": "LinkedIn Post 7 - Depoimento Real",
+      "clip": true,
+      "width": 1200,
+      "height": 1200,
+      "fill": {
+        "type": "gradient",
+        "gradientType": "linear",
+        "enabled": true,
+        "rotation": 160,
+        "size": {
+          "height": 1
+        },
+        "colors": [
+          {
+            "color": "#0F172A",
+            "position": 0
+          },
+          {
+            "color": "#1E293B",
+            "position": 1
+          }
+        ]
+      },
+      "layout": "vertical",
+      "padding": 80,
+      "justifyContent": "space_between",
+      "children": [
+        {
+          "type": "frame",
+          "id": "34BOt",
+          "name": "top7",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "gap": 40,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "ZJ2Wy",
+              "name": "starsRow",
+              "gap": 8,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "icon_font",
+                  "id": "jBR5S",
+                  "name": "s1",
+                  "width": 28,
+                  "height": 28,
+                  "iconFontName": "star",
+                  "iconFontFamily": "lucide",
+                  "fill": "#FACC15"
+                },
+                {
+                  "type": "icon_font",
+                  "id": "lkIF2",
+                  "name": "s2",
+                  "width": 28,
+                  "height": 28,
+                  "iconFontName": "star",
+                  "iconFontFamily": "lucide",
+                  "fill": "#FACC15"
+                },
+                {
+                  "type": "icon_font",
+                  "id": "2g0xs",
+                  "name": "s3",
+                  "width": 28,
+                  "height": 28,
+                  "iconFontName": "star",
+                  "iconFontFamily": "lucide",
+                  "fill": "#FACC15"
+                },
+                {
+                  "type": "icon_font",
+                  "id": "NAoBo",
+                  "name": "s4",
+                  "width": 28,
+                  "height": 28,
+                  "iconFontName": "star",
+                  "iconFontFamily": "lucide",
+                  "fill": "#FACC15"
+                },
+                {
+                  "type": "icon_font",
+                  "id": "foCoz",
+                  "name": "s5",
+                  "width": 28,
+                  "height": 28,
+                  "iconFontName": "star",
+                  "iconFontFamily": "lucide",
+                  "fill": "#FACC15"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "id": "zLFNw",
+              "name": "quoteText",
+              "fill": "#FFFFFF",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "“Em 2 semanas,\nconsegui 4 entrevistas.”",
+              "lineHeight": 1.2,
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 52,
+              "fontWeight": "800",
+              "letterSpacing": -1.5
+            },
+            {
+              "type": "text",
+              "id": "Fm8oZ",
+              "name": "quoteBody",
+              "fill": "#94A3B8",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Antes, eu passava horas adaptando meu currículo\ne quase nunca recebia retorno.\nCom o MatchVaga, tudo mudou.",
+              "lineHeight": 1.6,
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 20
+            },
+            {
+              "type": "frame",
+              "id": "Ok4oH",
+              "name": "authorRow",
+              "gap": 16,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "edWkS",
+                  "name": "authorAvatar",
+                  "width": 48,
+                  "height": 48,
+                  "fill": "#2563EB",
+                  "cornerRadius": 100,
+                  "layout": "vertical",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "vdseB",
+                      "name": "authorInitials",
+                      "fill": "#FFFFFF",
+                      "content": "MS",
+                      "fontFamily": "Inter",
+                      "fontSize": 18,
+                      "fontWeight": "700"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "P74aF",
+                  "name": "authorInfo",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ZYrx4",
+                      "name": "authorName",
+                      "fill": "#FFFFFF",
+                      "content": "Marina S.",
+                      "fontFamily": "Inter",
+                      "fontSize": 18,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "KbyRC",
+                      "name": "authorRole",
+                      "fill": "#64748B",
+                      "content": "Analista de Marketing",
+                      "fontFamily": "Inter",
+                      "fontSize": 14
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "OYgFx",
+          "name": "bottom7",
+          "width": "fill_container",
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "9bLNw",
+              "name": "cta7",
+              "fill": "#60A5FA",
+              "content": "Sua vez → matchvaga.com",
+              "fontFamily": "Inter",
+              "fontSize": 20,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "T8ftX",
+              "name": "logo7",
+              "fill": "#475569",
+              "content": "MatchVaga",
+              "fontFamily": "Inter",
+              "fontSize": 18,
+              "fontWeight": "700"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "ADV8f",
+      "x": 3515,
+      "y": 13882,
+      "name": "LinkedIn Post 8 - Nao Sou Bom em Curriculo",
+      "clip": true,
+      "width": 1200,
+      "height": 1200,
+      "fill": "#FFFFFF",
+      "layout": "vertical",
+      "padding": 80,
+      "justifyContent": "space_between",
+      "children": [
+        {
+          "type": "frame",
+          "id": "GpHJy",
+          "name": "top8",
+          "width": "fill_container",
+          "height": "fill_container",
+          "layout": "vertical",
+          "gap": 48,
+          "justifyContent": "center",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "AnPhc",
+              "name": "objection",
+              "fill": "#94A3B8",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "“Não sou bom em currículo.”",
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 40,
+              "fontWeight": "500",
+              "fontStyle": "italic"
+            },
+            {
+              "type": "frame",
+              "id": "zJICv",
+              "name": "dividerLine",
+              "width": 80,
+              "height": 4,
+              "fill": "#2563EB",
+              "cornerRadius": 2
+            },
+            {
+              "type": "text",
+              "id": "CAQok",
+              "name": "response",
+              "fill": "#0F172A",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Você não precisa ser.",
+              "lineHeight": 1.15,
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 56,
+              "fontWeight": "800",
+              "letterSpacing": -1.5
+            },
+            {
+              "type": "text",
+              "id": "erLTK",
+              "name": "sub8",
+              "fill": "#64748B",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "A IA do MatchVaga reescreve, reorganiza\ne otimiza tudo para você.\nSó suba seu currículo e cole a vaga.",
+              "lineHeight": 1.5,
+              "textAlign": "center",
+              "fontFamily": "Inter",
+              "fontSize": 22
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "JSTUF",
+          "name": "bottom8",
+          "width": "fill_container",
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "xbxfe",
+              "name": "cta8",
+              "fill": "#2563EB",
+              "content": "Comece agora → matchvaga.com",
+              "fontFamily": "Inter",
+              "fontSize": 20,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "hxqkh",
+              "name": "logo8",
+              "fill": "#94A3B8",
+              "content": "MatchVaga",
+              "fontFamily": "Inter",
+              "fontSize": 18,
+              "fontWeight": "700"
             }
           ]
         }

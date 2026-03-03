@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { useToastNotification } from "@/hooks/useToastNotification";
 
 const RESEND_COOLDOWN_SECONDS = 60;
 
@@ -18,8 +19,8 @@ export function LoginCheckEmail({
   isPending,
 }: LoginCheckEmailProps) {
   const [isResending, setIsResending] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [resendCooldown, setResendCooldown] = useState(RESEND_COOLDOWN_SECONDS);
+  const { showErrorToastNotification } = useToastNotification();
 
   useEffect(() => {
     if (resendCooldown <= 0) return;
@@ -31,16 +32,15 @@ export function LoginCheckEmail({
 
   async function handleResend() {
     if (isResending || resendCooldown > 0) return;
-    setError(null);
     setIsResending(true);
     try {
       await onResend();
       setResendCooldown(RESEND_COOLDOWN_SECONDS);
     } catch (e) {
       console.error(e);
-      setError(
-        e instanceof Error ? e.message : "Falha ao reenviar. Tente novamente."
-      );
+      const message =
+        e instanceof Error ? e.message : "Falha ao reenviar. Tente novamente.";
+      showErrorToastNotification(message);
     } finally {
       setIsResending(false);
     }
@@ -51,8 +51,6 @@ export function LoginCheckEmail({
 
   return (
     <div className="flex flex-col gap-6">
-      {error && <p className="text-center text-sm text-destructive">{error}</p>}
-
       <div className="flex w-full flex-col gap-3">
         <Button
           type="button"

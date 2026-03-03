@@ -6,21 +6,20 @@ import { useRouter } from "next/navigation";
 import { ROUTE_LOGIN } from "@/constants/routes";
 import { createClient } from "@/lib/supabase/client";
 import { translateAuthError } from "@/utils/auth";
+import { useToastNotification } from "@/hooks/useToastNotification";
 
 export interface UseSignOutReturn {
   signOut: () => Promise<void>;
   isPending: boolean;
-  error: string | null;
 }
 
 export function useSignOut(): UseSignOutReturn {
   const router = useRouter();
   const [isPending, setIsPending] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { showErrorToastNotification } = useToastNotification();
 
   async function signOut() {
     setIsPending(true);
-    setError(null);
 
     try {
       const supabase = createClient();
@@ -28,8 +27,8 @@ export function useSignOut(): UseSignOutReturn {
 
       if (signOutError) {
         const message = translateAuthError(signOutError);
-        setError(message);
         console.error("[useSignOut] sign out error:", signOutError.message);
+        showErrorToastNotification(message);
         return;
       }
 
@@ -37,12 +36,12 @@ export function useSignOut(): UseSignOutReturn {
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Erro ao sair. Tente novamente.";
-      setError(message);
       console.error("[useSignOut] unexpected error:", err);
+      showErrorToastNotification(message);
     } finally {
       setIsPending(false);
     }
   }
 
-  return { signOut, isPending, error };
+  return { signOut, isPending };
 }

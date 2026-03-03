@@ -6,17 +6,17 @@ import { CreditCard, Clock, Shield } from "lucide-react";
 
 import { CheckoutPackagesGrid } from "@/components/shared/checkout-packages-grid";
 import { type CheckoutPackageId } from "@/constants/checkout-packages";
+import { useToastNotification } from "@/hooks/useToastNotification";
 
 import { createCheckoutSession } from "../_actions/checkout";
 
 export function CheckoutContent() {
   const [loadingPackageId, setLoadingPackageId] =
     useState<CheckoutPackageId | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { showErrorToastNotification } = useToastNotification();
 
   const handleSelectPackage = async (id: CheckoutPackageId) => {
     setLoadingPackageId(id);
-    setErrorMessage(null);
 
     try {
       const result = await createCheckoutSession({ packageId: id });
@@ -27,7 +27,7 @@ export function CheckoutContent() {
       }
 
       setLoadingPackageId(null);
-      setErrorMessage(
+      showErrorToastNotification(
         result.error ?? "Erro ao iniciar checkout. Tente novamente."
       );
     } catch (error) {
@@ -36,7 +36,7 @@ export function CheckoutContent() {
         error
       );
       setLoadingPackageId(null);
-      setErrorMessage("Erro ao iniciar checkout. Tente novamente.");
+      showErrorToastNotification("Erro ao iniciar checkout. Tente novamente.");
     }
   };
 
@@ -47,11 +47,6 @@ export function CheckoutContent() {
         <p className="text-page-subtitle">
           Escolha o pacote ideal para seu momento.
         </p>
-        {errorMessage && (
-          <p className="text-small text-destructive" role="alert">
-            {errorMessage}
-          </p>
-        )}
       </div>
 
       <div className="flex w-content flex-col gap-10">

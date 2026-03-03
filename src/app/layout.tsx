@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/next";
 
 import { CookieConsent } from "@/components/shared/cookie-consent";
 import { QueryProvider } from "@/components/providers/query-provider";
+import { ToastProvider } from "@/components/providers/toast-provider";
 import { AuthProvider } from "@/contexts/auth-context";
 import { SITE_URL } from "@/constants/site";
 
@@ -66,9 +67,11 @@ export default function RootLayout({
       <body className="min-h-screen font-sans antialiased">
         <QueryProvider>
           <AuthProvider>
-            {children}
-            <CookieConsent />
-            <Analytics />
+            <ToastProvider>
+              {children}
+              <CookieConsent />
+              <Analytics />
+            </ToastProvider>
           </AuthProvider>
         </QueryProvider>
       </body>

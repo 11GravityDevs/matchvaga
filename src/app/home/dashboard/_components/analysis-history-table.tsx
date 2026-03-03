@@ -18,6 +18,7 @@ import {
   ROUTE_HOME_NEW_ANALYSIS,
 } from "@/constants/routes";
 import { cn } from "@/utils/style";
+import { useToastNotification } from "@/hooks/useToastNotification";
 
 type FilterType = "todos" | "recentes" | "score-alto";
 
@@ -84,14 +85,21 @@ export function AnalysisHistoryTable({
 }: AnalysisHistoryTableProps) {
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [openAnalysisId, setOpenAnalysisId] = useState<string | null>(null);
+  const { showErrorToastNotification } = useToastNotification();
 
   const handleDownload = async (analysisId: string, format: "pdf" | "docx") => {
     if (!onDownload) return;
+
     setDownloadingId(analysisId);
+
     try {
       const result = await onDownload(analysisId, format);
       if (result.success && result.url) {
         window.open(result.url, "_blank");
+      } else if (!result.success) {
+        const message =
+          result.error ?? "Erro ao baixar documento. Tente novamente.";
+        showErrorToastNotification(message);
       }
       setOpenAnalysisId(null);
     } finally {

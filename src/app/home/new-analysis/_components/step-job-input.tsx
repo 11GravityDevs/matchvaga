@@ -16,6 +16,7 @@ import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
 import { Loading } from "@/components/ui/loading";
 import { StepIndicator } from "@/components/shared/step-indicator";
+import { useToastNotification } from "@/hooks/useToastNotification";
 import {
   useNewAnalysis,
   WIZARD_STEPS,
@@ -41,12 +42,9 @@ export function StepJobInput() {
     setStep,
     setAnalysisResult,
   } = useNewAnalysis();
+  const { showErrorToastNotification } = useToastNotification();
 
-  const {
-    mutate: runAnalysis,
-    isPending: isAnalyzing,
-    error: analysisError,
-  } = useMutation({
+  const { mutate: runAnalysis, isPending: isAnalyzing } = useMutation({
     mutationFn: async () => {
       const result = await runGapAnalysis(jobDescription.trim());
 
@@ -79,6 +77,13 @@ export function StepJobInput() {
 
       setStep(2);
     },
+    onError: (error) => {
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Erro ao analisar. Tente novamente.";
+      showErrorToastNotification(message);
+    },
   });
 
   const canAnalyze =
@@ -87,13 +92,6 @@ export function StepJobInput() {
   const handleAnalyze = () => {
     runAnalysis();
   };
-
-  const analysisErrorDisplay =
-    analysisError instanceof Error
-      ? analysisError.message
-      : analysisError
-        ? String(analysisError)
-        : null;
 
   if (isAnalyzing) {
     return (
@@ -159,15 +157,6 @@ export function StepJobInput() {
                 />
               </div>
             </Field>
-
-            {analysisErrorDisplay && (
-              <div
-                role="alert"
-                className="rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive"
-              >
-                {analysisErrorDisplay}
-              </div>
-            )}
 
             {/* Tip Banner */}
             <div className="flex items-start gap-2 self-start rounded-lg border border-accent-success-border bg-accent-success-light tip-banner-padding">

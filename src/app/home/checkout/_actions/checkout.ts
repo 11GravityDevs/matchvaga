@@ -63,6 +63,7 @@ export async function createCheckoutSession(input: {
       },
       err
     );
+
     return { success: false, error: "Configuração de pagamento indisponível." };
   }
 
@@ -88,7 +89,7 @@ export async function createCheckoutSession(input: {
       ],
       payment_method_types: ["card"],
       success_url: `${SITE_URL}/home/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${SITE_URL}/home/checkout`,
+      cancel_url: `${SITE_URL}/home/checkout/cancel`,
       metadata: {
         packageId,
         userId: user.id,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Check, Upload } from "lucide-react";
 
@@ -14,6 +14,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Loading } from "@/components/ui/loading";
+import { useToastNotification } from "@/hooks/useToastNotification";
 import { useResumeUpload } from "../_hooks/use-resume-upload";
 import {
   formatFileSize,
@@ -33,8 +34,8 @@ const UPLOAD_THINKING_MESSAGES = [
 export function UploadContent() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isDraggingOver, setIsDraggingOver] = useState(false);
-  const [fileSizeError, setFileSizeError] = useState<string | null>(null);
   const [isSkipUploadModalOpen, setIsSkipUploadModalOpen] = useState(false);
+  const { showErrorToastNotification } = useToastNotification();
   const {
     isUploading,
     uploadError,
@@ -44,6 +45,11 @@ export function UploadContent() {
     analyze,
     continueWithoutUpload,
   } = useResumeUpload();
+
+  useEffect(() => {
+    if (!uploadError) return;
+    showErrorToastNotification(uploadError);
+  }, [uploadError, showErrorToastNotification]);
 
   async function handleAnalyze() {
     if (!selectedFile || isUploading) return;
@@ -59,12 +65,11 @@ export function UploadContent() {
     e.target.value = "";
     if (!file) return;
     if (!isFileWithinSizeLimit(file)) {
-      setFileSizeError(
+      showErrorToastNotification(
         `Arquivo muito grande. Máximo: ${formatFileSize(MAX_FILE_SIZE_BYTES)}.`
       );
       return;
     }
-    setFileSizeError(null);
     void uploadFile(file);
   }
 
@@ -72,7 +77,6 @@ export function UploadContent() {
     const text = e.clipboardData.getData("text");
     if (text) {
       e.preventDefault();
-      setFileSizeError(null);
       uploadFromPaste(text);
     }
   }
@@ -97,12 +101,11 @@ export function UploadContent() {
     const file = e.dataTransfer.files?.[0];
     if (!file) return;
     if (!isFileWithinSizeLimit(file)) {
-      setFileSizeError(
+      showErrorToastNotification(
         `Arquivo muito grande. Máximo: ${formatFileSize(MAX_FILE_SIZE_BYTES)}.`
       );
       return;
     }
-    setFileSizeError(null);
     void uploadFile(file);
   }
 
@@ -196,7 +199,7 @@ export function UploadContent() {
                   Arraste seu curriculo aqui
                 </p>
                 <p className="text-center text-sm text-muted-foreground">
-                  Suportamos PDF e DOCX (Máx.{" "}
+                  Suportamos PDF e DOCX (Máximo{" "}
                   {formatFileSize(MAX_FILE_SIZE_BYTES)})
                 </p>
                 <p className="text-small text-muted-foreground">ou</p>
@@ -211,11 +214,6 @@ export function UploadContent() {
             )}
           </div>
 
-          {(fileSizeError || uploadError) && (
-            <p className="text-sm text-destructive" role="alert">
-              {fileSizeError ?? uploadError}
-            </p>
-          )}
           <div className="flex justify-end gap-4">
             <Button
               type="button"
