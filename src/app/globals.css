@@ -165,6 +165,10 @@
   --right-hero-circle-2: 100px;
   --top-hero-circle-3: 200px;
   --right-hero-circle-3: 50px;
+
+  --toastify-color-success: var(--accent-success);
+  --toastify-color-warning: var(--accent-warning);
+  --toastify-color-error: #dc2626;
 }
 
 .dark {

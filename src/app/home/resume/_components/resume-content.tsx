@@ -11,6 +11,7 @@ import { ResumeFormCard } from "@/components/shared/resume-form-card";
 import { Loading } from "@/components/ui/loading";
 import { ROUTE_ONBOARDING_UPLOAD } from "@/constants/routes";
 import type { ResumeData } from "@/types/resume";
+import { useToastNotification } from "@/hooks/useToastNotification";
 
 interface ResumeEditFormProps {
   initialData: ResumeData;
@@ -19,14 +20,10 @@ interface ResumeEditFormProps {
   error: Error | null;
 }
 
-function ResumeEditForm({
-  initialData,
-  save,
-  isSaving,
-  error,
-}: ResumeEditFormProps) {
+function ResumeEditForm({ initialData, save, isSaving }: ResumeEditFormProps) {
   const [validationErrors, setValidationErrors] =
     useState<ResumeValidationErrors | null>(null);
+  const { showErrorToastNotification } = useToastNotification();
 
   const {
     data,
@@ -103,21 +100,17 @@ function ResumeEditForm({
     setValidationErrors(null);
     try {
       await save(data);
-    } catch {
-      // Error is set in useResume and displayed below
+    } catch (err) {
+      const message =
+        err instanceof Error
+          ? err.message
+          : "Falha ao salvar. Tente novamente.";
+      showErrorToastNotification(message);
     }
   }
 
   return (
     <div className="flex w-full flex-col items-center section-gap overflow-auto page-padding">
-      {error && (
-        <div
-          role="alert"
-          className="w-form rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive"
-        >
-          Falha ao salvar. Tente novamente.
-        </div>
-      )}
       <div className="flex w-content flex-col gap-1">
         <h1 className="text-page-title">Edite seu currículo</h1>
         <p className="text-page-subtitle">

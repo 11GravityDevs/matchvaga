@@ -7,4 +7,4 @@ alwaysApply: false
 
 **Gatilho:** "commitar e abrir PR" / "fazer o PR". Branch no formato `start-issue.mdc`.
 
-**Passos:** (1) git status. (2) git add . (3) git commit (formato `commit-messages.mdc`, footer `Refs MAT-XX` extraído da branch). (4) git push. (5) gh pr create --title "..." --body "..." (PT-BR, imperativo ~60 chars; corpo com seções de `pull-request-template.mdc`).
+**Passos:** (1) git status. (2) git add . (3) git commit (formato `commit-messages.mdc`, footer `Refs MAT-XX` extraído da branch). (3.1) Aguardar execução completa do pre-commit; se o hook falhar ou modificar arquivos, a IA deve apenas informar claramente o erro e encerrar o fluxo, sem tentar corrigir ou repetir o commit. (4) git push. (5) gh pr create --title "..." --body "..." (PT-BR, imperativo ~60 chars; corpo com seções de `pull-request-template.mdc`).

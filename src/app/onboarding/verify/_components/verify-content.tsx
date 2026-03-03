@@ -12,6 +12,7 @@ import type { ResumeData } from "@/types/resume";
 import { createEmptyEducation, createEmptyExperience } from "@/types/resume";
 import { ResumeFormCard } from "@/components/shared/resume-form-card";
 import { Loading } from "@/components/ui/loading";
+import { useToastNotification } from "@/hooks/useToastNotification";
 import { useOnboardingContext } from "../../_contexts/onboarding-context";
 
 const VERIFY_THINKING_MESSAGES = [
@@ -46,6 +47,7 @@ export function VerifyContent() {
   });
   const [validationErrors, setValidationErrors] =
     useState<ResumeValidationErrors | null>(null);
+  const { showErrorToastNotification } = useToastNotification();
 
   const initialData: ResumeData = effectiveData ?? {
     fullName: "",
@@ -141,9 +143,11 @@ export function VerifyContent() {
       await save(data);
       continueToDashboard();
     } catch (err) {
+      const message = err instanceof Error ? err.message : "Erro ao salvar.";
       setValidationErrors({
-        form: err instanceof Error ? err.message : "Erro ao salvar.",
+        form: message,
       });
+      showErrorToastNotification(message);
     }
   }
 

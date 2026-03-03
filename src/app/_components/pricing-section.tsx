@@ -7,6 +7,7 @@ import { CheckoutPackagesGrid } from "@/components/shared/checkout-packages-grid
 import { ROUTE_LOGIN } from "@/constants/routes";
 import { type CheckoutPackageId } from "@/constants/checkout-packages";
 import { useAuthContext } from "@/contexts/auth-context";
+import { useToastNotification } from "@/hooks/useToastNotification";
 import { createCheckoutSession } from "../home/checkout/_actions/checkout";
 
 import { AnimateOnScroll } from "./animate-on-scroll";
@@ -14,9 +15,9 @@ import { AnimateOnScroll } from "./animate-on-scroll";
 export function PricingSection() {
   const [loadingPackageId, setLoadingPackageId] =
     useState<CheckoutPackageId | null>(null);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { isLoggedIn } = useAuthContext();
   const router = useRouter();
+  const { showErrorToastNotification } = useToastNotification();
 
   const handleSelectPackage = async (id: CheckoutPackageId) => {
     if (!isLoggedIn) {
@@ -25,7 +26,6 @@ export function PricingSection() {
     }
 
     setLoadingPackageId(id);
-    setErrorMessage(null);
 
     try {
       const result = await createCheckoutSession({ packageId: id });
@@ -36,7 +36,7 @@ export function PricingSection() {
       }
 
       setLoadingPackageId(null);
-      setErrorMessage(
+      showErrorToastNotification(
         result.error ?? "Erro ao iniciar checkout. Tente novamente."
       );
     } catch (error) {
@@ -45,7 +45,7 @@ export function PricingSection() {
         error
       );
       setLoadingPackageId(null);
-      setErrorMessage("Erro ao iniciar checkout. Tente novamente.");
+      showErrorToastNotification("Erro ao iniciar checkout. Tente novamente.");
     }
   };
 
@@ -68,12 +68,6 @@ export function PricingSection() {
             </p>
           </div>
         </AnimateOnScroll>
-
-        {errorMessage && (
-          <p className="text-center text-sm text-destructive" role="alert">
-            {errorMessage}
-          </p>
-        )}
 
         <AnimateOnScroll delay={80} className="flex w-full flex-col gap-5">
           <CheckoutPackagesGrid
