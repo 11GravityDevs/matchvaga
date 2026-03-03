@@ -13,6 +13,10 @@ import {
   missingSkillsFromColumns,
   type MissingSkillsByCategory,
 } from "@/utils/analysis";
+import {
+  NOT_JOB_DESCRIPTION_MESSAGE,
+  validateJobDescriptionText,
+} from "@/utils/job-description";
 
 export interface RunGapAnalysisResult {
   success: boolean;
@@ -52,6 +56,11 @@ export async function runGapAnalysis(
   const rawText = jobDescription.trim();
   if (rawText.length === 0) {
     return { success: false, error: "Cole a descrição da vaga para analisar." };
+  }
+
+  const heuristic = validateJobDescriptionText(rawText);
+  if (!heuristic.valid) {
+    return { success: false, error: NOT_JOB_DESCRIPTION_MESSAGE };
   }
 
   const supabase = await createClient();
@@ -105,13 +114,17 @@ export async function runGapAnalysis(
 
   const aiResult = await runGapAnalysisAI(resumeData, rawText);
   if (!aiResult.success) {
-    logServerError({
-      context: "server_action",
-      operation: "runGapAnalysis",
-      action: "runGapAnalysis",
-      message: "Análise de gap (IA) retornou erro.",
-      errorMessage: aiResult.error,
-    });
+    const isNotJobError = aiResult.error === NOT_JOB_DESCRIPTION_MESSAGE;
+
+    if (!isNotJobError) {
+      logServerError({
+        context: "server_action",
+        operation: "runGapAnalysis",
+        action: "runGapAnalysis",
+        message: "Análise de gap (IA) retornou erro.",
+        errorMessage: aiResult.error,
+      });
+    }
     return { success: false, error: aiResult.error };
   }
 
