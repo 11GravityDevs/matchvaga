@@ -6,6 +6,7 @@ import { gapAnalysisResponseSchema } from "@/lib/ai/config/gap-analysis-schema";
 import { logServerError } from "@/lib/logger";
 import { GAP_ANALYSIS_SYSTEM_PROMPT } from "@/lib/ai/prompts/gap-analysis";
 import type { ResumeData } from "@/types/resume";
+import { NOT_JOB_DESCRIPTION_MESSAGE } from "@/utils/job-description";
 import { getFlattenedSkills } from "@/utils/resume";
 
 const MODEL = "gpt-4o-mini";
@@ -54,7 +55,7 @@ ${jobDescription}
 Resume data:
 ${resumeSummary}
 
-Analyze and return JSON with score, matched_skills, missing_technical_skills, missing_behavioral_skills, job_title, and job_company.`;
+Analyze and return JSON with is_job_description, score, matched_skills, missing_technical_skills, missing_behavioral_skills, job_title, and job_company.`;
 }
 
 export async function runGapAnalysisAI(
@@ -85,6 +86,10 @@ export async function runGapAnalysisAI(
 
     const parsed = JSON.parse(content.trim()) as unknown;
     const validated = gapAnalysisResponseSchema.parse(parsed);
+
+    if (!validated.is_job_description) {
+      return { success: false, error: NOT_JOB_DESCRIPTION_MESSAGE };
+    }
 
     return {
       success: true,
