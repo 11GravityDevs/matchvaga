@@ -5,6 +5,7 @@ import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { getStripe } from "@/lib/stripe/client";
 import { SITE_URL } from "@/constants/site";
+import { logServerError } from "@/lib/logger";
 import { translateAuthError } from "@/utils/auth";
 import {
   type CheckoutPackageId,
@@ -52,8 +53,16 @@ export async function createCheckoutSession(input: {
   let stripe;
   try {
     stripe = getStripe();
-  } catch {
-    console.error("[createCheckoutSession] STRIPE_SECRET_KEY is not set");
+  } catch (err) {
+    logServerError(
+      {
+        context: "server_action",
+        operation: "createCheckoutSession",
+        action: "createCheckoutSession",
+        message: "STRIPE_SECRET_KEY is not set",
+      },
+      err
+    );
     return { success: false, error: "Configuração de pagamento indisponível." };
   }
 
@@ -86,7 +95,12 @@ export async function createCheckoutSession(input: {
     });
 
     if (!session.url) {
-      console.error("[createCheckoutSession] Stripe session has no url");
+      logServerError({
+        context: "server_action",
+        operation: "createCheckoutSession",
+        action: "createCheckoutSession",
+        message: "Stripe session has no url",
+      });
       return {
         success: false,
         error: "Erro ao iniciar checkout. Tente novamente.",
@@ -95,7 +109,15 @@ export async function createCheckoutSession(input: {
 
     return { success: true, checkoutUrl: session.url };
   } catch (err) {
-    console.error("[createCheckoutSession] Stripe error:", err);
+    logServerError(
+      {
+        context: "server_action",
+        operation: "createCheckoutSession",
+        action: "createCheckoutSession",
+        message: "Stripe error",
+      },
+      err
+    );
     return {
       success: false,
       error: "Erro ao iniciar checkout. Tente novamente.",

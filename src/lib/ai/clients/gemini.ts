@@ -3,6 +3,7 @@
 import { type Schema, GoogleGenerativeAI } from "@google/generative-ai";
 
 import { resumeExtractionResponseSchema } from "@/lib/ai/config/resume-extraction-schema";
+import { logServerError } from "@/lib/logger";
 import { extractTextFromDocx } from "@/lib/document/extract-docx-text";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
@@ -26,6 +27,7 @@ export interface ExtractResumeError {
 
 export type ExtractResumeOutput = ExtractResumeResult | ExtractResumeError;
 
+const GEMINI_MODEL = "gemini-2.5-flash-lite";
 export async function extractResumeFromFile(
   file: File
 ): Promise<ExtractResumeOutput> {
@@ -55,7 +57,7 @@ export async function extractResumeFromFile(
 
   const genAI = new GoogleGenerativeAI(apiKey);
   const model = genAI.getGenerativeModel({
-    model: "gemini-2.5-flash-lite",
+    model: GEMINI_MODEL,
     generationConfig: {
       responseMimeType: "application/json",
       responseSchema: resumeExtractionResponseSchema as Schema,
@@ -89,6 +91,15 @@ export async function extractResumeFromFile(
 
     return parseAndValidateResult(result);
   } catch (error) {
+    logServerError(
+      {
+        context: "ai",
+        operation: "extractResume",
+        message: "Extração de currículo falhou.",
+        model: GEMINI_MODEL,
+      },
+      error
+    );
     if (error instanceof SyntaxError) {
       return {
         success: false,

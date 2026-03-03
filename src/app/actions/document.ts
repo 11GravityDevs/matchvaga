@@ -9,6 +9,7 @@ import { synthesizeOptimizedResume } from "@/lib/ai/clients/anthropic";
 import { runGapAnalysisAI } from "@/lib/ai/clients/openai";
 import { ResumeDocument } from "@/lib/document/resume-to-pdf";
 import { buildResumeDocx } from "@/lib/document/resume-to-docx";
+import { logServerError } from "@/lib/logger";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
 import { translateAuthError } from "@/utils/auth";
@@ -90,6 +91,13 @@ export async function synthesizeOptimizedResumeForPreview(
   );
 
   if (!synthesis.success) {
+    logServerError({
+      context: "server_action",
+      operation: "synthesizeOptimizedResumeForPreview",
+      action: "synthesizeOptimizedResumeForPreview",
+      message: "Síntese de currículo otimizado retornou erro.",
+      errorMessage: synthesis.error,
+    });
     return { success: false, error: synthesis.error };
   }
 
@@ -100,10 +108,13 @@ export async function synthesizeOptimizedResumeForPreview(
   if (aiResult.success) {
     optimizedScore = aiResult.data.score;
   } else {
-    console.error(
-      "[synthesizeOptimizedResumeForPreview] re-score error:",
-      aiResult.error
-    );
+    logServerError({
+      context: "server_action",
+      operation: "synthesizeOptimizedResumeForPreview_re-score",
+      action: "synthesizeOptimizedResumeForPreview",
+      message: "Re-score após síntese falhou.",
+      errorMessage: aiResult.error,
+    });
   }
 
   const updatePayload: { status: string; optimized_score?: number } = {
@@ -120,10 +131,11 @@ export async function synthesizeOptimizedResumeForPreview(
     .eq("user_id", user.id);
 
   if (updateStatusError) {
-    console.error(
-      "[synthesizeOptimizedResumeForPreview] status update error:",
-      updateStatusError.message
-    );
+    logServerError({
+      context: "db",
+      operation: "synthesizeOptimizedResumeForPreview_status_update",
+      message: updateStatusError.message,
+    });
   }
 
   return {
@@ -177,15 +189,17 @@ async function generateOptimizedDocumentWithContext(
         url: signedData.signedUrl,
       };
     }
-    console.error(
-      "[generateOptimizedDocument] signedUrl for existing document:",
-      signedError?.message
-    );
+    logServerError({
+      context: "db",
+      operation: "generateOptimizedDocument_signedUrl_existing",
+      message: signedError?.message ?? "Unknown",
+    });
   } else if (docLookupError) {
-    console.error(
-      "[generateOptimizedDocument] optimized_documents lookup error:",
-      docLookupError.message
-    );
+    logServerError({
+      context: "db",
+      operation: "generateOptimizedDocument_lookup",
+      message: docLookupError.message,
+    });
   }
 
   const resumeParsed = resumeDataSchema.safeParse(resumeData);
@@ -221,10 +235,11 @@ async function generateOptimizedDocumentWithContext(
     });
 
   if (uploadError) {
-    console.error(
-      "[generateOptimizedDocument] upload error:",
-      uploadError.message
-    );
+    logServerError({
+      context: "db",
+      operation: "generateOptimizedDocument_upload",
+      message: uploadError.message,
+    });
     return {
       success: false,
       error:
@@ -241,10 +256,11 @@ async function generateOptimizedDocumentWithContext(
     });
 
   if (insertError) {
-    console.error(
-      "[generateOptimizedDocument] insert error:",
-      insertError.message
-    );
+    logServerError({
+      context: "db",
+      operation: "generateOptimizedDocument_insert",
+      message: insertError.message,
+    });
   }
 
   const { data: signedData, error: signedError } = await supabase.storage
@@ -252,10 +268,11 @@ async function generateOptimizedDocumentWithContext(
     .createSignedUrl(filePath, SIGNED_URL_EXPIRES_IN);
 
   if (signedError || !signedData?.signedUrl) {
-    console.error(
-      "[generateOptimizedDocument] signedUrl error:",
-      signedError?.message
-    );
+    logServerError({
+      context: "db",
+      operation: "generateOptimizedDocument_signedUrl",
+      message: signedError?.message ?? "Unknown",
+    });
     return {
       success: false,
       error: "Erro ao gerar link de download.",

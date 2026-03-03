@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
+import { logServerError } from "@/lib/logger";
 import { getStripe } from "@/lib/stripe/client";
 
 export async function verifyStripeWebhook(
@@ -28,8 +29,14 @@ export async function verifyStripeWebhook(
     );
     return { event };
   } catch (err) {
-    const message = err instanceof Error ? err.message : "Unknown error";
-    console.error("[stripe webhook] Signature verification failed:", message);
+    logServerError(
+      {
+        context: "api",
+        operation: "verify_webhook",
+        message: "Signature verification failed",
+      },
+      err
+    );
     return {
       errorResponse: NextResponse.json(
         { message: "Webhook signature verification failed" },

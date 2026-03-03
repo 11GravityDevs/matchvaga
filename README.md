@@ -90,6 +90,7 @@ src/
 
 - `@/components` — Components (ui/, shared/)
 - `@/lib/supabase` — Supabase client (client, server)
+- `@/lib/logger` — Server-side error logger (stderr, JSON; use only in server code)
 - `@/lib/ai` — AI prompts and client wrappers (server-only)
 - `@/lib/query` — Query client, query options
 - `@/constants` — Shared constants
@@ -120,6 +121,17 @@ Husky runs a pre-commit hook that:
 2. **tsc --noEmit** — Type-checks the project
 
 The commit is blocked if there are ESLint or TypeScript errors.
+
+## Monitoring & Logs
+
+Server-side errors (AI failures, database errors, server actions, API routes) are logged with a consistent JSON format via `logServerError` in `src/lib/logger.ts`. Logs are written to stderr (`console.error`), so they are captured by the host (e.g. Vercel).
+
+### Viewing logs on Vercel
+
+1. Open your project in the [Vercel Dashboard](https://vercel.com/dashboard).
+2. Go to **Logs** (or **Observability → Logs**).
+3. Use **Runtime Logs** to see output from serverless functions and Server Actions.
+4. Each error is a single JSON line with fields: `level`, `timestamp`, `context` (`ai` | `db` | `server_action` | `api`), `operation`, `message`, and optional `model`, `errorMessage`, `errorName`. You can filter or search by these fields in the Vercel UI.
 
 ## License
 
