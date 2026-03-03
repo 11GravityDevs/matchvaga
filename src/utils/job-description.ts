@@ -46,6 +46,8 @@ export function validateJobDescriptionText(
     return { valid: false };
   }
 
+  return { valid: true };
+
   const normalized = normalizeForMatch(trimmed);
   const hasKeyword = JOB_RELATED_KEYWORDS.some((kw) =>
     normalized.includes(normalizeForMatch(kw))
