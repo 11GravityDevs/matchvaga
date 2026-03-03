@@ -12,10 +12,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   QUERY_CONTINUE_ANALYSIS,
   ROUTE_HOME_NEW_ANALYSIS,
 } from "@/constants/routes";
+import { cn } from "@/utils/style";
 
 type FilterType = "todos" | "recentes" | "score-alto";
 
@@ -55,8 +57,24 @@ const STATUS_LABEL_PT_BR: Record<string, string> = {
   abandoned: "Abandonado",
 };
 
+const STATUS_BADGE_CLASSES: Record<string, string> = {
+  pending:
+    "border-accent-warning-border bg-accent-warning-light text-accent-warning-text",
+  completed:
+    "border-accent-success-border bg-accent-success-light text-accent-success-text",
+  abandoned:
+    "border-accent-low-border bg-accent-low-light text-accent-low-text",
+};
+
 function getStatusLabel(status: string): string {
   return STATUS_LABEL_PT_BR[status] ?? status;
+}
+
+function getStatusBadgeClass(status: string): string {
+  return (
+    STATUS_BADGE_CLASSES[status] ??
+    "border-border bg-muted text-muted-foreground"
+  );
 }
 
 export function AnalysisHistoryTable({
@@ -208,9 +226,15 @@ export function AnalysisHistoryTable({
 
               {/* Status */}
               <div className="flex min-w-0 flex-1 items-center gap-2 border-r border-border p-4">
-                <span className="truncate text-sm text-foreground">
+                <Badge
+                  variant="outline"
+                  className={cn(
+                    "max-w-full truncate text-xs font-semibold",
+                    getStatusBadgeClass(row.status)
+                  )}
+                >
                   {getStatusLabel(row.status)}
-                </span>
+                </Badge>
               </div>
 
               {/* Action */}
