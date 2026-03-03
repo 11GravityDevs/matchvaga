@@ -29,9 +29,34 @@ export function getCompanyColor(company: string): {
 
 export function formatAnalysisDate(isoDate: string): string {
   const date = new Date(isoDate);
-  return new Intl.DateTimeFormat("pt-BR", {
+  if (Number.isNaN(date.getTime())) {
+    return "—";
+  }
+
+  const formatter = new Intl.DateTimeFormat("pt-BR", {
+    timeZone: "America/Sao_Paulo",
     day: "2-digit",
-    month: "short",
+    month: "2-digit",
     year: "numeric",
-  }).format(date);
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
+
+  const parts = formatter.formatToParts(date);
+
+  const getPart = (type: string): string =>
+    parts.find((part) => part.type === type)?.value ?? "";
+
+  const day = getPart("day");
+  const month = getPart("month");
+  const year = getPart("year");
+  const hour = getPart("hour");
+  const minute = getPart("minute");
+
+  if (!day || !month || !year || !hour || !minute) {
+    return formatter.format(date);
+  }
+
+  return `${day}/${month}/${year} - ${hour}:${minute}`;
 }
