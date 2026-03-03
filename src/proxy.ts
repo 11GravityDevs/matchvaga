@@ -4,6 +4,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import {
   ROUTE_AUTH_CALLBACK,
   ROUTE_HOME,
+  ROUTE_HOME_RESUME,
   ROUTE_LOGIN,
   ROUTE_ONBOARDING,
   ROUTE_ONBOARDING_PREVIEW,
@@ -81,6 +82,12 @@ export async function proxy(request: NextRequest) {
 
     const userHasResume = !error && (resumes?.length ?? 0) > 0;
     const pathname = request.nextUrl.pathname;
+
+    if (pathname === ROUTE_ONBOARDING_UPLOAD && userHasResume) {
+      const url = request.nextUrl.clone();
+      url.pathname = ROUTE_HOME_RESUME;
+      return NextResponse.redirect(url);
+    }
 
     if (pathname.startsWith(ROUTE_HOME) && !userHasResume) {
       const url = request.nextUrl.clone();

@@ -39,6 +39,15 @@ export async function createResumeWithData(
     return { success: false, error: "Faça login para continuar." };
   }
 
+  const alreadyHasResume = await hasResume();
+  if (alreadyHasResume) {
+    return {
+      success: false,
+      error:
+        "Você já possui um currículo cadastrado. Para alterar as informações, acesse a tela Meu currículo.",
+    };
+  }
+
   const { data: row, error: insertError } = await supabase
     .from("resumes")
     .insert({
@@ -112,6 +121,15 @@ export async function uploadResume(
   }
   if (!user) {
     return { success: false, error: "Faça login para continuar." };
+  }
+
+  const alreadyHasResume = await hasResume();
+  if (alreadyHasResume) {
+    return {
+      success: false,
+      error:
+        "Você já possui um currículo cadastrado. Para alterar as informações, acesse a tela Meu currículo.",
+    };
   }
 
   const extraction = await extractResumeFromFile(file);
