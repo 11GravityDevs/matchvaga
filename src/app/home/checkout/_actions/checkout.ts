@@ -73,6 +73,7 @@ export async function createCheckoutSession(input: {
     const session = await stripe.checkout.sessions.create({
       mode: "payment",
       currency: "brl",
+      locale: "pt-BR",
       line_items: [
         {
           price_data: {

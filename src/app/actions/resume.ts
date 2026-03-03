@@ -9,6 +9,9 @@ import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
 import { translateAuthError } from "@/utils/auth";
 
+const ERROR_ALREADY_HAS_RESUME =
+  "Você já possui um currículo cadastrado. Para alterar as informações, acesse a tela Meu currículo.";
+
 export interface CreateResumeWithDataResult {
   success: boolean;
   resumeId?: string;
@@ -37,6 +40,11 @@ export async function createResumeWithData(
 
   if (!user) {
     return { success: false, error: "Faça login para continuar." };
+  }
+
+  const alreadyHasResume = await hasResume();
+  if (alreadyHasResume) {
+    return { success: false, error: ERROR_ALREADY_HAS_RESUME };
   }
 
   const { data: row, error: insertError } = await supabase
@@ -112,6 +120,11 @@ export async function uploadResume(
   }
   if (!user) {
     return { success: false, error: "Faça login para continuar." };
+  }
+
+  const alreadyHasResume = await hasResume();
+  if (alreadyHasResume) {
+    return { success: false, error: ERROR_ALREADY_HAS_RESUME };
   }
 
   const extraction = await extractResumeFromFile(file);
