@@ -3,6 +3,7 @@
 import OpenAI from "openai";
 
 import { gapAnalysisResponseSchema } from "@/lib/ai/config/gap-analysis-schema";
+import { logServerError } from "@/lib/logger";
 import { GAP_ANALYSIS_SYSTEM_PROMPT } from "@/lib/ai/prompts/gap-analysis";
 import type { ResumeData } from "@/types/resume";
 import { getFlattenedSkills } from "@/utils/resume";
@@ -97,6 +98,15 @@ export async function runGapAnalysisAI(
       },
     };
   } catch (error) {
+    logServerError(
+      {
+        context: "ai",
+        operation: "runGapAnalysis",
+        message: "Análise de gap (IA) falhou.",
+        model: MODEL,
+      },
+      error
+    );
     if (error instanceof SyntaxError) {
       return {
         success: false,

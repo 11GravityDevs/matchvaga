@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 
 import { createClient } from "@/lib/supabase/server";
 import { runGapAnalysisAI } from "@/lib/ai/clients/openai";
+import { logServerError } from "@/lib/logger";
 import { jobSnapshotSchema } from "@/schemas/job";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
@@ -104,6 +105,13 @@ export async function runGapAnalysis(
 
   const aiResult = await runGapAnalysisAI(resumeData, rawText);
   if (!aiResult.success) {
+    logServerError({
+      context: "server_action",
+      operation: "runGapAnalysis",
+      action: "runGapAnalysis",
+      message: "Análise de gap (IA) retornou erro.",
+      errorMessage: aiResult.error,
+    });
     return { success: false, error: aiResult.error };
   }
 
@@ -134,7 +142,11 @@ export async function runGapAnalysis(
     .single();
 
   if (insertError) {
-    console.error("[runGapAnalysis] insert error:", insertError.message);
+    logServerError({
+      context: "db",
+      operation: "runGapAnalysis_insert",
+      message: insertError.message,
+    });
     return {
       success: false,
       error: "Erro ao salvar análise. Tente novamente.",
@@ -153,10 +165,11 @@ export async function runGapAnalysis(
 
   if (decrementError || !updatedCredits?.length) {
     if (decrementError) {
-      console.error(
-        "[runGapAnalysis] credit decrement error:",
-        decrementError.message
-      );
+      logServerError({
+        context: "db",
+        operation: "runGapAnalysis_credit_decrement",
+        message: decrementError.message,
+      });
     }
     await supabase.from("analyses").delete().eq("id", analysisRow.id);
     return {
@@ -202,7 +215,11 @@ export async function getAnalysesForUser(): Promise<GetAnalysesForUserResult> {
     .order("created_at", { ascending: false });
 
   if (error) {
-    console.error("[getAnalysesForUser] select error:", error.message);
+    logServerError({
+      context: "db",
+      operation: "getAnalysesForUser_select",
+      message: error.message,
+    });
     return {
       success: false,
       error: "Erro ao carregar análises.",

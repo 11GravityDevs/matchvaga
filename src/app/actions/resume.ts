@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 
 import { createClient } from "@/lib/supabase/server";
 import { extractResumeFromFile } from "@/lib/ai/clients/gemini";
+import { logServerError } from "@/lib/logger";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
 import { translateAuthError } from "@/utils/auth";
@@ -48,7 +49,11 @@ export async function createResumeWithData(
     .single();
 
   if (insertError) {
-    console.error("[createResumeWithData] insert error:", insertError.message);
+    logServerError({
+      context: "db",
+      operation: "createResumeWithData_insert",
+      message: insertError.message,
+    });
     return {
       success: false,
       error: "Erro ao salvar. Tente novamente.",
@@ -60,10 +65,11 @@ export async function createResumeWithData(
     .insert({ user_id: user.id, credits: 3 });
 
   if (creditsError) {
-    console.error(
-      "[createResumeWithData] user_credits insert error:",
-      creditsError.message
-    );
+    logServerError({
+      context: "db",
+      operation: "createResumeWithData_user_credits",
+      message: creditsError.message,
+    });
     return {
       success: false,
       error: "Erro ao salvar. Tente novamente.",
@@ -110,6 +116,13 @@ export async function uploadResume(
 
   const extraction = await extractResumeFromFile(file);
   if (!extraction.success) {
+    logServerError({
+      context: "server_action",
+      operation: "uploadResume",
+      action: "uploadResume",
+      message: "Extração de currículo falhou.",
+      errorMessage: extraction.error,
+    });
     return { success: false, error: extraction.error };
   }
 
@@ -125,7 +138,11 @@ export async function uploadResume(
     .single();
 
   if (insertError) {
-    console.error("[uploadResume] insert error:", insertError.message);
+    logServerError({
+      context: "db",
+      operation: "uploadResume_insert",
+      message: insertError.message,
+    });
     return {
       success: false,
       error: "Erro ao salvar. Tente novamente.",
@@ -137,11 +154,11 @@ export async function uploadResume(
     .insert({ user_id: user.id, credits: 3 });
 
   if (creditsError) {
-    console.error(
-      "[uploadResume] user_credits insert error:",
-      creditsError.message
-    );
-
+    logServerError({
+      context: "db",
+      operation: "uploadResume_user_credits",
+      message: creditsError.message,
+    });
     return {
       success: false,
       error: "Erro ao salvar. Tente novamente.",
@@ -198,7 +215,11 @@ export async function saveResumeData(
     .eq("user_id", user.id);
 
   if (updateError) {
-    console.error("[saveResumeData] update error:", updateError.message);
+    logServerError({
+      context: "db",
+      operation: "saveResumeData_update",
+      message: updateError.message,
+    });
     return {
       success: false,
       error: "Erro ao salvar. Tente novamente.",
@@ -243,8 +264,11 @@ export async function getResumeForUser(): Promise<GetResumeForUserResult> {
     if (error?.code === "PGRST116") {
       return { success: true, resumeId: undefined, data: undefined };
     }
-
-    console.error("[getResumeForUser] select error:", error?.message);
+    logServerError({
+      context: "db",
+      operation: "getResumeForUser_select",
+      message: error?.message ?? "No row",
+    });
     return { success: false, error: "Erro ao carregar currículo." };
   }
 

@@ -7,13 +7,18 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
+import { logServerError } from "@/lib/logger";
 import { handleCheckoutSessionCompleted } from "./_utils/handle-checkout-session-completed";
 import { verifyStripeWebhook } from "./_utils/verify-webhook";
 
 export async function POST(request: Request) {
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
   if (!webhookSecret || webhookSecret.trim() === "") {
-    console.error("[stripe webhook] STRIPE_WEBHOOK_SECRET is not set");
+    logServerError({
+      context: "api",
+      operation: "stripe_webhook",
+      message: "STRIPE_WEBHOOK_SECRET is not set",
+    });
     return NextResponse.json(
       { message: "Webhook secret not configured" },
       { status: 500 }

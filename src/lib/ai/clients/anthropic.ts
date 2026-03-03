@@ -3,6 +3,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 
 import { normalizeAIResumeData } from "@/lib/ai/utils/normalize-resume";
+import { logServerError } from "@/lib/logger";
 import { SYNTHESIS_SYSTEM_PROMPT } from "@/lib/ai/prompts/synthesis";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
@@ -138,6 +139,15 @@ export async function synthesizeOptimizedResume(
 
     return { success: true, data: validated };
   } catch (error) {
+    logServerError(
+      {
+        context: "ai",
+        operation: "synthesizeOptimizedResume",
+        message: "Síntese de currículo otimizado falhou.",
+        model: MODEL,
+      },
+      error
+    );
     if (error instanceof SyntaxError) {
       return {
         success: false,

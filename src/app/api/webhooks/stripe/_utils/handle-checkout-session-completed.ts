@@ -6,6 +6,7 @@ import {
   getCreditsForPackage,
   isCheckoutPackageId,
 } from "@/constants/checkout-packages";
+import { logServerError } from "@/lib/logger";
 import { createAdminSupabaseClient } from "@/lib/supabase/service";
 
 /**
@@ -18,18 +19,22 @@ export async function handleCheckoutSessionCompleted(
   const { packageId, userId } = session.metadata ?? {};
 
   if (!packageId || !userId) {
-    console.error(
-      "[stripe webhook] checkout.session.completed missing metadata",
-      { packageId, userId }
-    );
+    logServerError({
+      context: "api",
+      operation: "checkout_session_completed",
+      message: "Missing metadata (packageId or userId)",
+      errorMessage: JSON.stringify({ packageId, userId }),
+    });
     return null;
   }
 
   if (!isCheckoutPackageId(packageId)) {
-    console.error(
-      "[stripe webhook] checkout.session.completed invalid packageId",
-      { packageId }
-    );
+    logServerError({
+      context: "api",
+      operation: "checkout_session_completed",
+      message: "Invalid packageId",
+      errorMessage: packageId,
+    });
     return null;
   }
 
@@ -51,10 +56,11 @@ export async function handleCheckoutSessionCompleted(
         return null;
       }
 
-      console.error(
-        "[stripe webhook] purchase insert error:",
-        purchaseError.message
-      );
+      logServerError({
+        context: "api",
+        operation: "checkout_session_completed_purchase_insert",
+        message: purchaseError.message,
+      });
       return NextResponse.json({ message: "Database error" }, { status: 500 });
     }
 
@@ -65,7 +71,12 @@ export async function handleCheckoutSessionCompleted(
       .single();
 
     if (creditsRow == null) {
-      console.error("[stripe webhook] user_credits not found", userId);
+      logServerError({
+        context: "api",
+        operation: "checkout_session_completed_user_credits_lookup",
+        message: "user_credits not found",
+        errorMessage: userId,
+      });
       return NextResponse.json({ message: "Database error" }, { status: 500 });
     }
 
@@ -78,17 +89,24 @@ export async function handleCheckoutSessionCompleted(
       .eq("user_id", userId);
 
     if (updateError) {
-      console.error(
-        "[stripe webhook] user_credits update error:",
-        updateError.message
-      );
+      logServerError({
+        context: "api",
+        operation: "checkout_session_completed_user_credits_update",
+        message: updateError.message,
+      });
       return NextResponse.json({ message: "Database error" }, { status: 500 });
     }
 
     return null;
   } catch (err) {
-    const message = err instanceof Error ? err.message : "Unknown error";
-    console.error("[stripe webhook] unexpected error:", message);
+    logServerError(
+      {
+        context: "api",
+        operation: "checkout_session_completed",
+        message: "Unexpected error",
+      },
+      err
+    );
     return NextResponse.json({ message: "Server error" }, { status: 500 });
   }
 }
