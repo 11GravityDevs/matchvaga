@@ -14,7 +14,6 @@ import { useOnboardingContext } from "../../_contexts/onboarding-context";
 
 export interface UseResumeVerifyOptions {
   resumeId: string | null;
-  skippedUpload: boolean;
 }
 
 export interface UseResumeVerifyReturn {
@@ -27,12 +26,10 @@ export interface UseResumeVerifyReturn {
 
 export function useResumeVerify({
   resumeId,
-  skippedUpload,
 }: UseResumeVerifyOptions): UseResumeVerifyReturn {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const { resumeContent, setResumeContent, setResumeId, setParsedData } =
-    useOnboardingContext();
+  const { resumeContent, setResumeContent } = useOnboardingContext();
 
   const { mutateAsync: saveMutation, isPending: isSaving } = useMutation({
     mutationFn: async (data: ResumeData) => {
@@ -44,26 +41,20 @@ export function useResumeVerify({
         return { resumeId, data };
       }
 
-      if (skippedUpload) {
-        const result = await createResumeWithData(data);
+      const result = await createResumeWithData(data);
 
-        if (!result.success) {
-          throw new Error(result.error ?? "Erro ao salvar.");
-        }
-
-        if (!result.resumeId || !result.parsedData) {
-          throw new Error("Erro ao criar currículo.");
-        }
-
-        return {
-          resumeId: result.resumeId,
-          data: result.parsedData,
-        };
+      if (!result.success) {
+        throw new Error(result.error ?? "Erro ao salvar.");
       }
 
-      throw new Error(
-        "Resumo não encontrado. Volte e envie o arquivo novamente."
-      );
+      if (!result.resumeId || !result.parsedData) {
+        throw new Error("Erro ao criar currículo.");
+      }
+
+      return {
+        resumeId: result.resumeId,
+        data: result.parsedData,
+      };
     },
     onSuccess: (result) => {
       queryClient.setQueryData(QUERY_KEY_RESUME, {
@@ -83,9 +74,6 @@ export function useResumeVerify({
         email: result.data.email,
         credits,
       });
-
-      setResumeId(result.resumeId);
-      setParsedData(result.data);
     },
   });
 

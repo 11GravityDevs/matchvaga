@@ -34,8 +34,6 @@ export function useResumeUpload(): UseResumeUploadReturn {
     setResumeContent,
     selectedFile,
     setSelectedFile,
-    setResumeId,
-    setParsedData,
     setSkippedUpload,
   } = useOnboardingContext();
 
@@ -52,14 +50,6 @@ export function useResumeUpload(): UseResumeUploadReturn {
         throw new Error(result.error ?? "Erro ao processar currículo.");
       }
       return result;
-    },
-    onError: (error) => {
-      const reason =
-        error instanceof Error
-          ? error.message
-          : typeof error === "string"
-            ? error
-            : "unknown";
     },
     onSuccess: (result) => {
       if (result.resumeId && result.parsedData) {
@@ -80,8 +70,6 @@ export function useResumeUpload(): UseResumeUploadReturn {
           email: result.parsedData.email,
           credits,
         });
-        setResumeId(result.resumeId);
-        setParsedData(result.parsedData);
         router.push(ROUTE_ONBOARDING_VERIFY);
       }
     },
