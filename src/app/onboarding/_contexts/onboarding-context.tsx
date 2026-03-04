@@ -1,7 +1,6 @@
 "use client";
 
 import { createContext, useContext, useState, type ReactNode } from "react";
-import type { ResumeData } from "@/types/resume";
 
 export interface SelectedFileInfo {
   name: string;
@@ -14,10 +13,6 @@ interface OnboardingContextValue {
   setResumeContent: (content: string) => void;
   selectedFile: SelectedFileInfo | null;
   setSelectedFile: (file: SelectedFileInfo | null) => void;
-  resumeId: string | null;
-  setResumeId: (id: string | null) => void;
-  parsedData: ResumeData | null;
-  setParsedData: (data: ResumeData | null) => void;
   skippedUpload: boolean;
   setSkippedUpload: (value: boolean) => void;
 }
@@ -29,8 +24,6 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
   const [selectedFile, setSelectedFile] = useState<SelectedFileInfo | null>(
     null
   );
-  const [resumeId, setResumeId] = useState<string | null>(null);
-  const [parsedData, setParsedData] = useState<ResumeData | null>(null);
   const [skippedUpload, setSkippedUpload] = useState(false);
 
   return (
@@ -40,10 +33,6 @@ export function OnboardingProvider({ children }: { children: ReactNode }) {
         setResumeContent,
         selectedFile,
         setSelectedFile,
-        resumeId,
-        setResumeId,
-        parsedData,
-        setParsedData,
         skippedUpload,
         setSkippedUpload,
       }}
