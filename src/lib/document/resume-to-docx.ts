@@ -12,6 +12,8 @@ import {
   getSkillsByCategoryForDisplay,
   formatResumeDateBr,
   getContactLineForDisplay,
+  sortExperienceByDateDesc,
+  sortEducationByDateDesc,
 } from "@/utils/resume";
 
 const TWIP = 20;
@@ -200,6 +202,8 @@ export async function buildResumeDocx(data: ResumeData): Promise<Buffer> {
   }
 
   if (data.experience.length > 0) {
+    const experience = sortExperienceByDateDesc(data.experience);
+
     children.push(sectionSeparatorParagraph());
     children.push(
       new Paragraph({
@@ -217,7 +221,7 @@ export async function buildResumeDocx(data: ResumeData): Promise<Buffer> {
       })
     );
 
-    data.experience.forEach((exp, expIndex) => {
+    experience.forEach((exp, expIndex) => {
       const dateEnd =
         exp.isCurrent || !exp.endDate
           ? "Presente"
@@ -287,6 +291,8 @@ export async function buildResumeDocx(data: ResumeData): Promise<Buffer> {
   }
 
   if (data.education.length > 0) {
+    const education = sortEducationByDateDesc(data.education);
+
     children.push(sectionSeparatorParagraph());
     children.push(
       new Paragraph({
@@ -304,7 +310,7 @@ export async function buildResumeDocx(data: ResumeData): Promise<Buffer> {
       })
     );
 
-    data.education.forEach((edu, eduIndex) => {
+    education.forEach((edu, eduIndex) => {
       const dateEnd =
         edu.isCurrent || !edu.completionDate
           ? "Presente"
