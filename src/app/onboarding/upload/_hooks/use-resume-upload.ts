@@ -51,14 +51,6 @@ export function useResumeUpload(): UseResumeUploadReturn {
       }
       return result;
     },
-    onError: (error) => {
-      const reason =
-        error instanceof Error
-          ? error.message
-          : typeof error === "string"
-            ? error
-            : "unknown";
-    },
     onSuccess: (result) => {
       if (result.resumeId && result.parsedData) {
         queryClient.setQueryData(QUERY_KEY_RESUME, {
