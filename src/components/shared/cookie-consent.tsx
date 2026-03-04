@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 
 import { Cookie } from "lucide-react";
 import Link from "next/link";
+import posthog from "posthog-js";
 
+import { trackEvent } from "@/lib/analytics/posthog";
 import { Button } from "@/components/ui/button";
 
 const STORAGE_KEY = "cookie-consent";
@@ -24,6 +26,15 @@ export function CookieConsent() {
 
   function handleConsent(status: ConsentStatus) {
     localStorage.setItem(STORAGE_KEY, status);
+
+    if (status === "accepted") {
+      posthog.opt_in_capturing();
+      trackEvent("cookie_consent_accepted", {});
+    } else {
+      posthog.opt_out_capturing();
+      trackEvent("cookie_consent_declined", {});
+    }
+
     setIsVisible(false);
   }
 

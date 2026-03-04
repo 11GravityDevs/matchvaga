@@ -4,9 +4,17 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { CheckoutPackagesGrid } from "@/components/shared/checkout-packages-grid";
+import {
+  type CheckoutPackageId,
+  getCreditsForPackage,
+  getPackagePriceCentavos,
+} from "@/constants/checkout-packages";
 import { ROUTE_LOGIN } from "@/constants/routes";
-import { type CheckoutPackageId } from "@/constants/checkout-packages";
 import { useAuthContext } from "@/contexts/auth-context";
+import {
+  trackCheckoutStartedEvent,
+  trackPricingPackageSelectedEvent,
+} from "@/lib/analytics/posthog-events";
 import { useToastNotification } from "@/hooks/useToastNotification";
 import { createCheckoutSession } from "../home/checkout/_actions/checkout";
 
@@ -24,6 +32,11 @@ export function PricingSection() {
       router.push(ROUTE_LOGIN);
       return;
     }
+
+    const credits = getCreditsForPackage(id);
+    const priceCentavos = getPackagePriceCentavos(id);
+    trackPricingPackageSelectedEvent(id, credits, priceCentavos);
+    trackCheckoutStartedEvent(id, priceCentavos);
 
     setLoadingPackageId(id);
 

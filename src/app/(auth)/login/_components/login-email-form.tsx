@@ -6,6 +6,13 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Field, FieldContent, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import {
+  trackAuthLoginFailedEvent,
+  trackLoginEmailSubmittedEvent,
+  trackLoginGoogleSubmittedEvent,
+} from "@/lib/analytics/posthog-events";
+import { mapEmailLoginErrorType } from "../_utils/map-email-login-error-type";
+import { mapGoogleLoginErrorType } from "../_utils/map-google-login-error-type";
 import { isValidEmail } from "../_utils/validation";
 
 interface LoginEmailFormProps {
@@ -37,18 +44,22 @@ export function LoginEmailForm({
     setError(null);
     setIsGoogleLoading(true);
     try {
+      trackLoginGoogleSubmittedEvent();
       await onGoogleClick();
     } catch (e) {
       console.error(e);
-      setError(
-        e instanceof Error ? e.message : "Falha ao conectar com Google."
-      );
+      const message =
+        e instanceof Error ? e.message : "Falha ao conectar com Google.";
+
+      const errorType = mapGoogleLoginErrorType(message);
+      trackAuthLoginFailedEvent("google", errorType);
+      setError(message);
     } finally {
       setIsGoogleLoading(false);
     }
   }
 
-  async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (isDisabled) return;
 
@@ -60,12 +71,16 @@ export function LoginEmailForm({
     setError(null);
     setIsSubmitting(true);
     try {
+      trackLoginEmailSubmittedEvent();
       await onSubmit(email.trim());
     } catch (e) {
       console.error(e);
-      setError(
-        e instanceof Error ? e.message : "Algo deu errado. Tente novamente."
-      );
+      const message =
+        e instanceof Error ? e.message : "Algo deu errado. Tente novamente.";
+
+      const errorType = mapEmailLoginErrorType(e);
+      trackAuthLoginFailedEvent("email", errorType);
+      setError(message);
     } finally {
       setIsSubmitting(false);
     }

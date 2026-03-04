@@ -1,8 +1,6 @@
-import { Sparkles, Zap } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-
-import { AuthAwareLink } from "./auth-aware-link";
+import { HeroPrimaryCtaButton } from "./hero-primary-cta-button";
 
 export function HeroSection() {
   return (
@@ -45,13 +43,7 @@ export function HeroSection() {
         className="animate-fade-up flex items-center gap-4"
         style={{ animationDelay: "240ms" }}
       >
-        <Button variant="brand" className="gap-2" size="brand" asChild>
-          <AuthAwareLink
-            loggedOutLabel="Começar Grátis"
-            loggedInLabel="Acessar Dashboard"
-            icon={<Zap className="size-4" />}
-          />
-        </Button>
+        <HeroPrimaryCtaButton />
       </div>
 
       {/* Product Screenshot Placeholder */}

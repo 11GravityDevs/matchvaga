@@ -1,11 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { CreditCard, Clock, Shield } from "lucide-react";
 
 import { CheckoutPackagesGrid } from "@/components/shared/checkout-packages-grid";
-import { type CheckoutPackageId } from "@/constants/checkout-packages";
+import {
+  type CheckoutPackageId,
+  getCreditsForPackage,
+  getPackagePriceCentavos,
+} from "@/constants/checkout-packages";
+import {
+  trackCheckoutStartedEvent,
+  trackPricingPackageSelectedEvent,
+  trackPricingViewedEvent,
+} from "@/lib/analytics/posthog-events";
 import { useToastNotification } from "@/hooks/useToastNotification";
 
 import { createCheckoutSession } from "../_actions/checkout";
@@ -15,7 +24,17 @@ export function CheckoutContent() {
     useState<CheckoutPackageId | null>(null);
   const { showErrorToastNotification } = useToastNotification();
 
+  useEffect(() => {
+    trackPricingViewedEvent();
+  }, []);
+
   const handleSelectPackage = async (id: CheckoutPackageId) => {
+    const credits = getCreditsForPackage(id);
+    const priceCentavos = getPackagePriceCentavos(id);
+
+    trackPricingPackageSelectedEvent(id, credits, priceCentavos);
+    trackCheckoutStartedEvent(id, priceCentavos);
+
     setLoadingPackageId(id);
 
     try {

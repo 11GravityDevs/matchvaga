@@ -5,9 +5,10 @@ import type { Metadata } from "next";
 import { SITE_URL } from "@/constants/site";
 import { CoreFeaturesSection } from "./_components/core-features-section";
 import { FAQSection } from "./_components/faq-section";
-import { LandingStructuredData } from "./_components/landing-structured-data";
 import { FinalCTASection } from "./_components/final-cta-section";
 import { HeroSection } from "./_components/hero-section";
+import { LandingPageTracker } from "./_components/landing-page-tracker";
+import { LandingStructuredData } from "./_components/landing-structured-data";
 import { HowItWorksSection } from "./_components/how-it-works-section";
 import { LandingFooter } from "./_components/landing-footer";
 import { LandingHeader } from "./_components/landing-header";
@@ -34,6 +35,7 @@ export const metadata: Metadata = {
 export default async function Page() {
   return (
     <main className="flex min-h-screen flex-col bg-background">
+      <LandingPageTracker />
       <LandingStructuredData />
       <LandingHeader />
       <div className="mx-auto w-full max-w-landing-content px-4 md:px-0">
