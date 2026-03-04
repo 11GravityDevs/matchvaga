@@ -12,6 +12,8 @@ import {
 
 const PROTECTED_PATH_PREFIXES = [ROUTE_HOME, ROUTE_ONBOARDING];
 const GUEST_ONLY_PATH_PREFIXES = [ROUTE_LOGIN];
+// TODO(lancamento): remover LANDING_ONLY_PREFIXES e voltar a permitir acesso às rotas autenticadas
+const LANDING_ONLY_PREFIXES = [ROUTE_HOME, ROUTE_ONBOARDING, ROUTE_LOGIN];
 
 function isProtectedPath(pathname: string): boolean {
   return PROTECTED_PATH_PREFIXES.some((prefix) => pathname.startsWith(prefix));
@@ -23,6 +25,10 @@ function isGuestOnlyPath(pathname: string): boolean {
   }
 
   return GUEST_ONLY_PATH_PREFIXES.some((prefix) => pathname.startsWith(prefix));
+}
+
+function isLandingOnlyPhasePath(pathname: string): boolean {
+  return LANDING_ONLY_PREFIXES.some((prefix) => pathname.startsWith(prefix));
 }
 
 export async function proxy(request: NextRequest) {
@@ -58,6 +64,14 @@ export async function proxy(request: NextRequest) {
 
   const { data } = await supabase.auth.getClaims();
   const user = data?.claims;
+
+  // TODO(lancamento): remover bloqueio de login/home/onboarding usado apenas na fase de divulgação da landing
+  if (isLandingOnlyPhasePath(request.nextUrl.pathname)) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/";
+    url.search = "";
+    return NextResponse.redirect(url);
+  }
 
   if (!user && isProtectedPath(request.nextUrl.pathname)) {
     const url = request.nextUrl.clone();

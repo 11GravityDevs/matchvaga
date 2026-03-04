@@ -28,6 +28,10 @@ export function PricingSection() {
   const { showErrorToastNotification } = useToastNotification();
 
   const handleSelectPackage = async (id: CheckoutPackageId) => {
+    // TODO(lancamento): remover redirecionamento para /em-breve e reativar fluxo de checkout
+    router.push("/em-breve");
+    return;
+
     if (!isLoggedIn) {
       router.push(ROUTE_LOGIN);
       return;
@@ -44,7 +48,7 @@ export function PricingSection() {
       const result = await createCheckoutSession({ packageId: id });
 
       if (result.success && result.checkoutUrl) {
-        window.location.assign(result.checkoutUrl);
+        // window.location.assign(result.checkoutUrl);
         return;
       }
 
