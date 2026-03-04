@@ -8,6 +8,7 @@ import { logServerError } from "@/lib/logger";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
 import { translateAuthError } from "@/utils/auth";
+import { formatPhoneBr } from "@/utils/resume";
 
 const ERROR_ALREADY_HAS_RESUME =
   "Você já possui um currículo cadastrado. Para alterar as informações, acesse a tela Meu currículo.";
@@ -140,12 +141,16 @@ export async function uploadResume(
   }
 
   const { data: parsedData } = extraction;
+  const dataToStore: ResumeData = {
+    ...parsedData,
+    phone: formatPhoneBr(parsedData.phone),
+  };
 
   const { data: row, error: insertError } = await supabase
     .from("resumes")
     .insert({
       user_id: user.id,
-      parsed_data: parsedData as unknown as Record<string, unknown>,
+      parsed_data: dataToStore as unknown as Record<string, unknown>,
     })
     .select("id")
     .single();
@@ -184,7 +189,7 @@ export async function uploadResume(
   return {
     success: true,
     resumeId: row.id,
-    parsedData,
+    parsedData: dataToStore,
   };
 }
 
