@@ -23,14 +23,27 @@ const VERIFY_THINKING_MESSAGES = [
   "Redirecionando...",
 ] as const;
 
+const EMPTY_INITIAL_DATA = (summary: string): ResumeData => ({
+  fullName: "",
+  email: "",
+  location: "",
+  phone: "",
+  linkedin: "",
+  github: "",
+  summary,
+  skills: [],
+  languages: [],
+  experience: [createEmptyExperience()],
+  education: [createEmptyEducation()],
+});
+
+function getFormKey(resumeId: string | null, hasResumeData: boolean): string {
+  if (resumeId && hasResumeData) return resumeId;
+  return "no-resume";
+}
+
 export function VerifyContent() {
-  const {
-    resumeContent,
-    setResumeContent,
-    parsedData,
-    resumeId: contextResumeId,
-    skippedUpload,
-  } = useOnboardingContext();
+  const { resumeContent, setResumeContent } = useOnboardingContext();
   const {
     resumeId: queryResumeId,
     resumeData: queryResumeData,
@@ -38,31 +51,55 @@ export function VerifyContent() {
     isLoading: isLoadingResume,
   } = useResumeQuery();
 
-  const effectiveResumeId = contextResumeId ?? queryResumeId;
-  const effectiveData = parsedData ?? (hasNoResume ? null : queryResumeData);
+  const resumeId = queryResumeId;
+  const resumeData = hasNoResume ? null : queryResumeData;
 
-  const { isSaving, save, continueToDashboard } = useResumeVerify({
-    resumeId: effectiveResumeId,
-    skippedUpload,
-  });
+  const { isSaving, save, continueToDashboard } = useResumeVerify({ resumeId });
   const [validationErrors, setValidationErrors] =
     useState<ResumeValidationErrors | null>(null);
   const { showErrorToastNotification } = useToastNotification();
 
-  const initialData: ResumeData = effectiveData ?? {
-    fullName: "",
-    email: "",
-    location: "",
-    phone: "",
-    linkedin: "",
-    github: "",
-    summary: resumeContent,
-    skills: [],
-    languages: [],
-    experience: [createEmptyExperience()],
-    education: [createEmptyEducation()],
-  };
+  const initialData: ResumeData =
+    resumeData ?? EMPTY_INITIAL_DATA(resumeContent);
 
+  if (isLoadingResume) {
+    return <Loading className="min-h-0 flex-1" />;
+  }
+
+  return (
+    <VerifyFormWithKey
+      key={getFormKey(resumeId, !!resumeData)}
+      initialData={initialData}
+      setResumeContent={setResumeContent}
+      isSaving={isSaving}
+      save={save}
+      continueToDashboard={continueToDashboard}
+      validationErrors={validationErrors}
+      setValidationErrors={setValidationErrors}
+      showErrorToastNotification={showErrorToastNotification}
+    />
+  );
+}
+
+function VerifyFormWithKey({
+  initialData,
+  setResumeContent,
+  isSaving,
+  save,
+  continueToDashboard,
+  validationErrors,
+  setValidationErrors,
+  showErrorToastNotification,
+}: {
+  initialData: ResumeData;
+  setResumeContent: (content: string) => void;
+  isSaving: boolean;
+  save: (data: ResumeData) => Promise<void>;
+  continueToDashboard: () => void;
+  validationErrors: ResumeValidationErrors | null;
+  setValidationErrors: (errors: ResumeValidationErrors | null) => void;
+  showErrorToastNotification: (message: string) => void;
+}) {
   const {
     data,
     updateField,
@@ -149,10 +186,6 @@ export function VerifyContent() {
       });
       showErrorToastNotification(message);
     }
-  }
-
-  if (isLoadingResume && !parsedData && !skippedUpload) {
-    return <Loading className="min-h-0 flex-1" />;
   }
 
   if (isSaving) {

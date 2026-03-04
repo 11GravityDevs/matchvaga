@@ -34,8 +34,6 @@ export function useResumeUpload(): UseResumeUploadReturn {
     setResumeContent,
     selectedFile,
     setSelectedFile,
-    setResumeId,
-    setParsedData,
     setSkippedUpload,
   } = useOnboardingContext();
 
@@ -72,8 +70,6 @@ export function useResumeUpload(): UseResumeUploadReturn {
           email: result.parsedData.email,
           credits,
         });
-        setResumeId(result.resumeId);
-        setParsedData(result.parsedData);
         router.push(ROUTE_ONBOARDING_VERIFY);
       }
     },
