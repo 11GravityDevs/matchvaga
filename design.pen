@@ -17998,7 +17998,8 @@
               "lineHeight": 1.5,
               "textAlign": "center",
               "fontFamily": "Inter",
-              "fontSize": 22
+              "fontSize": 22,
+              "fontWeight": "normal"
             }
           ]
         },
@@ -18098,7 +18099,8 @@
                       "lineHeight": 1.4,
                       "textAlign": "center",
                       "fontFamily": "Inter",
-                      "fontSize": 18
+                      "fontSize": 18,
+                      "fontWeight": "normal"
                     }
                   ]
                 },
@@ -18142,7 +18144,8 @@
                       "lineHeight": 1.4,
                       "textAlign": "center",
                       "fontFamily": "Inter",
-                      "fontSize": 18
+                      "fontSize": 18,
+                      "fontWeight": "normal"
                     }
                   ]
                 }
@@ -18159,7 +18162,8 @@
               "lineHeight": 1.5,
               "textAlign": "center",
               "fontFamily": "Inter",
-              "fontSize": 20
+              "fontSize": 20,
+              "fontWeight": "normal"
             }
           ]
         },
@@ -18614,7 +18618,8 @@
               "lineHeight": 1.5,
               "textAlign": "center",
               "fontFamily": "Inter",
-              "fontSize": 20
+              "fontSize": 20,
+              "fontWeight": "normal"
             }
           ]
         },
@@ -18732,7 +18737,8 @@
               "lineHeight": 1.5,
               "textAlign": "center",
               "fontFamily": "Inter",
-              "fontSize": 20
+              "fontSize": 20,
+              "fontWeight": "normal"
             }
           ]
         },
@@ -18874,7 +18880,8 @@
                           "content": "Faça upload do seu currículo ou perfil LinkedIn.",
                           "lineHeight": 1.4,
                           "fontFamily": "Inter",
-                          "fontSize": 18
+                          "fontSize": 18,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -18938,7 +18945,8 @@
                           "content": "A IA identifica palavras-chave e requisitos do ATS.",
                           "lineHeight": 1.4,
                           "fontFamily": "Inter",
-                          "fontSize": 18
+                          "fontSize": 18,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -19002,7 +19010,8 @@
                           "content": "Currículo adaptado, carta e mensagem de abordagem.",
                           "lineHeight": 1.4,
                           "fontFamily": "Inter",
-                          "fontSize": 18
+                          "fontSize": 18,
+                          "fontWeight": "normal"
                         }
                       ]
                     }
@@ -19263,7 +19272,8 @@
               "lineHeight": 1.5,
               "textAlign": "center",
               "fontFamily": "Inter",
-              "fontSize": 20
+              "fontSize": 20,
+              "fontWeight": "normal"
             }
           ]
         },
@@ -19427,7 +19437,8 @@
               "lineHeight": 1.6,
               "textAlign": "center",
               "fontFamily": "Inter",
-              "fontSize": 20
+              "fontSize": 20,
+              "fontWeight": "normal"
             },
             {
               "type": "frame",
@@ -19485,7 +19496,8 @@
                       "fill": "#64748B",
                       "content": "Analista de Marketing",
                       "fontFamily": "Inter",
-                      "fontSize": 14
+                      "fontSize": 14,
+                      "fontWeight": "normal"
                     }
                   ]
                 }
@@ -19599,7 +19611,8 @@
               "lineHeight": 1.5,
               "textAlign": "center",
               "fontFamily": "Inter",
-              "fontSize": 22
+              "fontSize": 22,
+              "fontWeight": "normal"
             }
           ]
         },

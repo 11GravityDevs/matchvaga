@@ -8,6 +8,8 @@ import {
   ROUTE_HOME_NEW_ANALYSIS,
 } from "@/constants/routes";
 
+import { CheckoutSuccessTracker } from "../_components/checkout-success-tracker";
+
 interface CheckoutSuccessPageProps {
   searchParams: Promise<{ session_id?: string }>;
 }
@@ -19,6 +21,7 @@ export default async function CheckoutSuccessPage({
 
   return (
     <main className="flex flex-1 flex-col items-center justify-center section-gap page-padding">
+      <CheckoutSuccessTracker sessionId={sessionId} />
       <div className="flex flex-col items-center justify-center gap-6 text-center">
         <div className="flex size-20 items-center justify-center rounded-full bg-accent-success-light">
           <CheckCircle2 className="size-16 text-accent-success" />

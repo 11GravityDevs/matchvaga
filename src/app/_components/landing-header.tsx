@@ -5,17 +5,22 @@ import { Zap } from "lucide-react";
 
 import { Logo } from "@/components/shared/logo";
 import { Button } from "@/components/ui/button";
+import { useAnalyticsEvents } from "@/hooks/useAnalyticsEvents";
 
-import { LandingNav } from "./landing-nav";
 import { AuthAwareLink } from "./auth-aware-link";
+import { LandingNav } from "./landing-nav";
 
 export function LandingHeader() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const { trackLandingNavbarCtaClicked } = useAnalyticsEvents();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 0);
+
     handleScroll();
+
     window.addEventListener("scroll", handleScroll, { passive: true });
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -29,8 +34,16 @@ export function LandingHeader() {
         <LandingNav className="hidden md:flex" />
 
         <div className="hidden items-center gap-3 md:flex">
-          <Button variant="brand" className="gap-2" size="lg" asChild>
+          <Button
+            variant="brand"
+            className="gap-2"
+            size="lg"
+            asChild
+            onClick={trackLandingNavbarCtaClicked}
+          >
             <AuthAwareLink
+              loggedOutHref="/em-breve"
+              loggedInHref="/em-breve"
               loggedOutLabel="Começar Grátis"
               loggedInLabel="Acessar Dashboard"
               icon={<Zap className="size-4" />}
