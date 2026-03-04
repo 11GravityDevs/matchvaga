@@ -3,6 +3,8 @@ import {
   formatResumeDateBr,
   getSkillsByCategoryForDisplay,
   formatLinkLabel,
+  sortExperienceByDateDesc,
+  sortEducationByDateDesc,
 } from "@/utils/resume";
 
 function ensureHttps(url: string): string {
@@ -12,6 +14,8 @@ function ensureHttps(url: string): string {
 }
 
 export function ResumePreviewDocument({ data }: { data: ResumeData }) {
+  const experience = sortExperienceByDateDesc(data.experience);
+  const education = sortEducationByDateDesc(data.education);
   const contactItems: Array<{ href?: string; label: string }> = [];
 
   if (data.location) contactItems.push({ label: data.location });
@@ -79,8 +83,8 @@ export function ResumePreviewDocument({ data }: { data: ResumeData }) {
         </p>
       </div>
       {(getSkillsByCategoryForDisplay(data).length > 0 ||
-        data.experience.length > 0 ||
-        data.education.length > 0) &&
+        experience.length > 0 ||
+        education.length > 0) &&
         separator}
 
       {/* Habilidades Técnicas */}
@@ -99,20 +103,19 @@ export function ResumePreviewDocument({ data }: { data: ResumeData }) {
               ))}
             </ul>
           </div>
-          {(data.experience.length > 0 || data.education.length > 0) &&
-            separator}
+          {(experience.length > 0 || education.length > 0) && separator}
         </>
       )}
 
       {/* Experiência Profissional */}
-      {data.experience.length > 0 && (
+      {experience.length > 0 && (
         <>
           <div className="flex flex-col gap-2">
             <h3 className="text-section-title text-foreground">
               Experiência Profissional
             </h3>
             <div className="flex flex-col gap-4">
-              {data.experience.map((exp, i) => {
+              {experience.map((exp, i) => {
                 const jobLineParts = [
                   exp.jobTitle && <strong key="title">{exp.jobTitle}</strong>,
                   exp.company && <span key="company">{exp.company}</span>,
@@ -154,16 +157,16 @@ export function ResumePreviewDocument({ data }: { data: ResumeData }) {
               })}
             </div>
           </div>
-          {data.education.length > 0 && separator}
+          {education.length > 0 && separator}
         </>
       )}
 
       {/* Formação */}
-      {data.education.length > 0 && (
+      {education.length > 0 && (
         <div className="flex flex-col gap-2">
           <h3 className="text-section-title text-foreground">Formação</h3>
           <div className="flex flex-col gap-3">
-            {data.education.map((edu, i) => {
+            {education.map((edu, i) => {
               const eduLineParts = [
                 edu.course && <strong key="course">{edu.course}</strong>,
                 edu.institution && (

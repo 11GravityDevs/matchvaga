@@ -4,6 +4,8 @@ import {
   getSkillsByCategoryForDisplay,
   formatResumeDateBr,
   getContactLineForDisplay,
+  sortExperienceByDateDesc,
+  sortEducationByDateDesc,
 } from "@/utils/resume";
 
 const colors = {
@@ -163,6 +165,8 @@ export function ResumeDocument({ data }: ResumeDocumentProps) {
   const hasSkills = skillsForDisplay.length > 0;
   const hasExperience = data.experience.length > 0;
   const hasEducation = data.education.length > 0;
+  const experience = sortExperienceByDateDesc(data.experience);
+  const education = sortEducationByDateDesc(data.education);
 
   return (
     <Document>
@@ -217,7 +221,7 @@ export function ResumeDocument({ data }: ResumeDocumentProps) {
           <>
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Experiência Profissional</Text>
-              {data.experience.map((exp, i) => {
+              {experience.map((exp, i) => {
                 const dateEnd =
                   exp.isCurrent || !exp.endDate
                     ? "Presente"
@@ -240,7 +244,7 @@ export function ResumeDocument({ data }: ResumeDocumentProps) {
                     key={i}
                     style={[
                       styles.experienceItem,
-                      ...(hasEducation && i === data.experience.length - 1
+                      ...(hasEducation && i === experience.length - 1
                         ? [styles.experienceItemLast]
                         : []),
                     ]}
@@ -271,7 +275,7 @@ export function ResumeDocument({ data }: ResumeDocumentProps) {
         {hasEducation && (
           <View style={[styles.section, styles.sectionLast]}>
             <Text style={styles.sectionTitle}>Formação</Text>
-            {data.education.map((edu, i) => {
+            {education.map((edu, i) => {
               const dateEnd =
                 edu.isCurrent || !edu.completionDate
                   ? "Presente"
@@ -296,7 +300,7 @@ export function ResumeDocument({ data }: ResumeDocumentProps) {
                   key={i}
                   style={[
                     styles.educationItem,
-                    ...(i === data.education.length - 1
+                    ...(i === education.length - 1
                       ? [styles.educationItemLast]
                       : []),
                   ]}
