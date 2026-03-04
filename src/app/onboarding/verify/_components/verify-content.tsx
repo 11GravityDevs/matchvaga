@@ -62,17 +62,24 @@ export function VerifyContent() {
     useState<ResumeValidationErrors | null>(null);
   const { showErrorToastNotification } = useToastNotification();
   const hasSetBlockedErrors = useRef(false);
+  const initialDataRef = useRef<ResumeData | null>(null);
 
   const initialData: ResumeData =
     resumeData ?? EMPTY_INITIAL_DATA(resumeContent);
 
   useEffect(() => {
+    initialDataRef.current = initialData;
+  }, [initialData]);
+
+  useEffect(() => {
     if (!blockedIncomplete || isLoadingResume) return;
     if (hasSetBlockedErrors.current) return;
+    const data = initialDataRef.current;
+    if (!data) return;
     hasSetBlockedErrors.current = true;
-    const errors = getResumeValidationErrors(initialData);
+    const errors = getResumeValidationErrors(data);
     queueMicrotask(() => setValidationErrors(errors ?? null));
-  }, [blockedIncomplete, isLoadingResume, initialData, setValidationErrors]);
+  }, [blockedIncomplete, isLoadingResume, setValidationErrors]);
 
   if (isLoadingResume) {
     return <Loading className="min-h-0 flex-1" />;
