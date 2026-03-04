@@ -9,7 +9,9 @@ if (typeof window !== "undefined" && POSTHOG_TOKEN && POSTHOG_HOST) {
     capture_pageview: true,
     capture_pageleave: true,
     opt_out_capturing_by_default: true,
-    defaults: "2026-01-30",
+    capture_performance: {
+      web_vitals: true,
+    },
   });
 
   const consentStatus = window.localStorage.getItem("cookie-consent");
