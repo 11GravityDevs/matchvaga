@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-
 import { useResumeVerify } from "../_hooks/use-resume-verify";
 import {
   useResumeForm,

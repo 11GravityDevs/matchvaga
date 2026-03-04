@@ -4,9 +4,17 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { CheckoutPackagesGrid } from "@/components/shared/checkout-packages-grid";
+import {
+  type CheckoutPackageId,
+  getCreditsForPackage,
+  getPackagePriceCentavos,
+} from "@/constants/checkout-packages";
 import { ROUTE_LOGIN } from "@/constants/routes";
-import { type CheckoutPackageId } from "@/constants/checkout-packages";
 import { useAuthContext } from "@/contexts/auth-context";
+import {
+  trackCheckoutStartedEvent,
+  trackPricingPackageSelectedEvent,
+} from "@/lib/analytics/posthog-events";
 import { useToastNotification } from "@/hooks/useToastNotification";
 import { createCheckoutSession } from "../home/checkout/_actions/checkout";
 
@@ -20,10 +28,19 @@ export function PricingSection() {
   const { showErrorToastNotification } = useToastNotification();
 
   const handleSelectPackage = async (id: CheckoutPackageId) => {
+    // TODO(lancamento): remover redirecionamento para /em-breve e reativar fluxo de checkout
+    router.push("/em-breve");
+    return;
+
     if (!isLoggedIn) {
       router.push(ROUTE_LOGIN);
       return;
     }
+
+    const credits = getCreditsForPackage(id);
+    const priceCentavos = getPackagePriceCentavos(id);
+    trackPricingPackageSelectedEvent(id, credits, priceCentavos);
+    trackCheckoutStartedEvent(id, priceCentavos);
 
     setLoadingPackageId(id);
 
@@ -31,7 +48,7 @@ export function PricingSection() {
       const result = await createCheckoutSession({ packageId: id });
 
       if (result.success && result.checkoutUrl) {
-        window.location.assign(result.checkoutUrl);
+        // window.location.assign(result.checkoutUrl);
         return;
       }
 
