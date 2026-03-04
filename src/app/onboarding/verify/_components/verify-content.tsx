@@ -74,8 +74,10 @@ export function VerifyContent() {
   useEffect(() => {
     if (!blockedIncomplete || isLoadingResume) return;
     if (hasSetBlockedErrors.current) return;
+
     const data = initialDataRef.current;
     if (!data) return;
+
     hasSetBlockedErrors.current = true;
     const errors = getResumeValidationErrors(data);
     queueMicrotask(() => setValidationErrors(errors ?? null));
