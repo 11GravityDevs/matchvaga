@@ -8,7 +8,7 @@ import { extractTextFromDocx } from "@/lib/document/extract-docx-text";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
 
-const MAX_FILE_SIZE_BYTES = 2 * 1024 * 1024; // 2MB
+const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5MB
 const MIME_PDF = "application/pdf";
 const MIME_DOCX =
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
@@ -37,7 +37,7 @@ export async function extractResumeFromFile(
   }
 
   if (file.size > MAX_FILE_SIZE_BYTES) {
-    return { success: false, error: "Arquivo muito grande. Máximo 2 MB." };
+    return { success: false, error: "Arquivo muito grande. Máximo 5 MB." };
   }
 
   const mimeType = file.type;

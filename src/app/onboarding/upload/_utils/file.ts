@@ -1,4 +1,4 @@
-export const MAX_FILE_SIZE_BYTES = 2 * 1024 * 1024; // 2MB
+export const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5MB
 
 export function isFileWithinSizeLimit(file: File): boolean {
   return file.size <= MAX_FILE_SIZE_BYTES;
