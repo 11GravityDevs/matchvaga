@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useResumeVerify } from "../_hooks/use-resume-verify";
 import {
   useResumeForm,
@@ -13,6 +13,7 @@ import { createEmptyEducation, createEmptyExperience } from "@/types/resume";
 import { ResumeFormCard } from "@/components/shared/resume-form-card";
 import { Loading } from "@/components/ui/loading";
 import { useToastNotification } from "@/hooks/useToastNotification";
+import { getResumeValidationErrors } from "@/utils/resume-validation";
 import { useOnboardingContext } from "../../_contexts/onboarding-context";
 
 const VERIFY_THINKING_MESSAGES = [
@@ -42,9 +43,6 @@ function getFormKey(resumeId: string | null, hasResumeData: boolean): string {
   return "no-resume";
 }
 
-const BLOCKED_TOAST_MESSAGE =
-  "Complete os dados obrigatórios abaixo para acessar o dashboard.";
-
 export function VerifyContent() {
   const searchParams = useSearchParams();
   const blockedIncomplete = searchParams.get("blocked") === "incomplete";
@@ -63,17 +61,18 @@ export function VerifyContent() {
   const [validationErrors, setValidationErrors] =
     useState<ResumeValidationErrors | null>(null);
   const { showErrorToastNotification } = useToastNotification();
-
-  useEffect(() => {
-    if (blockedIncomplete) {
-      showErrorToastNotification(BLOCKED_TOAST_MESSAGE, {
-        toastId: "verify-blocked-incomplete",
-      });
-    }
-  }, [blockedIncomplete, showErrorToastNotification]);
+  const hasSetBlockedErrors = useRef(false);
 
   const initialData: ResumeData =
     resumeData ?? EMPTY_INITIAL_DATA(resumeContent);
+
+  useEffect(() => {
+    if (!blockedIncomplete || isLoadingResume) return;
+    if (hasSetBlockedErrors.current) return;
+    hasSetBlockedErrors.current = true;
+    const errors = getResumeValidationErrors(initialData);
+    queueMicrotask(() => setValidationErrors(errors ?? null));
+  }, [blockedIncomplete, isLoadingResume, initialData, setValidationErrors]);
 
   if (isLoadingResume) {
     return <Loading className="min-h-0 flex-1" />;
