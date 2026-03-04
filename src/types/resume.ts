@@ -54,3 +54,25 @@ export const createEmptyEducation = (): EducationEntry => ({
   startDate: "",
   completionDate: "",
 });
+
+export type ExperienceEntryFieldErrors = Partial<
+  Record<keyof ExperienceEntry, string>
+>;
+
+export type EducationEntryFieldErrors = Partial<
+  Record<keyof EducationEntry, string>
+>;
+
+export interface ResumeValidationErrors {
+  form?: string;
+  fullName?: string;
+  email?: string;
+  location?: string;
+  phone?: string;
+  summary?: string;
+  skills?: string;
+  experience?: string;
+  experienceEntryErrors?: ExperienceEntryFieldErrors[];
+  education?: string;
+  educationEntryErrors?: EducationEntryFieldErrors[];
+}

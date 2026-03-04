@@ -9,7 +9,11 @@ import {
   ROUTE_ONBOARDING,
   ROUTE_ONBOARDING_PREVIEW,
   ROUTE_ONBOARDING_UPLOAD,
+  ROUTE_ONBOARDING_VERIFY,
 } from "@/constants/routes";
+import { resumeDataSchema } from "@/schemas/resume";
+import type { ResumeData } from "@/types/resume";
+import { isResumeCompleteForOnboarding } from "@/utils/resume-validation";
 
 const PROTECTED_PATH_PREFIXES = [ROUTE_HOME, ROUTE_ONBOARDING];
 const GUEST_ONLY_PATH_PREFIXES = [ROUTE_LOGIN];
@@ -92,14 +96,16 @@ export async function proxy(request: NextRequest) {
 
   if (user && isProtectedPath(request.nextUrl.pathname)) {
     const userId = user.sub as string;
-    const { data: resumes, error } = await supabase
-      .from("resumes")
-      .select("id")
-      .eq("user_id", userId)
-      .limit(1);
-
-    const userHasResume = !error && (resumes?.length ?? 0) > 0;
     const pathname = request.nextUrl.pathname;
+
+    const { data: resumeRow, error } = await supabase
+      .from("resumes")
+      .select("id, parsed_data")
+      .eq("user_id", userId)
+      .limit(1)
+      .maybeSingle();
+
+    const userHasResume = !error && resumeRow != null;
 
     if (pathname === ROUTE_ONBOARDING_UPLOAD && userHasResume) {
       const url = request.nextUrl.clone();
@@ -111,6 +117,18 @@ export async function proxy(request: NextRequest) {
       const url = request.nextUrl.clone();
       url.pathname = ROUTE_ONBOARDING_UPLOAD;
       return NextResponse.redirect(url);
+    }
+
+    if (pathname.startsWith(ROUTE_HOME) && resumeRow?.parsed_data) {
+      const parsed = resumeDataSchema.safeParse(resumeRow.parsed_data);
+      const data = parsed.success ? (parsed.data as ResumeData) : null;
+
+      if (!data || !isResumeCompleteForOnboarding(data)) {
+        const url = request.nextUrl.clone();
+        url.pathname = ROUTE_ONBOARDING_VERIFY;
+        url.searchParams.set("blocked", "incomplete");
+        return NextResponse.redirect(url);
+      }
     }
   }
 

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useResumeVerify } from "../_hooks/use-resume-verify";
 import {
   useResumeForm,
@@ -41,7 +42,12 @@ function getFormKey(resumeId: string | null, hasResumeData: boolean): string {
   return "no-resume";
 }
 
+const BLOCKED_TOAST_MESSAGE =
+  "Complete os dados obrigatórios abaixo para acessar o dashboard.";
+
 export function VerifyContent() {
+  const searchParams = useSearchParams();
+  const blockedIncomplete = searchParams.get("blocked") === "incomplete";
   const { resumeContent, setResumeContent } = useOnboardingContext();
   const {
     resumeId: queryResumeId,
@@ -57,6 +63,14 @@ export function VerifyContent() {
   const [validationErrors, setValidationErrors] =
     useState<ResumeValidationErrors | null>(null);
   const { showErrorToastNotification } = useToastNotification();
+
+  useEffect(() => {
+    if (blockedIncomplete) {
+      showErrorToastNotification(BLOCKED_TOAST_MESSAGE, {
+        toastId: "verify-blocked-incomplete",
+      });
+    }
+  }, [blockedIncomplete, showErrorToastNotification]);
 
   const initialData: ResumeData =
     resumeData ?? EMPTY_INITIAL_DATA(resumeContent);
