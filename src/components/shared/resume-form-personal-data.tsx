@@ -5,6 +5,7 @@ import { FormField } from "@/components/shared/form-field";
 import type { ResumeData } from "@/types/resume";
 import type { ResumeValidationErrors } from "@/hooks/use-resume-form";
 import { INPUT_CLASS } from "@/components/shared/resume-form-card";
+import { formatPhoneBr } from "@/utils/resume";
 
 interface ResumeFormPersonalDataProps {
   data: Pick<
@@ -95,9 +96,12 @@ export function ResumeFormPersonalData({
             <Input
               id="phone"
               value={data.phone}
-              onChange={(e) => updateField("phone", e.target.value)}
+              onChange={(e) =>
+                updateField("phone", formatPhoneBr(e.target.value))
+              }
               disabled={isSaving}
               className={INPUT_CLASS}
+              placeholder="(11) 99999-9999"
               aria-invalid={!!validationErrors?.phone}
             />
           </FormField>
