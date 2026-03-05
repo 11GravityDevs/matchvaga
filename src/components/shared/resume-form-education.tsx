@@ -261,7 +261,7 @@ export function ResumeFormEducation({
         </Button>
         {education.length >= RESUME_LIMITS.EDUCATION_MAX && (
           <p className="text-small text-muted-foreground">
-            Máximo de {RESUME_LIMITS.EDUCATION_MAX} formações.
+            Máximo de {RESUME_LIMITS.EDUCATION_MAX} formações
           </p>
         )}
       </div>

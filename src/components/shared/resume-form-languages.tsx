@@ -126,7 +126,7 @@ export function ResumeFormLanguages({
             </Button>
             {languages.length >= RESUME_LIMITS.LANGUAGES_MAX && (
               <p className="text-small text-muted-foreground">
-                Máximo de {RESUME_LIMITS.LANGUAGES_MAX} idiomas.
+                Máximo de {RESUME_LIMITS.LANGUAGES_MAX} idiomas
               </p>
             )}
           </div>

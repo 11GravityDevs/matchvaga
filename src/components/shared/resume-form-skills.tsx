@@ -122,7 +122,7 @@ export function ResumeFormSkills({
             </Button>
             {skills.length >= RESUME_LIMITS.SKILLS_MAX && (
               <p className="text-small text-muted-foreground">
-                Máximo de {RESUME_LIMITS.SKILLS_MAX} habilidades.
+                Máximo de {RESUME_LIMITS.SKILLS_MAX} habilidades
               </p>
             )}
           </div>

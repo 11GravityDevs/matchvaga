@@ -216,7 +216,7 @@ export function ResumeFormExperience({
         </Button>
         {experience.length >= RESUME_LIMITS.EXPERIENCE_MAX && (
           <p className="text-small text-muted-foreground">
-            Máximo de {RESUME_LIMITS.EXPERIENCE_MAX} experiências.
+            Máximo de {RESUME_LIMITS.EXPERIENCE_MAX} experiências
           </p>
         )}
       </div>
