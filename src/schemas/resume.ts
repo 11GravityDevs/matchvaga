@@ -43,6 +43,7 @@ export const resumeDataSchema = z.object({
   fullName: textField(),
   email: textField(),
   location: textField(),
+  phoneDdi: z.string().max(6).default("+55"),
   phone: textField(),
   linkedin: textField(),
   github: textField(),

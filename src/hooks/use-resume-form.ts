@@ -22,6 +22,7 @@ export interface ResumeValidationErrors {
   fullName?: string;
   email?: string;
   location?: string;
+  phoneDdi?: string;
   phone?: string;
   summary?: string;
   skills?: string;
@@ -148,6 +149,9 @@ export function useResumeForm({
     }
     if (formData.location.trim() === "") {
       errors.location = "Local é obrigatório";
+    }
+    if (formData.phoneDdi.trim() === "") {
+      errors.phoneDdi = "DDI é obrigatório";
     }
     if (formData.phone.trim() === "") {
       errors.phone = "Telefone é obrigatório";

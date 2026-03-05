@@ -78,6 +78,7 @@ export function truncateResumeDataToLimits(obj: unknown): unknown {
     fullName: truncateStr(o.fullName, RESUME_LIMITS.TEXT_FIELD_MAX),
     email: truncateStr(o.email, RESUME_LIMITS.TEXT_FIELD_MAX),
     location: truncateStr(o.location, RESUME_LIMITS.TEXT_FIELD_MAX),
+    phoneDdi: truncateStr(o.phoneDdi, 6),
     phone: truncateStr(o.phone, RESUME_LIMITS.TEXT_FIELD_MAX),
     linkedin: truncateStr(o.linkedin, RESUME_LIMITS.TEXT_FIELD_MAX),
     github: truncateStr(o.github, RESUME_LIMITS.TEXT_FIELD_MAX),
@@ -140,7 +141,12 @@ export function formatLinkLabel(url: string): string {
 }
 
 export function formatPhoneBr(value: string): string {
-  const digits = (value ?? "").replace(/\D/g, "").slice(0, 11);
+  let digits = (value ?? "").replace(/\D/g, "");
+
+  if (digits.startsWith("55") && digits.length > 11) {
+    digits = digits.slice(2);
+  }
+  digits = digits.slice(0, 11);
   if (digits.length <= 2) return digits ? `(${digits}` : "";
 
   if (digits.length <= 6) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
@@ -151,10 +157,18 @@ export function formatPhoneBr(value: string): string {
   return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7, 11)}`;
 }
 
+export function getPhoneForDisplay(data: ResumeData): string {
+  const ddi = (data.phoneDdi ?? "").trim();
+  const phone = (data.phone ?? "").trim();
+  if (!phone) return "";
+  return ddi ? `${ddi} ${phone}` : phone;
+}
+
 export function getContactLineForDisplay(data: ResumeData): string {
   const parts: string[] = [];
   if (data.location) parts.push(data.location);
-  if (data.phone) parts.push(data.phone);
+  const phoneDisplay = getPhoneForDisplay(data);
+  if (phoneDisplay) parts.push(phoneDisplay);
   if (data.linkedin) parts.push(formatLinkLabel(data.linkedin));
   if (data.github) parts.push(formatLinkLabel(data.github));
   if (data.email) parts.push(data.email);

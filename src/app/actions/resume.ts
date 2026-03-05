@@ -8,6 +8,7 @@ import { logServerError } from "@/lib/logger";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
 import { translateAuthError } from "@/utils/auth";
+import { DEFAULT_PHONE_DDI } from "@/constants/phone";
 import { formatPhoneBr } from "@/utils/resume";
 
 const ERROR_ALREADY_HAS_RESUME =
@@ -154,9 +155,14 @@ export async function uploadResume(
   }
 
   const { data: parsedData } = extraction;
+  const phoneDdi = parsedData.phoneDdi?.trim() || DEFAULT_PHONE_DDI;
   const dataToStore: ResumeData = {
     ...parsedData,
-    phone: formatPhoneBr(parsedData.phone),
+    phoneDdi,
+    phone:
+      phoneDdi === "+55"
+        ? formatPhoneBr(parsedData.phone)
+        : (parsedData.phone ?? ""),
   };
 
   const { data: row, error: insertError } = await supabase

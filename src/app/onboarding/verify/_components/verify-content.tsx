@@ -9,6 +9,7 @@ import {
 import { useResumeQuery } from "@/hooks/use-resume-query";
 import type { ResumeData } from "@/types/resume";
 import { createEmptyEducation, createEmptyExperience } from "@/types/resume";
+import { DEFAULT_PHONE_DDI } from "@/constants/phone";
 import { ResumeFormCard } from "@/components/shared/resume-form-card";
 import { Loading } from "@/components/ui/loading";
 import { useToastNotification } from "@/hooks/useToastNotification";
@@ -26,6 +27,7 @@ const EMPTY_INITIAL_DATA = (summary: string): ResumeData => ({
   fullName: "",
   email: "",
   location: "",
+  phoneDdi: DEFAULT_PHONE_DDI,
   phone: "",
   linkedin: "",
   github: "",
