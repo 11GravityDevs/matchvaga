@@ -31,7 +31,11 @@ export function ResumeFormSkills({
 
   const addSkill = () => {
     const trimmed = newSkill.trim();
-    if (trimmed && !skills.includes(trimmed)) {
+    if (
+      trimmed &&
+      !skills.includes(trimmed) &&
+      skills.length < RESUME_LIMITS.SKILLS_MAX
+    ) {
       onChange([...skills, trimmed]);
       setNewSkill("");
     }
@@ -47,7 +51,12 @@ export function ResumeFormSkills({
       className="flex scroll-mt-6 scroll-mb-6 flex-col gap-4"
     >
       <div className="flex flex-col gap-1.5">
-        <h3 className="text-section-title">Habilidades</h3>
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <h3 className="text-section-title">Habilidades</h3>
+          <span className="text-small text-muted-foreground">
+            {skills.length} / {RESUME_LIMITS.SKILLS_MAX}
+          </span>
+        </div>
         {skillsError && (
           <p className="text-sm text-destructive" role="alert">
             {skillsError}
@@ -102,7 +111,7 @@ export function ResumeFormSkills({
               }
             }}
             placeholder="Digite uma habilidade e pressione Enter"
-            disabled={isSaving}
+            disabled={isSaving || skills.length >= RESUME_LIMITS.SKILLS_MAX}
             className="h-9 bg-background px-3 shadow-none focus-visible:border-accent-brand focus-visible:ring-1 focus-visible:ring-accent-brand/30"
             aria-invalid={!!skillsError}
           />
@@ -120,11 +129,6 @@ export function ResumeFormSkills({
               <Plus className="h-4 w-4" />
               Adicionar habilidades
             </Button>
-            {skills.length >= RESUME_LIMITS.SKILLS_MAX && (
-              <p className="text-small text-muted-foreground">
-                Máximo de {RESUME_LIMITS.SKILLS_MAX} habilidades
-              </p>
-            )}
           </div>
         )}
       </div>
