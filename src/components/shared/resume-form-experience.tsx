@@ -1,6 +1,7 @@
 "use client";
 
 import { Plus, Trash2 } from "lucide-react";
+import { RESUME_LIMITS } from "@/constants/resume";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -199,16 +200,26 @@ export function ResumeFormExperience({
         </div>
       ))}
 
-      <Button
-        type="button"
-        variant="brand"
-        size="sm"
-        onClick={addExperience}
-        className="w-fit gap-1.5 text-small"
-      >
-        <Plus className="h-4 w-4" />
-        Adicionar experiência
-      </Button>
+      <div className="flex flex-col gap-1">
+        <Button
+          type="button"
+          variant="brand"
+          size="sm"
+          onClick={addExperience}
+          disabled={
+            isSaving || experience.length >= RESUME_LIMITS.EXPERIENCE_MAX
+          }
+          className="w-fit gap-1.5 text-small"
+        >
+          <Plus className="h-4 w-4" />
+          Adicionar experiência
+        </Button>
+        {experience.length >= RESUME_LIMITS.EXPERIENCE_MAX && (
+          <p className="text-small text-muted-foreground">
+            Máximo de {RESUME_LIMITS.EXPERIENCE_MAX} experiências.
+          </p>
+        )}
+      </div>
     </div>
   );
 }

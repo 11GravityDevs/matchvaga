@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Plus, X } from "lucide-react";
+import { RESUME_LIMITS } from "@/constants/resume";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -107,16 +108,24 @@ export function ResumeFormSkills({
           />
         )}
         {!isAddingSkill && (
-          <Button
-            type="button"
-            variant="brand"
-            size="sm"
-            onClick={() => setIsAddingSkill(true)}
-            className="w-fit gap-1.5 text-small"
-          >
-            <Plus className="h-4 w-4" />
-            Adicionar habilidades
-          </Button>
+          <div className="flex flex-col gap-1">
+            <Button
+              type="button"
+              variant="brand"
+              size="sm"
+              onClick={() => setIsAddingSkill(true)}
+              disabled={isSaving || skills.length >= RESUME_LIMITS.SKILLS_MAX}
+              className="w-fit gap-1.5 text-small"
+            >
+              <Plus className="h-4 w-4" />
+              Adicionar habilidades
+            </Button>
+            {skills.length >= RESUME_LIMITS.SKILLS_MAX && (
+              <p className="text-small text-muted-foreground">
+                Máximo de {RESUME_LIMITS.SKILLS_MAX} habilidades.
+              </p>
+            )}
+          </div>
         )}
       </div>
     </div>

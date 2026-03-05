@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Plus, X } from "lucide-react";
+import { RESUME_LIMITS } from "@/constants/resume";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { INPUT_CLASS } from "@/components/shared/resume-form-card";
@@ -109,16 +110,26 @@ export function ResumeFormLanguages({
           />
         )}
         {!isAddingLanguage && (
-          <Button
-            type="button"
-            variant="brand"
-            size="sm"
-            onClick={() => setIsAddingLanguage(true)}
-            className="w-fit gap-1.5 text-small"
-          >
-            <Plus className="h-4 w-4" />
-            Adicionar idiomas
-          </Button>
+          <div className="flex flex-col gap-1">
+            <Button
+              type="button"
+              variant="brand"
+              size="sm"
+              onClick={() => setIsAddingLanguage(true)}
+              disabled={
+                isSaving || languages.length >= RESUME_LIMITS.LANGUAGES_MAX
+              }
+              className="w-fit gap-1.5 text-small"
+            >
+              <Plus className="h-4 w-4" />
+              Adicionar idiomas
+            </Button>
+            {languages.length >= RESUME_LIMITS.LANGUAGES_MAX && (
+              <p className="text-small text-muted-foreground">
+                Máximo de {RESUME_LIMITS.LANGUAGES_MAX} idiomas.
+              </p>
+            )}
+          </div>
         )}
       </div>
     </div>

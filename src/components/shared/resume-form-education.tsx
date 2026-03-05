@@ -1,6 +1,7 @@
 "use client";
 
 import { Plus, Trash2 } from "lucide-react";
+import { RESUME_LIMITS } from "@/constants/resume";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -246,16 +247,24 @@ export function ResumeFormEducation({
         </div>
       ))}
 
-      <Button
-        type="button"
-        variant="brand"
-        size="sm"
-        onClick={addEducation}
-        className="w-fit gap-1.5 text-small"
-      >
-        <Plus className="h-4 w-4" />
-        Adicionar formação
-      </Button>
+      <div className="flex flex-col gap-1">
+        <Button
+          type="button"
+          variant="brand"
+          size="sm"
+          onClick={addEducation}
+          disabled={isSaving || education.length >= RESUME_LIMITS.EDUCATION_MAX}
+          className="w-fit gap-1.5 text-small"
+        >
+          <Plus className="h-4 w-4" />
+          Adicionar formação
+        </Button>
+        {education.length >= RESUME_LIMITS.EDUCATION_MAX && (
+          <p className="text-small text-muted-foreground">
+            Máximo de {RESUME_LIMITS.EDUCATION_MAX} formações.
+          </p>
+        )}
+      </div>
     </div>
   );
 }
