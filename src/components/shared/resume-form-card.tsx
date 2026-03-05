@@ -7,6 +7,7 @@ import type {
   ResumeData,
 } from "@/types/resume";
 import type { ResumeValidationErrors } from "@/hooks/use-resume-form";
+import { RESUME_LIMITS } from "@/constants/resume";
 
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -196,6 +197,7 @@ export function ResumeFormCard({
             value={data.summary}
             onChange={(e) => handleSummaryChange(e.target.value)}
             disabled={isSaving}
+            maxLength={RESUME_LIMITS.SUMMARY_MAX}
             variant="form"
             className="w-full"
             aria-invalid={!!validationErrors?.summary}

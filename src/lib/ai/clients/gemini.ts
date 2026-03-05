@@ -6,6 +6,7 @@ import { resumeExtractionResponseSchema } from "@/lib/ai/config/resume-extractio
 import { logServerError } from "@/lib/logger";
 import { extractTextFromDocx } from "@/lib/document/extract-docx-text";
 import { resumeDataSchema } from "@/schemas/resume";
+import { truncateResumeDataToLimits } from "@/utils/resume";
 import type { ResumeData } from "@/types/resume";
 
 const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5MB
@@ -129,7 +130,8 @@ function parseAndValidateResult(
 
   try {
     const parsed = JSON.parse(text.trim()) as unknown;
-    const validated = resumeDataSchema.parse(parsed);
+    const truncated = truncateResumeDataToLimits(parsed);
+    const validated = resumeDataSchema.parse(truncated);
     return { success: true, data: validated };
   } catch {
     return {
