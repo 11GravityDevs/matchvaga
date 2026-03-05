@@ -78,7 +78,7 @@ export function truncateResumeDataToLimits(obj: unknown): unknown {
     fullName: truncateStr(o.fullName, RESUME_LIMITS.TEXT_FIELD_MAX),
     email: truncateStr(o.email, RESUME_LIMITS.TEXT_FIELD_MAX),
     location: truncateStr(o.location, RESUME_LIMITS.TEXT_FIELD_MAX),
-    phoneDdi: truncateStr(o.phoneDdi, 6),
+    phoneDdi: truncateStr(o.phoneDdi, RESUME_LIMITS.PHONE_DDI_MAX),
     phone: truncateStr(o.phone, RESUME_LIMITS.TEXT_FIELD_MAX),
     linkedin: truncateStr(o.linkedin, RESUME_LIMITS.TEXT_FIELD_MAX),
     github: truncateStr(o.github, RESUME_LIMITS.TEXT_FIELD_MAX),
