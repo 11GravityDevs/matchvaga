@@ -1,22 +1,36 @@
 import { z } from "zod";
 
+import { RESUME_LIMITS } from "@/constants/resume";
+
+const textField = () =>
+  z.string().max(RESUME_LIMITS.TEXT_FIELD_MAX, {
+    message: `Máximo de ${RESUME_LIMITS.TEXT_FIELD_MAX} caracteres`,
+  });
+
 export const experienceEntrySchema = z.object({
-  jobTitle: z.string(),
-  company: z.string(),
-  startDate: z.string(),
-  endDate: z.string(),
-  location: z.string(),
-  description: z.string(),
+  jobTitle: textField(),
+  company: textField(),
+  startDate: textField(),
+  endDate: textField(),
+  location: textField(),
+  description: z.string().max(RESUME_LIMITS.EXPERIENCE_DESCRIPTION_MAX, {
+    message: `Descrição com no máximo ${RESUME_LIMITS.EXPERIENCE_DESCRIPTION_MAX} caracteres`,
+  }),
   isCurrent: z.boolean().optional(),
 });
 
 export const educationEntrySchema = z.object({
-  institution: z.string(),
-  course: z.string(),
-  level: z.string(),
-  startDate: z.string(),
-  completionDate: z.string(),
-  description: z.string().optional(),
+  institution: textField(),
+  course: textField(),
+  level: textField(),
+  startDate: textField(),
+  completionDate: textField(),
+  description: z
+    .string()
+    .max(RESUME_LIMITS.EDUCATION_DESCRIPTION_MAX, {
+      message: `Descrição com no máximo ${RESUME_LIMITS.EDUCATION_DESCRIPTION_MAX} caracteres`,
+    })
+    .optional(),
   isCurrent: z.boolean().optional(),
 });
 
@@ -26,18 +40,33 @@ export const skillCategorySchema = z.object({
 });
 
 export const resumeDataSchema = z.object({
-  fullName: z.string(),
-  email: z.string(),
-  location: z.string(),
-  phone: z.string(),
-  linkedin: z.string(),
-  github: z.string(),
-  summary: z.string(),
-  skills: z.array(z.string()),
+  fullName: textField(),
+  email: textField(),
+  location: textField(),
+  phone: textField(),
+  linkedin: textField(),
+  github: textField(),
+  summary: z.string().max(RESUME_LIMITS.SUMMARY_MAX, {
+    message: `Resumo com no máximo ${RESUME_LIMITS.SUMMARY_MAX} caracteres`,
+  }),
+  skills: z
+    .array(z.string().max(RESUME_LIMITS.TEXT_FIELD_MAX))
+    .max(RESUME_LIMITS.SKILLS_MAX, {
+      message: `Máximo de ${RESUME_LIMITS.SKILLS_MAX} habilidades`,
+    }),
   skillsByCategory: z.array(skillCategorySchema).optional(),
-  languages: z.array(z.string()).default([]),
-  experience: z.array(experienceEntrySchema),
-  education: z.array(educationEntrySchema),
+  languages: z
+    .array(z.string().max(RESUME_LIMITS.TEXT_FIELD_MAX))
+    .max(RESUME_LIMITS.LANGUAGES_MAX, {
+      message: `Máximo de ${RESUME_LIMITS.LANGUAGES_MAX} idiomas`,
+    })
+    .default([]),
+  experience: z.array(experienceEntrySchema).max(RESUME_LIMITS.EXPERIENCE_MAX, {
+    message: `Máximo de ${RESUME_LIMITS.EXPERIENCE_MAX} experiências`,
+  }),
+  education: z.array(educationEntrySchema).max(RESUME_LIMITS.EDUCATION_MAX, {
+    message: `Máximo de ${RESUME_LIMITS.EDUCATION_MAX} formações`,
+  }),
 });
 
 export type ResumeDataSchema = z.infer<typeof resumeDataSchema>;

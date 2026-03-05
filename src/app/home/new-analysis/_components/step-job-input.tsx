@@ -5,6 +5,7 @@ import { Lightbulb, Sparkles } from "lucide-react";
 import Link from "next/link";
 
 import { runGapAnalysis } from "@/app/actions/analysis";
+import { JOB_DESCRIPTION_MAX } from "@/constants/job";
 import {
   QUERY_KEY_ANALYSES,
   QUERY_KEY_CURRENT_USER_DISPLAY,
@@ -151,6 +152,7 @@ export function StepJobInput() {
               <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-input bg-background">
                 <Textarea
                   className="h-full min-h-0 resize-none border-0 bg-transparent p-4 text-sm leading-relaxed shadow-none focus-visible:ring-0"
+                  maxLength={JOB_DESCRIPTION_MAX}
                   placeholder="Exemplo: Estamos procurando um desenvolvedor full-stack com experiência em React e Node.js para trabalhar em nosso time de produto..."
                   value={jobDescription}
                   onChange={(e) => setJobDescription(e.target.value)}

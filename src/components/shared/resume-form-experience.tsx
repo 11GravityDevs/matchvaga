@@ -1,6 +1,7 @@
 "use client";
 
 import { Plus, Trash2 } from "lucide-react";
+import { RESUME_LIMITS } from "@/constants/resume";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -77,6 +78,7 @@ export function ResumeFormExperience({
                     updateExperience(expIndex, { company: e.target.value })
                   }
                   disabled={isSaving}
+                  maxLength={RESUME_LIMITS.TEXT_FIELD_MAX}
                   className={INPUT_CLASS}
                   aria-invalid={!!experienceEntryErrors?.[expIndex]?.company}
                 />
@@ -94,6 +96,7 @@ export function ResumeFormExperience({
                     updateExperience(expIndex, { jobTitle: e.target.value })
                   }
                   disabled={isSaving}
+                  maxLength={RESUME_LIMITS.TEXT_FIELD_MAX}
                   className={INPUT_CLASS}
                   aria-invalid={!!experienceEntryErrors?.[expIndex]?.jobTitle}
                 />
@@ -162,6 +165,7 @@ export function ResumeFormExperience({
                   updateExperience(expIndex, { location: e.target.value })
                 }
                 disabled={isSaving}
+                maxLength={RESUME_LIMITS.TEXT_FIELD_MAX}
                 className={INPUT_CLASS}
                 aria-invalid={!!experienceEntryErrors?.[expIndex]?.location}
               />
@@ -179,6 +183,7 @@ export function ResumeFormExperience({
                   updateExperience(expIndex, { description: e.target.value })
                 }
                 disabled={isSaving}
+                maxLength={RESUME_LIMITS.EXPERIENCE_DESCRIPTION_MAX}
                 className="h-32 w-full resize-none rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground shadow-none transition-[color,box-shadow] outline-none placeholder:text-muted-foreground focus-visible:border-accent-brand focus-visible:ring-1 focus-visible:ring-accent-brand/30 disabled:cursor-not-allowed disabled:opacity-50"
                 aria-invalid={!!experienceEntryErrors?.[expIndex]?.description}
               />
@@ -199,16 +204,26 @@ export function ResumeFormExperience({
         </div>
       ))}
 
-      <Button
-        type="button"
-        variant="brand"
-        size="sm"
-        onClick={addExperience}
-        className="w-fit gap-1.5 text-small"
-      >
-        <Plus className="h-4 w-4" />
-        Adicionar experiência
-      </Button>
+      <div className="flex flex-col gap-1">
+        <Button
+          type="button"
+          variant="brand"
+          size="sm"
+          onClick={addExperience}
+          disabled={
+            isSaving || experience.length >= RESUME_LIMITS.EXPERIENCE_MAX
+          }
+          className="w-fit gap-1.5 text-small"
+        >
+          <Plus className="h-4 w-4" />
+          Adicionar experiência
+        </Button>
+        {experience.length >= RESUME_LIMITS.EXPERIENCE_MAX && (
+          <p className="text-small text-muted-foreground">
+            Máximo de {RESUME_LIMITS.EXPERIENCE_MAX} experiências
+          </p>
+        )}
+      </div>
     </div>
   );
 }

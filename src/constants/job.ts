@@ -1,0 +1,1 @@
+export const JOB_DESCRIPTION_MAX = 20_000;

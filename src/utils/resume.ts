@@ -1,9 +1,93 @@
+import { RESUME_LIMITS } from "@/constants/resume";
 import type {
   EducationEntry,
   ExperienceEntry,
   ResumeData,
   SkillCategory,
 } from "@/types/resume";
+
+export function truncateResumeDataToLimits(obj: unknown): unknown {
+  if (obj === null || typeof obj !== "object") return obj;
+
+  const o = obj as Record<string, unknown>;
+  const truncateStr = (s: unknown, max: number): string => {
+    if (typeof s !== "string") return "";
+    return s.slice(0, max);
+  };
+
+  const experience = Array.isArray(o.experience)
+    ? o.experience.slice(0, RESUME_LIMITS.EXPERIENCE_MAX).map((e) => {
+        if (e === null || typeof e !== "object") return e;
+        const entry = e as Record<string, unknown>;
+        return {
+          ...entry,
+          jobTitle: truncateStr(entry.jobTitle, RESUME_LIMITS.TEXT_FIELD_MAX),
+          company: truncateStr(entry.company, RESUME_LIMITS.TEXT_FIELD_MAX),
+          startDate: truncateStr(entry.startDate, RESUME_LIMITS.TEXT_FIELD_MAX),
+          endDate: truncateStr(entry.endDate, RESUME_LIMITS.TEXT_FIELD_MAX),
+          location: truncateStr(entry.location, RESUME_LIMITS.TEXT_FIELD_MAX),
+          description: truncateStr(
+            entry.description,
+            RESUME_LIMITS.EXPERIENCE_DESCRIPTION_MAX
+          ),
+        };
+      })
+    : o.experience;
+
+  const education = Array.isArray(o.education)
+    ? o.education.slice(0, RESUME_LIMITS.EDUCATION_MAX).map((e) => {
+        if (e === null || typeof e !== "object") return e;
+        const entry = e as Record<string, unknown>;
+        return {
+          ...entry,
+          institution: truncateStr(
+            entry.institution,
+            RESUME_LIMITS.TEXT_FIELD_MAX
+          ),
+          course: truncateStr(entry.course, RESUME_LIMITS.TEXT_FIELD_MAX),
+          level: truncateStr(entry.level, RESUME_LIMITS.TEXT_FIELD_MAX),
+          startDate: truncateStr(entry.startDate, RESUME_LIMITS.TEXT_FIELD_MAX),
+          completionDate: truncateStr(
+            entry.completionDate,
+            RESUME_LIMITS.TEXT_FIELD_MAX
+          ),
+          description: entry.description
+            ? truncateStr(
+                entry.description,
+                RESUME_LIMITS.EDUCATION_DESCRIPTION_MAX
+              )
+            : entry.description,
+        };
+      })
+    : o.education;
+
+  const skills = Array.isArray(o.skills)
+    ? o.skills
+        .slice(0, RESUME_LIMITS.SKILLS_MAX)
+        .map((s) => truncateStr(s, RESUME_LIMITS.TEXT_FIELD_MAX))
+    : o.skills;
+
+  const languages = Array.isArray(o.languages)
+    ? o.languages
+        .slice(0, RESUME_LIMITS.LANGUAGES_MAX)
+        .map((s) => truncateStr(s, RESUME_LIMITS.TEXT_FIELD_MAX))
+    : o.languages;
+
+  return {
+    ...o,
+    fullName: truncateStr(o.fullName, RESUME_LIMITS.TEXT_FIELD_MAX),
+    email: truncateStr(o.email, RESUME_LIMITS.TEXT_FIELD_MAX),
+    location: truncateStr(o.location, RESUME_LIMITS.TEXT_FIELD_MAX),
+    phone: truncateStr(o.phone, RESUME_LIMITS.TEXT_FIELD_MAX),
+    linkedin: truncateStr(o.linkedin, RESUME_LIMITS.TEXT_FIELD_MAX),
+    github: truncateStr(o.github, RESUME_LIMITS.TEXT_FIELD_MAX),
+    summary: truncateStr(o.summary, RESUME_LIMITS.SUMMARY_MAX),
+    skills,
+    languages,
+    experience,
+    education,
+  };
+}
 
 const PT_BR_MONTHS: Record<number, string> = {
   1: "Jan",

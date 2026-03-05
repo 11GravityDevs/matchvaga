@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Plus, X } from "lucide-react";
+import { RESUME_LIMITS } from "@/constants/resume";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { INPUT_CLASS } from "@/components/shared/resume-form-card";
@@ -34,7 +35,11 @@ export function ResumeFormLanguages({
       (lang) => lang.toLowerCase() === trimmed.toLowerCase()
     );
 
-    if (trimmed && !isDuplicate) {
+    if (
+      trimmed &&
+      !isDuplicate &&
+      languages.length < RESUME_LIMITS.LANGUAGES_MAX
+    ) {
       onChange([...languages, trimmed]);
       setNewLanguage("");
     }
@@ -47,14 +52,19 @@ export function ResumeFormLanguages({
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col justify-center gap-1.5">
-        <h3 className="text-section-title">
-          <span className="inline-flex items-baseline gap-1">
-            Idiomas
-            <span className="align-baseline text-small font-normal text-muted-foreground">
-              (opcional)
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <h3 className="text-section-title">
+            <span className="inline-flex items-baseline gap-1">
+              Idiomas
+              <span className="align-baseline text-small font-normal text-muted-foreground">
+                (opcional)
+              </span>
             </span>
+          </h3>
+          <span className="text-small text-muted-foreground">
+            {languages.length} / {RESUME_LIMITS.LANGUAGES_MAX}
           </span>
-        </h3>
+        </div>
       </div>
       <div className="flex flex-col gap-3">
         {languages.length > 0 && (
@@ -84,6 +94,7 @@ export function ResumeFormLanguages({
             ref={languageInputRef}
             value={newLanguage}
             onChange={(e) => setNewLanguage(e.target.value)}
+            maxLength={RESUME_LIMITS.TEXT_FIELD_MAX}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 e.preventDefault();
@@ -104,21 +115,28 @@ export function ResumeFormLanguages({
               }
             }}
             placeholder="Digite um idioma e pressione Enter"
-            disabled={isSaving}
+            disabled={
+              isSaving || languages.length >= RESUME_LIMITS.LANGUAGES_MAX
+            }
             className={INPUT_CLASS}
           />
         )}
         {!isAddingLanguage && (
-          <Button
-            type="button"
-            variant="brand"
-            size="sm"
-            onClick={() => setIsAddingLanguage(true)}
-            className="w-fit gap-1.5 text-small"
-          >
-            <Plus className="h-4 w-4" />
-            Adicionar idiomas
-          </Button>
+          <div className="flex flex-col gap-1">
+            <Button
+              type="button"
+              variant="brand"
+              size="sm"
+              onClick={() => setIsAddingLanguage(true)}
+              disabled={
+                isSaving || languages.length >= RESUME_LIMITS.LANGUAGES_MAX
+              }
+              className="w-fit gap-1.5 text-small"
+            >
+              <Plus className="h-4 w-4" />
+              Adicionar idiomas
+            </Button>
+          </div>
         )}
       </div>
     </div>
