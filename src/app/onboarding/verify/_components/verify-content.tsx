@@ -36,11 +36,6 @@ const EMPTY_INITIAL_DATA = (summary: string): ResumeData => ({
   education: [createEmptyEducation()],
 });
 
-function getFormKey(resumeId: string | null, hasResumeData: boolean): string {
-  if (resumeId && hasResumeData) return resumeId;
-  return "no-resume";
-}
-
 export function VerifyContent() {
   const { resumeContent, setResumeContent } = useOnboardingContext();
   const {
@@ -61,44 +56,6 @@ export function VerifyContent() {
   const initialData: ResumeData =
     resumeData ?? EMPTY_INITIAL_DATA(resumeContent);
 
-  if (isLoadingResume) {
-    return <Loading className="min-h-0 flex-1" />;
-  }
-
-  return (
-    <VerifyFormWithKey
-      key={getFormKey(resumeId, !!resumeData)}
-      initialData={initialData}
-      setResumeContent={setResumeContent}
-      isSaving={isSaving}
-      save={save}
-      continueToDashboard={continueToDashboard}
-      validationErrors={validationErrors}
-      setValidationErrors={setValidationErrors}
-      showErrorToastNotification={showErrorToastNotification}
-    />
-  );
-}
-
-function VerifyFormWithKey({
-  initialData,
-  setResumeContent,
-  isSaving,
-  save,
-  continueToDashboard,
-  validationErrors,
-  setValidationErrors,
-  showErrorToastNotification,
-}: {
-  initialData: ResumeData;
-  setResumeContent: (content: string) => void;
-  isSaving: boolean;
-  save: (data: ResumeData) => Promise<void>;
-  continueToDashboard: () => void;
-  validationErrors: ResumeValidationErrors | null;
-  setValidationErrors: (errors: ResumeValidationErrors | null) => void;
-  showErrorToastNotification: (message: string) => void;
-}) {
   const {
     data,
     updateField,
@@ -185,6 +142,10 @@ function VerifyFormWithKey({
       });
       showErrorToastNotification(message);
     }
+  }
+
+  if (isLoadingResume) {
+    return <Loading className="min-h-0 flex-1" />;
   }
 
   if (isSaving) {
