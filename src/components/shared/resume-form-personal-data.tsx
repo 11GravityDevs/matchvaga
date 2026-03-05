@@ -1,5 +1,6 @@
 "use client";
 
+import { RESUME_LIMITS } from "@/constants/resume";
 import { Input } from "@/components/ui/input";
 import { FormField } from "@/components/shared/form-field";
 import type { ResumeData } from "@/types/resume";
@@ -44,6 +45,7 @@ export function ResumeFormPersonalData({
               value={data.fullName}
               onChange={(e) => updateField("fullName", e.target.value)}
               disabled={isSaving}
+              maxLength={RESUME_LIMITS.TEXT_FIELD_MAX}
               className={INPUT_CLASS}
               aria-invalid={!!validationErrors?.fullName}
             />
@@ -61,6 +63,7 @@ export function ResumeFormPersonalData({
               value={data.email}
               onChange={(e) => updateField("email", e.target.value)}
               disabled={isSaving}
+              maxLength={RESUME_LIMITS.TEXT_FIELD_MAX}
               className={INPUT_CLASS}
               aria-invalid={!!validationErrors?.email}
             />
@@ -82,6 +85,7 @@ export function ResumeFormPersonalData({
               value={data.location}
               onChange={(e) => updateField("location", e.target.value)}
               disabled={isSaving}
+              maxLength={RESUME_LIMITS.TEXT_FIELD_MAX}
               className={INPUT_CLASS}
               aria-invalid={!!validationErrors?.location}
             />
@@ -100,6 +104,7 @@ export function ResumeFormPersonalData({
                 updateField("phone", formatPhoneBr(e.target.value))
               }
               disabled={isSaving}
+              maxLength={RESUME_LIMITS.TEXT_FIELD_MAX}
               className={INPUT_CLASS}
               placeholder="(11) 99999-9999"
               aria-invalid={!!validationErrors?.phone}
@@ -125,6 +130,7 @@ export function ResumeFormPersonalData({
             value={data.linkedin}
             onChange={(e) => updateField("linkedin", e.target.value)}
             disabled={isSaving}
+            maxLength={RESUME_LIMITS.TEXT_FIELD_MAX}
             className={INPUT_CLASS}
           />
         </FormField>
@@ -145,6 +151,7 @@ export function ResumeFormPersonalData({
             value={data.github}
             onChange={(e) => updateField("github", e.target.value)}
             disabled={isSaving}
+            maxLength={RESUME_LIMITS.TEXT_FIELD_MAX}
             className={INPUT_CLASS}
           />
         </FormField>

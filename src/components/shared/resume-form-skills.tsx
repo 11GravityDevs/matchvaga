@@ -91,6 +91,7 @@ export function ResumeFormSkills({
             ref={skillInputRef}
             value={newSkill}
             onChange={(e) => setNewSkill(e.target.value)}
+            maxLength={RESUME_LIMITS.TEXT_FIELD_MAX}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 e.preventDefault();

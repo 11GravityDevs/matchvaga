@@ -96,6 +96,7 @@ export function ResumeFormEducation({
                   updateEducation(eduIndex, { course: e.target.value })
                 }
                 disabled={isSaving}
+                maxLength={RESUME_LIMITS.TEXT_FIELD_MAX}
                 className={INPUT_CLASS}
                 aria-invalid={!!educationEntryErrors?.[eduIndex]?.course}
               />
@@ -154,6 +155,7 @@ export function ResumeFormEducation({
                     updateEducation(eduIndex, { institution: e.target.value })
                   }
                   disabled={isSaving}
+                  maxLength={RESUME_LIMITS.TEXT_FIELD_MAX}
                   className={INPUT_CLASS}
                   aria-invalid={!!educationEntryErrors?.[eduIndex]?.institution}
                 />
@@ -226,6 +228,7 @@ export function ResumeFormEducation({
                   })
                 }
                 disabled={isSaving}
+                maxLength={RESUME_LIMITS.EDUCATION_DESCRIPTION_MAX}
                 placeholder="Uma conquista por linha"
                 variant="form"
                 className="h-32 w-full resize-none"

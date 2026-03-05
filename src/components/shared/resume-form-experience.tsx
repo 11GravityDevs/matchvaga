@@ -78,6 +78,7 @@ export function ResumeFormExperience({
                     updateExperience(expIndex, { company: e.target.value })
                   }
                   disabled={isSaving}
+                  maxLength={RESUME_LIMITS.TEXT_FIELD_MAX}
                   className={INPUT_CLASS}
                   aria-invalid={!!experienceEntryErrors?.[expIndex]?.company}
                 />
@@ -95,6 +96,7 @@ export function ResumeFormExperience({
                     updateExperience(expIndex, { jobTitle: e.target.value })
                   }
                   disabled={isSaving}
+                  maxLength={RESUME_LIMITS.TEXT_FIELD_MAX}
                   className={INPUT_CLASS}
                   aria-invalid={!!experienceEntryErrors?.[expIndex]?.jobTitle}
                 />
@@ -163,6 +165,7 @@ export function ResumeFormExperience({
                   updateExperience(expIndex, { location: e.target.value })
                 }
                 disabled={isSaving}
+                maxLength={RESUME_LIMITS.TEXT_FIELD_MAX}
                 className={INPUT_CLASS}
                 aria-invalid={!!experienceEntryErrors?.[expIndex]?.location}
               />
@@ -180,6 +183,7 @@ export function ResumeFormExperience({
                   updateExperience(expIndex, { description: e.target.value })
                 }
                 disabled={isSaving}
+                maxLength={RESUME_LIMITS.EXPERIENCE_DESCRIPTION_MAX}
                 className="h-32 w-full resize-none rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground shadow-none transition-[color,box-shadow] outline-none placeholder:text-muted-foreground focus-visible:border-accent-brand focus-visible:ring-1 focus-visible:ring-accent-brand/30 disabled:cursor-not-allowed disabled:opacity-50"
                 aria-invalid={!!experienceEntryErrors?.[expIndex]?.description}
               />

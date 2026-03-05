@@ -94,6 +94,7 @@ export function ResumeFormLanguages({
             ref={languageInputRef}
             value={newLanguage}
             onChange={(e) => setNewLanguage(e.target.value)}
+            maxLength={RESUME_LIMITS.TEXT_FIELD_MAX}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 e.preventDefault();
