@@ -7,9 +7,7 @@ import {
   type EducationEntry,
   type ExperienceEntry,
   type ResumeData,
-  type ResumeValidationErrors,
 } from "@/types/resume";
-import { getResumeValidationErrors } from "@/utils/resume-validation";
 
 export type {
   EducationEntryFieldErrors,
@@ -35,8 +33,6 @@ export interface UseResumeFormReturn {
   addEducation: () => void;
   removeEducation: (index: number) => void;
   handleSummaryChange: (value: string) => void;
-  isFormValid: boolean;
-  getValidationErrors: (data: ResumeData) => ResumeValidationErrors | null;
 }
 
 export function useResumeForm({
@@ -121,14 +117,6 @@ export function useResumeForm({
     onSummarySync?.(value);
   }
 
-  function getValidationErrors(
-    formData: ResumeData
-  ): ResumeValidationErrors | null {
-    return getResumeValidationErrors(formData);
-  }
-
-  const isFormValid = getResumeValidationErrors(data) === null;
-
   return {
     data,
     updateField,
@@ -139,7 +127,5 @@ export function useResumeForm({
     addEducation,
     removeEducation,
     handleSummaryChange,
-    isFormValid,
-    getValidationErrors,
   };
 }

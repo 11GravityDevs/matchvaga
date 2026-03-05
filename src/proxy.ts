@@ -11,9 +11,13 @@ import {
   ROUTE_ONBOARDING_UPLOAD,
   ROUTE_ONBOARDING_VERIFY,
 } from "@/constants/routes";
-import { resumeDataSchema } from "@/schemas/resume";
-import type { ResumeData } from "@/types/resume";
-import { isResumeCompleteForOnboarding } from "@/utils/resume-validation";
+import {
+  RESUME_STATUS_COOKIE_NAME,
+  RESUME_STATUS_COOKIE_OPTIONS,
+  computeResumeStatusFromRow,
+  isResumeStatus,
+  type ResumeStatus,
+} from "@/utils/resume-status-cookie";
 
 const PROTECTED_PATH_PREFIXES = [ROUTE_HOME, ROUTE_ONBOARDING];
 const GUEST_ONLY_PATH_PREFIXES = [ROUTE_LOGIN];
@@ -98,37 +102,68 @@ export async function proxy(request: NextRequest) {
     const userId = user.sub as string;
     const pathname = request.nextUrl.pathname;
 
-    const { data: resumeRow, error } = await supabase
-      .from("resumes")
-      .select("id, parsed_data")
-      .eq("user_id", userId)
-      .limit(1)
-      .maybeSingle();
+    const cookieValue = request.cookies.get(RESUME_STATUS_COOKIE_NAME)?.value;
+    let status: ResumeStatus;
 
-    const userHasResume = !error && resumeRow != null;
+    if (isResumeStatus(cookieValue)) {
+      status = cookieValue;
+    } else {
+      const { data: resumeRow, error } = await supabase
+        .from("resumes")
+        .select("id, parsed_data")
+        .eq("user_id", userId)
+        .limit(1)
+        .maybeSingle();
 
-    if (pathname === ROUTE_ONBOARDING_UPLOAD && userHasResume) {
+      status = computeResumeStatusFromRow(error ? null : (resumeRow ?? null));
+    }
+
+    function setResumeStatusCookieOnResponse(response: NextResponse): void {
+      response.cookies.set(
+        RESUME_STATUS_COOKIE_NAME,
+        status,
+        RESUME_STATUS_COOKIE_OPTIONS
+      );
+    }
+
+    if (pathname === ROUTE_ONBOARDING_UPLOAD && status !== "none") {
       const url = request.nextUrl.clone();
       url.pathname = ROUTE_HOME_RESUME;
-      return NextResponse.redirect(url);
+      const response = NextResponse.redirect(url);
+
+      if (!isResumeStatus(cookieValue)) {
+        setResumeStatusCookieOnResponse(response);
+      }
+
+      return response;
     }
 
-    if (pathname.startsWith(ROUTE_HOME) && !userHasResume) {
+    if (pathname.startsWith(ROUTE_HOME) && status === "none") {
       const url = request.nextUrl.clone();
       url.pathname = ROUTE_ONBOARDING_UPLOAD;
-      return NextResponse.redirect(url);
+      const response = NextResponse.redirect(url);
+
+      if (!isResumeStatus(cookieValue)) {
+        setResumeStatusCookieOnResponse(response);
+      }
+
+      return response;
     }
 
-    if (pathname.startsWith(ROUTE_HOME) && resumeRow?.parsed_data) {
-      const parsed = resumeDataSchema.safeParse(resumeRow.parsed_data);
-      const data = parsed.success ? (parsed.data as ResumeData) : null;
+    if (pathname.startsWith(ROUTE_HOME) && status === "incomplete") {
+      const url = request.nextUrl.clone();
+      url.pathname = ROUTE_ONBOARDING_VERIFY;
+      const response = NextResponse.redirect(url);
 
-      if (!data || !isResumeCompleteForOnboarding(data)) {
-        const url = request.nextUrl.clone();
-        url.pathname = ROUTE_ONBOARDING_VERIFY;
-        url.searchParams.set("blocked", "incomplete");
-        return NextResponse.redirect(url);
+      if (!isResumeStatus(cookieValue)) {
+        setResumeStatusCookieOnResponse(response);
       }
+
+      return response;
+    }
+
+    if (!isResumeStatus(cookieValue)) {
+      setResumeStatusCookieOnResponse(supabaseResponse);
     }
   }
 

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { clearResumeStatusCookie } from "@/app/actions/resume";
 import { ROUTE_LOGIN } from "@/constants/routes";
 import { createClient } from "@/lib/supabase/client";
 import { translateAuthError } from "@/utils/auth";
@@ -40,6 +41,7 @@ export function useSignOut(): UseSignOutReturn {
       showErrorToastNotification(message);
     } finally {
       setIsPending(false);
+      clearResumeStatusCookie();
     }
   }
 

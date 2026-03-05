@@ -1,6 +1,5 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { useResumeVerify } from "../_hooks/use-resume-verify";
 import {
@@ -43,9 +42,13 @@ function getFormKey(resumeId: string | null, hasResumeData: boolean): string {
   return "no-resume";
 }
 
-export function VerifyContent() {
-  const searchParams = useSearchParams();
-  const blockedIncomplete = searchParams.get("blocked") === "incomplete";
+export interface VerifyContentProps {
+  prefillValidationErrors?: boolean;
+}
+
+export function VerifyContent({
+  prefillValidationErrors = false,
+}: VerifyContentProps) {
   const { resumeContent, setResumeContent } = useOnboardingContext();
   const {
     resumeId: queryResumeId,
@@ -72,7 +75,7 @@ export function VerifyContent() {
   }, [initialData]);
 
   useEffect(() => {
-    if (!blockedIncomplete || isLoadingResume) return;
+    if (!prefillValidationErrors || isLoadingResume) return;
     if (hasSetBlockedErrors.current) return;
 
     const data = initialDataRef.current;
@@ -81,7 +84,7 @@ export function VerifyContent() {
     hasSetBlockedErrors.current = true;
     const errors = getResumeValidationErrors(data);
     queueMicrotask(() => setValidationErrors(errors ?? null));
-  }, [blockedIncomplete, isLoadingResume, setValidationErrors]);
+  }, [prefillValidationErrors, isLoadingResume]);
 
   if (isLoadingResume) {
     return <Loading className="min-h-0 flex-1" />;
@@ -131,8 +134,6 @@ function VerifyFormWithKey({
     addEducation,
     removeEducation,
     handleSummaryChange,
-    isFormValid,
-    getValidationErrors,
   } = useResumeForm({
     initialData,
     onSummarySync: setResumeContent,
@@ -192,10 +193,13 @@ function VerifyFormWithKey({
   }
 
   async function handleContinue() {
-    if (!isFormValid) {
-      setValidationErrors(getValidationErrors(data) ?? null);
+    const errors = getResumeValidationErrors(data);
+
+    if (errors !== null) {
+      setValidationErrors(errors);
       return;
     }
+
     setValidationErrors(null);
     try {
       await save(data);

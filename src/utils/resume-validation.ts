@@ -152,7 +152,3 @@ export function getResumeValidationErrors(
 
   return Object.keys(errors).length > 0 ? errors : null;
 }
-
-export function isResumeCompleteForOnboarding(data: ResumeData): boolean {
-  return getResumeValidationErrors(data) === null;
-}
