@@ -1,3 +1,5 @@
+import { JOB_DESCRIPTION_MAX } from "@/constants/job";
+
 const MIN_LENGTH = 300;
 
 const JOB_RELATED_KEYWORDS = [
@@ -27,6 +29,9 @@ const JOB_RELATED_KEYWORDS = [
 export const NOT_JOB_DESCRIPTION_MESSAGE =
   "Não foi possível identificar informações da vaga. Cole a descrição completa da vaga.";
 
+export const JOB_DESCRIPTION_TOO_LONG_MESSAGE =
+  "Descrição da vaga com no máximo 20.000 caracteres.";
+
 function normalizeForMatch(text: string): string {
   return text
     .toLowerCase()
@@ -36,6 +41,7 @@ function normalizeForMatch(text: string): string {
 
 export interface JobDescriptionValidationResult {
   valid: boolean;
+  errorCode?: "min" | "max";
 }
 
 export function validateJobDescriptionText(
@@ -43,7 +49,10 @@ export function validateJobDescriptionText(
 ): JobDescriptionValidationResult {
   const trimmed = text.trim();
   if (trimmed.length < MIN_LENGTH) {
-    return { valid: false };
+    return { valid: false, errorCode: "min" };
+  }
+  if (trimmed.length > JOB_DESCRIPTION_MAX) {
+    return { valid: false, errorCode: "max" };
   }
 
   return { valid: true };
