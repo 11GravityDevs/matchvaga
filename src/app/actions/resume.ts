@@ -103,7 +103,7 @@ export async function createResumeWithData(
     };
   }
 
-  revalidatePath("/home");
+  revalidatePath("/inicio");
   revalidatePath("/onboarding");
 
   const cookieStore = await cookies();
@@ -205,7 +205,7 @@ export async function uploadResume(
     };
   }
 
-  revalidatePath("/home");
+  revalidatePath("/inicio");
   revalidatePath("/onboarding");
 
   const cookieStore = await cookies();
@@ -273,7 +273,7 @@ export async function saveResumeData(
     };
   }
 
-  revalidatePath("/home");
+  revalidatePath("/inicio");
   revalidatePath("/onboarding");
 
   const cookieStore = await cookies();

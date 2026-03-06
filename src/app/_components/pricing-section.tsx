@@ -16,9 +16,9 @@ import {
   trackPricingPackageSelectedEvent,
 } from "@/lib/analytics/posthog-events";
 import { useToastNotification } from "@/hooks/useToastNotification";
-import { createCheckoutSession } from "../home/checkout/_actions/checkout";
 
 import { AnimateOnScroll } from "./animate-on-scroll";
+import { createCheckoutSession } from "../inicio/checkout/_actions/checkout";
 
 export function PricingSection() {
   const [loadingPackageId, setLoadingPackageId] =

@@ -88,8 +88,8 @@ export async function createCheckoutSession(input: {
         },
       ],
       payment_method_types: ["card"],
-      success_url: `${SITE_URL}/home/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${SITE_URL}/home/checkout/cancel`,
+      success_url: `${SITE_URL}/inicio/checkout/sucesso?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${SITE_URL}/inicio/checkout/cancelar`,
       metadata: {
         packageId,
         userId: user.id,

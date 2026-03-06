@@ -17,7 +17,7 @@ Docs/auth/SSR → `search_docs`. Banco → `list_tables`, `execute_sql`, `apply_
 Componente UI → `search_items_in_registries` → `get_add_command_for_items`. Exemplos → `get_item_examples_from_registries`.
 
 ## Linear
-Criar/atualizar issue → `save_issue` (template em `linear-task-template.mdc`). Listar/buscar → `list_issues`, `get_issue`. **Começar tarefa** → `start-issue.mdc` (get_issue, pull, branch, save_issue assignee+In Progress, push).
+Criar/atualizar issue → `save_issue` (template em `create-issue.mdc`). Listar/buscar → `list_issues`, `get_issue`. **Começar tarefa** → `start-issue.mdc` (get_issue, pull, branch, save_issue assignee+In Progress, push).
 
 ## Referência rápida
 | Tarefa | MCP | Ferramenta |

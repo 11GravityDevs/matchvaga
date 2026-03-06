@@ -28,10 +28,10 @@ alwaysApply: true
 ## Rotas
 | Grupo | Uso |
 |-------|-----|
-| (auth) | Login |
+| (auth) | Login (`/entrar`) |
 | (legal) | Privacidade, Termos |
-| onboarding | Upload → verificação currículo |
-| home | Dashboard, new-analysis, resume, checkout; /home → /home/dashboard |
+| onboarding | Upload → verificação currículo (`/onboarding/enviar-curriculo`, `/onboarding/verificar-informacoes`, `/onboarding/como-funciona`) |
+| inicio | Dashboard, nova análise, currículo, checkout; `/inicio` → `/inicio/dashboard` |
 
 ## Aliases
 `@/components` (ui, shared), `@/lib/supabase`, `@/lib/ai`, `@/lib/query`, `@/hooks`, `@/constants`, `@/contexts`, `@/utils/style` (cn), `@/utils/auth`, `@/types`.
@@ -50,4 +50,4 @@ alwaysApply: true
 | Server Action | app/actions ou _actions, Zod |
 | DB | database-schema.mdc |
 | App Router / React / edição | nextjs-app-router.mdc, react-rules.mdc, rule-writing-guidelines.mdc |
-| MCP / Linear / Git | mcp-tools.mdc, linear-task-template.mdc, start-issue.mdc, finish-issue.mdc, git-workflow.mdc, commit-messages.mdc |
+| MCP / Linear / Git | mcp-tools.mdc, create-issue.mdc, start-issue.mdc, git-workflow.mdc, commit-messages.mdc |

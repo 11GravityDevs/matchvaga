@@ -14,13 +14,13 @@ import {
   getCompanyColor,
   getCompanyInitials,
 } from "../_utils/format";
-import { getScoreColorToken } from "../../new-analysis/_utils/analysis";
 import {
   analysesQueryOptions,
   currentUserDisplayQueryOptions,
 } from "@/lib/query/query-options";
 import { useQuery } from "@tanstack/react-query";
 import { Loading } from "@/components/ui/loading";
+import { getScoreColorToken } from "../../nova-analise/_utils/analysis";
 
 interface DashboardContentProps {
   userName: string;

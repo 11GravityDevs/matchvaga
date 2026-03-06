@@ -8,7 +8,7 @@ alwaysApply: false
 | Cenário | Regra |
 |---------|--------|
 | Começar tarefa | `start-issue.mdc` |
-| Commitar + abrir PR | `finish-issue.mdc` |
+| Commitar + abrir PR | `pull-request-template.mdc` |
 | Mensagem de commit | `commit-messages.mdc` |
 | Template PR | `pull-request-template.mdc` |
 

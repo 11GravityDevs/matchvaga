@@ -1,11 +1,11 @@
 ---
-description: Template de PR (corpo e título); fluxo completo em finish-issue.mdc
+description: Template de PR (corpo e título); uso junto com git-workflow.mdc
 alwaysApply: false
 ---
 
 # Template de Pull Request
 
-Fluxo commitar + abrir PR: `finish-issue.mdc`. Use as seções abaixo no corpo. PT-BR.
+Fluxo commitar + abrir PR: seguir `git-workflow.mdc` (branch da issue, commits, push) e usar as seções abaixo no corpo. PT-BR.
 
 **Título:** imperativo, ~60 chars (ex. `Adiciona estado vazio quando não há análises`).
 
@@ -16,4 +16,4 @@ Fluxo commitar + abrir PR: `finish-issue.mdc`. Use as seções abaixo no corpo. 
 - **Plano de testes** — checkboxes `- [ ]`.
 - **Links** — ex. Linear: MAT-123.
 
-Issue do Linear: referenciar em Links; descrição da issue segue `linear-task-template.mdc`.
+Issue do Linear: referenciar em Links; descrição da issue segue `create-issue.mdc`.

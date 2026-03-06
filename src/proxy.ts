@@ -7,7 +7,6 @@ import {
   ROUTE_HOME_RESUME,
   ROUTE_LOGIN,
   ROUTE_ONBOARDING,
-  ROUTE_ONBOARDING_PREVIEW,
   ROUTE_ONBOARDING_UPLOAD,
   ROUTE_ONBOARDING_VERIFY,
 } from "@/constants/routes";
@@ -93,8 +92,33 @@ export async function proxy(request: NextRequest) {
   }
 
   if (user && isGuestOnlyPath(request.nextUrl.pathname)) {
+    const userId = user.sub as string;
+    const cookieValue = request.cookies.get(RESUME_STATUS_COOKIE_NAME)?.value;
+    let status: ResumeStatus;
+
+    if (isResumeStatus(cookieValue)) {
+      status = cookieValue;
+    } else {
+      const { data: resumeRow, error } = await supabase
+        .from("resumes")
+        .select("id, parsed_data")
+        .eq("user_id", userId)
+        .limit(1)
+        .maybeSingle();
+
+      status = computeResumeStatusFromRow(error ? null : (resumeRow ?? null));
+    }
+
     const url = request.nextUrl.clone();
-    url.pathname = ROUTE_ONBOARDING_PREVIEW;
+
+    if (status === "none") {
+      url.pathname = ROUTE_ONBOARDING_UPLOAD;
+    } else if (status === "incomplete") {
+      url.pathname = ROUTE_ONBOARDING_VERIFY;
+    } else {
+      url.pathname = ROUTE_HOME_RESUME;
+    }
+
     return NextResponse.redirect(url);
   }
 

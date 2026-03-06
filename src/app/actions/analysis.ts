@@ -196,7 +196,7 @@ export async function runGapAnalysis(
     };
   }
 
-  revalidatePath("/home");
+  revalidatePath("/inicio");
 
   return {
     success: true,

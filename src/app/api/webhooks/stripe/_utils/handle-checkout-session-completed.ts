@@ -52,7 +52,7 @@ export async function handleCheckoutSessionCompleted(
 
     if (purchaseError) {
       if (purchaseError.code === "23505") {
-        console.log("[stripe webhook] session already processed", session.id);
+        console.debug("[stripe webhook] session already processed", session.id);
         return null;
       }
 

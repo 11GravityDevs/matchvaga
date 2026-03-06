@@ -279,7 +279,7 @@ async function generateOptimizedDocumentWithContext(
     };
   }
 
-  revalidatePath("/home");
+  revalidatePath("/inicio");
 
   return {
     success: true,

@@ -13,3 +13,5 @@ Ref: `supabase/migrations/20250222000000_initial_schema.sql`
 **Mapping:** parsed_data → resumeDataSchema; job_snapshot → jobSnapshotSchema; matched/missing_skills = string[]; status em runGapAnalysis/synthesizeOptimizedResumeForPreview.
 
 **RLS:** resumes, analyses, user_credits = auth.uid()=user_id. purchases = sem policies, só service client. optimized_documents = via analysis.
+
+**Storage:** bucket `documents` para arquivos gerados (PDF/DOCX), com RLS por prefixo `{user_id}/*` (ver `supabase/migrations/20250222000001_storage_documents.sql`); usuários só podem inserir/selecionar arquivos no próprio diretório.

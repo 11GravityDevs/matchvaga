@@ -17,7 +17,10 @@ const ONBOARDING_STEPS: StepIndicatorStep[] = [
   { id: "verify", label: "Verificar" },
 ];
 
-const STEP_PATHS = ["/onboarding/upload", "/onboarding/verify"] as const;
+const STEP_PATHS = [
+  "/onboarding/enviar-curriculo",
+  "/onboarding/verificar-informacoes",
+] as const;
 
 export function OnboardingLayoutClient({
   children,
@@ -31,7 +34,7 @@ export function OnboardingLayoutClient({
     router.push(ROUTE_ONBOARDING_UPLOAD);
   }
 
-  if (pathname.startsWith("/onboarding/preview")) {
+  if (pathname.startsWith("/onboarding/como-funciona")) {
     return (
       <main className="flex min-h-screen flex-col bg-background">
         <OnboardingTopBar showSkipButton onSkip={handleSkip} />

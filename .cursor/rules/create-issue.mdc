@@ -7,7 +7,7 @@ alwaysApply: false
 
 Template padrão para **criar** issue de tarefa no Linear.
 
-Usar ao criar issue via MCP `create_issue`, tanto para uma única task quanto para várias tasks relacionadas. PT-BR. Prioridade 1–4 (campo da issue). Título claro.
+Usar ao criar issue via MCP `save_issue`, tanto para uma única task quanto para várias tasks relacionadas. PT-BR. Prioridade 1–4 (campo da issue). Título claro.
 
 **Seções (usar `##` para margem no Linear):**  
 **🎯 Contexto** — o quê e por quê.  
