@@ -140,7 +140,8 @@ export function formatLinkLabel(url: string): string {
 }
 
 export function formatPhoneBr(value: string): string {
-  const digits = (value ?? "").replace(/\D/g, "").slice(0, 11);
+  let digits = (value ?? "").replace(/\D/g, "");
+  digits = digits.slice(0, 11);
   if (digits.length <= 2) return digits ? `(${digits}` : "";
 
   if (digits.length <= 6) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
@@ -151,10 +152,58 @@ export function formatPhoneBr(value: string): string {
   return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7, 11)}`;
 }
 
+export const normalizeBrazilianPhone = (
+  raw: string | null | undefined
+): string => {
+  if (!raw) return "";
+
+  let digits = raw.replace(/\D/g, "");
+  if (!digits) return "";
+
+  if (digits.startsWith("0055")) {
+    digits = digits.slice(4);
+  } else if (digits.startsWith("055")) {
+    digits = digits.slice(3);
+  } else if (digits.startsWith("55")) {
+    digits = digits.slice(2);
+  }
+
+  if (digits.length > 11 && digits.startsWith("0")) {
+    const possibleOperator = digits.slice(0, 3);
+    const operatorCode = Number(possibleOperator.slice(1));
+    if (operatorCode >= 10 && operatorCode <= 99) {
+      digits = digits.slice(3);
+    }
+  }
+
+  if (digits.length === 12 && digits.startsWith("0")) {
+    const ddd = digits.slice(1, 4);
+    const rest = digits.slice(4);
+    const dddNumber = Number(ddd);
+    if (dddNumber >= 11 && dddNumber <= 99 && rest.length >= 8) {
+      digits = digits.slice(1);
+    }
+  }
+
+  if (digits.length > 11) {
+    const last11 = digits.slice(-11);
+    if (last11.length === 11) {
+      digits = last11;
+    }
+  }
+
+  if (digits.length === 10 || digits.length === 11) {
+    return digits;
+  }
+
+  return "";
+};
+
 export function getContactLineForDisplay(data: ResumeData): string {
   const parts: string[] = [];
   if (data.location) parts.push(data.location);
-  if (data.phone) parts.push(data.phone);
+  const phoneDisplay = formatPhoneBr(data.phone ?? "");
+  if (phoneDisplay) parts.push(phoneDisplay);
   if (data.linkedin) parts.push(formatLinkLabel(data.linkedin));
   if (data.github) parts.push(formatLinkLabel(data.github));
   if (data.email) parts.push(data.email);

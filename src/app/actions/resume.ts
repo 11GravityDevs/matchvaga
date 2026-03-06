@@ -10,7 +10,7 @@ import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
 import { RESUME_STATUS_COOKIE_NAME } from "@/utils/resume-status-cookie";
 import { translateAuthError } from "@/utils/auth";
-import { formatPhoneBr } from "@/utils/resume";
+import { normalizeBrazilianPhone } from "@/utils/resume";
 
 const ERROR_ALREADY_HAS_RESUME =
   "Você já possui um currículo cadastrado. Para alterar as informações, acesse a tela Meu currículo.";
@@ -35,7 +35,10 @@ export interface CreateResumeWithDataResult {
 export async function createResumeWithData(
   data: ResumeData
 ): Promise<CreateResumeWithDataResult> {
-  const parsed = resumeDataSchema.safeParse(data);
+  const parsed = resumeDataSchema.safeParse({
+    ...data,
+    phone: normalizeBrazilianPhone(data.phone),
+  });
 
   if (!parsed.success) {
     return {
@@ -159,9 +162,10 @@ export async function uploadResume(
   }
 
   const { data: parsedData } = extraction;
+  const normalizedPhone = normalizeBrazilianPhone(parsedData.phone);
   const dataToStore: ResumeData = {
     ...parsedData,
-    phone: formatPhoneBr(parsedData.phone),
+    phone: normalizedPhone,
   };
 
   const { data: row, error: insertError } = await supabase
@@ -223,7 +227,11 @@ export async function saveResumeData(
   resumeId: string,
   data: ResumeData
 ): Promise<SaveResumeDataResult> {
-  const parsed = resumeDataSchema.safeParse(data);
+  const parsed = resumeDataSchema.safeParse({
+    ...data,
+    phone: normalizeBrazilianPhone(data.phone),
+  });
+
   if (!parsed.success) {
     return {
       success: false,

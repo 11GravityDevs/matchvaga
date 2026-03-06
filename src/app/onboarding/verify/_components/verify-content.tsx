@@ -9,6 +9,7 @@ import {
 import { useResumeQuery } from "@/hooks/use-resume-query";
 import type { ResumeData } from "@/types/resume";
 import { createEmptyEducation, createEmptyExperience } from "@/types/resume";
+import { formatPhoneBr } from "@/utils/resume";
 import { ResumeFormCard } from "@/components/shared/resume-form-card";
 import { Loading } from "@/components/ui/loading";
 import { useToastNotification } from "@/hooks/useToastNotification";
@@ -135,7 +136,10 @@ function VerifyFormWithKey({
     removeEducation,
     handleSummaryChange,
   } = useResumeForm({
-    initialData,
+    initialData: {
+      ...initialData,
+      phone: formatPhoneBr(initialData.phone),
+    },
     onSummarySync: setResumeContent,
   });
 

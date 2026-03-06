@@ -5,6 +5,7 @@ import {
   formatLinkLabel,
   sortExperienceByDateDesc,
   sortEducationByDateDesc,
+  formatPhoneBr,
 } from "@/utils/resume";
 
 function ensureHttps(url: string): string {
@@ -20,7 +21,8 @@ export function ResumePreviewDocument({ data }: { data: ResumeData }) {
 
   if (data.location) contactItems.push({ label: data.location });
 
-  if (data.phone) contactItems.push({ label: data.phone });
+  const phoneDisplay = formatPhoneBr(data.phone ?? "");
+  if (phoneDisplay) contactItems.push({ label: phoneDisplay });
 
   if (data.linkedin)
     contactItems.push({
