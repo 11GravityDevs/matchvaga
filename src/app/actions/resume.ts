@@ -19,6 +19,16 @@ import { formatPhoneBr } from "@/utils/resume";
 const ERROR_ALREADY_HAS_RESUME =
   "Você já possui um currículo cadastrado. Para alterar as informações, acesse a tela Meu currículo.";
 
+const ERROR_INVALID_DATA = "Dados inválidos. Verifique os campos.";
+
+function firstZodErrorMessage(error: {
+  issues?: Array<{ message?: string }>;
+}): string | undefined {
+  const issues = error.issues ?? [];
+  const msg = issues[0]?.message;
+  return typeof msg === "string" && msg.length > 0 ? msg : undefined;
+}
+
 export interface CreateResumeWithDataResult {
   success: boolean;
   resumeId?: string;
@@ -32,7 +42,10 @@ export async function createResumeWithData(
   const parsed = resumeDataSchema.safeParse(data);
 
   if (!parsed.success) {
-    return { success: false, error: "Dados inválidos. Verifique os campos." };
+    return {
+      success: false,
+      error: firstZodErrorMessage(parsed.error) ?? ERROR_INVALID_DATA,
+    };
   }
 
   const supabase = await createClient();
@@ -226,7 +239,7 @@ export async function saveResumeData(
   if (!parsed.success) {
     return {
       success: false,
-      error: "Dados inválidos. Verifique os campos.",
+      error: firstZodErrorMessage(parsed.error) ?? ERROR_INVALID_DATA,
     };
   }
 

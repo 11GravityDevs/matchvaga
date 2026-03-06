@@ -14,6 +14,7 @@ import {
   type MissingSkillsByCategory,
 } from "@/utils/analysis";
 import {
+  JOB_DESCRIPTION_TOO_LONG_MESSAGE,
   NOT_JOB_DESCRIPTION_MESSAGE,
   validateJobDescriptionText,
 } from "@/utils/job-description";
@@ -60,7 +61,11 @@ export async function runGapAnalysis(
 
   const heuristic = validateJobDescriptionText(rawText);
   if (!heuristic.valid) {
-    return { success: false, error: NOT_JOB_DESCRIPTION_MESSAGE };
+    const error =
+      heuristic.errorCode === "max"
+        ? JOB_DESCRIPTION_TOO_LONG_MESSAGE
+        : NOT_JOB_DESCRIPTION_MESSAGE;
+    return { success: false, error };
   }
 
   const supabase = await createClient();
