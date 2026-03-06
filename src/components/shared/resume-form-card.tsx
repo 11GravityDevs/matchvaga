@@ -16,6 +16,7 @@ import { ResumeFormSkills } from "@/components/shared/resume-form-skills";
 import { ResumeFormLanguages } from "@/components/shared/resume-form-languages";
 import { ResumeFormEducation } from "@/components/shared/resume-form-education";
 import { ResumeFormExperience } from "@/components/shared/resume-form-experience";
+import { FormSectionSeparator } from "@/components/shared/form-section-separator";
 
 export interface ResumeFormCardPrimaryAction {
   label: string;
@@ -171,7 +172,7 @@ export function ResumeFormCard({
       )}
 
       <div
-        className={`flex flex-col gap-5 overflow-hidden p-7 ${hideHeader ? "" : "pt-0"}`}
+        className={`flex flex-col gap-6 overflow-hidden p-7 ${hideHeader ? "" : "pt-0"}`}
       >
         {validationErrors?.form && (
           <div id="resume-form-error" className="scroll-mt-6 scroll-mb-6">
@@ -186,6 +187,8 @@ export function ResumeFormCard({
           isSaving={isSaving}
           validationErrors={validationErrors}
         />
+
+        <FormSectionSeparator />
 
         <div
           id="resume-form-summary"
@@ -209,6 +212,8 @@ export function ResumeFormCard({
           )}
         </div>
 
+        <FormSectionSeparator />
+
         <ResumeFormSkills
           skills={data.skills}
           onChange={(skills) => updateField("skills", skills)}
@@ -216,11 +221,15 @@ export function ResumeFormCard({
           skillsError={validationErrors?.skills}
         />
 
+        <FormSectionSeparator />
+
         <ResumeFormLanguages
           languages={data.languages ?? []}
           onChange={(languages) => updateField("languages", languages)}
           isSaving={isSaving}
         />
+
+        <FormSectionSeparator />
 
         <ResumeFormEducation
           education={data.education}
@@ -232,6 +241,8 @@ export function ResumeFormCard({
           educationEntryErrors={validationErrors?.educationEntryErrors}
         />
 
+        <FormSectionSeparator />
+
         <ResumeFormExperience
           experience={data.experience}
           updateExperience={updateExperience}
@@ -241,6 +252,8 @@ export function ResumeFormCard({
           experienceError={validationErrors?.experience}
           experienceEntryErrors={validationErrors?.experienceEntryErrors}
         />
+
+        <div className="h-6" />
 
         <div className="flex justify-end">
           <Button
