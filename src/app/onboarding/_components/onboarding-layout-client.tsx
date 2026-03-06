@@ -35,7 +35,7 @@ export function OnboardingLayoutClient({
     return (
       <main className="flex min-h-screen flex-col bg-background">
         <OnboardingTopBar showSkipButton onSkip={handleSkip} />
-        <div className="flex flex-1 flex-col items-center justify-center gap-8 bg-(--surface-subtle) px-12 py-12">
+        <div className="flex flex-1 flex-col items-center justify-center gap-8 bg-surface-subtle px-12 py-12">
           {children}
         </div>
       </main>
@@ -48,7 +48,7 @@ export function OnboardingLayoutClient({
     <OnboardingProvider>
       <main className="flex min-h-screen flex-col bg-background">
         <OnboardingTopBar />
-        <div className="flex flex-1 flex-col items-center justify-center gap-7 bg-(--surface-subtle) py-12">
+        <div className="flex flex-1 flex-col items-center justify-center gap-7 bg-surface-subtle py-12">
           <StepIndicator
             steps={ONBOARDING_STEPS}
             currentStepIndex={currentStepIndex}

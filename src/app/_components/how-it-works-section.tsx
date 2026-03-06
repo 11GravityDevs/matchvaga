@@ -50,7 +50,7 @@ export function HowItWorksSection() {
       </AnimateOnScroll>
 
       {/* Steps */}
-      <div className="flex w-full flex-col gap-4 md:flex-row md:gap-8">
+      <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
         {STEPS.map((step, i) => (
           <AnimateOnScroll key={step.number} delay={i * 80}>
             <div className="flex h-full flex-1 flex-col gap-5 rounded-xl border border-border bg-card p-5 md:p-8">

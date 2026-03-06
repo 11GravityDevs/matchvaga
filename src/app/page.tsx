@@ -38,7 +38,7 @@ export default async function Page() {
       <LandingPageTracker />
       <LandingStructuredData />
       <LandingHeader />
-      <div className="mx-auto w-full max-w-landing-content px-4 md:px-0">
+      <div className="mx-auto w-full max-w-landing-content px-4 sm:px-8 xl:px-0">
         <HeroSection />
         <HowItWorksSection />
         <CoreFeaturesSection />

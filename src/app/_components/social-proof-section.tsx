@@ -71,9 +71,9 @@ export function SocialProofSection() {
       </AnimateOnScroll>
 
       {/* Testimonials */}
-      <div className="flex w-full flex-col gap-4 md:flex-row md:gap-6">
+      <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3">
         {TESTIMONIALS.map((t, i) => (
-          <AnimateOnScroll key={t.name} delay={i * 80} className="flex-1">
+          <AnimateOnScroll key={t.name} delay={i * 80} className="h-full">
             <div className="flex h-full flex-col gap-5 rounded-xl border border-border bg-card p-5 md:p-7">
               <Stars />
               <p className="text-body-15 text-foreground">{t.quote}</p>

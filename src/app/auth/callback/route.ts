@@ -6,10 +6,7 @@ import {
   ROUTE_ONBOARDING_UPLOAD,
 } from "@/constants/routes";
 import { createClient } from "@/lib/supabase/server";
-import {
-  RESUME_STATUS_COOKIE_NAME,
-  RESUME_STATUS_COOKIE_OPTIONS,
-} from "@/utils/resume-status-cookie";
+import { RESUME_STATUS_COOKIE_NAME } from "@/utils/resume-status-cookie";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
@@ -56,13 +53,7 @@ export async function GET(request: Request) {
 
       const response = NextResponse.redirect(redirectUrl);
 
-      if (user && !userHasResume) {
-        response.cookies.set(
-          RESUME_STATUS_COOKIE_NAME,
-          "none",
-          RESUME_STATUS_COOKIE_OPTIONS
-        );
-      }
+      response.cookies.delete(RESUME_STATUS_COOKIE_NAME);
 
       return response;
     }

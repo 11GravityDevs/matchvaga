@@ -107,7 +107,7 @@ export function SecondaryFeaturesSection() {
       </AnimateOnScroll>
 
       {/* Feature Grid - 3 columns, 2 rows, equal card heights */}
-      <div className="grid w-full auto-rows-fr grid-cols-1 gap-4 md:grid-cols-3 md:gap-6">
+      <div className="grid w-full auto-rows-fr grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
         {[0, 1].flatMap((rowIndex) =>
           [FEATURES_COL_1, FEATURES_COL_2, FEATURES_COL_3].map(
             (col, colIndex) => (

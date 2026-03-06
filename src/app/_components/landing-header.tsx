@@ -26,9 +26,9 @@ export function LandingHeader() {
 
   return (
     <header
-      className={`animate-fade-up relative inset-x-0 top-0 z-50 flex w-full justify-center border-b py-5 transition-colors duration-300 ease-in-out md:fixed ${isScrolled ? "border-border bg-white" : "border-transparent bg-background"}`}
+      className={`animate-fade-up relative inset-x-0 top-0 z-50 flex w-full justify-center border-b py-5 transition-colors duration-300 ease-in-out lg:fixed ${isScrolled ? "border-border bg-white" : "border-transparent bg-background"}`}
     >
-      <div className="mx-4 flex w-full max-w-landing-content items-center justify-between md:mx-auto">
+      <div className="mx-4 flex w-full max-w-landing-content items-center justify-between sm:mx-8 xl:mx-auto">
         <Logo textClassName="text-xl" />
 
         <LandingNav className="hidden md:flex" />

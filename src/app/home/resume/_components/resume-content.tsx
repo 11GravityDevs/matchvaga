@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { useResume } from "../_hooks/use-resume";
 import {
   useResumeForm,
@@ -9,7 +8,6 @@ import {
 } from "@/hooks/use-resume-form";
 import { ResumeFormCard } from "@/components/shared/resume-form-card";
 import { Loading } from "@/components/ui/loading";
-import { ROUTE_ONBOARDING_UPLOAD } from "@/constants/routes";
 import type { ResumeData } from "@/types/resume";
 import { useToastNotification } from "@/hooks/useToastNotification";
 import { getResumeValidationErrors } from "@/utils/resume-validation";
@@ -144,8 +142,7 @@ function ResumeEditForm({ initialData, save, isSaving }: ResumeEditFormProps) {
 }
 
 export function ResumeContent() {
-  const { resumeData, isLoading, error, hasNoResume, save, isSaving } =
-    useResume();
+  const { resumeData, isLoading, error, save, isSaving } = useResume();
 
   if (isLoading) {
     return <Loading />;
