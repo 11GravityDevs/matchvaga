@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useResumeVerify } from "../_hooks/use-resume-verify";
 import {
   useResumeForm,
@@ -12,6 +12,7 @@ import { createEmptyEducation, createEmptyExperience } from "@/types/resume";
 import { ResumeFormCard } from "@/components/shared/resume-form-card";
 import { Loading } from "@/components/ui/loading";
 import { useToastNotification } from "@/hooks/useToastNotification";
+import { getResumeValidationErrors } from "@/utils/resume-validation";
 import { useOnboardingContext } from "../../_contexts/onboarding-context";
 
 const VERIFY_THINKING_MESSAGES = [
@@ -36,7 +37,18 @@ const EMPTY_INITIAL_DATA = (summary: string): ResumeData => ({
   education: [createEmptyEducation()],
 });
 
-export function VerifyContent() {
+function getFormKey(resumeId: string | null, hasResumeData: boolean): string {
+  if (resumeId && hasResumeData) return resumeId;
+  return "no-resume";
+}
+
+export interface VerifyContentProps {
+  prefillValidationErrors?: boolean;
+}
+
+export function VerifyContent({
+  prefillValidationErrors = false,
+}: VerifyContentProps) {
   const { resumeContent, setResumeContent } = useOnboardingContext();
   const {
     resumeId: queryResumeId,
@@ -52,10 +64,66 @@ export function VerifyContent() {
   const [validationErrors, setValidationErrors] =
     useState<ResumeValidationErrors | null>(null);
   const { showErrorToastNotification } = useToastNotification();
+  const hasSetBlockedErrors = useRef(false);
+  const initialDataRef = useRef<ResumeData | null>(null);
 
   const initialData: ResumeData =
     resumeData ?? EMPTY_INITIAL_DATA(resumeContent);
 
+  useEffect(() => {
+    initialDataRef.current = initialData;
+  }, [initialData]);
+
+  useEffect(() => {
+    if (!prefillValidationErrors || isLoadingResume) return;
+    if (hasSetBlockedErrors.current) return;
+
+    const data = initialDataRef.current;
+    if (!data) return;
+
+    hasSetBlockedErrors.current = true;
+    const errors = getResumeValidationErrors(data);
+    queueMicrotask(() => setValidationErrors(errors ?? null));
+  }, [prefillValidationErrors, isLoadingResume]);
+
+  if (isLoadingResume) {
+    return <Loading className="min-h-0 flex-1" />;
+  }
+
+  return (
+    <VerifyFormWithKey
+      key={getFormKey(resumeId, !!resumeData)}
+      initialData={initialData}
+      setResumeContent={setResumeContent}
+      isSaving={isSaving}
+      save={save}
+      continueToDashboard={continueToDashboard}
+      validationErrors={validationErrors}
+      setValidationErrors={setValidationErrors}
+      showErrorToastNotification={showErrorToastNotification}
+    />
+  );
+}
+
+function VerifyFormWithKey({
+  initialData,
+  setResumeContent,
+  isSaving,
+  save,
+  continueToDashboard,
+  validationErrors,
+  setValidationErrors,
+  showErrorToastNotification,
+}: {
+  initialData: ResumeData;
+  setResumeContent: (content: string) => void;
+  isSaving: boolean;
+  save: (data: ResumeData) => Promise<void>;
+  continueToDashboard: () => void;
+  validationErrors: ResumeValidationErrors | null;
+  setValidationErrors: (errors: ResumeValidationErrors | null) => void;
+  showErrorToastNotification: (message: string) => void;
+}) {
   const {
     data,
     updateField,
@@ -66,8 +134,6 @@ export function VerifyContent() {
     addEducation,
     removeEducation,
     handleSummaryChange,
-    isFormValid,
-    getValidationErrors,
   } = useResumeForm({
     initialData,
     onSummarySync: setResumeContent,
@@ -127,10 +193,13 @@ export function VerifyContent() {
   }
 
   async function handleContinue() {
-    if (!isFormValid) {
-      setValidationErrors(getValidationErrors(data) ?? null);
+    const errors = getResumeValidationErrors(data);
+
+    if (errors !== null) {
+      setValidationErrors(errors);
       return;
     }
+
     setValidationErrors(null);
     try {
       await save(data);
@@ -142,10 +211,6 @@ export function VerifyContent() {
       });
       showErrorToastNotification(message);
     }
-  }
-
-  if (isLoadingResume) {
-    return <Loading className="min-h-0 flex-1" />;
   }
 
   if (isSaving) {

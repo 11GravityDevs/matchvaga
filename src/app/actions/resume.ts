@@ -1,12 +1,18 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
 
 import { createClient } from "@/lib/supabase/server";
 import { extractResumeFromFile } from "@/lib/ai/clients/gemini";
 import { logServerError } from "@/lib/logger";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
+import {
+  RESUME_STATUS_COOKIE_NAME,
+  RESUME_STATUS_COOKIE_OPTIONS,
+  computeResumeStatusFromData,
+} from "@/utils/resume-status-cookie";
 import { translateAuthError } from "@/utils/auth";
 import { formatPhoneBr } from "@/utils/resume";
 
@@ -100,6 +106,13 @@ export async function createResumeWithData(
 
   revalidatePath("/home");
   revalidatePath("/onboarding");
+
+  const cookieStore = await cookies();
+  cookieStore.set(
+    RESUME_STATUS_COOKIE_NAME,
+    "complete",
+    RESUME_STATUS_COOKIE_OPTIONS
+  );
 
   return {
     success: true,
@@ -199,6 +212,13 @@ export async function uploadResume(
   revalidatePath("/home");
   revalidatePath("/onboarding");
 
+  const cookieStore = await cookies();
+  cookieStore.set(
+    RESUME_STATUS_COOKIE_NAME,
+    "incomplete",
+    RESUME_STATUS_COOKIE_OPTIONS
+  );
+
   return {
     success: true,
     resumeId: row.id,
@@ -259,6 +279,14 @@ export async function saveResumeData(
 
   revalidatePath("/home");
   revalidatePath("/onboarding");
+
+  const status = computeResumeStatusFromData(parsed.data as ResumeData);
+  const cookieStore = await cookies();
+  cookieStore.set(
+    RESUME_STATUS_COOKIE_NAME,
+    status,
+    RESUME_STATUS_COOKIE_OPTIONS
+  );
 
   return { success: true };
 }
@@ -337,4 +365,9 @@ export async function hasResume(): Promise<boolean> {
   }
 
   return (data?.length ?? 0) > 0;
+}
+
+export async function clearResumeStatusCookie(): Promise<void> {
+  const cookieStore = await cookies();
+  cookieStore.delete(RESUME_STATUS_COOKIE_NAME);
 }

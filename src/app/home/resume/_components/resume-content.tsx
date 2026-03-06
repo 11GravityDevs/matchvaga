@@ -12,6 +12,7 @@ import { Loading } from "@/components/ui/loading";
 import { ROUTE_ONBOARDING_UPLOAD } from "@/constants/routes";
 import type { ResumeData } from "@/types/resume";
 import { useToastNotification } from "@/hooks/useToastNotification";
+import { getResumeValidationErrors } from "@/utils/resume-validation";
 
 interface ResumeEditFormProps {
   initialData: ResumeData;
@@ -35,8 +36,6 @@ function ResumeEditForm({ initialData, save, isSaving }: ResumeEditFormProps) {
     addEducation,
     removeEducation,
     handleSummaryChange,
-    isFormValid,
-    getValidationErrors,
   } = useResumeForm({ initialData });
 
   function clearValidationOnChange() {
@@ -93,10 +92,13 @@ function ResumeEditForm({ initialData, save, isSaving }: ResumeEditFormProps) {
   }
 
   async function handleSave() {
-    if (!isFormValid) {
-      setValidationErrors(getValidationErrors(data) ?? null);
+    const errors = getResumeValidationErrors(data);
+
+    if (errors !== null) {
+      setValidationErrors(errors);
       return;
     }
+
     setValidationErrors(null);
     try {
       await save(data);
@@ -147,25 +149,6 @@ export function ResumeContent() {
 
   if (isLoading) {
     return <Loading />;
-  }
-
-  if (hasNoResume) {
-    return (
-      <main className="flex w-full flex-col items-center section-gap overflow-auto page-padding">
-        <div className="flex w-content flex-col gap-1">
-          <h1 className="text-page-title">Nenhum currículo encontrado</h1>
-          <p className="text-page-subtitle">
-            Faça o upload do seu currículo para começar a editá-lo.
-          </p>
-          <Link
-            href={ROUTE_ONBOARDING_UPLOAD}
-            className="text-primary underline hover:no-underline"
-          >
-            Ir para upload
-          </Link>
-        </div>
-      </main>
-    );
   }
 
   return (

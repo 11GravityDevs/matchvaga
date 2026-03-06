@@ -9,7 +9,15 @@ import {
   ROUTE_ONBOARDING,
   ROUTE_ONBOARDING_PREVIEW,
   ROUTE_ONBOARDING_UPLOAD,
+  ROUTE_ONBOARDING_VERIFY,
 } from "@/constants/routes";
+import {
+  RESUME_STATUS_COOKIE_NAME,
+  RESUME_STATUS_COOKIE_OPTIONS,
+  computeResumeStatusFromRow,
+  isResumeStatus,
+  type ResumeStatus,
+} from "@/utils/resume-status-cookie";
 
 const PROTECTED_PATH_PREFIXES = [ROUTE_HOME, ROUTE_ONBOARDING];
 const GUEST_ONLY_PATH_PREFIXES = [ROUTE_LOGIN];
@@ -92,25 +100,70 @@ export async function proxy(request: NextRequest) {
 
   if (user && isProtectedPath(request.nextUrl.pathname)) {
     const userId = user.sub as string;
-    const { data: resumes, error } = await supabase
-      .from("resumes")
-      .select("id")
-      .eq("user_id", userId)
-      .limit(1);
-
-    const userHasResume = !error && (resumes?.length ?? 0) > 0;
     const pathname = request.nextUrl.pathname;
 
-    if (pathname === ROUTE_ONBOARDING_UPLOAD && userHasResume) {
-      const url = request.nextUrl.clone();
-      url.pathname = ROUTE_HOME_RESUME;
-      return NextResponse.redirect(url);
+    const cookieValue = request.cookies.get(RESUME_STATUS_COOKIE_NAME)?.value;
+    let status: ResumeStatus;
+
+    if (isResumeStatus(cookieValue)) {
+      status = cookieValue;
+    } else {
+      const { data: resumeRow, error } = await supabase
+        .from("resumes")
+        .select("id, parsed_data")
+        .eq("user_id", userId)
+        .limit(1)
+        .maybeSingle();
+
+      status = computeResumeStatusFromRow(error ? null : (resumeRow ?? null));
     }
 
-    if (pathname.startsWith(ROUTE_HOME) && !userHasResume) {
+    function setResumeStatusCookieOnResponse(response: NextResponse): void {
+      response.cookies.set(
+        RESUME_STATUS_COOKIE_NAME,
+        status,
+        RESUME_STATUS_COOKIE_OPTIONS
+      );
+    }
+
+    if (pathname === ROUTE_ONBOARDING_UPLOAD && status !== "none") {
+      const url = request.nextUrl.clone();
+      url.pathname = ROUTE_HOME_RESUME;
+      const response = NextResponse.redirect(url);
+
+      if (!isResumeStatus(cookieValue)) {
+        setResumeStatusCookieOnResponse(response);
+      }
+
+      return response;
+    }
+
+    if (pathname.startsWith(ROUTE_HOME) && status === "none") {
       const url = request.nextUrl.clone();
       url.pathname = ROUTE_ONBOARDING_UPLOAD;
-      return NextResponse.redirect(url);
+      const response = NextResponse.redirect(url);
+
+      if (!isResumeStatus(cookieValue)) {
+        setResumeStatusCookieOnResponse(response);
+      }
+
+      return response;
+    }
+
+    if (pathname.startsWith(ROUTE_HOME) && status === "incomplete") {
+      const url = request.nextUrl.clone();
+      url.pathname = ROUTE_ONBOARDING_VERIFY;
+      const response = NextResponse.redirect(url);
+
+      if (!isResumeStatus(cookieValue)) {
+        setResumeStatusCookieOnResponse(response);
+      }
+
+      return response;
+    }
+
+    if (!isResumeStatus(cookieValue)) {
+      setResumeStatusCookieOnResponse(supabaseResponse);
     }
   }
 

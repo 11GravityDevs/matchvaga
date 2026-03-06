@@ -6,6 +6,10 @@ import {
   ROUTE_ONBOARDING_UPLOAD,
 } from "@/constants/routes";
 import { createClient } from "@/lib/supabase/server";
+import {
+  RESUME_STATUS_COOKIE_NAME,
+  RESUME_STATUS_COOKIE_OPTIONS,
+} from "@/utils/resume-status-cookie";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
@@ -25,6 +29,8 @@ export async function GET(request: Request) {
         data: { user },
       } = await supabase.auth.getUser();
 
+      let userHasResume = false;
+
       if (user) {
         const { data: resumeRows } = await supabase
           .from("resumes")
@@ -32,7 +38,9 @@ export async function GET(request: Request) {
           .eq("user_id", user.id)
           .limit(1);
 
-        if ((resumeRows?.length ?? 0) > 0) {
+        userHasResume = (resumeRows?.length ?? 0) > 0;
+
+        if (userHasResume) {
           next = ROUTE_HOME_DASHBOARD;
         }
       }
@@ -40,15 +48,23 @@ export async function GET(request: Request) {
       const forwardedHost = request.headers.get("x-forwarded-host");
       const isLocalEnv = process.env.NODE_ENV === "development";
 
-      if (isLocalEnv) {
-        return NextResponse.redirect(`${origin}${next}`);
+      const redirectUrl = isLocalEnv
+        ? `${origin}${next}`
+        : forwardedHost
+          ? `https://${forwardedHost}${next}`
+          : `${origin}${next}`;
+
+      const response = NextResponse.redirect(redirectUrl);
+
+      if (user && !userHasResume) {
+        response.cookies.set(
+          RESUME_STATUS_COOKIE_NAME,
+          "none",
+          RESUME_STATUS_COOKIE_OPTIONS
+        );
       }
 
-      if (forwardedHost) {
-        return NextResponse.redirect(`https://${forwardedHost}${next}`);
-      }
-
-      return NextResponse.redirect(`${origin}${next}`);
+      return response;
     }
   }
 
