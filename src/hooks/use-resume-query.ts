@@ -7,14 +7,12 @@ import {
   createEmptyExperience,
   type ResumeData,
 } from "@/types/resume";
-import { DEFAULT_PHONE_DDI } from "@/constants/phone";
 import { resumeQueryOptions } from "@/lib/query/query-options";
 
 export const EMPTY_RESUME_DATA: ResumeData = {
   fullName: "",
   email: "",
   location: "",
-  phoneDdi: DEFAULT_PHONE_DDI,
   phone: "",
   linkedin: "",
   github: "",

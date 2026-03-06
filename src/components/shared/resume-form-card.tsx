@@ -123,10 +123,6 @@ function hasValidationError(
     );
   }
 
-  if (key === "phone") {
-    return !!validationErrors.phone || !!validationErrors.phoneDdi;
-  }
-
   return !!validationErrors[key];
 }
 

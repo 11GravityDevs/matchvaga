@@ -27,7 +27,6 @@ export interface ResumeData {
   fullName: string;
   email: string;
   location: string;
-  phoneDdi: string;
   phone: string;
   linkedin: string;
   github: string;

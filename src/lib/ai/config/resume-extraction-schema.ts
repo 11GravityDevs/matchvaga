@@ -43,7 +43,6 @@ export const resumeExtractionResponseSchema = {
     fullName: stringSchema,
     email: stringSchema,
     location: stringSchema,
-    phoneDdi: stringSchema,
     phone: stringSchema,
     linkedin: stringSchema,
     github: stringSchema,

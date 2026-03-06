@@ -1,15 +1,7 @@
 "use client";
 
 import { RESUME_LIMITS } from "@/constants/resume";
-import { PHONE_DDI_OPTIONS } from "@/constants/phone";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { FormField } from "@/components/shared/form-field";
 import type { ResumeData } from "@/types/resume";
 import type { ResumeValidationErrors } from "@/hooks/use-resume-form";
@@ -19,13 +11,7 @@ import { formatPhoneBr } from "@/utils/resume";
 interface ResumeFormPersonalDataProps {
   data: Pick<
     ResumeData,
-    | "fullName"
-    | "email"
-    | "location"
-    | "phoneDdi"
-    | "phone"
-    | "linkedin"
-    | "github"
+    "fullName" | "email" | "location" | "phone" | "linkedin" | "github"
   >;
   updateField: <K extends keyof ResumeData>(
     key: K,
@@ -109,48 +95,20 @@ export function ResumeFormPersonalData({
           <FormField
             label="Telefone"
             htmlFor="phone"
-            error={validationErrors?.phoneDdi ?? validationErrors?.phone}
+            error={validationErrors?.phone}
           >
-            <div className="flex items-center gap-2">
-              <Select
-                value={data.phoneDdi}
-                onValueChange={(value) => updateField("phoneDdi", value)}
-                disabled={isSaving}
-              >
-                <SelectTrigger
-                  className={INPUT_CLASS}
-                  aria-invalid={!!validationErrors?.phone}
-                >
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {PHONE_DDI_OPTIONS.map((opt) => (
-                    <SelectItem key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Input
-                id="phone"
-                value={data.phone}
-                onChange={(e) =>
-                  updateField(
-                    "phone",
-                    data.phoneDdi === "+55"
-                      ? formatPhoneBr(e.target.value)
-                      : e.target.value
-                  )
-                }
-                disabled={isSaving}
-                maxLength={RESUME_LIMITS.TEXT_FIELD_MAX}
-                className={INPUT_CLASS}
-                placeholder={
-                  data.phoneDdi === "+55" ? "(11) 99999-9999" : undefined
-                }
-                aria-invalid={!!validationErrors?.phone}
-              />
-            </div>
+            <Input
+              id="phone"
+              value={data.phone}
+              onChange={(e) =>
+                updateField("phone", formatPhoneBr(e.target.value))
+              }
+              disabled={isSaving}
+              maxLength={RESUME_LIMITS.TEXT_FIELD_MAX}
+              className={INPUT_CLASS}
+              placeholder="(11) 99999-9999"
+              aria-invalid={!!validationErrors?.phone}
+            />
           </FormField>
         </div>
       </div>

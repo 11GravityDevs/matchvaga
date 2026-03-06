@@ -15,10 +15,6 @@ export function normalizeAIResumeData(raw: unknown): unknown {
     if (obj[key] == null) obj[key] = "";
   }
 
-  if (obj.phoneDdi == null || obj.phoneDdi === "") {
-    obj.phoneDdi = "+55";
-  }
-
   if (!Array.isArray(obj.skills)) obj.skills = [];
   if (!Array.isArray(obj.languages)) obj.languages = [];
   if (!Array.isArray(obj.experience)) obj.experience = [];

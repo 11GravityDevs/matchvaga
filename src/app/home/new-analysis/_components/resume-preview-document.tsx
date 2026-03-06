@@ -2,10 +2,10 @@ import type { ResumeData } from "@/types/resume";
 import {
   formatResumeDateBr,
   getSkillsByCategoryForDisplay,
-  getPhoneForDisplay,
   formatLinkLabel,
   sortExperienceByDateDesc,
   sortEducationByDateDesc,
+  formatPhoneBr,
 } from "@/utils/resume";
 
 function ensureHttps(url: string): string {
@@ -21,7 +21,7 @@ export function ResumePreviewDocument({ data }: { data: ResumeData }) {
 
   if (data.location) contactItems.push({ label: data.location });
 
-  const phoneDisplay = getPhoneForDisplay(data);
+  const phoneDisplay = formatPhoneBr(data.phone ?? "");
   if (phoneDisplay) contactItems.push({ label: phoneDisplay });
 
   if (data.linkedin)

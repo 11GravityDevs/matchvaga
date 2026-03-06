@@ -78,7 +78,6 @@ export function truncateResumeDataToLimits(obj: unknown): unknown {
     fullName: truncateStr(o.fullName, RESUME_LIMITS.TEXT_FIELD_MAX),
     email: truncateStr(o.email, RESUME_LIMITS.TEXT_FIELD_MAX),
     location: truncateStr(o.location, RESUME_LIMITS.TEXT_FIELD_MAX),
-    phoneDdi: truncateStr(o.phoneDdi, RESUME_LIMITS.PHONE_DDI_MAX),
     phone: truncateStr(o.phone, RESUME_LIMITS.TEXT_FIELD_MAX),
     linkedin: truncateStr(o.linkedin, RESUME_LIMITS.TEXT_FIELD_MAX),
     github: truncateStr(o.github, RESUME_LIMITS.TEXT_FIELD_MAX),
@@ -142,10 +141,6 @@ export function formatLinkLabel(url: string): string {
 
 export function formatPhoneBr(value: string): string {
   let digits = (value ?? "").replace(/\D/g, "");
-
-  if (digits.startsWith("55") && digits.length > 11) {
-    digits = digits.slice(2);
-  }
   digits = digits.slice(0, 11);
   if (digits.length <= 2) return digits ? `(${digits}` : "";
 
@@ -157,17 +152,57 @@ export function formatPhoneBr(value: string): string {
   return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7, 11)}`;
 }
 
-export function getPhoneForDisplay(data: ResumeData): string {
-  const ddi = (data.phoneDdi ?? "").trim();
-  const phone = (data.phone ?? "").trim();
-  if (!phone) return "";
-  return ddi ? `${ddi} ${phone}` : phone;
-}
+export const normalizeBrazilianPhone = (
+  raw: string | null | undefined
+): string => {
+  if (!raw) return "";
+
+  let digits = raw.replace(/\D/g, "");
+  if (!digits) return "";
+
+  if (digits.startsWith("0055")) {
+    digits = digits.slice(4);
+  } else if (digits.startsWith("055")) {
+    digits = digits.slice(3);
+  } else if (digits.startsWith("55")) {
+    digits = digits.slice(2);
+  }
+
+  if (digits.length > 11 && digits.startsWith("0")) {
+    const possibleOperator = digits.slice(0, 3);
+    const operatorCode = Number(possibleOperator.slice(1));
+    if (operatorCode >= 10 && operatorCode <= 99) {
+      digits = digits.slice(3);
+    }
+  }
+
+  if (digits.length === 12 && digits.startsWith("0")) {
+    const ddd = digits.slice(1, 4);
+    const rest = digits.slice(4);
+    const dddNumber = Number(ddd);
+    if (dddNumber >= 11 && dddNumber <= 99 && rest.length >= 8) {
+      digits = digits.slice(1);
+    }
+  }
+
+  if (digits.length > 11) {
+    const last11 = digits.slice(-11);
+    if (last11.length === 11) {
+      digits = last11;
+    }
+  }
+
+  if (digits.length === 10 || digits.length === 11) {
+    return digits;
+  }
+
+  return "";
+};
 
 export function getContactLineForDisplay(data: ResumeData): string {
   const parts: string[] = [];
   if (data.location) parts.push(data.location);
-  const phoneDisplay = getPhoneForDisplay(data);
+  const phoneDisplay = formatPhoneBr(data.phone ?? "");
   if (phoneDisplay) parts.push(phoneDisplay);
   if (data.linkedin) parts.push(formatLinkLabel(data.linkedin));
   if (data.github) parts.push(formatLinkLabel(data.github));
