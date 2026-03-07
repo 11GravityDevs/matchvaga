@@ -3,7 +3,6 @@
 import React from "react";
 import { revalidatePath } from "next/cache";
 import { renderToBuffer } from "@react-pdf/renderer";
-
 import { createClient } from "@/lib/supabase/server";
 import { synthesizeOptimizedResume } from "@/lib/ai/clients/anthropic";
 import { runGapAnalysisAI } from "@/lib/ai/clients/openai";
