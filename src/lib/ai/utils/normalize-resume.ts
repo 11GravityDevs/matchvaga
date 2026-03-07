@@ -1,3 +1,13 @@
+function normalizeMonthYear(value: unknown): string {
+  if (value == null || typeof value !== "string") return "";
+
+  const v = value.trim();
+
+  if (/^\d{4}$/.test(v)) return `${v}-01`;
+
+  return v;
+}
+
 export function normalizeAIResumeData(raw: unknown): unknown {
   if (typeof raw !== "object" || raw === null || Array.isArray(raw)) return raw;
 
@@ -15,33 +25,15 @@ export function normalizeAIResumeData(raw: unknown): unknown {
     if (obj[key] == null) obj[key] = "";
   }
 
-  if (!Array.isArray(obj.skills)) obj.skills = [];
+  if (!Array.isArray(obj.hardSkills)) obj.hardSkills = [];
+
+  if (!Array.isArray(obj.softSkills)) obj.softSkills = [];
+
   if (!Array.isArray(obj.languages)) obj.languages = [];
+
   if (!Array.isArray(obj.experience)) obj.experience = [];
+
   if (!Array.isArray(obj.education)) obj.education = [];
-
-  if (Array.isArray(obj.skillsByCategory) && obj.skillsByCategory.length > 0) {
-    obj.skillsByCategory = obj.skillsByCategory.map((cat: unknown) => {
-      if (typeof cat !== "object" || cat === null || Array.isArray(cat))
-        return { category: "Habilidades", items: [] };
-      const c = cat as Record<string, unknown>;
-      return {
-        category: typeof c.category === "string" ? c.category : "Habilidades",
-        items: Array.isArray(c.items)
-          ? c.items.filter((x): x is string => typeof x === "string")
-          : [],
-      };
-    });
-
-    if (
-      (obj.skills as string[]).length === 0 &&
-      Array.isArray(obj.skillsByCategory)
-    ) {
-      obj.skills = (obj.skillsByCategory as { items: string[] }[]).flatMap(
-        (c) => c.items
-      );
-    }
-  }
 
   obj.experience = (obj.experience as unknown[]).map((exp) => {
     if (typeof exp !== "object" || exp === null || Array.isArray(exp))
@@ -57,6 +49,10 @@ export function normalizeAIResumeData(raw: unknown): unknown {
     ]) {
       if (e[key] == null) e[key] = "";
     }
+
+    e.startDate = normalizeMonthYear(e.startDate);
+    e.endDate = normalizeMonthYear(e.endDate);
+
     return e;
   });
 
@@ -74,6 +70,10 @@ export function normalizeAIResumeData(raw: unknown): unknown {
     ]) {
       if (e[key] == null && key !== "description") e[key] = "";
     }
+
+    e.startDate = normalizeMonthYear(e.startDate);
+    e.completionDate = normalizeMonthYear(e.completionDate);
+
     return e;
   });
 

@@ -42,6 +42,7 @@ export async function extractResumeFromFile(
   }
 
   const mimeType = file.type;
+
   if (
     !ALLOWED_MIME_TYPES.includes(
       mimeType as (typeof ALLOWED_MIME_TYPES)[number]
@@ -53,15 +54,17 @@ export async function extractResumeFromFile(
     };
   }
 
-  const { RESUME_EXTRACTION_PROMPT } =
+  const { RESUME_SYSTEM_INSTRUCTION, RESUME_USER_PROMPT } =
     await import("@/lib/ai/prompts/extraction");
 
   const genAI = new GoogleGenerativeAI(apiKey);
   const model = genAI.getGenerativeModel({
     model: GEMINI_MODEL,
+    systemInstruction: RESUME_SYSTEM_INSTRUCTION,
     generationConfig: {
       responseMimeType: "application/json",
       responseSchema: resumeExtractionResponseSchema as Schema,
+      temperature: 0.1,
     },
   });
 
@@ -70,16 +73,17 @@ export async function extractResumeFromFile(
 
     if (mimeType === MIME_DOCX) {
       const documentText = await extractTextFromDocx(arrayBuffer);
-      const textPrompt = `Document text:\n\n${documentText}`;
+      const textPrompt = `Você está recebendo o currículo como texto.\n\nTexto do documento:\n\n${documentText}`;
       const result = await model.generateContent([
         { text: textPrompt },
-        { text: RESUME_EXTRACTION_PROMPT },
+        { text: RESUME_USER_PROMPT },
       ]);
 
       return parseAndValidateResult(result);
     }
 
     const base64 = Buffer.from(arrayBuffer).toString("base64");
+    const userPromptWithContext = `Você está recebendo o currículo em formato PDF.\n\n${RESUME_USER_PROMPT}`;
     const result = await model.generateContent([
       {
         inlineData: {
@@ -87,7 +91,7 @@ export async function extractResumeFromFile(
           data: base64,
         },
       },
-      { text: RESUME_EXTRACTION_PROMPT },
+      { text: userPromptWithContext },
     ]);
 
     return parseAndValidateResult(result);

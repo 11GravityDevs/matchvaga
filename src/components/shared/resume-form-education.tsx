@@ -53,8 +53,6 @@ export function ResumeFormEducation({
   educationError,
   educationEntryErrors,
 }: ResumeFormEducationProps) {
-  const hasCurrentEducation = education.some((edu) => edu.isCurrent);
-
   return (
     <div
       id="resume-form-education"
@@ -202,24 +200,22 @@ export function ResumeFormEducation({
                 )}
               </div>
 
-              {(edu.isCurrent || !hasCurrentEducation) && (
-                <label className="flex cursor-pointer items-center gap-1 self-start">
-                  <Checkbox
-                    className="cursor-pointer border-2 border-accent-brand data-[state=checked]:border-accent-brand data-[state=checked]:bg-accent-brand"
-                    checked={edu.isCurrent ?? false}
-                    onCheckedChange={(checked) =>
-                      updateEducation(eduIndex, {
-                        isCurrent: checked === true,
-                        ...(checked === true ? { completionDate: "" } : {}),
-                      })
-                    }
-                    disabled={isSaving}
-                  />
-                  <span className="text-small font-medium">
-                    Atualmente estudo aqui
-                  </span>
-                </label>
-              )}
+              <label className="flex cursor-pointer items-center gap-1 self-start">
+                <Checkbox
+                  className="cursor-pointer border-2 border-accent-brand data-[state=checked]:border-accent-brand data-[state=checked]:bg-accent-brand"
+                  checked={edu.isCurrent ?? false}
+                  onCheckedChange={(checked) =>
+                    updateEducation(eduIndex, {
+                      isCurrent: checked === true,
+                      ...(checked === true ? { completionDate: "" } : {}),
+                    })
+                  }
+                  disabled={isSaving}
+                />
+                <span className="text-small font-medium">
+                  Atualmente estudo aqui
+                </span>
+              </label>
               <FormField
                 label="Detalhes"
                 htmlFor={`edu-desc-${eduIndex}`}

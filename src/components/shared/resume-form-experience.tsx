@@ -32,8 +32,6 @@ export function ResumeFormExperience({
   experienceError,
   experienceEntryErrors,
 }: ResumeFormExperienceProps) {
-  const hasCurrentExperience = experience.some((exp) => exp.isCurrent);
-
   return (
     <div
       id="resume-form-experience"
@@ -136,24 +134,22 @@ export function ResumeFormExperience({
                   <div className="flex-1" />
                 )}
               </div>
-              {(exp.isCurrent || !hasCurrentExperience) && (
-                <label className="flex cursor-pointer items-center gap-1 self-start">
-                  <Checkbox
-                    className="cursor-pointer border-2 border-accent-brand data-[state=checked]:border-accent-brand data-[state=checked]:bg-accent-brand"
-                    checked={exp.isCurrent ?? false}
-                    onCheckedChange={(checked) =>
-                      updateExperience(expIndex, {
-                        isCurrent: checked === true,
-                        ...(checked === true ? { endDate: "" } : {}),
-                      })
-                    }
-                    disabled={isSaving}
-                  />
-                  <span className="text-small font-medium">
-                    Atualmente trabalho aqui
-                  </span>
-                </label>
-              )}
+              <label className="flex cursor-pointer items-center gap-1 self-start">
+                <Checkbox
+                  className="cursor-pointer border-2 border-accent-brand data-[state=checked]:border-accent-brand data-[state=checked]:bg-accent-brand"
+                  checked={exp.isCurrent ?? false}
+                  onCheckedChange={(checked) =>
+                    updateExperience(expIndex, {
+                      isCurrent: checked === true,
+                      ...(checked === true ? { endDate: "" } : {}),
+                    })
+                  }
+                  disabled={isSaving}
+                />
+                <span className="text-small font-medium">
+                  Atualmente trabalho aqui
+                </span>
+              </label>
               <FormField
                 label="Local"
                 htmlFor={`exp-location-${expIndex}`}
@@ -186,7 +182,7 @@ export function ResumeFormExperience({
                   }
                   disabled={isSaving}
                   maxLength={RESUME_LIMITS.EXPERIENCE_DESCRIPTION_MAX}
-                  className="h-32 w-full resize-none rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground shadow-none transition-[color,box-shadow] outline-none placeholder:text-muted-foreground focus-visible:border-accent-brand focus-visible:ring-1 focus-visible:ring-accent-brand/30 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="h-32 w-full resize-none rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground shadow-none transition-[color,box-shadow] outline-none placeholder:text-muted-foreground focus-visible:border-accent-brand focus-visible:ring-1 focus-visible:ring-accent-brand/30 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-1 aria-invalid:ring-destructive/30"
                   aria-invalid={
                     !!experienceEntryErrors?.[expIndex]?.description
                   }

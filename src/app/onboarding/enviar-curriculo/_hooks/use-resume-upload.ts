@@ -46,9 +46,11 @@ export function useResumeUpload(): UseResumeUploadReturn {
       const formData = new FormData();
       formData.append("file", file);
       const result = await uploadResume(formData);
+
       if (!result.success) {
         throw new Error(result.error ?? "Erro ao processar currículo.");
       }
+
       return result;
     },
     onSuccess: (result) => {

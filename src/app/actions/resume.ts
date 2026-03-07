@@ -145,11 +145,13 @@ export async function uploadResume(
   }
 
   const alreadyHasResume = await hasResume();
+
   if (alreadyHasResume) {
     return { success: false, error: ERROR_ALREADY_HAS_RESUME };
   }
 
   const extraction = await extractResumeFromFile(file);
+
   if (!extraction.success) {
     logServerError({
       context: "server_action",
@@ -162,7 +164,9 @@ export async function uploadResume(
   }
 
   const { data: parsedData } = extraction;
+
   const normalizedPhone = normalizeBrazilianPhone(parsedData.phone);
+
   const dataToStore: ResumeData = {
     ...parsedData,
     phone: normalizedPhone,
@@ -336,6 +340,7 @@ export async function getResumeForUser(): Promise<GetResumeForUserResult> {
 
 export async function hasResume(): Promise<boolean> {
   const supabase = await createClient();
+
   const {
     data: { user },
     error: authError,

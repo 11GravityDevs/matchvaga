@@ -9,7 +9,7 @@ import {
 import { useResumeQuery } from "@/hooks/use-resume-query";
 import type { ResumeData } from "@/types/resume";
 import { createEmptyEducation, createEmptyExperience } from "@/types/resume";
-import { formatPhoneBr } from "@/utils/resume";
+import { formatPhoneBr, normalizeResumeDates } from "@/utils/resume";
 import { ResumeFormCard } from "@/components/shared/resume-form-card";
 import { Loading } from "@/components/ui/loading";
 import { useToastNotification } from "@/hooks/useToastNotification";
@@ -32,7 +32,8 @@ const EMPTY_INITIAL_DATA = (summary: string): ResumeData => ({
   linkedin: "",
   github: "",
   summary,
-  skills: [],
+  hardSkills: [],
+  softSkills: [],
   languages: [],
   experience: [createEmptyExperience()],
   education: [createEmptyEducation()],
@@ -68,8 +69,9 @@ export function VerifyContent({
   const hasSetBlockedErrors = useRef(false);
   const initialDataRef = useRef<ResumeData | null>(null);
 
-  const initialData: ResumeData =
+  const rawInitialData: ResumeData =
     resumeData ?? EMPTY_INITIAL_DATA(resumeContent);
+  const initialData = normalizeResumeDates(rawInitialData);
 
   useEffect(() => {
     initialDataRef.current = initialData;

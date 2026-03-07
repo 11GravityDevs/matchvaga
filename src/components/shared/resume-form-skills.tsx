@@ -11,6 +11,10 @@ interface ResumeFormSkillsProps {
   onChange: (skills: string[]) => void;
   isSaving?: boolean;
   skillsError?: string;
+  title?: string;
+  placeholder?: string;
+  addButtonText?: string;
+  id?: string;
 }
 
 export function ResumeFormSkills({
@@ -18,6 +22,10 @@ export function ResumeFormSkills({
   onChange,
   isSaving,
   skillsError,
+  title = "Habilidades",
+  placeholder = "Digite uma habilidade e pressione Enter",
+  addButtonText = "Adicionar habilidades",
+  id = "resume-form-skills",
 }: ResumeFormSkillsProps) {
   const [isAddingSkill, setIsAddingSkill] = useState(false);
   const [newSkill, setNewSkill] = useState("");
@@ -46,13 +54,10 @@ export function ResumeFormSkills({
   };
 
   return (
-    <div
-      id="resume-form-skills"
-      className="flex scroll-mt-6 scroll-mb-6 flex-col gap-4"
-    >
+    <div id={id} className="flex scroll-mt-6 scroll-mb-6 flex-col gap-4">
       <div className="flex flex-col gap-1.5">
         <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <h3 className="text-section-title">Habilidades</h3>
+          <h3 className="text-section-title">{title}</h3>
           <span className="text-small text-muted-foreground">
             {skills.length} / {RESUME_LIMITS.SKILLS_MAX}
           </span>
@@ -111,7 +116,7 @@ export function ResumeFormSkills({
                 setIsAddingSkill(false);
               }
             }}
-            placeholder="Digite uma habilidade e pressione Enter"
+            placeholder={placeholder}
             disabled={isSaving || skills.length >= RESUME_LIMITS.SKILLS_MAX}
             className="h-9 bg-background px-3 shadow-none focus-visible:border-accent-brand focus-visible:ring-1 focus-visible:ring-accent-brand/30"
             aria-invalid={!!skillsError}
@@ -128,7 +133,7 @@ export function ResumeFormSkills({
               className="w-fit gap-1.5 text-small"
             >
               <Plus className="h-4 w-4" />
-              Adicionar habilidades
+              {addButtonText}
             </Button>
           </div>
         )}

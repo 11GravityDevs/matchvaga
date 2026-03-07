@@ -6,12 +6,36 @@ import type {
   SkillCategory,
 } from "@/types/resume";
 
+function normalizeMonthYearValue(value: string): string {
+  const v = value.trim();
+  if (/^\d{4}$/.test(v)) return `${v}-01`;
+  return value;
+}
+
+export function normalizeResumeDates(data: ResumeData): ResumeData {
+  return {
+    ...data,
+    experience: data.experience.map((exp) => ({
+      ...exp,
+      startDate: normalizeMonthYearValue(exp.startDate),
+      endDate: normalizeMonthYearValue(exp.endDate),
+    })),
+    education: data.education.map((edu) => ({
+      ...edu,
+      startDate: normalizeMonthYearValue(edu.startDate),
+      completionDate: normalizeMonthYearValue(edu.completionDate),
+    })),
+  };
+}
+
 export function truncateResumeDataToLimits(obj: unknown): unknown {
   if (obj === null || typeof obj !== "object") return obj;
 
   const o = obj as Record<string, unknown>;
+
   const truncateStr = (s: unknown, max: number): string => {
     if (typeof s !== "string") return "";
+
     return s.slice(0, max);
   };
 
@@ -61,11 +85,17 @@ export function truncateResumeDataToLimits(obj: unknown): unknown {
       })
     : o.education;
 
-  const skills = Array.isArray(o.skills)
-    ? o.skills
+  const hardSkills = Array.isArray(o.hardSkills)
+    ? o.hardSkills
         .slice(0, RESUME_LIMITS.SKILLS_MAX)
         .map((s) => truncateStr(s, RESUME_LIMITS.TEXT_FIELD_MAX))
-    : o.skills;
+    : o.hardSkills;
+
+  const softSkills = Array.isArray(o.softSkills)
+    ? o.softSkills
+        .slice(0, RESUME_LIMITS.SKILLS_MAX)
+        .map((s) => truncateStr(s, RESUME_LIMITS.TEXT_FIELD_MAX))
+    : o.softSkills;
 
   const languages = Array.isArray(o.languages)
     ? o.languages
@@ -82,7 +112,8 @@ export function truncateResumeDataToLimits(obj: unknown): unknown {
     linkedin: truncateStr(o.linkedin, RESUME_LIMITS.TEXT_FIELD_MAX),
     github: truncateStr(o.github, RESUME_LIMITS.TEXT_FIELD_MAX),
     summary: truncateStr(o.summary, RESUME_LIMITS.SUMMARY_MAX),
-    skills,
+    hardSkills,
+    softSkills,
     languages,
     experience,
     education,
@@ -114,23 +145,31 @@ export function formatResumeDateBr(dateStr: string): string {
 }
 
 export function getFlattenedSkills(data: ResumeData): string[] {
-  if (data.skillsByCategory && data.skillsByCategory.length > 0) {
-    return data.skillsByCategory.flatMap((c) => c.items);
-  }
-
-  return data.skills ?? [];
+  const hardSkills = data.hardSkills ?? [];
+  const softSkills = data.softSkills ?? [];
+  return [...hardSkills, ...softSkills];
 }
 
 export function getSkillsByCategoryForDisplay(
   data: ResumeData
 ): SkillCategory[] {
-  if (data.skillsByCategory && data.skillsByCategory.length > 0) {
-    return data.skillsByCategory;
+  const categories: SkillCategory[] = [];
+
+  if (data.hardSkills && data.hardSkills.length > 0) {
+    categories.push({
+      category: "Habilidades Técnicas",
+      items: data.hardSkills,
+    });
   }
-  if (data.skills && data.skills.length > 0) {
-    return [{ category: "Habilidades", items: data.skills }];
+
+  if (data.softSkills && data.softSkills.length > 0) {
+    categories.push({
+      category: "Competências Comportamentais",
+      items: data.softSkills,
+    });
   }
-  return [];
+
+  return categories;
 }
 
 export function formatLinkLabel(url: string): string {

@@ -62,7 +62,8 @@ const ERROR_FIELD_ORDER = [
   "location",
   "phone",
   "summary",
-  "skills",
+  "hardSkills",
+  "softSkills",
   "education",
   "experience",
 ] as const;
@@ -215,10 +216,27 @@ export function ResumeFormCard({
         <FormSectionSeparator />
 
         <ResumeFormSkills
-          skills={data.skills}
-          onChange={(skills) => updateField("skills", skills)}
+          id="resume-form-hardSkills"
+          title="Habilidades Técnicas"
+          placeholder="Digite uma habilidade técnica e pressione Enter"
+          addButtonText="Adicionar habilidade técnica"
+          skills={data.hardSkills}
+          onChange={(skills) => updateField("hardSkills", skills)}
           isSaving={isSaving}
-          skillsError={validationErrors?.skills}
+          skillsError={validationErrors?.hardSkills}
+        />
+
+        <FormSectionSeparator />
+
+        <ResumeFormSkills
+          id="resume-form-softSkills"
+          title="Competências Comportamentais"
+          placeholder="Digite uma competência e pressione Enter"
+          addButtonText="Adicionar competência"
+          skills={data.softSkills}
+          onChange={(skills) => updateField("softSkills", skills)}
+          isSaving={isSaving}
+          skillsError={validationErrors?.softSkills}
         />
 
         <FormSectionSeparator />

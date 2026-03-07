@@ -31,8 +31,8 @@ export interface ResumeData {
   linkedin: string;
   github: string;
   summary: string;
-  skills: string[];
-  skillsByCategory?: SkillCategory[];
+  hardSkills: string[];
+  softSkills: string[];
   languages?: string[];
   experience: ExperienceEntry[];
   education: EducationEntry[];
@@ -70,7 +70,8 @@ export interface ResumeValidationErrors {
   location?: string;
   phone?: string;
   summary?: string;
-  skills?: string;
+  hardSkills?: string;
+  softSkills?: string;
   experience?: string;
   experienceEntryErrors?: ExperienceEntryFieldErrors[];
   education?: string;
