@@ -4,6 +4,7 @@ import Anthropic from "@anthropic-ai/sdk";
 
 import { JOB_SKILLS_JSON_SCHEMA } from "@/lib/ai/config/job-skills-json-schema";
 import { jobSkillsResponseSchema } from "@/lib/ai/config/job-skills-schema";
+import { JOB_SKILLS_EXTRACTION_PROMPT } from "@/lib/ai/prompts/job-skills";
 import { normalizeAIResumeData } from "@/lib/ai/utils/normalize-resume";
 import { logServerError } from "@/lib/logger";
 import { SYNTHESIS_SYSTEM_PROMPT } from "@/lib/ai/prompts/synthesis";
@@ -193,9 +194,6 @@ export async function extractJobSkills(
   if (!apiKey) {
     return { success: false, error: "ANTHROPIC_API_KEY is not configured" };
   }
-
-  const { JOB_SKILLS_EXTRACTION_PROMPT } =
-    await import("@/lib/ai/prompts/job-skills");
 
   const client = new Anthropic({ apiKey });
 
