@@ -4,17 +4,19 @@ import {
   Paragraph,
   TextRun,
   HeadingLevel,
-  BorderStyle,
   convertInchesToTwip,
 } from "docx";
 import type { ResumeData } from "@/types/resume";
 import {
   getSkillsByCategoryForDisplay,
   formatResumeDateBr,
-  getContactLineForDisplay,
   sortExperienceByDateDesc,
   sortEducationByDateDesc,
 } from "@/utils/resume";
+import {
+  buildHeaderContactParagraphs,
+  sectionSeparatorParagraph,
+} from "./resume-to-docx-contact";
 
 const TWIP = 20;
 const pt = (n: number) => n * TWIP;
@@ -25,7 +27,7 @@ const colors = {
 } as const;
 
 const FONT = {
-  name: 40,
+  name: 48,
   section: 24,
   body: 22,
   meta: 22,
@@ -33,18 +35,20 @@ const FONT = {
 
 const FONT_FAMILY = "Helvetica";
 
+const SECTION_GAP = pt(12);
+
 const SPACE = {
   afterTitle: pt(16),
+  afterContactLine: pt(10),
   afterContact: pt(24),
-  afterHeaderBorder: pt(24),
-  beforeSection: pt(16),
-  afterSectionTitle: pt(8),
-  afterBlock: pt(16),
+  afterHeaderBorder: SECTION_GAP,
+  afterSectionTitle: SECTION_GAP,
+  afterBlock: SECTION_GAP,
   afterJobLine: pt(4),
   beforeBulletList: pt(8),
   bulletGap: pt(4),
-  afterExperienceItem: pt(16),
-  afterSkillItem: pt(8),
+  afterExperienceItem: SECTION_GAP,
+  afterSkillItem: SECTION_GAP,
 } as const;
 
 const INDENT_LEFT_PT = 18;
@@ -52,46 +56,16 @@ const indentLeftTwip = INDENT_LEFT_PT * TWIP;
 
 const MARGIN_IN = 0.75;
 
-function headerBorderParagraph() {
-  return new Paragraph({
-    border: {
-      bottom: {
-        style: BorderStyle.SINGLE,
-        color: colors.border,
-        size: 8,
-        space: 1,
-      },
-    },
-    spacing: { after: SPACE.afterHeaderBorder },
-  });
-}
-
-function sectionSeparatorParagraph() {
-  return new Paragraph({
-    border: {
-      bottom: {
-        style: BorderStyle.SINGLE,
-        color: colors.border,
-        size: 8,
-        space: 1,
-      },
-    },
-    spacing: { before: SPACE.beforeSection, after: SPACE.beforeSection },
-  });
-}
-
 export async function buildResumeDocx(data: ResumeData): Promise<Buffer> {
   const children: Paragraph[] = [];
   const skillsForDisplay = getSkillsByCategoryForDisplay(data);
-  const contactLine = getContactLineForDisplay(data);
-
   const runOpts = { font: FONT_FAMILY } as const;
 
   children.push(
     new Paragraph({
       children: [
         new TextRun({
-          text: (data.fullName || "—").toUpperCase(),
+          text: data.fullName || "—",
           bold: true,
           size: FONT.name,
           ...runOpts,
@@ -101,25 +75,14 @@ export async function buildResumeDocx(data: ResumeData): Promise<Buffer> {
       spacing: { after: SPACE.afterTitle },
     })
   );
-
-  if (contactLine) {
-    children.push(
-      new Paragraph({
-        children: [
-          new TextRun({
-            text: contactLine,
-            size: FONT.meta,
-            color: colors.foreground,
-            ...runOpts,
-          }),
-        ],
-        alignment: "center",
-        spacing: { after: SPACE.afterContact },
-      })
-    );
-  }
-
-  children.push(headerBorderParagraph());
+  children.push(
+    ...buildHeaderContactParagraphs(data, {
+      SPACE,
+      colors,
+      FONT,
+      FONT_FAMILY,
+    })
+  );
 
   children.push(
     new Paragraph({
@@ -149,7 +112,9 @@ export async function buildResumeDocx(data: ResumeData): Promise<Buffer> {
   );
 
   if (skillsForDisplay.length > 0) {
-    children.push(sectionSeparatorParagraph());
+    children.push(
+      sectionSeparatorParagraph(SECTION_GAP, SECTION_GAP, colors.border)
+    );
     children.push(
       new Paragraph({
         children: [
@@ -204,7 +169,9 @@ export async function buildResumeDocx(data: ResumeData): Promise<Buffer> {
   if (data.experience.length > 0) {
     const experience = sortExperienceByDateDesc(data.experience);
 
-    children.push(sectionSeparatorParagraph());
+    children.push(
+      sectionSeparatorParagraph(SECTION_GAP, SECTION_GAP, colors.border)
+    );
     children.push(
       new Paragraph({
         children: [
@@ -227,16 +194,14 @@ export async function buildResumeDocx(data: ResumeData): Promise<Buffer> {
           ? "Presente"
           : formatResumeDateBr(exp.endDate);
 
-      const jobMetaParts: string[] = [];
-      if (exp.company) jobMetaParts.push(exp.company);
-      if (exp.location) jobMetaParts.push(exp.location);
-      jobMetaParts.push(`${formatResumeDateBr(exp.startDate)} – ${dateEnd}`);
-      const jobMetaRun = new TextRun({
-        text: jobMetaParts.length > 0 ? ` | ${jobMetaParts.join(" | ")}` : "",
-        size: FONT.meta,
-        color: colors.foreground,
-        ...runOpts,
-      });
+      const jobMetaPartsNoDate: string[] = [];
+      if (exp.company) jobMetaPartsNoDate.push(exp.company);
+      if (exp.location) jobMetaPartsNoDate.push(exp.location);
+      const jobDateRange = `${formatResumeDateBr(exp.startDate)} – ${dateEnd}`;
+      const jobMetaPrefix =
+        jobMetaPartsNoDate.length > 0
+          ? ` | ${jobMetaPartsNoDate.join(" | ")} | `
+          : " | ";
       const isFirstJob = expIndex === 0;
       children.push(
         new Paragraph({
@@ -248,7 +213,19 @@ export async function buildResumeDocx(data: ResumeData): Promise<Buffer> {
               color: colors.foreground,
               ...runOpts,
             }),
-            jobMetaRun,
+            new TextRun({
+              text: jobMetaPrefix,
+              size: FONT.meta,
+              color: colors.foreground,
+              ...runOpts,
+            }),
+            new TextRun({
+              text: jobDateRange,
+              italics: true,
+              size: FONT.meta,
+              color: colors.foreground,
+              ...runOpts,
+            }),
           ],
           spacing: {
             before: isFirstJob
@@ -293,12 +270,14 @@ export async function buildResumeDocx(data: ResumeData): Promise<Buffer> {
   if (data.education.length > 0) {
     const education = sortEducationByDateDesc(data.education);
 
-    children.push(sectionSeparatorParagraph());
+    children.push(
+      sectionSeparatorParagraph(SECTION_GAP, SECTION_GAP, colors.border)
+    );
     children.push(
       new Paragraph({
         children: [
           new TextRun({
-            text: "Formação",
+            text: "Educação",
             bold: true,
             size: FONT.section,
             color: colors.foreground,
@@ -315,17 +294,14 @@ export async function buildResumeDocx(data: ResumeData): Promise<Buffer> {
         edu.isCurrent || !edu.completionDate
           ? "Presente"
           : formatResumeDateBr(edu.completionDate);
-      const eduMetaParts: string[] = [];
-      if (edu.institution) eduMetaParts.push(edu.institution);
-      if (edu.level) eduMetaParts.push(edu.level);
-      eduMetaParts.push(`${formatResumeDateBr(edu.startDate)} – ${dateEnd}`);
-
-      const eduMetaRun = new TextRun({
-        text: eduMetaParts.length > 0 ? ` | ${eduMetaParts.join(" | ")}` : "",
-        size: FONT.meta,
-        color: colors.foreground,
-        ...runOpts,
-      });
+      const eduMetaPartsNoDate: string[] = [];
+      if (edu.institution) eduMetaPartsNoDate.push(edu.institution);
+      if (edu.level) eduMetaPartsNoDate.push(edu.level);
+      const eduDateRange = `${formatResumeDateBr(edu.startDate)} – ${dateEnd}`;
+      const eduMetaPrefix =
+        eduMetaPartsNoDate.length > 0
+          ? ` | ${eduMetaPartsNoDate.join(" | ")} | `
+          : " | ";
       const isFirstEdu = eduIndex === 0;
       children.push(
         new Paragraph({
@@ -337,7 +313,19 @@ export async function buildResumeDocx(data: ResumeData): Promise<Buffer> {
               color: colors.foreground,
               ...runOpts,
             }),
-            eduMetaRun,
+            new TextRun({
+              text: eduMetaPrefix,
+              size: FONT.meta,
+              color: colors.foreground,
+              ...runOpts,
+            }),
+            new TextRun({
+              text: eduDateRange,
+              italics: true,
+              size: FONT.meta,
+              color: colors.foreground,
+              ...runOpts,
+            }),
           ],
           spacing: {
             before: isFirstEdu

@@ -178,6 +178,13 @@ export function formatLinkLabel(url: string): string {
   return trimmed.replace(/^https?:\/\//, "").replace(/\/$/, "");
 }
 
+export function ensureAbsoluteUrl(url: string): string {
+  const trimmed = (url ?? "").trim();
+  if (!trimmed) return "";
+  if (/^https?:\/\//i.test(trimmed)) return trimmed;
+  return `https://${trimmed}`;
+}
+
 export function formatPhoneBr(value: string): string {
   let digits = (value ?? "").replace(/\D/g, "");
   digits = digits.slice(0, 11);
@@ -238,11 +245,16 @@ export const normalizeBrazilianPhone = (
   return "";
 };
 
-export function getContactLineForDisplay(data: ResumeData): string {
+export function getContactLine1ForDisplay(data: ResumeData): string {
   const parts: string[] = [];
   if (data.location) parts.push(data.location);
   const phoneDisplay = formatPhoneBr(data.phone ?? "");
   if (phoneDisplay) parts.push(phoneDisplay);
+  return parts.join(" | ");
+}
+
+export function getContactLine2ForDisplay(data: ResumeData): string {
+  const parts: string[] = [];
   if (data.linkedin) parts.push(formatLinkLabel(data.linkedin));
   if (data.github) parts.push(formatLinkLabel(data.github));
   if (data.email) parts.push(data.email);

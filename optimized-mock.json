@@ -1,141 +1,88 @@
 {
   "success": true,
   "data": {
-    "fullName": "FULANO DE TAL",
-    "email": "fulano@gmail.com",
-    "location": "",
-    "phone": "(16) 99999-9999",
-    "linkedin": "linkedin.com/in/fulano",
-    "github": "github.com/fulano",
-    "summary": "Desenvolvedor .NET Pleno com 4+ anos de experiência em C# e ASP.NET. Especialista em arquitetura de microsserviços, APIs REST, e soluções cloud com Azure. Proficiente em tecnologias de mensageria (RabbitMQ), bancos de dados relacionais e NoSQL (MongoDB, Redis), containerização (Docker) e CI/CD com Azure DevOps. Experiência comprovada em ambientes ágeis, otimização de performance e clean architecture.",
-    "skills": [
-      "C#",
-      "ASP.NET",
-      "APIs REST",
-      "Microservices",
-      "Clean Architecture",
-      "DDD",
-      "Entity Framework Core",
-      "SQL Server",
-      "MongoDB",
-      "Redis",
-      "RabbitMQ",
+    "fullName": "Marina Silva Santos",
+    "email": "marina.silva.santos@email.com",
+    "location": "São Paulo, SP",
+    "phone": "(11) 98765-4321",
+    "linkedin": "https://linkedin.com/in/marinasilvasantos",
+    "github": "https://github.com/marinasilvasantos",
+    "summary": "Desenvolvedora Full Stack com mais de 6 anos de experiência em aplicações web escaláveis. Especialista em React, Node.js e arquitetura de microsserviços. Atuação em times ágeis, liderança técnica e entrega de produtos de alto impacto. Busco contribuir em projetos que priorizem qualidade de código, acessibilidade e performance.",
+    "hardSkills": [
+      "React",
+      "TypeScript",
+      "Node.js",
+      "Next.js",
+      "PostgreSQL",
+      "REST APIs",
+      "GraphQL",
       "Docker",
-      "Kubernetes",
-      "Azure",
-      "Azure DevOps",
-      "Azure Pipelines",
-      "CI/CD",
-      "Git",
-      "Git Flow",
-      "Azure Service Bus",
-      "CQRS",
-      "Design Patterns",
-      "xUnit",
-      "MSTest",
-      "Scrum",
-      "Ambiente Ágil",
-      "Cosmos DB",
-      "Mongo DB Atlas",
-      "SonarQube",
-      "Datadog",
-      "Kibana",
       "AWS",
-      "Performance Optimization",
-      "Escalabilidade Horizontal",
-      "Automação de Processos",
-      "Testes de Integração",
-      "Clean Code"
+      "Jest",
+      "CI/CD",
+      "Git"
     ],
-    "skillsByCategory": [
+    "softSkills": [
+      "Trabalho em equipe",
+      "Comunicação clara",
+      "Resolução de problemas",
+      "Gestão de tempo",
+      "Pensamento crítico",
+      "Adaptabilidade"
+    ],
+    "languages": [
+      "Português (nativo)",
+      "Inglês (fluente)",
+      "Espanhol (intermediário)"
+    ],
+    "education": [
       {
-        "category": "Linguagens de Programação",
-        "items": ["C#"]
+        "institution": "Universidade de São Paulo (USP)",
+        "course": "Ciência da Computação",
+        "level": "Bacharelado",
+        "startDate": "2014-02",
+        "completionDate": "2018-12",
+        "description": "TCC em otimização de algoritmos distribuídos.\nMonitoria em Estrutura de Dados.\nBolsista PIBIC.",
+        "isCurrent": false
       },
       {
-        "category": "Backend",
-        "items": [
-          "ASP.NET",
-          "APIs REST",
-          "Clean Architecture",
-          "DDD",
-          "CQRS",
-          "Entity Framework Core",
-          "Design Patterns"
-        ]
-      },
-      {
-        "category": "Bancos de Dados",
-        "items": [
-          "SQL Server",
-          "MongoDB",
-          "Redis",
-          "Cosmos DB",
-          "Mongo DB Atlas"
-        ]
-      },
-      {
-        "category": "Mensageria & Eventos",
-        "items": ["RabbitMQ", "Azure Service Bus"]
-      },
-      {
-        "category": "Containerização & Orquestração",
-        "items": ["Docker", "Kubernetes"]
-      },
-      {
-        "category": "Cloud & DevOps",
-        "items": [
-          "Azure",
-          "Azure DevOps",
-          "Azure Pipelines",
-          "CI/CD",
-          "Infraestrutura como Código"
-        ]
-      },
-      {
-        "category": "Testes",
-        "items": [
-          "xUnit",
-          "MSTest",
-          "Testes de Integração",
-          "Testes Automatizados"
-        ]
-      },
-      {
-        "category": "Versionamento & Controle",
-        "items": ["Git", "Git Flow"]
-      },
-      {
-        "category": "Monitoramento & Performance",
-        "items": [
-          "Datadog",
-          "Kibana",
-          "SonarQube",
-          "Performance Optimization",
-          "Escalabilidade Horizontal"
-        ]
-      },
-      {
-        "category": "Metodologias Ágeis",
-        "items": ["Scrum", "Ambiente Ágil", "Kanban"]
-      },
-      {
-        "category": "Idiomas",
-        "items": ["Inglês - Intermediário"]
+        "institution": "Instituto de Tecnologia",
+        "course": "Especialização em Engenharia de Software",
+        "level": "Especialização",
+        "startDate": "2020-03",
+        "completionDate": "2021-08",
+        "description": "Foco em arquitetura de sistemas e DevOps.",
+        "isCurrent": false
       }
     ],
-    "languages": ["Inglês - Intermediário"],
     "experience": [
       {
-        "jobTitle": "Desenvolvedor de Software",
-        "company": "EMPRESA DE TESTE",
-        "startDate": "2021-02",
-        "endDate": "Presente",
-        "location": "",
-        "description": "Atuo em sistemas relacionados à precificação de voos e receita da Azul Linhas Aéreas em ambiente Scrum, acompanhando a criação de sistemas desde a proposta de arquitetura até a entrega final em produção, propondo ideias, tomando iniciativas e discutindo soluções com o time.\nReduzi o tempo de precificação de voos em aproximadamente 92% através de reescrita arquitetural de monólito para microsserviços em Azure utilizando C#, ASP.NET e APIs REST.\nImplementei Publishers e Subscribers com RabbitMQ para processamento de eventos de solicitação de precificação.\nOtimizei queries no SQL Server e implementei cache Redis para acesso rápido às configurações de tarifas, melhorando significativamente a performance.\nArquiteturei solução escalável horizontalmente com Kubernetes para processar precificações em larga escala, monitorando gargalos via Datadog.\nDesenvolvi sistema de alteração de voo com Clean Architecture e DDD, implementando elegibilidade do cliente através de design patterns e regras complexas.\nUtilizei Azure Service Bus para controle de mensagens entre microsserviços de regras, elegibilidade e notificação.\nArmazenei dados de passageiros em MongoDB, garantindo performance e flexibilidade no controle de status.\nAutomatizei sistema de RH com CI/CD em Azure DevOps, eliminando importação manual diária de arquivos de cargos e status de funcionários.\nDesenvolvi biblioteca em C# para templates de email com testes automatizados, melhorando experiência dos desenvolvedores.\nMentorei 2 estagiários, contribuindo para seu sucesso profissional em ambiente ágil.",
+        "jobTitle": "Desenvolvedora Senior Full Stack",
+        "company": "Tech Solutions Ltda",
+        "startDate": "2021-03",
+        "endDate": "",
+        "location": "São Paulo, SP (remoto)",
+        "description": "Liderança técnica do squad de produto. Arquitetura e desenvolvimento de plataforma B2B em React e Node.js. Redução de 40% no tempo de deploy com pipeline CI/CD. Mentoria de desenvolvedores juniores.",
         "isCurrent": true
+      },
+      {
+        "jobTitle": "Desenvolvedora Full Stack",
+        "company": "Startup Inovação SA",
+        "startDate": "2018-06",
+        "endDate": "2021-02",
+        "location": "São Paulo, SP",
+        "description": "Desenvolvimento de aplicações web com React e APIs em Node.js. Implementação de testes automatizados (Jest, Cypress). Participação em decisões de produto e refinamento de backlog.",
+        "isCurrent": false
+      },
+      {
+        "jobTitle": "Estagiária de Desenvolvimento",
+        "company": "Empresa Digital",
+        "startDate": "2017-01",
+        "endDate": "2018-05",
+        "location": "São Paulo, SP",
+        "description": "Manutenção de sistemas legados em PHP e JavaScript. Suporte à migração para stack moderna.",
+        "isCurrent": false
       }
-    ],
-    "education": []
+    ]
   }
 }

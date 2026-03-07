@@ -146,7 +146,6 @@ export function DashboardContent({
 
       <AnalysisHistoryTable
         rows={tableRows}
-        activeFilter="todos"
         onDownload={downloadOptimizedDocument}
       />
     </main>

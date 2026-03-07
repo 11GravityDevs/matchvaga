@@ -325,6 +325,11 @@
   font-weight: 700;
   color: var(--foreground);
 }
+@utility text-resume-preview-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--foreground);
+}
 @utility text-section-item-label {
   font-size: 15px;
   font-weight: 700;

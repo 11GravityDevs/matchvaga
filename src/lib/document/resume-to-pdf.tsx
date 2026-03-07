@@ -1,9 +1,18 @@
-import { Document, Page, Text, View, StyleSheet } from "@react-pdf/renderer";
+import {
+  Document,
+  Page,
+  Text,
+  View,
+  StyleSheet,
+  Link,
+} from "@react-pdf/renderer";
 import type { ResumeData } from "@/types/resume";
 import {
   getSkillsByCategoryForDisplay,
   formatResumeDateBr,
-  getContactLineForDisplay,
+  getContactLine1ForDisplay,
+  formatLinkLabel,
+  ensureAbsoluteUrl,
   sortExperienceByDateDesc,
   sortEducationByDateDesc,
 } from "@/utils/resume";
@@ -12,6 +21,7 @@ const colors = {
   foreground: "#0a0a0a",
   muted: "#737373",
   border: "#e5e5e5",
+  link: "#2563eb",
 } as const;
 
 const space = {
@@ -42,18 +52,27 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.border,
   },
   name: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: "bold",
     marginBottom: space.md,
     color: colors.foreground,
     textAlign: "center",
     letterSpacing: 0.5,
-    textTransform: "uppercase",
   },
   contact: {
     fontSize: 10,
     color: colors.foreground,
     textAlign: "center",
+    marginTop: space.xs,
+  },
+  contactLine2: {
+    fontSize: 10,
+    color: colors.foreground,
+    textAlign: "center",
+    marginTop: space.sm,
+  },
+  link: {
+    color: colors.link,
   },
   separator: {
     height: 1,
@@ -120,6 +139,10 @@ const styles = StyleSheet.create({
   jobMeta: {
     color: colors.foreground,
   },
+  jobMetaItalic: {
+    color: colors.foreground,
+    fontStyle: "italic",
+  },
   bulletList: {
     marginLeft: 18,
     marginTop: space.sm,
@@ -149,6 +172,10 @@ const styles = StyleSheet.create({
   eduMeta: {
     color: colors.foreground,
   },
+  eduMetaItalic: {
+    color: colors.foreground,
+    fontStyle: "italic",
+  },
 });
 
 function Separator() {
@@ -159,9 +186,12 @@ interface ResumeDocumentProps {
   data: ResumeData;
 }
 
+const hasContactLine2 = (data: ResumeData): boolean =>
+  !!(data.linkedin?.trim() || data.github?.trim() || data.email?.trim());
+
 export function ResumeDocument({ data }: ResumeDocumentProps) {
   const skillsForDisplay = getSkillsByCategoryForDisplay(data);
-  const contactLine = getContactLineForDisplay(data);
+  const contactLine1 = getContactLine1ForDisplay(data);
   const hasSkills = skillsForDisplay.length > 0;
   const hasExperience = data.experience.length > 0;
   const hasEducation = data.education.length > 0;
@@ -172,11 +202,40 @@ export function ResumeDocument({ data }: ResumeDocumentProps) {
     <Document>
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
-          <Text style={styles.name}>
-            {(data.fullName || "—").toUpperCase()}
-          </Text>
-          {contactLine ? (
-            <Text style={styles.contact}>{contactLine}</Text>
+          <Text style={styles.name}>{data.fullName || "—"}</Text>
+          {contactLine1 ? (
+            <Text style={styles.contact}>{contactLine1}</Text>
+          ) : null}
+          {hasContactLine2(data) ? (
+            <Text style={styles.contactLine2}>
+              {data.linkedin?.trim() ? (
+                <>
+                  <Link
+                    src={ensureAbsoluteUrl(data.linkedin)}
+                    style={styles.link}
+                  >
+                    {formatLinkLabel(data.linkedin)}
+                  </Link>
+                  {data.github?.trim() || data.email?.trim() ? " | " : null}
+                </>
+              ) : null}
+              {data.github?.trim() ? (
+                <>
+                  <Link
+                    src={ensureAbsoluteUrl(data.github)}
+                    style={styles.link}
+                  >
+                    {formatLinkLabel(data.github)}
+                  </Link>
+                  {data.email?.trim() ? " | " : null}
+                </>
+              ) : null}
+              {data.email?.trim() ? (
+                <Link src={`mailto:${data.email.trim()}`} style={styles.link}>
+                  {data.email.trim()}
+                </Link>
+              ) : null}
+            </Text>
           ) : null}
         </View>
 
@@ -226,14 +285,14 @@ export function ResumeDocument({ data }: ResumeDocumentProps) {
                   exp.isCurrent || !exp.endDate
                     ? "Presente"
                     : formatResumeDateBr(exp.endDate);
-                const metaParts: string[] = [];
-                if (exp.company) metaParts.push(exp.company);
-                if (exp.location) metaParts.push(exp.location);
-                metaParts.push(
-                  `${formatResumeDateBr(exp.startDate)} – ${dateEnd}`
-                );
-                const metaLine =
-                  metaParts.length > 0 ? ` | ${metaParts.join(" | ")}` : "";
+                const dateRange = `${formatResumeDateBr(exp.startDate)} – ${dateEnd}`;
+                const metaPartsNoDate: string[] = [];
+                if (exp.company) metaPartsNoDate.push(exp.company);
+                if (exp.location) metaPartsNoDate.push(exp.location);
+                const metaPrefix =
+                  metaPartsNoDate.length > 0
+                    ? ` | ${metaPartsNoDate.join(" | ")} | `
+                    : " | ";
                 const bullets = exp.description
                   .split("\n")
                   .map((s) => s.trim())
@@ -253,7 +312,8 @@ export function ResumeDocument({ data }: ResumeDocumentProps) {
                       <Text style={styles.jobTitle}>
                         {(exp.jobTitle || "—") + " "}
                       </Text>
-                      <Text style={styles.jobMeta}>{metaLine}</Text>
+                      <Text style={styles.jobMeta}>{metaPrefix}</Text>
+                      <Text style={styles.jobMetaItalic}>{dateRange}</Text>
                     </View>
                     {bullets.length > 0 && (
                       <View style={styles.bulletList}>
@@ -274,20 +334,20 @@ export function ResumeDocument({ data }: ResumeDocumentProps) {
 
         {hasEducation && (
           <View style={[styles.section, styles.sectionLast]}>
-            <Text style={styles.sectionTitle}>Formação</Text>
+            <Text style={styles.sectionTitle}>Educação</Text>
             {education.map((edu, i) => {
               const dateEnd =
                 edu.isCurrent || !edu.completionDate
                   ? "Presente"
                   : formatResumeDateBr(edu.completionDate);
-              const metaParts: string[] = [];
-              if (edu.institution) metaParts.push(edu.institution);
-              if (edu.level) metaParts.push(edu.level);
-              metaParts.push(
-                `${formatResumeDateBr(edu.startDate)} – ${dateEnd}`
-              );
-              const metaLine =
-                metaParts.length > 0 ? ` | ${metaParts.join(" | ")}` : "";
+              const dateRange = `${formatResumeDateBr(edu.startDate)} – ${dateEnd}`;
+              const metaPartsNoDate: string[] = [];
+              if (edu.institution) metaPartsNoDate.push(edu.institution);
+              if (edu.level) metaPartsNoDate.push(edu.level);
+              const metaPrefix =
+                metaPartsNoDate.length > 0
+                  ? ` | ${metaPartsNoDate.join(" | ")} | `
+                  : " | ";
               const bullets = edu.description
                 ? edu.description
                     .split("\n")
@@ -309,7 +369,8 @@ export function ResumeDocument({ data }: ResumeDocumentProps) {
                     <Text style={styles.course}>
                       {(edu.course || "—") + " "}
                     </Text>
-                    <Text style={styles.eduMeta}>{metaLine}</Text>
+                    <Text style={styles.eduMeta}>{metaPrefix}</Text>
+                    <Text style={styles.eduMetaItalic}>{dateRange}</Text>
                   </View>
                   {bullets.length > 0 && (
                     <View style={styles.bulletList}>

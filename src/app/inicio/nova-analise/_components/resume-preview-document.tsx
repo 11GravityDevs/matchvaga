@@ -2,10 +2,10 @@ import type { ResumeData } from "@/types/resume";
 import {
   formatResumeDateBr,
   getSkillsByCategoryForDisplay,
+  getContactLine1ForDisplay,
   formatLinkLabel,
   sortExperienceByDateDesc,
   sortEducationByDateDesc,
-  formatPhoneBr,
 } from "@/utils/resume";
 
 function ensureHttps(url: string): string {
@@ -17,27 +17,21 @@ function ensureHttps(url: string): string {
 export function ResumePreviewDocument({ data }: { data: ResumeData }) {
   const experience = sortExperienceByDateDesc(data.experience);
   const education = sortEducationByDateDesc(data.education);
-  const contactItems: Array<{ href?: string; label: string }> = [];
-
-  if (data.location) contactItems.push({ label: data.location });
-
-  const phoneDisplay = formatPhoneBr(data.phone ?? "");
-  if (phoneDisplay) contactItems.push({ label: phoneDisplay });
+  const contactLine1 = getContactLine1ForDisplay(data);
+  const contactLine2Items: Array<{ href?: string; label: string }> = [];
 
   if (data.linkedin)
-    contactItems.push({
+    contactLine2Items.push({
       href: ensureHttps(data.linkedin),
       label: formatLinkLabel(data.linkedin),
     });
-
   if (data.github)
-    contactItems.push({
+    contactLine2Items.push({
       href: ensureHttps(data.github),
       label: formatLinkLabel(data.github),
     });
-
   if (data.email)
-    contactItems.push({ href: `mailto:${data.email}`, label: data.email });
+    contactLine2Items.push({ href: `mailto:${data.email}`, label: data.email });
 
   const separator = <div className="h-px w-full border-b border-border" />;
 
@@ -45,12 +39,15 @@ export function ResumePreviewDocument({ data }: { data: ResumeData }) {
     <div className="flex flex-col gap-5">
       {/* Header — centered, framed */}
       <div className="flex flex-col items-center gap-2 border-b border-border pb-6 text-center">
-        <h2 className="text-section-title text-foreground">
+        <h2 className="text-3xl font-bold text-foreground">
           {data.fullName || "—"}
         </h2>
-        {contactItems.length > 0 && (
-          <p className="flex flex-wrap items-center justify-center gap-x-1 text-small text-foreground">
-            {contactItems.map((item, i) => (
+        {contactLine1 && (
+          <p className="text-small text-foreground">{contactLine1}</p>
+        )}
+        {contactLine2Items.length > 0 && (
+          <p className="mt-0.5 flex flex-wrap items-center justify-center gap-x-1 text-small text-foreground">
+            {contactLine2Items.map((item, i) => (
               <span key={i} className="inline-flex items-center gap-1">
                 {i > 0 && (
                   <span className="text-muted-foreground" aria-hidden>
@@ -77,7 +74,7 @@ export function ResumePreviewDocument({ data }: { data: ResumeData }) {
 
       {/* Resumo Profissional */}
       <div className="flex flex-col gap-2">
-        <h3 className="text-section-title text-foreground">
+        <h3 className="text-resume-preview-title text-foreground">
           Resumo Profissional
         </h3>
         <p className="text-small-leading leading-relaxed text-foreground">
@@ -93,7 +90,7 @@ export function ResumePreviewDocument({ data }: { data: ResumeData }) {
       {getSkillsByCategoryForDisplay(data).length > 0 && (
         <>
           <div className="flex flex-col gap-2">
-            <h3 className="text-section-title text-foreground">
+            <h3 className="text-resume-preview-title text-foreground">
               Habilidades Técnicas
             </h3>
             <ul className="list-outside list-disc space-y-2 pl-5 text-small-leading text-foreground">
@@ -113,7 +110,7 @@ export function ResumePreviewDocument({ data }: { data: ResumeData }) {
       {experience.length > 0 && (
         <>
           <div className="flex flex-col gap-2">
-            <h3 className="text-section-title text-foreground">
+            <h3 className="text-resume-preview-title text-foreground">
               Experiência Profissional
             </h3>
             <div className="flex flex-col gap-4">
@@ -123,7 +120,7 @@ export function ResumePreviewDocument({ data }: { data: ResumeData }) {
                   exp.company && <span key="company">{exp.company}</span>,
                   exp.location && <span key="location">{exp.location}</span>,
                   (exp.startDate || exp.endDate || exp.isCurrent) && (
-                    <span key="dates">
+                    <span key="dates" className="italic">
                       {formatResumeDateBr(exp.startDate)} –{" "}
                       {exp.isCurrent || !exp.endDate
                         ? "Presente"
@@ -163,10 +160,12 @@ export function ResumePreviewDocument({ data }: { data: ResumeData }) {
         </>
       )}
 
-      {/* Formação */}
+      {/* Educação */}
       {education.length > 0 && (
         <div className="flex flex-col gap-2">
-          <h3 className="text-section-title text-foreground">Formação</h3>
+          <h3 className="text-resume-preview-title text-foreground">
+            Educação
+          </h3>
           <div className="flex flex-col gap-3">
             {education.map((edu, i) => {
               const eduLineParts = [
@@ -176,7 +175,7 @@ export function ResumePreviewDocument({ data }: { data: ResumeData }) {
                 ),
                 edu.level && <span key="level">{edu.level}</span>,
                 (edu.startDate || edu.completionDate) && (
-                  <span key="dates">
+                  <span key="dates" className="italic">
                     {formatResumeDateBr(edu.startDate)} –{" "}
                     {edu.isCurrent || !edu.completionDate
                       ? "Presente"

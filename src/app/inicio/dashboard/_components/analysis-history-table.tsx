@@ -20,8 +20,6 @@ import {
 import { cn } from "@/utils/style";
 import { useToastNotification } from "@/hooks/useToastNotification";
 
-type FilterType = "todos" | "recentes" | "score-alto";
-
 export interface AnalysisTableRow {
   analysisId: string;
   role: string;
@@ -39,18 +37,11 @@ export interface AnalysisTableRow {
 
 interface AnalysisHistoryTableProps {
   rows: AnalysisTableRow[];
-  activeFilter?: FilterType;
   onDownload?: (
     analysisId: string,
     format: "pdf" | "docx"
   ) => Promise<{ success: boolean; url?: string; error?: string }>;
 }
-
-const filters: { label: string; value: FilterType }[] = [
-  { label: "Todos", value: "todos" },
-  { label: "Recentes", value: "recentes" },
-  { label: "Score Alto", value: "score-alto" },
-];
 
 const STATUS_LABEL_PT_BR: Record<string, string> = {
   pending: "Pendente",
@@ -80,7 +71,6 @@ function getStatusBadgeClass(status: string): string {
 
 export function AnalysisHistoryTable({
   rows,
-  activeFilter = "todos",
   onDownload,
 }: AnalysisHistoryTableProps) {
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
@@ -112,18 +102,6 @@ export function AnalysisHistoryTable({
       {/* Section Header - outside card */}
       <div className="flex w-full items-center justify-between">
         <h2 className="text-section-header">Histórico de Análises</h2>
-        <div className="flex items-center gap-2">
-          {filters.map((f) => (
-            <Button
-              key={f.value}
-              variant={f.value === activeFilter ? "default" : "outline"}
-              size="xs"
-              className="rounded-full"
-            >
-              {f.label}
-            </Button>
-          ))}
-        </div>
       </div>
 
       {/* Table Card */}

@@ -116,7 +116,7 @@ export function StepPreviewExport() {
             </div>
 
             {/* Doc body — scrollable */}
-            <div className="flex min-h-0 flex-1 flex-col overflow-auto card-content-padding">
+            <div className="flex min-h-0 flex-1 flex-col overflow-auto p-16">
               {displayResumeData ? (
                 <ResumePreviewDocument data={displayResumeData} />
               ) : (

@@ -7,12 +7,18 @@ import type {
 
 function toComparableDate(value: string): number {
   if (!value?.trim()) return NaN;
+
   const v = value.trim();
+
   const yearOnly = /^\d{4}$/.exec(v);
+
   if (yearOnly) return Date.UTC(Number(yearOnly[0]), 0, 1);
+
   const yearMonth = /^(\d{4})-(\d{2})$/.exec(v);
+
   if (yearMonth)
     return Date.UTC(Number(yearMonth[1]), Number(yearMonth[2]) - 1, 1);
+
   return new Date(v).getTime();
 }
 

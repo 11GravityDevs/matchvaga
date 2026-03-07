@@ -24,7 +24,9 @@ export function parseMissingSkillsFromDb(
   ) {
     return { technical: [], behavioral: [] };
   }
+
   const typed = raw as MissingSkillsByCategory;
+
   return {
     technical: Array.isArray(typed.technical) ? typed.technical : [],
     behavioral: Array.isArray(typed.behavioral) ? typed.behavioral : [],
