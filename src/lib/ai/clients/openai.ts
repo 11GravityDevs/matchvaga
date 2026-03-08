@@ -169,10 +169,7 @@ export async function matchJobSkillsToResume(
     ...jobParsed.data.soft_skills.map((s) => s.original_term),
   ];
 
-  const resumeTerms = [
-    ...getFlattenedSkills(resumeParsed.data),
-    ...(resumeParsed.data.languages ?? []),
-  ];
+  const resumeTerms = getFlattenedSkills(resumeParsed.data);
 
   const userPayload = `<job_skills>
   ${jobTerms.map((t) => `- ${t}`).join("\n")}

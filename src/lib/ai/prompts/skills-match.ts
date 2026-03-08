@@ -11,5 +11,5 @@ Sua tarefa: para cada termo listado em <job_skills>, verifique se existe na list
 - **REGRA DE OURO:** Você é estritamente proibido de retornar uma habilidade da vaga se não houver um correspondente CLARO e REAL na lista <resume_skills>.
 - Não deduza, não infira, não invente. Se a habilidade da vaga não estiver presente ou não tiver um correspondente em <resume_skills>, IGNORE a habilidade (não inclua no resultado).
 - Retorne apenas pares em que há correspondência semântica verdadeira. Para cada par, use:
-  - **job_term**: o valor exato do termo da vaga (como aparece na lista).
-  - **resume_term**: o termo correspondente encontrado no currículo (como aparece ou uma forma equivalente).`;
+  - **job_term**: o valor exato do termo da vaga (como aparece na lista de job_skills).
+  - **resume_term**: o valor exato do termo correspondente no currículo (como aparece na lista de resume_skills).`;

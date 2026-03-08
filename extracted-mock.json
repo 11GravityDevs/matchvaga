@@ -28,6 +28,11 @@
         "type": "required"
       },
       {
+        "name": ".NET",
+        "original_term": ".NET",
+        "type": "required"
+      },
+      {
         "name": "React Hooks",
         "original_term": "Hooks",
         "type": "required"
