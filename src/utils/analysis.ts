@@ -1,3 +1,5 @@
+import type { JobSkill } from "@/lib/ai/config/job-skills-schema";
+
 export interface MissingSkillsByCategory {
   technical: string[];
   behavioral: string[];
@@ -103,4 +105,40 @@ export function applySkillsMatchToUserSkills(
   }
 
   return { user_hard_skills: hard, user_soft_skills: soft };
+}
+
+export function calculateAtsScore(
+  jobHardSkills: JobSkill[],
+  jobSoftSkills: JobSkill[],
+  missingHardSkills: JobSkill[],
+  missingSoftSkills: JobSkill[]
+): number {
+  let totalPoints = 0;
+  let missingPoints = 0;
+
+  const calculatePoints = (skills: JobSkill[], isHard: boolean) => {
+    let points = 0;
+    for (const skill of skills) {
+      if (isHard) {
+        points += skill.type === "required" ? 5 : 2;
+      } else {
+        points += skill.type === "required" ? 3 : 1;
+      }
+    }
+    return points;
+  };
+
+  totalPoints += calculatePoints(jobHardSkills, true);
+  totalPoints += calculatePoints(jobSoftSkills, false);
+
+  missingPoints += calculatePoints(missingHardSkills, true);
+  missingPoints += calculatePoints(missingSoftSkills, false);
+
+  if (totalPoints === 0) return 0;
+
+  const score = Math.max(
+    0,
+    Math.round(((totalPoints - missingPoints) / totalPoints) * 100)
+  );
+  return score;
 }
