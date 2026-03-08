@@ -12,6 +12,7 @@ import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
 
 import optimizedMock from "../../../../optimized-mock.json";
+import extractedMock from "../../../../extracted-mock.json";
 
 const MODEL = "claude-haiku-4-5";
 
@@ -187,9 +188,17 @@ export async function synthesizeOptimizedResume(
   }
 }
 
+const USE_JOB_SKILLS_MOCK = true;
+
 export async function extractJobSkills(
   jobDescription: string
 ): Promise<JobSkillsOutput> {
+  if (USE_JOB_SKILLS_MOCK) {
+    const data = (extractedMock as { success: boolean; data: unknown }).data;
+    const validated = jobSkillsResponseSchema.parse(data);
+    return { success: true, data: validated };
+  }
+
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
     return { success: false, error: "ANTHROPIC_API_KEY is not configured" };
