@@ -6,6 +6,133 @@ import type {
   SkillCategory,
 } from "@/types/resume";
 
+const LOWER_IN_MIDDLE = new Set([
+  "de",
+  "da",
+  "do",
+  "das",
+  "dos",
+  "e",
+  "o",
+  "a",
+]);
+
+function isEntirelyUppercase(value: string): boolean {
+  return value === value.toLocaleUpperCase("pt-BR");
+}
+
+function hasAtLeastOneLetter(value: string): boolean {
+  return /\p{L}/u.test(value);
+}
+
+export function capitalizeSkill(value: string): string {
+  const trimmed = value.trim().replace(/\s+/g, " ");
+  if (trimmed.length === 0) return "";
+  if (hasAtLeastOneLetter(trimmed) && isEntirelyUppercase(trimmed))
+    return trimmed;
+  return capitalizeTitleCase(trimmed);
+}
+
+export function capitalizeTitleCase(value: string): string {
+  const trimmed = value.trim().replace(/\s+/g, " ");
+  if (trimmed.length === 0) return "";
+
+  const words = trimmed.split(" ");
+
+  return words
+    .map((word, index) => {
+      if (word.length === 0) return word;
+      const lower = word.toLowerCase();
+      const isFirst = index === 0;
+      const shouldLower = !isFirst && LOWER_IN_MIDDLE.has(lower);
+      if (shouldLower) return lower;
+      return lower
+        .split("-")
+        .map(
+          (segment) =>
+            segment.charAt(0).toUpperCase() + segment.slice(1).toLowerCase()
+        )
+        .join("-");
+    })
+    .join(" ");
+}
+
+const BR_STATE_ACRONYMS = new Set([
+  "AC",
+  "AL",
+  "AP",
+  "AM",
+  "BA",
+  "CE",
+  "DF",
+  "ES",
+  "GO",
+  "MA",
+  "MT",
+  "MS",
+  "MG",
+  "PA",
+  "PB",
+  "PR",
+  "PE",
+  "PI",
+  "RJ",
+  "RN",
+  "RS",
+  "RO",
+  "RR",
+  "SC",
+  "SP",
+  "SE",
+  "TO",
+]);
+
+export function capitalizeLocation(value: string): string {
+  const trimmed = value?.trim() ?? "";
+  if (!trimmed) return "";
+
+  const parts = trimmed
+    .split(",")
+    .map((p) => p.trim())
+    .filter((p) => p.length > 0);
+
+  const formatted = parts.map((part) => {
+    if (part.length === 2 && BR_STATE_ACRONYMS.has(part.toUpperCase())) {
+      return part.toUpperCase();
+    }
+    return capitalizeTitleCase(part);
+  });
+
+  return formatted.join(", ");
+}
+
+function capitalizeIfNonEmpty(value: string): string {
+  const trimmed = value?.trim() ?? "";
+  return trimmed ? capitalizeTitleCase(trimmed) : "";
+}
+
+export function capitalizeResumeData(data: ResumeData): ResumeData {
+  return {
+    ...data,
+    fullName: capitalizeIfNonEmpty(data.fullName),
+    location: capitalizeLocation(data.location),
+    hardSkills: data.hardSkills.map((s) => capitalizeSkill(s)),
+    softSkills: data.softSkills.map((s) => capitalizeSkill(s)),
+    languages: (data.languages ?? []).map((s) => capitalizeSkill(s)),
+    experience: data.experience.map((exp) => ({
+      ...exp,
+      company: capitalizeIfNonEmpty(exp.company),
+      jobTitle: capitalizeIfNonEmpty(exp.jobTitle),
+      location: capitalizeLocation(exp.location),
+    })),
+    education: data.education.map((edu) => ({
+      ...edu,
+      institution: capitalizeIfNonEmpty(edu.institution),
+      course: capitalizeIfNonEmpty(edu.course),
+    })),
+  };
+}
+
 function normalizeMonthYearValue(value: string): string {
   const v = value.trim();
   if (/^\d{4}$/.test(v)) return `${v}-01`;
@@ -196,6 +323,14 @@ export function formatPhoneBr(value: string): string {
     return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
 
   return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7, 11)}`;
+}
+
+export function prepareResumeFormInitialData(data: ResumeData): ResumeData {
+  const normalizedData = normalizeResumeDates(data);
+  return {
+    ...normalizedData,
+    phone: formatPhoneBr(normalizedData.phone),
+  };
 }
 
 export const normalizeBrazilianPhone = (

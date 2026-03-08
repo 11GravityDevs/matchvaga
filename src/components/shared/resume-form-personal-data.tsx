@@ -6,7 +6,8 @@ import { FormField } from "@/components/shared/form-field";
 import type { ResumeData } from "@/types/resume";
 import type { ResumeValidationErrors } from "@/hooks/use-resume-form";
 import { INPUT_CLASS } from "@/components/shared/resume-form-card";
-import { formatPhoneBr } from "@/utils/resume";
+import { capitalizeLocation, formatPhoneBr } from "@/utils/resume";
+import { capitalizeTitleCase } from "@/utils/resume";
 
 interface ResumeFormPersonalDataProps {
   data: Pick<
@@ -44,6 +45,12 @@ export function ResumeFormPersonalData({
               id="fullName"
               value={data.fullName}
               onChange={(e) => updateField("fullName", e.target.value)}
+              onBlur={() => {
+                const capitalized = capitalizeTitleCase(data.fullName);
+                if (capitalized !== data.fullName) {
+                  updateField("fullName", capitalized);
+                }
+              }}
               disabled={isSaving}
               maxLength={RESUME_LIMITS.TEXT_FIELD_MAX}
               className={INPUT_CLASS}
@@ -84,6 +91,13 @@ export function ResumeFormPersonalData({
               id="location"
               value={data.location}
               onChange={(e) => updateField("location", e.target.value)}
+              onBlur={() => {
+                const capitalized = capitalizeLocation(data.location);
+
+                if (capitalized !== data.location) {
+                  updateField("location", capitalized);
+                }
+              }}
               disabled={isSaving}
               maxLength={RESUME_LIMITS.TEXT_FIELD_MAX}
               className={INPUT_CLASS}

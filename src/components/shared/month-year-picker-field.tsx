@@ -124,7 +124,7 @@ export function MonthYearPickerField({
             disabled={disabled}
             aria-invalid={!!error}
             className={cn(
-              "h-9 w-full justify-start text-left font-normal",
+              "h-9 w-full justify-start text-left font-normal focus-visible:border-accent-brand focus-visible:ring-1 focus-visible:ring-accent-brand/30",
               !displayText && "text-muted-foreground",
               error && "border-destructive! ring-1! ring-destructive/30!"
             )}

@@ -1,28 +1,23 @@
 "use client";
 
-import { useState } from "react";
 import { useResume } from "../_hooks/use-resume";
-import {
-  useResumeForm,
-  type ResumeValidationErrors,
-} from "@/hooks/use-resume-form";
+import { useResumeForm } from "@/hooks/use-resume-form";
+import { useResumeFormValidation } from "@/hooks/use-resume-form-validation";
 import { ResumeFormCard } from "@/components/shared/resume-form-card";
 import { Loading } from "@/components/ui/loading";
 import type { ResumeData } from "@/types/resume";
-import { useToastNotification } from "@/hooks/useToastNotification";
-import { getResumeValidationErrors } from "@/utils/resume-validation";
+import { useToastNotification } from "@/hooks/use-toast-notification";
+import { prepareResumeFormInitialData } from "@/utils/resume";
 
 interface ResumeEditFormProps {
   initialData: ResumeData;
   save: (data: ResumeData) => Promise<void>;
   isSaving: boolean;
-  error: Error | null;
 }
 
 function ResumeEditForm({ initialData, save, isSaving }: ResumeEditFormProps) {
-  const [validationErrors, setValidationErrors] =
-    useState<ResumeValidationErrors | null>(null);
-  const { showErrorToastNotification } = useToastNotification();
+  const { showErrorToastNotification, showSuccessToastNotification } =
+    useToastNotification();
 
   const {
     data,
@@ -36,75 +31,40 @@ function ResumeEditForm({ initialData, save, isSaving }: ResumeEditFormProps) {
     handleSummaryChange,
   } = useResumeForm({ initialData });
 
-  function clearValidationOnChange() {
-    setValidationErrors(null);
-  }
-
-  function wrappedUpdateField<K extends keyof ResumeData>(
-    key: K,
-    value: ResumeData[K]
-  ) {
-    clearValidationOnChange();
-    updateField(key, value);
-  }
-
-  function wrappedHandleSummaryChange(value: string) {
-    clearValidationOnChange();
-    handleSummaryChange(value);
-  }
-
-  function wrappedUpdateExperience(
-    index: number,
-    updates: Parameters<typeof updateExperience>[1]
-  ) {
-    clearValidationOnChange();
-    updateExperience(index, updates);
-  }
-
-  function wrappedAddExperience() {
-    clearValidationOnChange();
-    addExperience();
-  }
-
-  function wrappedRemoveExperience(index: number) {
-    clearValidationOnChange();
-    removeExperience(index);
-  }
-
-  function wrappedUpdateEducation(
-    index: number,
-    updates: Parameters<typeof updateEducation>[1]
-  ) {
-    clearValidationOnChange();
-    updateEducation(index, updates);
-  }
-
-  function wrappedAddEducation() {
-    clearValidationOnChange();
-    addEducation();
-  }
-
-  function wrappedRemoveEducation(index: number) {
-    clearValidationOnChange();
-    removeEducation(index);
-  }
+  const {
+    validationErrors,
+    scrollToFirstError,
+    wrappedUpdateField,
+    wrappedUpdateExperience,
+    wrappedRemoveExperience,
+    wrappedUpdateEducation,
+    wrappedRemoveEducation,
+    wrappedHandleSummaryChange,
+    validateBeforeSubmit,
+    setFormError,
+  } = useResumeFormValidation({
+    updateField,
+    updateExperience,
+    removeExperience,
+    updateEducation,
+    removeEducation,
+    handleSummaryChange,
+  });
 
   async function handleSave() {
-    const errors = getResumeValidationErrors(data);
-
-    if (errors !== null) {
-      setValidationErrors(errors);
+    if (!validateBeforeSubmit(data)) {
       return;
     }
 
-    setValidationErrors(null);
     try {
       await save(data);
+      showSuccessToastNotification("Currículo salvo com sucesso.");
     } catch (err) {
       const message =
         err instanceof Error
           ? err.message
           : "Falha ao salvar. Tente novamente.";
+      setFormError(message);
       showErrorToastNotification(message);
     }
   }
@@ -121,10 +81,10 @@ function ResumeEditForm({ initialData, save, isSaving }: ResumeEditFormProps) {
         data={data}
         updateField={wrappedUpdateField}
         updateExperience={wrappedUpdateExperience}
-        addExperience={wrappedAddExperience}
+        addExperience={addExperience}
         removeExperience={wrappedRemoveExperience}
         updateEducation={wrappedUpdateEducation}
-        addEducation={wrappedAddEducation}
+        addEducation={addEducation}
         removeEducation={wrappedRemoveEducation}
         handleSummaryChange={wrappedHandleSummaryChange}
         isSaving={isSaving}
@@ -136,13 +96,14 @@ function ResumeEditForm({ initialData, save, isSaving }: ResumeEditFormProps) {
         }}
         hideHeader
         validationErrors={validationErrors}
+        scrollToFirstError={scrollToFirstError}
       />
     </div>
   );
 }
 
 export function ResumeContent() {
-  const { resumeData, isLoading, error, save, isSaving } = useResume();
+  const { resumeData, isLoading, save, isSaving } = useResume();
 
   if (isLoading) {
     return <Loading />;
@@ -150,10 +111,9 @@ export function ResumeContent() {
 
   return (
     <ResumeEditForm
-      initialData={resumeData}
+      initialData={prepareResumeFormInitialData(resumeData)}
       save={save}
       isSaving={isSaving}
-      error={error}
     />
   );
 }

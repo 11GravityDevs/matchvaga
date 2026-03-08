@@ -6,13 +6,14 @@ import {
   useResumeForm,
   type ResumeValidationErrors,
 } from "@/hooks/use-resume-form";
+import { useResumeFormValidation } from "@/hooks/use-resume-form-validation";
 import { useResumeQuery } from "@/hooks/use-resume-query";
 import type { ResumeData } from "@/types/resume";
 import { createEmptyEducation, createEmptyExperience } from "@/types/resume";
-import { formatPhoneBr, normalizeResumeDates } from "@/utils/resume";
+import { prepareResumeFormInitialData } from "@/utils/resume";
 import { ResumeFormCard } from "@/components/shared/resume-form-card";
 import { Loading } from "@/components/ui/loading";
-import { useToastNotification } from "@/hooks/useToastNotification";
+import { useToastNotification } from "@/hooks/use-toast-notification";
 import { getResumeValidationErrors } from "@/utils/resume-validation";
 import { useOnboardingContext } from "../../_contexts/onboarding-context";
 
@@ -63,7 +64,7 @@ export function VerifyContent({
   const resumeData = hasNoResume ? null : queryResumeData;
 
   const { isSaving, save, continueToDashboard } = useResumeVerify({ resumeId });
-  const [validationErrors, setValidationErrors] =
+  const [initialValidationErrors, setInitialValidationErrors] =
     useState<ResumeValidationErrors | null>(null);
   const { showErrorToastNotification } = useToastNotification();
   const hasSetBlockedErrors = useRef(false);
@@ -71,7 +72,7 @@ export function VerifyContent({
 
   const rawInitialData: ResumeData =
     resumeData ?? EMPTY_INITIAL_DATA(resumeContent);
-  const initialData = normalizeResumeDates(rawInitialData);
+  const initialData = prepareResumeFormInitialData(rawInitialData);
 
   useEffect(() => {
     initialDataRef.current = initialData;
@@ -86,7 +87,7 @@ export function VerifyContent({
 
     hasSetBlockedErrors.current = true;
     const errors = getResumeValidationErrors(data);
-    queueMicrotask(() => setValidationErrors(errors ?? null));
+    queueMicrotask(() => setInitialValidationErrors(errors ?? null));
   }, [prefillValidationErrors, isLoadingResume]);
 
   if (isLoadingResume) {
@@ -101,8 +102,7 @@ export function VerifyContent({
       isSaving={isSaving}
       save={save}
       continueToDashboard={continueToDashboard}
-      validationErrors={validationErrors}
-      setValidationErrors={setValidationErrors}
+      initialValidationErrors={initialValidationErrors}
       showErrorToastNotification={showErrorToastNotification}
     />
   );
@@ -114,8 +114,7 @@ function VerifyFormWithKey({
   isSaving,
   save,
   continueToDashboard,
-  validationErrors,
-  setValidationErrors,
+  initialValidationErrors,
   showErrorToastNotification,
 }: {
   initialData: ResumeData;
@@ -123,8 +122,7 @@ function VerifyFormWithKey({
   isSaving: boolean;
   save: (data: ResumeData) => Promise<void>;
   continueToDashboard: () => void;
-  validationErrors: ResumeValidationErrors | null;
-  setValidationErrors: (errors: ResumeValidationErrors | null) => void;
+  initialValidationErrors: ResumeValidationErrors | null;
   showErrorToastNotification: (message: string) => void;
 }) {
   const {
@@ -138,83 +136,46 @@ function VerifyFormWithKey({
     removeEducation,
     handleSummaryChange,
   } = useResumeForm({
-    initialData: {
-      ...initialData,
-      phone: formatPhoneBr(initialData.phone),
-    },
+    initialData,
     onSummarySync: setResumeContent,
   });
 
-  function clearValidationOnChange() {
-    setValidationErrors(null);
-  }
+  const {
+    validationErrors,
+    setValidationErrors,
+    scrollToFirstError,
+    wrappedUpdateField,
+    wrappedUpdateExperience,
+    wrappedRemoveExperience,
+    wrappedUpdateEducation,
+    wrappedRemoveEducation,
+    wrappedHandleSummaryChange,
+    validateBeforeSubmit,
+    setFormError,
+  } = useResumeFormValidation({
+    updateField,
+    updateExperience,
+    removeExperience,
+    updateEducation,
+    removeEducation,
+    handleSummaryChange,
+  });
 
-  function wrappedUpdateField<K extends keyof ResumeData>(
-    key: K,
-    value: ResumeData[K]
-  ) {
-    clearValidationOnChange();
-    updateField(key, value);
-  }
-
-  function wrappedHandleSummaryChange(value: string) {
-    clearValidationOnChange();
-    handleSummaryChange(value);
-  }
-
-  function wrappedUpdateExperience(
-    index: number,
-    updates: Parameters<typeof updateExperience>[1]
-  ) {
-    clearValidationOnChange();
-    updateExperience(index, updates);
-  }
-
-  function wrappedAddExperience() {
-    clearValidationOnChange();
-    addExperience();
-  }
-
-  function wrappedRemoveExperience(index: number) {
-    clearValidationOnChange();
-    removeExperience(index);
-  }
-
-  function wrappedUpdateEducation(
-    index: number,
-    updates: Parameters<typeof updateEducation>[1]
-  ) {
-    clearValidationOnChange();
-    updateEducation(index, updates);
-  }
-
-  function wrappedAddEducation() {
-    clearValidationOnChange();
-    addEducation();
-  }
-
-  function wrappedRemoveEducation(index: number) {
-    clearValidationOnChange();
-    removeEducation(index);
-  }
+  useEffect(() => {
+    setValidationErrors(initialValidationErrors);
+  }, [initialValidationErrors, setValidationErrors]);
 
   async function handleContinue() {
-    const errors = getResumeValidationErrors(data);
-
-    if (errors !== null) {
-      setValidationErrors(errors);
+    if (!validateBeforeSubmit(data)) {
       return;
     }
 
-    setValidationErrors(null);
     try {
       await save(data);
       continueToDashboard();
     } catch (err) {
       const message = err instanceof Error ? err.message : "Erro ao salvar.";
-      setValidationErrors({
-        form: message,
-      });
+      setFormError(message);
       showErrorToastNotification(message);
     }
   }
@@ -233,10 +194,10 @@ function VerifyFormWithKey({
       data={data}
       updateField={wrappedUpdateField}
       updateExperience={wrappedUpdateExperience}
-      addExperience={wrappedAddExperience}
+      addExperience={addExperience}
       removeExperience={wrappedRemoveExperience}
       updateEducation={wrappedUpdateEducation}
-      addEducation={wrappedAddEducation}
+      addEducation={addEducation}
       removeEducation={wrappedRemoveEducation}
       handleSummaryChange={wrappedHandleSummaryChange}
       isSaving={isSaving}
@@ -246,6 +207,7 @@ function VerifyFormWithKey({
         disabled: isSaving,
       }}
       validationErrors={validationErrors}
+      scrollToFirstError={scrollToFirstError}
     />
   );
 }

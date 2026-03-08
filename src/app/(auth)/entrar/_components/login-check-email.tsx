@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { useToastNotification } from "@/hooks/useToastNotification";
+import { useToastNotification } from "@/hooks/use-toast-notification";
 
 const RESEND_COOLDOWN_SECONDS = 60;
 

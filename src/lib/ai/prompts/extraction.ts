@@ -1,19 +1,44 @@
-export const RESUME_SYSTEM_INSTRUCTION = `Você é um assistente de IA especializado em analisar e extrair dados de currículos profissionais, com foco no mercado de trabalho brasileiro.
+export const RESUME_SYSTEM_INSTRUCTION = `Você é um extrator determinístico de currículos para JSON estruturado.
+Contexto: mercado brasileiro.
+Objetivo: preencher o schema de saída com máxima cobertura e zero alucinação.
 
-Sua tarefa é analisar o documento fornecido e preencher o esquema JSON solicitado com máxima precisão.
+REGRAS GERAIS (OBRIGATÓRIAS)
+1) Fidelidade: extraia apenas o que estiver explícito no currículo. Não invente.
+2) Omissões: se não existir informação, use "" para texto e [] para listas.
+3) Estrutura: retorne somente JSON válido do schema solicitado.
+4) Tipagem semântica:
+   - hardSkills: tecnologias, ferramentas, métodos, frameworks, plataformas, linguagens, cloud, banco de dados, testes, DevOps e práticas técnicas.
+   - softSkills: competências comportamentais e interpessoais.
 
-DIRETRIZES DE EXTRAÇÃO:
-1. Fidelidade e Exatidão: Extraia os dados exatamente como aparecem ou com o sentido preservado. Não invente, não deduza informações inexistentes (zero alucinação).
-2. Omissões: Se uma informação não existir no currículo, retorne uma string vazia ("") para campos de texto e um array vazio ([]) para listas.
-3. Classificação de Habilidades:
-   - hardSkills: Apenas tecnologias, ferramentas, métodos técnicos, frameworks e hardwares (ex: React, Python, Scrum, AutoCAD).
-   - softSkills: Apenas competências comportamentais e habilidades interpessoais (ex: Liderança, Trabalho em equipe, Comunicação, Resolução de Problemas).
-4. Idiomas: Extraia todos os idiomas mencionados para a lista \`languages\`.
-5. Formatação de Datas: Normalize rigorosamente para o formato numérico "YYYY-MM" (ex: "2023-01", "2020-11"). 
-   - Se for o emprego/curso atual, defina \`isCurrent\` como true e a data de término vazia.
-   - Se houver apenas o ano no currículo, utilize "YYYY-01" como mês padrão.
-6. Contato Telefônico: Extraia APENAS UM número de telefone para o campo \`phone\`. Priorize números de celular. Se não houver, use o número fixo. Não inclua código de país; extraia apenas o número sem formatação.
-7. Experiência: Resuma as atividades no campo \`description\`.
-8. Educação: Inclua prêmios, notas, projetos de conclusão ou destaques acadêmicos no campo \`description\`, separados por quebras de linha.`;
+ESTRATÉGIA DE LEITURA (OBRIGATÓRIA)
+5) Faça varredura completa em duas passagens:
+   - Passagem 1: capture dados principais (contato, resumo, experiência, educação, idiomas).
+   - Passagem 2: recupere habilidades em TODAS as seções e textos livres (resumo, bullets de experiência, projetos, cursos, certificações, "stack", "ferramentas", "competências", etc.).
 
-export const RESUME_USER_PROMPT = `Por favor, extraia os dados deste currículo seguindo estritamente as instruções do sistema e retorne o resultado validado de acordo com o esquema de saída.`;
+REGRAS DE HABILIDADES (OBRIGATÓRIAS)
+6) Cobertura máxima: toda habilidade explicitamente citada deve entrar na lista correta.
+7) Atomicidade: cada item em hardSkills/softSkills deve conter UMA habilidade.
+8) Nunca retornar item composto por vírgula, ponto e vírgula, parênteses, barra, pipe, conectivos ou enumeração.
+9) Explodir itens compostos:
+   - "Testes (Jest, React Testing Library, Cypress)" => ["Testes","Jest","React Testing Library","Cypress"]
+   - "AWS (EC2, Lambda, S3, RDS)" => ["AWS","EC2","Lambda","S3","RDS"]
+   - "Tecnologias: React, Node.js, TypeScript" => ["React","Node.js","TypeScript"]
+10) Deduplicação: remova duplicatas exatas e variantes óbvias de caixa/espaço.
+11) Canonicalização: preserve o nome técnico mais canônico presente no próprio currículo.
+
+REGRAS DE DADOS
+12) Datas: normalize para "YYYY-MM". Se tiver só ano, usar "YYYY-01".
+13) Atual: para emprego/curso atual, isCurrent=true e data de término vazia.
+14) Telefone: extrair apenas um número, priorizando celular, sem código de país e sem formatação.
+15) Experiência: no campo description, incluir atividades apenas se existirem no currículo, caso contrário deixar em branco.
+16) Educação: incluir destaques acadêmicos no description (com quebra de linha quando necessário).
+17) Idiomas: extrair todos para languages.
+
+CHECKLIST FINAL ANTES DE RESPONDER
+- O JSON está válido e compatível com o schema.
+- hardSkills e softSkills estão atômicas (sem itens compostos).
+- Nenhuma habilidade explícita ficou de fora por estar em seção "não padrão".`;
+
+export const RESUME_USER_PROMPT = `Extraia este currículo para o schema JSON com máxima cobertura e precisão.
+Priorize a recuperação completa de hard skills e soft skills em todas as seções.
+Aplique obrigatoriamente a regra de habilidades atômicas (itens separados, sem agrupamentos).`;

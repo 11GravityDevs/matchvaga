@@ -5,7 +5,7 @@ import { Zap } from "lucide-react";
 
 import { Logo } from "@/components/shared/logo";
 import { Button } from "@/components/ui/button";
-import { useAnalyticsEvents } from "@/hooks/useAnalyticsEvents";
+import { useAnalyticsEvents } from "@/hooks/use-analytics-events";
 
 import { AuthAwareLink } from "./auth-aware-link";
 import { LandingNav } from "./landing-nav";

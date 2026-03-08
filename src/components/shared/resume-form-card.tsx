@@ -44,6 +44,7 @@ export interface ResumeFormCardProps {
   headerSubtitle?: string;
   hideHeader?: boolean;
   validationErrors?: ResumeValidationErrors | null;
+  scrollToFirstError?: boolean;
 }
 
 export { INPUT_CLASS };
@@ -144,9 +145,10 @@ export function ResumeFormCard({
   headerSubtitle = DEFAULT_HEADER_SUBTITLE,
   hideHeader = false,
   validationErrors,
+  scrollToFirstError = false,
 }: ResumeFormCardProps) {
   useEffect(() => {
-    if (!validationErrors) return;
+    if (!scrollToFirstError || !validationErrors) return;
 
     const firstKey = ERROR_FIELD_ORDER.find((key) =>
       hasValidationError(key, validationErrors)
@@ -161,7 +163,7 @@ export function ResumeFormCard({
     }, 0);
 
     return () => clearTimeout(timer);
-  }, [validationErrors]);
+  }, [scrollToFirstError, validationErrors]);
 
   return (
     <div className="w-content rounded-xl border border-border bg-card">
@@ -224,6 +226,7 @@ export function ResumeFormCard({
           onChange={(skills) => updateField("hardSkills", skills)}
           isSaving={isSaving}
           skillsError={validationErrors?.hardSkills}
+          duplicateErrorMessage="Esta habilidade técnica já foi adicionada."
         />
 
         <FormSectionSeparator />
@@ -237,6 +240,7 @@ export function ResumeFormCard({
           onChange={(skills) => updateField("softSkills", skills)}
           isSaving={isSaving}
           skillsError={validationErrors?.softSkills}
+          duplicateErrorMessage="Esta competência já foi adicionada."
         />
 
         <FormSectionSeparator />

@@ -14,7 +14,7 @@ import {
 } from "../_contexts/new-analysis-context";
 import { ScoreRing } from "./score-ring";
 import { StepIndicator } from "@/components/shared/step-indicator";
-import { useToastNotification } from "@/hooks/useToastNotification";
+import { useToastNotification } from "@/hooks/use-toast-notification";
 
 const GENERATE_RESUME_THINKING_MESSAGES = [
   "Gerando currículo otimizado...",

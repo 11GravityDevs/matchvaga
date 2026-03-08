@@ -4,6 +4,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import {
   ROUTE_AUTH_CALLBACK,
   ROUTE_HOME,
+  ROUTE_HOME_DASHBOARD,
   ROUTE_HOME_RESUME,
   ROUTE_LOGIN,
   ROUTE_ONBOARDING,
@@ -116,7 +117,7 @@ export async function proxy(request: NextRequest) {
     } else if (status === "incomplete") {
       url.pathname = ROUTE_ONBOARDING_VERIFY;
     } else {
-      url.pathname = ROUTE_HOME_RESUME;
+      url.pathname = ROUTE_HOME_DASHBOARD;
     }
 
     return NextResponse.redirect(url);

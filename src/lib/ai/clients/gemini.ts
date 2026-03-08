@@ -6,7 +6,10 @@ import { resumeExtractionResponseSchema } from "@/lib/ai/config/resume-extractio
 import { logServerError } from "@/lib/logger";
 import { extractTextFromDocx } from "@/lib/document/extract-docx-text";
 import { resumeDataSchema } from "@/schemas/resume";
-import { truncateResumeDataToLimits } from "@/utils/resume";
+import {
+  capitalizeResumeData,
+  truncateResumeDataToLimits,
+} from "@/utils/resume";
 import type { ResumeData } from "@/types/resume";
 
 const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5MB
@@ -29,6 +32,114 @@ export interface ExtractResumeError {
 export type ExtractResumeOutput = ExtractResumeResult | ExtractResumeError;
 
 const GEMINI_MODEL = "gemini-2.5-flash-lite";
+
+function normalizeWhitespace(value: string): string {
+  return value.replace(/\s+/g, " ").trim();
+}
+
+function cleanSkillToken(token: string): string {
+  const normalizedToken = normalizeWhitespace(token)
+    .replace(/^[-*•·]\s*/, "")
+    .replace(/^["'`]+|["'`]+$/g, "")
+    .replace(/^[([{]+|[)\]}]+$/g, "")
+    .replace(/[.,;:]+$/g, "");
+
+  return normalizeWhitespace(normalizedToken);
+}
+
+function splitByConnectors(token: string): string[] {
+  const normalizedToken = normalizeWhitespace(token);
+  if (!/\s(?:e|and)\s/i.test(normalizedToken)) {
+    return [normalizedToken];
+  }
+
+  const parts = normalizedToken
+    .split(/\s(?:e|and)\s/i)
+    .map((part) => normalizeWhitespace(part))
+    .filter((part) => part.length > 0);
+
+  if (parts.length < 2) {
+    return [normalizedToken];
+  }
+
+  return parts;
+}
+
+function splitSkillItem(skill: string): string[] {
+  const normalizedSkill = normalizeWhitespace(skill);
+  if (!normalizedSkill) {
+    return [];
+  }
+
+  const parentheticalSegments = Array.from(
+    normalizedSkill.matchAll(/\(([^()]+)\)/g),
+    (match) => normalizeWhitespace(match[1] ?? "")
+  ).filter((segment) => segment.length > 0);
+
+  const outsideParentheses = normalizeWhitespace(
+    normalizedSkill.replace(/\([^()]*\)/g, " ")
+  );
+
+  const baseSegments = [outsideParentheses, ...parentheticalSegments].filter(
+    (segment) => segment.length > 0
+  );
+
+  const delimiterSplitPattern = /[\n,;|•·]+|\s+-\s+|\s\/\s+/;
+  const splitTokens = baseSegments.flatMap((segment) =>
+    segment
+      .split(delimiterSplitPattern)
+      .map((part) => normalizeWhitespace(part))
+      .filter((part) => part.length > 0)
+  );
+
+  return splitTokens
+    .flatMap((token) => splitByConnectors(token))
+    .map((token) => token.replace(/^.+?:\s*/, ""))
+    .map((token) => cleanSkillToken(token))
+    .filter((token) => token.length > 0);
+}
+
+function normalizeSkillList(input: unknown): string[] {
+  if (!Array.isArray(input)) {
+    return [];
+  }
+
+  const uniqueSkills = new Set<string>();
+  const normalizedSkills: string[] = [];
+
+  for (const item of input) {
+    if (typeof item !== "string") {
+      continue;
+    }
+
+    for (const token of splitSkillItem(item)) {
+      const key = token.toLocaleLowerCase("pt-BR");
+      if (uniqueSkills.has(key)) {
+        continue;
+      }
+
+      uniqueSkills.add(key);
+      normalizedSkills.push(token);
+    }
+  }
+
+  return normalizedSkills;
+}
+
+function normalizeExtractedSkills(parsed: unknown): unknown {
+  if (!parsed || typeof parsed !== "object") {
+    return parsed;
+  }
+
+  const parsedObject = parsed as Record<string, unknown>;
+
+  return {
+    ...parsedObject,
+    hardSkills: normalizeSkillList(parsedObject.hardSkills),
+    softSkills: normalizeSkillList(parsedObject.softSkills),
+  };
+}
+
 export async function extractResumeFromFile(
   file: File
 ): Promise<ExtractResumeOutput> {
@@ -64,7 +175,7 @@ export async function extractResumeFromFile(
     generationConfig: {
       responseMimeType: "application/json",
       responseSchema: resumeExtractionResponseSchema as Schema,
-      temperature: 0.1,
+      temperature: 0,
     },
   });
 
@@ -134,9 +245,10 @@ function parseAndValidateResult(
 
   try {
     const parsed = JSON.parse(text.trim()) as unknown;
-    const truncated = truncateResumeDataToLimits(parsed);
+    const normalizedSkills = normalizeExtractedSkills(parsed);
+    const truncated = truncateResumeDataToLimits(normalizedSkills);
     const validated = resumeDataSchema.parse(truncated);
-    return { success: true, data: validated };
+    return { success: true, data: capitalizeResumeData(validated) };
   } catch {
     return {
       success: false,

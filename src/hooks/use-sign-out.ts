@@ -7,7 +7,7 @@ import { clearResumeStatusCookie } from "@/app/actions/resume";
 import { ROUTE_LOGIN } from "@/constants/routes";
 import { createClient } from "@/lib/supabase/client";
 import { translateAuthError } from "@/utils/auth";
-import { useToastNotification } from "@/hooks/useToastNotification";
+import { useToastNotification } from "@/hooks/use-toast-notification";
 
 export interface UseSignOutReturn {
   signOut: () => Promise<void>;

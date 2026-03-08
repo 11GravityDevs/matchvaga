@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Plus, X } from "lucide-react";
 import { RESUME_LIMITS } from "@/constants/resume";
+import { capitalizeSkill } from "@/utils/resume";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { INPUT_CLASS } from "@/components/shared/resume-form-card";
@@ -20,6 +21,7 @@ export function ResumeFormLanguages({
 }: ResumeFormLanguagesProps) {
   const [isAddingLanguage, setIsAddingLanguage] = useState(false);
   const [newLanguage, setNewLanguage] = useState("");
+  const [duplicateError, setDuplicateError] = useState<string | null>(null);
   const languageInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -30,19 +32,18 @@ export function ResumeFormLanguages({
 
   const addLanguage = () => {
     const trimmed = newLanguage.trim();
-
+    if (!trimmed || languages.length >= RESUME_LIMITS.LANGUAGES_MAX) return;
+    const capitalized = capitalizeSkill(trimmed);
     const isDuplicate = languages.some(
-      (lang) => lang.toLowerCase() === trimmed.toLowerCase()
+      (lang) => lang.toLowerCase() === capitalized.toLowerCase()
     );
-
-    if (
-      trimmed &&
-      !isDuplicate &&
-      languages.length < RESUME_LIMITS.LANGUAGES_MAX
-    ) {
-      onChange([...languages, trimmed]);
-      setNewLanguage("");
+    if (isDuplicate) {
+      setDuplicateError("Este idioma já foi adicionado.");
+      return;
     }
+    setDuplicateError(null);
+    onChange([...languages, capitalized]);
+    setNewLanguage("");
   };
 
   const removeLanguage = (index: number) => {
@@ -50,7 +51,10 @@ export function ResumeFormLanguages({
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div
+      id="resume-form-languages"
+      className="flex scroll-mt-6 scroll-mb-6 flex-col gap-4"
+    >
       <div className="flex flex-col justify-center gap-1.5">
         <div className="flex flex-wrap items-baseline justify-between gap-2">
           <h3 className="text-section-title">
@@ -90,36 +94,48 @@ export function ResumeFormLanguages({
           </div>
         )}
         {isAddingLanguage && (
-          <Input
-            ref={languageInputRef}
-            value={newLanguage}
-            onChange={(e) => setNewLanguage(e.target.value)}
-            maxLength={RESUME_LIMITS.TEXT_FIELD_MAX}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                addLanguage();
+          <div className="flex flex-col gap-1">
+            <Input
+              ref={languageInputRef}
+              value={newLanguage}
+              onChange={(e) => {
+                setNewLanguage(e.target.value);
+                setDuplicateError(null);
+              }}
+              maxLength={RESUME_LIMITS.TEXT_FIELD_MAX}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  addLanguage();
+                }
+                if (e.key === "Escape") {
+                  setIsAddingLanguage(false);
+                  setNewLanguage("");
+                  setDuplicateError(null);
+                }
+              }}
+              onBlur={(e) => {
+                const relatedTarget = e.relatedTarget as HTMLElement | null;
+                if (relatedTarget?.closest?.('button[aria-label^="Remover"]')) {
+                  return;
+                }
+                if (!newLanguage.trim()) {
+                  setIsAddingLanguage(false);
+                }
+              }}
+              placeholder="Digite um idioma e pressione Enter"
+              disabled={
+                isSaving || languages.length >= RESUME_LIMITS.LANGUAGES_MAX
               }
-              if (e.key === "Escape") {
-                setIsAddingLanguage(false);
-                setNewLanguage("");
-              }
-            }}
-            onBlur={(e) => {
-              const relatedTarget = e.relatedTarget as HTMLElement | null;
-              if (relatedTarget?.closest?.('button[aria-label^="Remover"]')) {
-                return;
-              }
-              if (!newLanguage.trim()) {
-                setIsAddingLanguage(false);
-              }
-            }}
-            placeholder="Digite um idioma e pressione Enter"
-            disabled={
-              isSaving || languages.length >= RESUME_LIMITS.LANGUAGES_MAX
-            }
-            className={INPUT_CLASS}
-          />
+              className={INPUT_CLASS}
+              aria-invalid={!!duplicateError}
+            />
+            {duplicateError && (
+              <p className="text-sm text-destructive" role="alert">
+                {duplicateError}
+              </p>
+            )}
+          </div>
         )}
         {!isAddingLanguage && (
           <div className="flex flex-col gap-1">
@@ -127,7 +143,10 @@ export function ResumeFormLanguages({
               type="button"
               variant="brand"
               size="sm"
-              onClick={() => setIsAddingLanguage(true)}
+              onClick={() => {
+                setDuplicateError(null);
+                setIsAddingLanguage(true);
+              }}
               disabled={
                 isSaving || languages.length >= RESUME_LIMITS.LANGUAGES_MAX
               }

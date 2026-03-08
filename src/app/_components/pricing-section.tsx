@@ -15,7 +15,7 @@ import {
   trackCheckoutStartedEvent,
   trackPricingPackageSelectedEvent,
 } from "@/lib/analytics/posthog-events";
-import { useToastNotification } from "@/hooks/useToastNotification";
+import { useToastNotification } from "@/hooks/use-toast-notification";
 
 import { AnimateOnScroll } from "./animate-on-scroll";
 import { createCheckoutSession } from "../inicio/checkout/_actions/checkout";

@@ -20,6 +20,7 @@ import type { EducationEntry } from "@/types/resume";
 import type { EducationEntryFieldErrors } from "@/hooks/use-resume-form";
 import { FormSectionSeparator } from "@/components/shared/form-section-separator";
 import { INPUT_CLASS } from "@/components/shared/resume-form-card";
+import { capitalizeTitleCase } from "@/utils/resume";
 
 const EDUCATION_LEVELS = [
   "Ensino Fundamental",
@@ -97,6 +98,12 @@ export function ResumeFormEducation({
                   onChange={(e) =>
                     updateEducation(eduIndex, { course: e.target.value })
                   }
+                  onBlur={() => {
+                    const capitalized = capitalizeTitleCase(edu.course);
+                    if (capitalized !== edu.course) {
+                      updateEducation(eduIndex, { course: capitalized });
+                    }
+                  }}
                   disabled={isSaving}
                   maxLength={RESUME_LIMITS.TEXT_FIELD_MAX}
                   className={INPUT_CLASS}
@@ -156,6 +163,12 @@ export function ResumeFormEducation({
                     onChange={(e) =>
                       updateEducation(eduIndex, { institution: e.target.value })
                     }
+                    onBlur={() => {
+                      const capitalized = capitalizeTitleCase(edu.institution);
+                      if (capitalized !== edu.institution) {
+                        updateEducation(eduIndex, { institution: capitalized });
+                      }
+                    }}
                     disabled={isSaving}
                     maxLength={RESUME_LIMITS.TEXT_FIELD_MAX}
                     className={INPUT_CLASS}

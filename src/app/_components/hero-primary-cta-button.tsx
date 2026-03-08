@@ -3,7 +3,7 @@
 import { Zap } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { useAnalyticsEvents } from "@/hooks/useAnalyticsEvents";
+import { useAnalyticsEvents } from "@/hooks/use-analytics-events";
 
 import { AuthAwareLink } from "./auth-aware-link";
 

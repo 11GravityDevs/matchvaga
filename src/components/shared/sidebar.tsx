@@ -117,19 +117,25 @@ export function Sidebar() {
         <DropdownMenuTrigger asChild aria-label="Abrir menu da conta">
           <button
             type="button"
-            className="flex w-full cursor-pointer items-center justify-between gap-2 rounded-md bg-sidebar p-2 transition-colors outline-none hover:bg-sidebar-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar"
+            className="flex w-full min-w-0 cursor-pointer items-center justify-between gap-2 rounded-md bg-sidebar p-2 transition-colors outline-none hover:bg-sidebar-accent focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar"
           >
-            <div className="flex items-center gap-2">
+            <div className="flex min-w-0 flex-1 items-center gap-2 overflow-hidden">
               <div className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-muted">
                 <span className="text-sm font-semibold text-foreground">
                   {initials}
                 </span>
               </div>
-              <div className="flex flex-col justify-center text-left">
-                <span className="text-sm leading-snug font-medium text-sidebar-foreground">
+              <div className="flex min-w-0 flex-1 flex-col justify-center overflow-hidden text-left">
+                <span
+                  className="truncate text-sm leading-snug font-medium text-sidebar-foreground"
+                  title={displayName}
+                >
                   {displayName}
                 </span>
-                <span className="text-xs leading-relaxed text-sidebar-foreground">
+                <span
+                  className="truncate text-xs leading-relaxed text-sidebar-foreground"
+                  title={email}
+                >
                   {email}
                 </span>
               </div>

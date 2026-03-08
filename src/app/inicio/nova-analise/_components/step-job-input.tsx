@@ -17,7 +17,7 @@ import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
 import { Loading } from "@/components/ui/loading";
 import { StepIndicator } from "@/components/shared/step-indicator";
-import { useToastNotification } from "@/hooks/useToastNotification";
+import { useToastNotification } from "@/hooks/use-toast-notification";
 import {
   useNewAnalysis,
   WIZARD_STEPS,

@@ -12,6 +12,8 @@ import type { ExperienceEntry } from "@/types/resume";
 import type { ExperienceEntryFieldErrors } from "@/hooks/use-resume-form";
 import { FormSectionSeparator } from "@/components/shared/form-section-separator";
 import { INPUT_CLASS } from "@/components/shared/resume-form-card";
+import { capitalizeLocation } from "@/utils/resume";
+import { capitalizeTitleCase } from "@/utils/resume";
 
 interface ResumeFormExperienceProps {
   experience: ExperienceEntry[];
@@ -77,6 +79,12 @@ export function ResumeFormExperience({
                     onChange={(e) =>
                       updateExperience(expIndex, { company: e.target.value })
                     }
+                    onBlur={() => {
+                      const capitalized = capitalizeTitleCase(exp.company);
+                      if (capitalized !== exp.company) {
+                        updateExperience(expIndex, { company: capitalized });
+                      }
+                    }}
                     disabled={isSaving}
                     maxLength={RESUME_LIMITS.TEXT_FIELD_MAX}
                     className={INPUT_CLASS}
@@ -95,6 +103,12 @@ export function ResumeFormExperience({
                     onChange={(e) =>
                       updateExperience(expIndex, { jobTitle: e.target.value })
                     }
+                    onBlur={() => {
+                      const capitalized = capitalizeTitleCase(exp.jobTitle);
+                      if (capitalized !== exp.jobTitle) {
+                        updateExperience(expIndex, { jobTitle: capitalized });
+                      }
+                    }}
                     disabled={isSaving}
                     maxLength={RESUME_LIMITS.TEXT_FIELD_MAX}
                     className={INPUT_CLASS}
@@ -162,6 +176,12 @@ export function ResumeFormExperience({
                   onChange={(e) =>
                     updateExperience(expIndex, { location: e.target.value })
                   }
+                  onBlur={() => {
+                    const capitalized = capitalizeLocation(exp.location);
+                    if (capitalized !== exp.location) {
+                      updateExperience(expIndex, { location: capitalized });
+                    }
+                  }}
                   disabled={isSaving}
                   maxLength={RESUME_LIMITS.TEXT_FIELD_MAX}
                   className={INPUT_CLASS}

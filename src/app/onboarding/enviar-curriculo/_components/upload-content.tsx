@@ -14,7 +14,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Loading } from "@/components/ui/loading";
-import { useToastNotification } from "@/hooks/useToastNotification";
+import { useToastNotification } from "@/hooks/use-toast-notification";
 import { useResumeUpload } from "../_hooks/use-resume-upload";
 import {
   formatFileSize,

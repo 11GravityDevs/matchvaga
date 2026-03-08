@@ -18,7 +18,7 @@ import {
   ROUTE_HOME_NEW_ANALYSIS,
 } from "@/constants/routes";
 import { cn } from "@/utils/style";
-import { useToastNotification } from "@/hooks/useToastNotification";
+import { useToastNotification } from "@/hooks/use-toast-notification";
 
 export interface AnalysisTableRow {
   analysisId: string;

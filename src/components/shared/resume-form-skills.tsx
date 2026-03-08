@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Plus, X } from "lucide-react";
 import { RESUME_LIMITS } from "@/constants/resume";
+import { capitalizeSkill } from "@/utils/resume";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -11,6 +12,7 @@ interface ResumeFormSkillsProps {
   onChange: (skills: string[]) => void;
   isSaving?: boolean;
   skillsError?: string;
+  duplicateErrorMessage?: string;
   title?: string;
   placeholder?: string;
   addButtonText?: string;
@@ -22,6 +24,7 @@ export function ResumeFormSkills({
   onChange,
   isSaving,
   skillsError,
+  duplicateErrorMessage,
   title = "Habilidades",
   placeholder = "Digite uma habilidade e pressione Enter",
   addButtonText = "Adicionar habilidades",
@@ -29,6 +32,7 @@ export function ResumeFormSkills({
 }: ResumeFormSkillsProps) {
   const [isAddingSkill, setIsAddingSkill] = useState(false);
   const [newSkill, setNewSkill] = useState("");
+  const [duplicateError, setDuplicateError] = useState<string | null>(null);
   const skillInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -39,14 +43,20 @@ export function ResumeFormSkills({
 
   const addSkill = () => {
     const trimmed = newSkill.trim();
-    if (
-      trimmed &&
-      !skills.includes(trimmed) &&
-      skills.length < RESUME_LIMITS.SKILLS_MAX
-    ) {
-      onChange([...skills, trimmed]);
-      setNewSkill("");
+    if (!trimmed || skills.length >= RESUME_LIMITS.SKILLS_MAX) return;
+    const capitalized = capitalizeSkill(trimmed);
+    const isDuplicate = skills.some(
+      (s) => s.toLowerCase() === capitalized.toLowerCase()
+    );
+    if (isDuplicate) {
+      setDuplicateError(
+        duplicateErrorMessage ?? "Esta habilidade já foi adicionada."
+      );
+      return;
     }
+    setDuplicateError(null);
+    onChange([...skills, capitalized]);
+    setNewSkill("");
   };
 
   const removeSkill = (index: number) => {
@@ -92,35 +102,46 @@ export function ResumeFormSkills({
           </div>
         )}
         {isAddingSkill && (
-          <Input
-            ref={skillInputRef}
-            value={newSkill}
-            onChange={(e) => setNewSkill(e.target.value)}
-            maxLength={RESUME_LIMITS.TEXT_FIELD_MAX}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                addSkill();
-              }
-              if (e.key === "Escape") {
-                setIsAddingSkill(false);
-                setNewSkill("");
-              }
-            }}
-            onBlur={(e) => {
-              const relatedTarget = e.relatedTarget as HTMLElement | null;
-              if (relatedTarget?.closest?.('button[aria-label^="Remover"]')) {
-                return;
-              }
-              if (!newSkill.trim()) {
-                setIsAddingSkill(false);
-              }
-            }}
-            placeholder={placeholder}
-            disabled={isSaving || skills.length >= RESUME_LIMITS.SKILLS_MAX}
-            className="h-9 bg-background px-3 shadow-none focus-visible:border-accent-brand focus-visible:ring-1 focus-visible:ring-accent-brand/30"
-            aria-invalid={!!skillsError}
-          />
+          <div className="flex flex-col gap-1">
+            <Input
+              ref={skillInputRef}
+              value={newSkill}
+              onChange={(e) => {
+                setNewSkill(e.target.value);
+                setDuplicateError(null);
+              }}
+              maxLength={RESUME_LIMITS.TEXT_FIELD_MAX}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  addSkill();
+                }
+                if (e.key === "Escape") {
+                  setIsAddingSkill(false);
+                  setNewSkill("");
+                  setDuplicateError(null);
+                }
+              }}
+              onBlur={(e) => {
+                const relatedTarget = e.relatedTarget as HTMLElement | null;
+                if (relatedTarget?.closest?.('button[aria-label^="Remover"]')) {
+                  return;
+                }
+                if (!newSkill.trim()) {
+                  setIsAddingSkill(false);
+                }
+              }}
+              placeholder={placeholder}
+              disabled={isSaving || skills.length >= RESUME_LIMITS.SKILLS_MAX}
+              className="h-9 bg-background px-3 shadow-none focus-visible:border-accent-brand focus-visible:ring-1 focus-visible:ring-accent-brand/30"
+              aria-invalid={!!skillsError || !!duplicateError}
+            />
+            {duplicateError && (
+              <p className="text-sm text-destructive" role="alert">
+                {duplicateError}
+              </p>
+            )}
+          </div>
         )}
         {!isAddingSkill && (
           <div className="flex flex-col gap-1">
@@ -128,7 +149,10 @@ export function ResumeFormSkills({
               type="button"
               variant="brand"
               size="sm"
-              onClick={() => setIsAddingSkill(true)}
+              onClick={() => {
+                setDuplicateError(null);
+                setIsAddingSkill(true);
+              }}
               disabled={isSaving || skills.length >= RESUME_LIMITS.SKILLS_MAX}
               className="w-fit gap-1.5 text-small"
             >
