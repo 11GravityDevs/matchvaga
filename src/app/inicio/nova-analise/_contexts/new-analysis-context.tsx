@@ -46,7 +46,7 @@ interface NewAnalysisContextValue {
   analysisId: string | null;
   score: number | null;
   optimizedScore: number | null;
-  matchedSkills: string[];
+  matchedSkillsCount: number;
   technicalSkills: MissingSkill[];
   behavioralSkills: MissingSkill[];
   selectedTechnicalSkills: string[];
@@ -57,7 +57,7 @@ interface NewAnalysisContextValue {
   setAnalysisResult: (result: {
     analysisId: string;
     score: number;
-    matchedSkills: string[];
+    matchedSkillsCount: number;
     technicalSkills: string[];
     behavioralSkills: string[];
   }) => void;
@@ -100,7 +100,7 @@ const INITIAL_STATE = {
   analysisId: null as string | null,
   score: null as number | null,
   optimizedScore: null as number | null,
-  matchedSkills: [] as string[],
+  matchedSkillsCount: 0,
   technicalSkills: [] as MissingSkill[],
   behavioralSkills: [] as MissingSkill[],
   selectedTechnicalSkills: [] as string[],
@@ -150,8 +150,8 @@ export function NewAnalysisProvider({
     INITIAL_STATE.analysisId
   );
   const [score, setScore] = useState<number | null>(INITIAL_STATE.score);
-  const [matchedSkills, setMatchedSkills] = useState<string[]>(
-    INITIAL_STATE.matchedSkills
+  const [matchedSkillsCount, setMatchedSkillsCount] = useState<number>(
+    INITIAL_STATE.matchedSkillsCount
   );
   const [technicalSkills, setTechnicalSkills] = useState<MissingSkill[]>(
     INITIAL_STATE.technicalSkills
@@ -174,13 +174,13 @@ export function NewAnalysisProvider({
   function setAnalysisResult(result: {
     analysisId: string;
     score: number;
-    matchedSkills: string[];
+    matchedSkillsCount: number;
     technicalSkills: string[];
     behavioralSkills: string[];
   }) {
     setAnalysisId(result.analysisId);
     setScore(result.score);
-    setMatchedSkills(result.matchedSkills);
+    setMatchedSkillsCount(result.matchedSkillsCount);
     setTechnicalSkills(
       toMissingSkillsWithPrefix("technical", result.technicalSkills)
     );
@@ -213,7 +213,7 @@ export function NewAnalysisProvider({
     setJobRole(INITIAL_STATE.jobRole);
     setAnalysisId(INITIAL_STATE.analysisId);
     setScore(INITIAL_STATE.score);
-    setMatchedSkills(INITIAL_STATE.matchedSkills);
+    setMatchedSkillsCount(INITIAL_STATE.matchedSkillsCount);
     setTechnicalSkills(INITIAL_STATE.technicalSkills);
     setBehavioralSkills(INITIAL_STATE.behavioralSkills);
     setSelectedTechnicalSkills(INITIAL_STATE.selectedTechnicalSkills);
@@ -258,7 +258,7 @@ export function NewAnalysisProvider({
       setAnalysisResult({
         analysisId: analysis.id,
         score: analysis.score,
-        matchedSkills: analysis.matched_skills,
+        matchedSkillsCount: analysis.matched_skills_count,
         technicalSkills: analysis.missing_skills.technical,
         behavioralSkills: analysis.missing_skills.behavioral,
       });
@@ -290,7 +290,7 @@ export function NewAnalysisProvider({
         analysisId,
         score,
         optimizedScore,
-        matchedSkills,
+        matchedSkillsCount,
         technicalSkills,
         behavioralSkills,
         selectedTechnicalSkills,

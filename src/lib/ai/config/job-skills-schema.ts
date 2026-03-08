@@ -19,4 +19,11 @@ const skillSchema = z.object({
 export const jobSkillsResponseSchema = z.object({
   hard_skills: z.array(skillSchema),
   soft_skills: z.array(skillSchema),
+  is_job_description: z.boolean(),
+  job_title: z.string(),
+  job_company: z.string(),
 });
+
+export type JobSkill = z.infer<
+  typeof jobSkillsResponseSchema
+>["hard_skills"][number];

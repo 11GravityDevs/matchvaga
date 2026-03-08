@@ -5,14 +5,15 @@ import Anthropic from "@anthropic-ai/sdk";
 import { JOB_SKILLS_JSON_SCHEMA } from "@/lib/ai/config/job-skills-json-schema";
 import { jobSkillsResponseSchema } from "@/lib/ai/config/job-skills-schema";
 import { JOB_SKILLS_EXTRACTION_PROMPT } from "@/lib/ai/prompts/job-skills";
+import { SYNTHESIS_SYSTEM_PROMPT } from "@/lib/ai/prompts/synthesis";
 import { normalizeAIResumeData } from "@/lib/ai/utils/normalize-resume";
 import { logServerError } from "@/lib/logger";
-import { SYNTHESIS_SYSTEM_PROMPT } from "@/lib/ai/prompts/synthesis";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
+import { NOT_JOB_DESCRIPTION_MESSAGE } from "@/utils/job-description";
 
-import optimizedMock from "../../../../optimized-mock.json";
 import extractedMock from "../../../../extracted-mock.json";
+import optimizedMock from "../../../../optimized-mock.json";
 
 const MODEL = "claude-haiku-4-5";
 
@@ -41,6 +42,8 @@ export interface JobSkillsResult {
       original_term: string;
       type: "required" | "differential";
     }>;
+    job_title: string;
+    job_company: string;
   };
 }
 
@@ -246,11 +249,17 @@ export async function extractJobSkills(
       };
     }
 
+    if (!validated.data.is_job_description) {
+      return { success: false, error: NOT_JOB_DESCRIPTION_MESSAGE };
+    }
+
     return {
       success: true,
       data: {
         hard_skills: validated.data.hard_skills,
         soft_skills: validated.data.soft_skills,
+        job_title: validated.data.job_title,
+        job_company: validated.data.job_company,
       },
     };
   } catch (error) {

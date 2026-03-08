@@ -99,7 +99,7 @@ export function StepGapAnalysis() {
   const {
     jobRole,
     score,
-    matchedSkills,
+    matchedSkillsCount,
     technicalSkills,
     behavioralSkills,
     toggleSkill,
@@ -267,7 +267,7 @@ export function StepGapAnalysis() {
                     </span>
                   </div>
                   <span className="text-small-semibold font-bold text-foreground">
-                    {matchedSkills.length}
+                    {matchedSkillsCount}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
