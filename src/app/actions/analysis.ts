@@ -12,7 +12,7 @@ import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
 import {
   applySkillsMatchToUserSkills,
-  missingSkillsFromColumns,
+  missingSkillsFromJobSkillColumns,
   type MissingSkillsByCategory,
 } from "@/utils/analysis";
 import { translateAuthError } from "@/utils/auth";
@@ -21,18 +21,6 @@ import {
   NOT_JOB_DESCRIPTION_MESSAGE,
   validateJobDescriptionText,
 } from "@/utils/job-description";
-
-export interface RunGapAnalysisResult {
-  success: boolean;
-  analysisId?: string;
-  score?: number;
-  matched_skills_count?: number;
-  missing_technical_skills?: string[];
-  missing_behavioral_skills?: string[];
-  job_title?: string;
-  job_company?: string;
-  error?: string;
-}
 
 export type { MissingSkillsByCategory } from "@/utils/analysis";
 
@@ -54,7 +42,7 @@ export interface AnalysisRow {
   job_snapshot: { title: string; company: string; rawText: string };
   score: number;
   optimized_score: number;
-  matched_skills: string[];
+  matched_skills_count: number;
   missing_skills: MissingSkillsByCategory;
   created_at: string;
   status: string;
@@ -64,12 +52,6 @@ export interface GetAnalysesForUserResult {
   success: boolean;
   data?: AnalysisRow[];
   error?: string;
-}
-
-export async function runGapAnalysis(
-  jobDescription: string
-): Promise<RunGapAnalysisResult> {
-  return { success: false, error: "Obsoleto" };
 }
 
 export async function runSkillsMatch(
@@ -285,7 +267,7 @@ export async function getAnalysesForUser(): Promise<GetAnalysesForUserResult> {
   const { data, error } = await supabase
     .from("analyses")
     .select(
-      "id, resume_id, job_snapshot, score, optimized_score, matched_skills, missing_technical_skills, missing_behavioral_skills, created_at, status"
+      "id, resume_id, job_snapshot, score, optimized_score, matched_skills_count, missing_hard_skills, missing_soft_skills, created_at, status"
     )
     .eq("user_id", user.id)
     .order("created_at", { ascending: false });
@@ -304,24 +286,26 @@ export async function getAnalysesForUser(): Promise<GetAnalysesForUserResult> {
 
   return {
     success: true,
-    data: (data ?? []).map((row) => ({
-      id: row.id,
-      resume_id: row.resume_id,
-      job_snapshot: row.job_snapshot as {
-        title: string;
-        company: string;
-        rawText: string;
-      },
-      score: row.score,
-      optimized_score: row.optimized_score ?? null,
-      matched_skills: (row.matched_skills ?? []) as string[],
-      missing_skills: missingSkillsFromColumns(
-        row.missing_technical_skills,
-        row.missing_behavioral_skills
-      ),
-      created_at: row.created_at,
-      status: row.status ?? "pending",
-    })),
+    data: (data ?? []).map((row) => {
+      return {
+        id: row.id,
+        resume_id: row.resume_id,
+        job_snapshot: row.job_snapshot as {
+          title: string;
+          company: string;
+          rawText: string;
+        },
+        score: row.score,
+        optimized_score: row.optimized_score,
+        matched_skills_count: row.matched_skills_count,
+        missing_skills: missingSkillsFromJobSkillColumns(
+          row.missing_hard_skills,
+          row.missing_soft_skills
+        ),
+        created_at: row.created_at,
+        status: row.status ?? "pending",
+      };
+    }),
   };
 }
 
@@ -350,7 +334,7 @@ export async function getAnalysisById(
   const { data: row, error } = await supabase
     .from("analyses")
     .select(
-      "id, resume_id, job_snapshot, score, optimized_score, matched_skills, missing_technical_skills, missing_behavioral_skills, created_at, status"
+      "id, resume_id, job_snapshot, score, optimized_score, matched_skills_count, missing_hard_skills, missing_soft_skills, created_at, status"
     )
     .eq("id", analysisId)
     .eq("user_id", user.id)
@@ -372,10 +356,10 @@ export async function getAnalysisById(
       },
       score: row.score,
       optimized_score: row.optimized_score,
-      matched_skills: (row.matched_skills ?? []) as string[],
-      missing_skills: missingSkillsFromColumns(
-        row.missing_technical_skills,
-        row.missing_behavioral_skills
+      matched_skills_count: row.matched_skills_count,
+      missing_skills: missingSkillsFromJobSkillColumns(
+        row.missing_hard_skills,
+        row.missing_soft_skills
       ),
       created_at: row.created_at,
       status: row.status,

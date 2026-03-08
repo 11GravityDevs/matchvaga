@@ -13,6 +13,34 @@ export function missingSkillsFromColumns(
   };
 }
 
+function jobSkillToLabel(s: unknown): string {
+  if (
+    s &&
+    typeof s === "object" &&
+    "name" in s &&
+    typeof (s as { name: unknown }).name === "string"
+  ) {
+    return (s as { name: string }).name;
+  }
+  return "";
+}
+
+export function missingSkillsFromJobSkillColumns(
+  missingHard: unknown,
+  missingSoft: unknown
+): MissingSkillsByCategory {
+  const hard = Array.isArray(missingHard)
+    ? (missingHard as unknown[]).map(jobSkillToLabel).filter(Boolean)
+    : [];
+  const soft = Array.isArray(missingSoft)
+    ? (missingSoft as unknown[]).map(jobSkillToLabel).filter(Boolean)
+    : [];
+  return {
+    technical: hard,
+    behavioral: soft,
+  };
+}
+
 export function parseMissingSkillsFromDb(
   raw: unknown
 ): MissingSkillsByCategory {

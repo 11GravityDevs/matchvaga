@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Lightbulb, Sparkles } from "lucide-react";
 import Link from "next/link";
 
-import { runGapAnalysis } from "@/app/actions/analysis";
+import { runSkillsMatch } from "@/app/actions/analysis";
 import { JOB_DESCRIPTION_MAX } from "@/constants/job";
 import {
   QUERY_KEY_ANALYSES,
@@ -47,7 +47,7 @@ export function StepJobInput() {
 
   const { mutate: runAnalysis, isPending: isAnalyzing } = useMutation({
     mutationFn: async () => {
-      const result = await runGapAnalysis(jobDescription.trim());
+      const result = await runSkillsMatch(jobDescription.trim());
 
       if (!result.success) {
         throw new Error(result.error ?? "Erro ao analisar. Tente novamente.");
@@ -70,10 +70,10 @@ export function StepJobInput() {
 
       setAnalysisResult({
         analysisId: result.analysisId!,
-        score: result.score!,
+        score: result.score ?? 0,
         matchedSkillsCount: result.matched_skills_count ?? 0,
-        technicalSkills: result.missing_technical_skills ?? [],
-        behavioralSkills: result.missing_behavioral_skills ?? [],
+        technicalSkills: (result.missing_hard_skills ?? []).map((s) => s.name),
+        behavioralSkills: (result.missing_soft_skills ?? []).map((s) => s.name),
       });
 
       setStep(2);

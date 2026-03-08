@@ -258,7 +258,7 @@ export function NewAnalysisProvider({
       setAnalysisResult({
         analysisId: analysis.id,
         score: analysis.score,
-        matchedSkillsCount: analysis.matched_skills.length,
+        matchedSkillsCount: analysis.matched_skills_count,
         technicalSkills: analysis.missing_skills.technical,
         behavioralSkills: analysis.missing_skills.behavioral,
       });

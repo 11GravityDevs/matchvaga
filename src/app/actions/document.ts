@@ -1,17 +1,17 @@
 "use server";
 
-import React from "react";
-import { revalidatePath } from "next/cache";
-import { renderToBuffer } from "@react-pdf/renderer";
-import { createClient } from "@/lib/supabase/server";
 import { synthesizeOptimizedResume } from "@/lib/ai/clients/anthropic";
 import { runGapAnalysisAI } from "@/lib/ai/clients/openai";
-import { ResumeDocument } from "@/lib/document/resume-to-pdf";
 import { buildResumeDocx } from "@/lib/document/resume-to-docx";
+import { ResumeDocument } from "@/lib/document/resume-to-pdf";
 import { logServerError } from "@/lib/logger";
+import { createClient } from "@/lib/supabase/server";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
 import { translateAuthError } from "@/utils/auth";
+import { renderToBuffer } from "@react-pdf/renderer";
+import { revalidatePath } from "next/cache";
+import React from "react";
 
 const BUCKET = "documents";
 const SIGNED_URL_EXPIRES_IN = 3600;
@@ -44,9 +44,7 @@ export async function synthesizeOptimizedResumeForPreview(
 
   const { data: analysisRow, error: analysisError } = await supabase
     .from("analyses")
-    .select(
-      "id, resume_id, job_snapshot, matched_skills, missing_technical_skills, missing_behavioral_skills"
-    )
+    .select("id, resume_id, job_snapshot, user_hard_skills, user_soft_skills")
     .eq("id", analysisId)
     .eq("user_id", user.id)
     .single();
@@ -77,7 +75,10 @@ export async function synthesizeOptimizedResumeForPreview(
     company: string;
     rawText: string;
   };
-  const matchedSkills = (analysisRow.matched_skills ?? []) as string[];
+  const matchedSkills = [
+    ...((analysisRow.user_hard_skills ?? []) as string[]),
+    ...((analysisRow.user_soft_skills ?? []) as string[]),
+  ];
   const technical = selectedTechnicalSkills ?? [];
   const behavioral = selectedBehavioralSkills ?? [];
   const hasAnyMissing = technical.length > 0 || behavioral.length > 0;
