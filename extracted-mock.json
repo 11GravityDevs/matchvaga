@@ -1,6 +1,7 @@
 {
   "success": true,
   "data": {
+    "is_job_description": true,
     "hard_skills": [
       {
         "name": "JavaScript",

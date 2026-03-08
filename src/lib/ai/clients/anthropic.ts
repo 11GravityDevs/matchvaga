@@ -5,14 +5,15 @@ import Anthropic from "@anthropic-ai/sdk";
 import { JOB_SKILLS_JSON_SCHEMA } from "@/lib/ai/config/job-skills-json-schema";
 import { jobSkillsResponseSchema } from "@/lib/ai/config/job-skills-schema";
 import { JOB_SKILLS_EXTRACTION_PROMPT } from "@/lib/ai/prompts/job-skills";
+import { SYNTHESIS_SYSTEM_PROMPT } from "@/lib/ai/prompts/synthesis";
 import { normalizeAIResumeData } from "@/lib/ai/utils/normalize-resume";
 import { logServerError } from "@/lib/logger";
-import { SYNTHESIS_SYSTEM_PROMPT } from "@/lib/ai/prompts/synthesis";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
+import { NOT_JOB_DESCRIPTION_MESSAGE } from "@/utils/job-description";
 
-import optimizedMock from "../../../../optimized-mock.json";
 import extractedMock from "../../../../extracted-mock.json";
+import optimizedMock from "../../../../optimized-mock.json";
 
 const MODEL = "claude-haiku-4-5";
 
@@ -244,6 +245,10 @@ export async function extractJobSkills(
         success: false,
         error: "Não foi possível interpretar a resposta.",
       };
+    }
+
+    if (!validated.data.is_job_description) {
+      return { success: false, error: NOT_JOB_DESCRIPTION_MESSAGE };
     }
 
     return {

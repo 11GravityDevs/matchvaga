@@ -33,7 +33,8 @@ export const JOB_SKILLS_JSON_SCHEMA = {
         additionalProperties: false,
       },
     },
+    is_job_description: { type: "boolean" as const },
   },
-  required: ["hard_skills", "soft_skills"] as const,
+  required: ["hard_skills", "soft_skills", "is_job_description"] as const,
   additionalProperties: false,
 };

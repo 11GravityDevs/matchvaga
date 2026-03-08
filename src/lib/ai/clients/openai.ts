@@ -36,7 +36,10 @@ export interface GapAnalysisError {
 
 export type GapAnalysisOutput = GapAnalysisResult | GapAnalysisError;
 
-export type JobSkillsInput = z.infer<typeof jobSkillsResponseSchema>;
+const jobSkillsInputSchema = jobSkillsResponseSchema.omit({
+  is_job_description: true,
+});
+export type JobSkillsInput = z.infer<typeof jobSkillsInputSchema>;
 
 export interface MatchSkillsResult {
   success: true;
@@ -149,7 +152,7 @@ export async function matchJobSkillsToResume(
   jobSkills: JobSkillsInput,
   resumeData: ResumeData
 ): Promise<MatchSkillsOutput> {
-  const jobParsed = jobSkillsResponseSchema.safeParse(jobSkills);
+  const jobParsed = jobSkillsInputSchema.safeParse(jobSkills);
   const resumeParsed = resumeDataSchema.safeParse(resumeData);
 
   if (!jobParsed.success) {

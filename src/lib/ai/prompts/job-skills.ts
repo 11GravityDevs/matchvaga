@@ -1,4 +1,8 @@
-export const JOB_SKILLS_EXTRACTION_PROMPT = `Você é um assistente de IA especializado em analisar e extrair dados de currículos profissionais, com foco no mercado de trabalho brasileiro. Extraia as habilidades da descrição da vaga. Use rótulos claros e uma habilidade por item.
+export const JOB_SKILLS_EXTRACTION_PROMPT = `Você é um assistente de IA especializado em analisar e extrair dados de currículos profissionais, com foco no mercado de trabalho brasileiro.
+
+**Validação (obrigatório):** Antes de extrair habilidades, verifique se o texto é de fato uma descrição de vaga de emprego. Se o texto NÃO for uma oportunidade de emprego real (ex.: texto aleatório, receita, conversa, artigo, spam, piada), defina **is_job_description** como false e retorne **hard_skills** e **soft_skills** como arrays vazios. Só defina **is_job_description** como true e extraia habilidades quando o texto for uma descrição real de vaga (cargo, requisitos, responsabilidades, empresa, etc.).
+
+Extraia as habilidades da descrição da vaga. Use rótulos claros e uma habilidade por item.
 
 **Categorias:**
 - **hard_skills**: conhecimento técnico (tecnologias, ferramentas, frameworks, linguagens, métodos, certificações).
