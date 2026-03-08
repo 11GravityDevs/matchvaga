@@ -26,7 +26,7 @@ export interface RunGapAnalysisResult {
   success: boolean;
   analysisId?: string;
   score?: number;
-  matched_skills?: string[];
+  matched_skills_count?: number;
   missing_technical_skills?: string[];
   missing_behavioral_skills?: string[];
   job_title?: string;
@@ -40,8 +40,7 @@ export interface RunSkillsMatchResult {
   success: boolean;
   analysisId?: string;
   score?: number;
-  user_hard_skills?: string[];
-  user_soft_skills?: string[];
+  matched_skills_count?: number;
   missing_hard_skills?: JobSkill[];
   missing_soft_skills?: JobSkill[];
   job_title?: string;
@@ -152,6 +151,10 @@ export async function runSkillsMatch(
     return { success: false, error: jobSkillsResult.error };
   }
 
+  const matched_skills_count =
+    jobSkillsResult.data.hard_skills.length +
+    jobSkillsResult.data.soft_skills.length;
+
   const matchResult = await matchJobSkillsToResume(
     jobSkillsResult.data,
     resumeData
@@ -204,6 +207,7 @@ export async function runSkillsMatch(
       job_snapshot: jobParsed.data as unknown as Record<string, unknown>,
       score: 0,
       optimized_score: 0,
+      matched_skills_count: matched_skills_count,
       user_hard_skills: applied.user_hard_skills,
       user_soft_skills: applied.user_soft_skills,
       missing_hard_skills,
@@ -256,8 +260,7 @@ export async function runSkillsMatch(
     success: true,
     analysisId: analysisRow.id,
     score: 0,
-    // user_hard_skills: applied.user_hard_skills,
-    // user_soft_skills: applied.user_soft_skills,
+    matched_skills_count,
     missing_hard_skills,
     missing_soft_skills,
     job_title: jobParsed.data.title,

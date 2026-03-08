@@ -71,7 +71,7 @@ export function StepJobInput() {
       setAnalysisResult({
         analysisId: result.analysisId!,
         score: result.score!,
-        matchedSkills: result.matched_skills!,
+        matchedSkillsCount: result.matched_skills_count ?? 0,
         technicalSkills: result.missing_technical_skills ?? [],
         behavioralSkills: result.missing_behavioral_skills ?? [],
       });

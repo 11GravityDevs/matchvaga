@@ -19,6 +19,7 @@ CREATE TABLE analyses (
   job_snapshot JSONB NOT NULL,
   score INTEGER NOT NULL CHECK (score >= 0 AND score <= 100),
   optimized_score INTEGER CHECK (optimized_score >= 0 AND optimized_score <= 100),
+  matched_skills_count INTEGER NOT NULL DEFAULT 0 CHECK (matched_skills_count >= 0),
   user_hard_skills JSONB NOT NULL DEFAULT '[]',
   user_soft_skills JSONB NOT NULL DEFAULT '[]',
   missing_hard_skills JSONB NOT NULL DEFAULT '[]',

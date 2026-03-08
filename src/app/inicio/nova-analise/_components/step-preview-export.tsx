@@ -31,7 +31,7 @@ export function StepPreviewExport() {
     analysisId,
     score,
     optimizedScore,
-    matchedSkills,
+    matchedSkillsCount,
     selectedTechnicalSkills,
     selectedBehavioralSkills,
     reset,
@@ -78,7 +78,7 @@ export function StepPreviewExport() {
   const feedback = getScoreFeedback(finalScore);
   const feedbackBadgeClasses = FEEDBACK_BADGE_CLASSES[feedback.variant];
 
-  const skillsPresentCount = matchedSkills.length;
+  const skillsPresentCount = matchedSkillsCount;
   const skillsAddedCount =
     selectedTechnicalSkills.length + selectedBehavioralSkills.length;
 
