@@ -1,7 +1,6 @@
 "use server";
 
 import { synthesizeOptimizedResume } from "@/lib/ai/clients/anthropic";
-import { runGapAnalysisAI } from "@/lib/ai/clients/openai";
 import { buildResumeDocx } from "@/lib/document/resume-to-docx";
 import { ResumeDocument } from "@/lib/document/resume-to-pdf";
 import { logServerError } from "@/lib/logger";
@@ -101,28 +100,12 @@ export async function synthesizeOptimizedResumeForPreview(
     return { success: false, error: synthesis.error };
   }
 
-  let optimizedScore: number | undefined;
-
-  const aiResult = await runGapAnalysisAI(synthesis.data, jobSnapshot.rawText);
-
-  if (aiResult.success) {
-    optimizedScore = aiResult.data.score;
-  } else {
-    logServerError({
-      context: "server_action",
-      operation: "synthesizeOptimizedResumeForPreview_re-score",
-      action: "synthesizeOptimizedResumeForPreview",
-      message: "Re-score após síntese falhou.",
-      errorMessage: aiResult.error,
-    });
-  }
+  const optimizedScore = 0; //TODO: Implement the optimized score calculation
 
   const updatePayload: { status: string; optimized_score?: number } = {
     status: "completed",
+    optimized_score: optimizedScore,
   };
-  if (optimizedScore != null) {
-    updatePayload.optimized_score = optimizedScore;
-  }
 
   const { error: updateStatusError } = await supabase
     .from("analyses")
