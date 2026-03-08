@@ -121,9 +121,9 @@ export function calculateAtsScore(
     for (const skill of skills) {
       if (isHard) {
         points += skill.type === "required" ? 5 : 2;
-      } else {
-        points += skill.type === "required" ? 3 : 1;
+        continue;
       }
+      points += skill.type === "required" ? 3 : 1;
     }
     return points;
   };
