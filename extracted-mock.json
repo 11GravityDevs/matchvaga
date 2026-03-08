@@ -2,6 +2,8 @@
   "success": true,
   "data": {
     "is_job_description": true,
+    "job_title": "Desenvolvedor Front-end React/TypeScript",
+    "job_company": "Empresa Exemplo Ltda",
     "hard_skills": [
       {
         "name": "JavaScript",

@@ -42,6 +42,8 @@ export interface JobSkillsResult {
       original_term: string;
       type: "required" | "differential";
     }>;
+    job_title: string;
+    job_company: string;
   };
 }
 
@@ -256,6 +258,8 @@ export async function extractJobSkills(
       data: {
         hard_skills: validated.data.hard_skills,
         soft_skills: validated.data.soft_skills,
+        job_title: validated.data.job_title,
+        job_company: validated.data.job_company,
       },
     };
   } catch (error) {

@@ -34,7 +34,15 @@ export const JOB_SKILLS_JSON_SCHEMA = {
       },
     },
     is_job_description: { type: "boolean" as const },
+    job_title: { type: "string" as const },
+    job_company: { type: "string" as const },
   },
-  required: ["hard_skills", "soft_skills", "is_job_description"] as const,
+  required: [
+    "hard_skills",
+    "soft_skills",
+    "is_job_description",
+    "job_title",
+    "job_company",
+  ] as const,
   additionalProperties: false,
 };

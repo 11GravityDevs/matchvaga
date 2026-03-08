@@ -169,8 +169,8 @@ export async function runSkillsMatch(
   );
 
   const jobSnapshot = {
-    title: "Nao implementado", //matchResult.data.job_title
-    company: "Nao implementado", //matchResult.data.job_company,
+    title: jobSkillsResult.data.job_title,
+    company: jobSkillsResult.data.job_company,
     rawText,
   };
 
