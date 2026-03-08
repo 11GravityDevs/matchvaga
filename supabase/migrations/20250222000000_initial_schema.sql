@@ -19,9 +19,10 @@ CREATE TABLE analyses (
   job_snapshot JSONB NOT NULL,
   score INTEGER NOT NULL CHECK (score >= 0 AND score <= 100),
   optimized_score INTEGER CHECK (optimized_score >= 0 AND optimized_score <= 100),
-  matched_skills JSONB NOT NULL DEFAULT '[]',
-  missing_technical_skills JSONB NOT NULL DEFAULT '[]',
-  missing_behavioral_skills JSONB NOT NULL DEFAULT '[]',
+  user_hard_skills JSONB NOT NULL DEFAULT '[]',
+  user_soft_skills JSONB NOT NULL DEFAULT '[]',
+  missing_hard_skills JSONB NOT NULL DEFAULT '[]',
+  missing_soft_skills JSONB NOT NULL DEFAULT '[]',
   status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'completed', 'abandoned')),
   created_at TIMESTAMPTZ DEFAULT NOW()
 );

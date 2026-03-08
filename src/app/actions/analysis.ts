@@ -2,17 +2,20 @@
 
 import { revalidatePath } from "next/cache";
 
-import { createClient } from "@/lib/supabase/server";
-import { runGapAnalysisAI } from "@/lib/ai/clients/openai";
+import { extractJobSkills } from "@/lib/ai/clients/anthropic";
+import { matchJobSkillsToResume } from "@/lib/ai/clients/openai";
+import type { JobSkill } from "@/lib/ai/config/job-skills-schema";
 import { logServerError } from "@/lib/logger";
+import { createClient } from "@/lib/supabase/server";
 import { jobSnapshotSchema } from "@/schemas/job";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
-import { translateAuthError } from "@/utils/auth";
 import {
+  applySkillsMatchToUserSkills,
   missingSkillsFromColumns,
   type MissingSkillsByCategory,
 } from "@/utils/analysis";
+import { translateAuthError } from "@/utils/auth";
 import {
   JOB_DESCRIPTION_TOO_LONG_MESSAGE,
   NOT_JOB_DESCRIPTION_MESSAGE,
@@ -32,6 +35,19 @@ export interface RunGapAnalysisResult {
 }
 
 export type { MissingSkillsByCategory } from "@/utils/analysis";
+
+export interface RunSkillsMatchResult {
+  success: boolean;
+  analysisId?: string;
+  score?: number;
+  user_hard_skills?: string[];
+  user_soft_skills?: string[];
+  missing_hard_skills?: JobSkill[];
+  missing_soft_skills?: JobSkill[];
+  job_title?: string;
+  job_company?: string;
+  error?: string;
+}
 
 export interface AnalysisRow {
   id: string;
@@ -54,6 +70,12 @@ export interface GetAnalysesForUserResult {
 export async function runGapAnalysis(
   jobDescription: string
 ): Promise<RunGapAnalysisResult> {
+  return { success: false, error: "Obsoleto" };
+}
+
+export async function runSkillsMatch(
+  jobDescription: string
+): Promise<RunSkillsMatchResult> {
   const rawText = jobDescription.trim();
   if (rawText.length === 0) {
     return { success: false, error: "Cole a descrição da vaga para analisar." };
@@ -117,27 +139,58 @@ export async function runGapAnalysis(
     };
   }
 
-  const aiResult = await runGapAnalysisAI(resumeData, rawText);
-  if (!aiResult.success) {
-    const isNotJobError = aiResult.error === NOT_JOB_DESCRIPTION_MESSAGE;
+  const jobSkillsResult = await extractJobSkills(rawText);
 
-    if (!isNotJobError) {
-      logServerError({
-        context: "server_action",
-        operation: "runGapAnalysis",
-        action: "runGapAnalysis",
-        message: "Análise de gap (IA) retornou erro.",
-        errorMessage: aiResult.error,
-      });
-    }
-    return { success: false, error: aiResult.error };
+  if (!jobSkillsResult.success) {
+    logServerError({
+      context: "server_action",
+      operation: "runSkillsMatch",
+      action: "runSkillsMatch",
+      message: "Extração de skills da vaga (IA) retornou erro.",
+      errorMessage: jobSkillsResult.error,
+    });
+    return { success: false, error: jobSkillsResult.error };
   }
 
+  const matchResult = await matchJobSkillsToResume(
+    jobSkillsResult.data,
+    resumeData
+  );
+  if (!matchResult.success) {
+    logServerError({
+      context: "server_action",
+      operation: "runSkillsMatch",
+      action: "runSkillsMatch",
+      message: "Match de habilidades vaga x currículo retornou erro.",
+      errorMessage: matchResult.error,
+    });
+    return { success: false, error: matchResult.error };
+  }
+
+  const user_hard_skills = [...(resumeData.hardSkills ?? [])];
+  const user_soft_skills = [...(resumeData.softSkills ?? [])];
+
+  const applied = applySkillsMatchToUserSkills(
+    user_hard_skills,
+    user_soft_skills,
+    matchResult.data
+  );
+
+  const appliedHardSet = new Set(applied.user_hard_skills);
+  const appliedSoftSet = new Set(applied.user_soft_skills);
+  const missing_hard_skills = jobSkillsResult.data.hard_skills.filter(
+    (s) => !appliedHardSet.has(s.original_term)
+  );
+  const missing_soft_skills = jobSkillsResult.data.soft_skills.filter(
+    (s) => !appliedSoftSet.has(s.original_term)
+  );
+
   const jobSnapshot = {
-    title: aiResult.data.job_title,
-    company: aiResult.data.job_company,
+    title: "Nao implementado", //matchResult.data.job_title
+    company: "Nao implementado", //matchResult.data.job_company,
     rawText,
   };
+
   const jobParsed = jobSnapshotSchema.safeParse(jobSnapshot);
   if (!jobParsed.success) {
     return { success: false, error: "Dados da vaga inválidos." };
@@ -149,11 +202,12 @@ export async function runGapAnalysis(
       user_id: user.id,
       resume_id: resumeRow.id,
       job_snapshot: jobParsed.data as unknown as Record<string, unknown>,
-      score: aiResult.data.score,
+      score: 0,
       optimized_score: 0,
-      matched_skills: aiResult.data.matched_skills,
-      missing_technical_skills: aiResult.data.missing_technical_skills,
-      missing_behavioral_skills: aiResult.data.missing_behavioral_skills,
+      user_hard_skills: applied.user_hard_skills,
+      user_soft_skills: applied.user_soft_skills,
+      missing_hard_skills,
+      missing_soft_skills,
       status: "pending",
     })
     .select("id")
@@ -162,7 +216,7 @@ export async function runGapAnalysis(
   if (insertError) {
     logServerError({
       context: "db",
-      operation: "runGapAnalysis_insert",
+      operation: "runSkillsMatch_insert",
       message: insertError.message,
     });
     return {
@@ -185,7 +239,7 @@ export async function runGapAnalysis(
     if (decrementError) {
       logServerError({
         context: "db",
-        operation: "runGapAnalysis_credit_decrement",
+        operation: "runSkillsMatch_credit_decrement",
         message: decrementError.message,
       });
     }
@@ -201,12 +255,13 @@ export async function runGapAnalysis(
   return {
     success: true,
     analysisId: analysisRow.id,
-    score: aiResult.data.score,
-    matched_skills: aiResult.data.matched_skills,
-    missing_technical_skills: aiResult.data.missing_technical_skills,
-    missing_behavioral_skills: aiResult.data.missing_behavioral_skills,
-    job_title: aiResult.data.job_title,
-    job_company: aiResult.data.job_company,
+    score: 0,
+    // user_hard_skills: applied.user_hard_skills,
+    // user_soft_skills: applied.user_soft_skills,
+    missing_hard_skills,
+    missing_soft_skills,
+    job_title: jobParsed.data.title,
+    job_company: jobParsed.data.company,
   };
 }
 
