@@ -12,6 +12,7 @@ import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
 import {
   applySkillsMatchToUserSkills,
+  calculateAtsScore,
   missingSkillsFromJobSkillColumns,
   type MissingSkillsByCategory,
 } from "@/utils/analysis";
@@ -168,6 +169,13 @@ export async function runSkillsMatch(
     (s) => !appliedSoftSet.has(s.original_term)
   );
 
+  const score = calculateAtsScore(
+    jobSkillsResult.data.hard_skills,
+    jobSkillsResult.data.soft_skills,
+    missing_hard_skills,
+    missing_soft_skills
+  );
+
   const jobSnapshot = {
     title: jobSkillsResult.data.job_title,
     company: jobSkillsResult.data.job_company,
@@ -185,7 +193,7 @@ export async function runSkillsMatch(
       user_id: user.id,
       resume_id: resumeRow.id,
       job_snapshot: jobParsed.data as unknown as Record<string, unknown>,
-      score: 0,
+      score,
       optimized_score: 0,
       matched_skills_count: matched_skills_count,
       user_hard_skills: applied.user_hard_skills,
@@ -239,7 +247,7 @@ export async function runSkillsMatch(
   return {
     success: true,
     analysisId: analysisRow.id,
-    score: 0,
+    score,
     matched_skills_count,
     missing_hard_skills,
     missing_soft_skills,
