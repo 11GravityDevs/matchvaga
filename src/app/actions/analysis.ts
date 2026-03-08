@@ -133,10 +133,6 @@ export async function runSkillsMatch(
     return { success: false, error: jobSkillsResult.error };
   }
 
-  const matched_skills_count =
-    jobSkillsResult.data.hard_skills.length +
-    jobSkillsResult.data.soft_skills.length;
-
   const matchResult = await matchJobSkillsToResume(
     jobSkillsResult.data,
     resumeData
@@ -151,6 +147,8 @@ export async function runSkillsMatch(
     });
     return { success: false, error: matchResult.error };
   }
+
+  const matched_skills_count = matchResult.data.length;
 
   const user_hard_skills = [...(resumeData.hardSkills ?? [])];
   const user_soft_skills = [...(resumeData.softSkills ?? [])];
