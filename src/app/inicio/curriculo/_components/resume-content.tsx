@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useResume } from "../_hooks/use-resume";
 import { useResumeForm } from "@/hooks/use-resume-form";
 import { useResumeFormValidation } from "@/hooks/use-resume-form-validation";
@@ -7,6 +8,7 @@ import { ResumeFormCard } from "@/components/shared/resume-form-card";
 import { Loading } from "@/components/ui/loading";
 import type { ResumeData } from "@/types/resume";
 import { useToastNotification } from "@/hooks/use-toast-notification";
+import { useUnsavedChanges } from "@/contexts/unsaved-changes-context";
 import { prepareResumeFormInitialData } from "@/utils/resume";
 
 interface ResumeEditFormProps {
@@ -21,6 +23,8 @@ function ResumeEditForm({ initialData, save, isSaving }: ResumeEditFormProps) {
 
   const {
     data,
+    isDirty,
+    reset,
     updateField,
     updateExperience,
     addExperience,
@@ -30,6 +34,18 @@ function ResumeEditForm({ initialData, save, isSaving }: ResumeEditFormProps) {
     removeEducation,
     handleSummaryChange,
   } = useResumeForm({ initialData });
+
+  const { setDirty, setOnBeforeLeave } = useUnsavedChanges();
+
+  useEffect(() => {
+    setDirty(isDirty);
+    return () => setDirty(false);
+  }, [isDirty, setDirty]);
+
+  useEffect(() => {
+    setOnBeforeLeave(reset);
+    return () => setOnBeforeLeave(undefined);
+  }, [reset, setOnBeforeLeave]);
 
   const {
     validationErrors,

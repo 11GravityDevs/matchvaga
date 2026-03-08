@@ -2,9 +2,8 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Lightbulb, Sparkles } from "lucide-react";
-import Link from "next/link";
-
 import { runSkillsMatch } from "@/app/actions/analysis";
+import { ConfirmLeaveLink } from "@/components/shared/confirm-leave-link";
 import { JOB_DESCRIPTION_MAX } from "@/constants/job";
 import {
   QUERY_KEY_ANALYSES,
@@ -118,7 +117,9 @@ export function StepJobInput() {
             Clique no botão abaixo para comprar mais análises e continuar.
           </p>
           <Button size="brand" className="gap-1.5" asChild>
-            <Link href={ROUTE_HOME_CHECKOUT}>Comprar análises</Link>
+            <ConfirmLeaveLink href={ROUTE_HOME_CHECKOUT}>
+              Comprar análises
+            </ConfirmLeaveLink>
           </Button>
         </div>
       </div>

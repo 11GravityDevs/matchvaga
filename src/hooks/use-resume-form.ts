@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   createEmptyEducation,
   createEmptyExperience,
@@ -22,6 +22,8 @@ export interface UseResumeFormOptions {
 
 export interface UseResumeFormReturn {
   data: ResumeData;
+  isDirty: boolean;
+  reset: () => void;
   updateField: <K extends keyof ResumeData>(
     key: K,
     value: ResumeData[K]
@@ -35,11 +37,24 @@ export interface UseResumeFormReturn {
   handleSummaryChange: (value: string) => void;
 }
 
+function resumeDataEquals(a: ResumeData, b: ResumeData): boolean {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
+
 export function useResumeForm({
   initialData,
   onSummarySync,
 }: UseResumeFormOptions): UseResumeFormReturn {
   const [data, setData] = useState<ResumeData>(initialData);
+  const initialDataRef = useRef<ResumeData>(initialData);
+
+  useEffect(() => {
+    initialDataRef.current = initialData;
+  }, [initialData]);
+
+  const reset = useCallback(() => {
+    setData(initialDataRef.current);
+  }, []);
 
   function updateField<K extends keyof ResumeData>(
     key: K,
@@ -117,8 +132,15 @@ export function useResumeForm({
     onSummarySync?.(value);
   }
 
+  const isDirty = useMemo(
+    () => !resumeDataEquals(data, initialData),
+    [data, initialData]
+  );
+
   return {
     data,
+    isDirty,
+    reset,
     updateField,
     updateExperience,
     addExperience,

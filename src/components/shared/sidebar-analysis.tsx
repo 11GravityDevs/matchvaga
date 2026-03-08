@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { FileText } from "lucide-react";
 
+import { ConfirmLeaveLink } from "@/components/shared/confirm-leave-link";
 import { ROUTE_HOME_CHECKOUT } from "@/constants/routes";
 
 interface SidebarAnalysisProps {
@@ -31,12 +31,12 @@ export function SidebarAnalysis({ analysis }: SidebarAnalysisProps) {
           <p className="text-sm font-medium text-on-accent-brand/80">{label}</p>
         </div>
 
-        <Link
+        <ConfirmLeaveLink
           href={ROUTE_HOME_CHECKOUT}
           className="flex w-full items-center justify-center gap-2 rounded-lg bg-on-accent-brand py-2 text-sm font-semibold text-accent-brand transition-colors hover:bg-on-accent-brand/90"
         >
           Comprar Análises
-        </Link>
+        </ConfirmLeaveLink>
       </div>
     </div>
   );

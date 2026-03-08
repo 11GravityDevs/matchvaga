@@ -2,8 +2,8 @@
 
 import type { Metadata } from "next";
 
-import { Logo } from "@/components/shared/logo";
 import { BrandName } from "@/components/shared/brand-name";
+import { Logo } from "@/components/shared/logo";
 
 export const metadata: Metadata = {
   title: "Política de Privacidade",
@@ -16,6 +16,7 @@ export default async function PoliticaDePrivacidadePage() {
   return (
     <article className="mx-auto flex max-w-3xl flex-col items-center px-6 py-12">
       <Logo
+        href="/"
         className="mb-10 flex-col gap-3"
         iconContainerClassName="h-16 w-16 rounded-xl"
         iconClassName="h-8 w-8"

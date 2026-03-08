@@ -127,6 +127,7 @@ function VerifyFormWithKey({
 }) {
   const {
     data,
+    isDirty,
     updateField,
     updateExperience,
     addExperience,
@@ -139,6 +140,15 @@ function VerifyFormWithKey({
     initialData,
     onSummarySync: setResumeContent,
   });
+
+  useEffect(() => {
+    if (!isDirty) return;
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.preventDefault();
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [isDirty]);
 
   const {
     validationErrors,

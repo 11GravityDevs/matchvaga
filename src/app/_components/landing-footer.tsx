@@ -10,7 +10,7 @@ export function LandingFooter() {
   return (
     <footer className="w-full bg-footer-bg py-8 md:py-12">
       <div className="mx-auto flex w-full max-w-landing-content flex-col items-center justify-center gap-10 px-4 md:px-0">
-        <Logo variant="light" textClassName="text-lg font-bold" />
+        <Logo href="/" variant="light" textClassName="text-lg font-bold" />
 
         <nav
           className="flex flex-wrap items-center justify-center gap-4 md:gap-6"

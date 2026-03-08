@@ -6,6 +6,7 @@ import { CookieConsent } from "@/components/shared/cookie-consent";
 import { QueryProvider } from "@/components/providers/query-provider";
 import { ToastProvider } from "@/components/providers/toast-provider";
 import { AuthProvider } from "@/contexts/auth-context";
+import { UnsavedChangesProvider } from "@/contexts/unsaved-changes-context";
 import { SITE_URL } from "@/constants/site";
 
 import "./globals.css";
@@ -68,9 +69,11 @@ export default function RootLayout({
         <QueryProvider>
           <AuthProvider>
             <ToastProvider>
-              {children}
-              <CookieConsent />
-              <Analytics />
+              <UnsavedChangesProvider>
+                {children}
+                <CookieConsent />
+                <Analytics />
+              </UnsavedChangesProvider>
             </ToastProvider>
           </AuthProvider>
         </QueryProvider>

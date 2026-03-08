@@ -22,6 +22,7 @@ export default function Error({
     <div className="flex min-h-screen flex-col items-center justify-center bg-background p-8">
       <div className="relative flex flex-col items-center gap-8">
         <Logo
+          href="/"
           iconContainerClassName="h-14 w-14 rounded-2xl"
           iconClassName="h-7 w-7"
           textClassName="text-3xl text-foreground"

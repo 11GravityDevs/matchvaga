@@ -88,7 +88,7 @@ export function AnalysisHistoryTable({
         window.open(result.url, "_blank");
       } else if (!result.success) {
         const message =
-          result.error ?? "Erro ao baixar documento. Tente novamente.";
+          result.error ?? "Erro ao baixar currículo. Tente novamente.";
         showErrorToastNotification(message);
       }
       setOpenAnalysisId(null);
@@ -268,7 +268,7 @@ export function AnalysisHistoryTable({
       >
         <DialogContent className="sm:max-w-sm">
           <DialogHeader>
-            <DialogTitle>Baixar documento</DialogTitle>
+            <DialogTitle>Baixar currículo</DialogTitle>
           </DialogHeader>
           <DialogFooter className="flex-row gap-3 sm:justify-center">
             <Button

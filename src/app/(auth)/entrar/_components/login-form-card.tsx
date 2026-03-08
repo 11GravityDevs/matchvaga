@@ -1,7 +1,6 @@
-import { FileSearch } from "lucide-react";
 import Link from "next/link";
 
-import { BrandName } from "@/components/shared/brand-name";
+import { Logo } from "@/components/shared/logo";
 import {
   Card,
   CardContent,
@@ -32,11 +31,12 @@ export function LoginFormCard({
       )}
     >
       <div className="flex w-full max-w-login-form flex-col items-center gap-7">
-        <div className="flex flex-col items-center gap-1">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-accent-brand">
-            <FileSearch className="h-6 w-6 text-primary-foreground" />
-          </div>
-          <BrandName className="text-2xl font-bold tracking-[-0.5px]" />
+        <div className="flex flex-col items-center gap-3">
+          <Logo
+            iconContainerClassName="h-12 w-12 rounded-xl"
+            iconClassName="h-6 w-6"
+            textClassName="text-2xl font-bold tracking-[-0.5px]"
+          />
           <span className="text-sm font-normal text-muted-foreground">
             Otimização Inteligente de Currículos
           </span>

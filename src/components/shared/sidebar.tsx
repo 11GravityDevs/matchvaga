@@ -2,8 +2,9 @@
 
 import type { ComponentType } from "react";
 import { useQuery } from "@tanstack/react-query";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
+
+import { ConfirmLeaveLink } from "@/components/shared/confirm-leave-link";
 import {
   LayoutDashboard,
   FileText,
@@ -72,7 +73,10 @@ export function Sidebar() {
     <aside className="flex h-full w-sidebar shrink-0 flex-col gap-4 border-r border-sidebar-border bg-sidebar p-2">
       {/* Brand */}
       <div className="px-2 py-3">
-        <Logo textClassName="text-sidebar-foreground" />
+        <Logo
+          href={ROUTE_HOME_DASHBOARD}
+          textClassName="text-sidebar-foreground"
+        />
       </div>
 
       {/* Nav */}
@@ -84,7 +88,7 @@ export function Sidebar() {
           const isActive = pathname === item.href;
           const Icon = item.icon;
           return (
-            <Link
+            <ConfirmLeaveLink
               key={item.href}
               href={item.href}
               className={cn(
@@ -103,7 +107,7 @@ export function Sidebar() {
                 />
                 {item.label}
               </span>
-            </Link>
+            </ConfirmLeaveLink>
           );
         })}
 
