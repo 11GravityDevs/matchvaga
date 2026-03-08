@@ -1,0 +1,174 @@
+{
+  "success": true,
+  "data": {
+    "hard_skills": [
+      {
+        "name": "JavaScript",
+        "original_term": "JavaScript (ES6+)",
+        "type": "required"
+      },
+      {
+        "name": "Promises",
+        "original_term": "promises",
+        "type": "required"
+      },
+      {
+        "name": "Módulos JavaScript",
+        "original_term": "módulos",
+        "type": "required"
+      },
+      {
+        "name": "TypeScript",
+        "original_term": "TypeScript com tipagem avançada e generics",
+        "type": "required"
+      },
+      {
+        "name": "React.js",
+        "original_term": "React.js",
+        "type": "required"
+      },
+      {
+        "name": "React Hooks",
+        "original_term": "Hooks",
+        "type": "required"
+      },
+      {
+        "name": "Otimização de re-renders",
+        "original_term": "otimização de re-renders",
+        "type": "required"
+      },
+      {
+        "name": "Redux",
+        "original_term": "Redux",
+        "type": "required"
+      },
+      {
+        "name": "React Query",
+        "original_term": "React Query",
+        "type": "required"
+      },
+      {
+        "name": "SWR",
+        "original_term": "SWR",
+        "type": "required"
+      },
+      {
+        "name": "Bootstrap",
+        "original_term": "Bootstrap",
+        "type": "required"
+      },
+      {
+        "name": "CSS Modules",
+        "original_term": "CSS Modules",
+        "type": "required"
+      },
+      {
+        "name": "Styled Components",
+        "original_term": "Styled Components",
+        "type": "required"
+      },
+      {
+        "name": "Sass",
+        "original_term": "Sass",
+        "type": "required"
+      },
+      {
+        "name": "Integração de APIs RESTful",
+        "original_term": "Integração com APIs",
+        "type": "required"
+      },
+      {
+        "name": "Autenticação de APIs",
+        "original_term": "autenticação de APIs",
+        "type": "required"
+      },
+      {
+        "name": "Jest",
+        "original_term": "Jest",
+        "type": "required"
+      },
+      {
+        "name": "React Testing Library",
+        "original_term": "React Testing Library",
+        "type": "required"
+      },
+      {
+        "name": "Cypress",
+        "original_term": "Cypress",
+        "type": "required"
+      },
+      {
+        "name": "Playwright",
+        "original_term": "Playwright",
+        "type": "required"
+      },
+      {
+        "name": "ESLint",
+        "original_term": "ESLint",
+        "type": "required"
+      },
+      {
+        "name": "Prettier",
+        "original_term": "Prettier",
+        "type": "required"
+      },
+      {
+        "name": "Clean Code",
+        "original_term": "Clean Code",
+        "type": "required"
+      },
+      {
+        "name": "Git",
+        "original_term": "Git",
+        "type": "required"
+      },
+      {
+        "name": "GitFlow",
+        "original_term": "GitFlow",
+        "type": "required"
+      },
+      {
+        "name": "Docker",
+        "original_term": "Docker",
+        "type": "differential"
+      },
+      {
+        "name": "Kubernetes",
+        "original_term": "Kubernetes",
+        "type": "differential"
+      },
+      {
+        "name": "AWS",
+        "original_term": "AWS",
+        "type": "differential"
+      }
+    ],
+    "soft_skills": [
+      {
+        "name": "Liderança",
+        "original_term": "habilidades de liderança",
+        "type": "required"
+      },
+      {
+        "name": "Colaboração em equipe",
+        "original_term": "colaborar com o time",
+        "type": "required"
+      },
+      {
+        "name": "Comunicação técnica",
+        "original_term": "Boa comunicação técnica",
+        "type": "differential"
+      },
+      {
+        "name": "Organização",
+        "original_term": "organização",
+        "type": "differential"
+      },
+      {
+        "name": "Atenção aos detalhes",
+        "original_term": "Atenção aos detalhes",
+        "type": "differential"
+      }
+    ]
+  }
+}
