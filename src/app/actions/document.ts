@@ -69,25 +69,15 @@ export async function generateResumePreview(
   }
 
   const resumeData = resumeParsed.data as ResumeData;
-  const jobSnapshot = analysisRow.job_snapshot as {
-    title: string;
-    company: string;
-    rawText: string;
-  };
-  const matchedSkills = [
-    ...((analysisRow.user_hard_skills ?? []) as string[]),
-    ...((analysisRow.user_soft_skills ?? []) as string[]),
-  ];
+
+  const userHardSkills = analysisRow.user_hard_skills ?? [];
+  const userSoftSkills = analysisRow.user_soft_skills ?? [];
+
   const hard = selectedHardSkills ?? [];
   const soft = selectedSoftSkills ?? [];
   const hasAnyMissing = hard.length > 0 || soft.length > 0;
 
-  const synthesis = await synthesizeResumeContent(
-    resumeData,
-    jobSnapshot,
-    matchedSkills,
-    hasAnyMissing ? { hard, soft } : undefined
-  );
+  const synthesis = await synthesizeResumeContent(); //TODO: Implement the synthesis of the resume content
 
   if (!synthesis.success) {
     logServerError({

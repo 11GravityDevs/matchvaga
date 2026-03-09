@@ -5,8 +5,6 @@ import Anthropic from "@anthropic-ai/sdk";
 import { JOB_SKILLS_JSON_SCHEMA } from "@/lib/ai/config/job-skills-json-schema";
 import { jobSkillsResponseSchema } from "@/lib/ai/config/job-skills-schema";
 import { JOB_SKILLS_EXTRACTION_PROMPT } from "@/lib/ai/prompts/job-skills";
-import { SYNTHESIS_SYSTEM_PROMPT } from "@/lib/ai/prompts/synthesis";
-import { normalizeAIResumeData } from "@/lib/ai/utils/normalize-resume";
 import { logServerError } from "@/lib/logger";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
@@ -114,12 +112,7 @@ Return the optimized resume as JSON. Include skillsByCategory (array of { catego
 
 const USE_SYNTHESIS_MOCK = true;
 
-export async function synthesizeResumeContent(
-  resumeData: ResumeData,
-  job: { title: string; company: string; rawText: string },
-  matchedSkills: string[],
-  missingSkills: { hard: string[]; soft: string[] } | undefined
-): Promise<SynthesisOutput> {
+export async function synthesizeResumeContent(): Promise<SynthesisOutput> {
   if (USE_SYNTHESIS_MOCK) {
     const data = (optimizedMock as { success: boolean; data: unknown }).data;
     const validated = resumeDataSchema.parse(data);
@@ -134,61 +127,7 @@ export async function synthesizeResumeContent(
 
   const client = new Anthropic({ apiKey });
 
-  try {
-    const message = await client.messages.create({
-      model: MODEL,
-      max_tokens: 8192,
-      system: SYNTHESIS_SYSTEM_PROMPT,
-      messages: [
-        {
-          role: "user",
-          content: buildUserPrompt(
-            resumeData,
-            job,
-            matchedSkills,
-            missingSkills
-          ),
-        },
-      ],
-    });
-
-    const textBlock = message.content.find((b) => b.type === "text");
-    const content =
-      textBlock && textBlock.type === "text" ? textBlock.text : "";
-
-    if (!content) {
-      return { success: false, error: "Resposta vazia do modelo." };
-    }
-
-    const trimmed = content.trim();
-    const jsonMatch = trimmed.match(/\{[\s\S]*\}/);
-    const jsonStr = jsonMatch ? jsonMatch[0] : trimmed;
-    const parsed = JSON.parse(jsonStr) as unknown;
-    const normalized = normalizeAIResumeData(parsed);
-    const validated = resumeDataSchema.parse(normalized);
-
-    return { success: true, data: validated };
-  } catch (error) {
-    logServerError(
-      {
-        context: "ai",
-        operation: "synthesizeResumeContent",
-        message: "Síntese de conteúdo do currículo para a vaga falhou.",
-        model: MODEL,
-      },
-      error
-    );
-    if (error instanceof SyntaxError) {
-      return {
-        success: false,
-        error: "Não foi possível interpretar o documento.",
-      };
-    }
-    if (error instanceof Error) {
-      return { success: false, error: error.message };
-    }
-    return { success: false, error: "Erro ao gerar documento." };
-  }
+  return { success: false, error: "Será implementado em breve." };
 }
 
 const USE_JOB_SKILLS_MOCK = true;
