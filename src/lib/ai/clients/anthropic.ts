@@ -63,7 +63,7 @@ export interface JobSkillsError {
 
 export type JobSkillsOutput = JobSkillsResult | JobSkillsError;
 
-const USE_SYNTHESIS_MOCK = true;
+const USE_MOCK = true;
 
 function stripJsonCodeFences(raw: string): string {
   let s = raw.trim();
@@ -108,7 +108,7 @@ function mockToSynthesizedFields(mockData: {
 export async function synthesizeResumeContent(
   params: SynthesisParams
 ): Promise<SynthesisOutput> {
-  if (USE_SYNTHESIS_MOCK) {
+  if (USE_MOCK) {
     const raw = (optimizedMock as { success: boolean; data: unknown }).data;
     const data = raw as {
       summary: string;
@@ -189,12 +189,10 @@ export async function synthesizeResumeContent(
   }
 }
 
-const USE_JOB_SKILLS_MOCK = true;
-
 export async function extractJobSkills(
   jobDescription: string
 ): Promise<JobSkillsOutput> {
-  if (USE_JOB_SKILLS_MOCK) {
+  if (USE_MOCK) {
     const data = (extractedMock as { success: boolean; data: unknown }).data;
     const validated = jobSkillsResponseSchema.parse(data);
     return { success: true, data: validated };
