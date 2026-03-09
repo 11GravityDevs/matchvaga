@@ -3,7 +3,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { Check, Lightbulb, RefreshCw, Sparkles } from "lucide-react";
 
-import { synthesizeOptimizedResumeForPreview } from "@/app/actions/document";
+import { generateResumePreview } from "@/app/actions/document";
 import { StepIndicator } from "@/components/shared/step-indicator";
 import { Button } from "@/components/ui/button";
 import { Loading } from "@/components/ui/loading";
@@ -126,7 +126,7 @@ export function StepGapAnalysis() {
     mutationFn: async () => {
       if (!analysisId) throw new Error("Análise não encontrada.");
 
-      const result = await synthesizeOptimizedResumeForPreview(
+      const result = await generateResumePreview(
         analysisId,
         selectedHard,
         selectedSoft

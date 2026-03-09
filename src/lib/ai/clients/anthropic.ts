@@ -114,7 +114,7 @@ Return the optimized resume as JSON. Include skillsByCategory (array of { catego
 
 const USE_SYNTHESIS_MOCK = true;
 
-export async function synthesizeOptimizedResume(
+export async function synthesizeResumeContent(
   resumeData: ResumeData,
   job: { title: string; company: string; rawText: string },
   matchedSkills: string[],
@@ -172,8 +172,8 @@ export async function synthesizeOptimizedResume(
     logServerError(
       {
         context: "ai",
-        operation: "synthesizeOptimizedResume",
-        message: "Síntese de currículo otimizado falhou.",
+        operation: "synthesizeResumeContent",
+        message: "Síntese de conteúdo do currículo para a vaga falhou.",
         model: MODEL,
       },
       error

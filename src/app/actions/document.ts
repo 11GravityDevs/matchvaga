@@ -1,6 +1,6 @@
 "use server";
 
-import { synthesizeOptimizedResume } from "@/lib/ai/clients/anthropic";
+import { synthesizeResumeContent } from "@/lib/ai/clients/anthropic";
 import { buildResumeDocx } from "@/lib/document/resume-to-docx";
 import { ResumeDocument } from "@/lib/document/resume-to-pdf";
 import { logServerError } from "@/lib/logger";
@@ -15,18 +15,18 @@ import React from "react";
 const BUCKET = "documents";
 const SIGNED_URL_EXPIRES_IN = 3600;
 
-export interface SynthesizeOptimizedResumeResult {
+export interface GenerateResumePreviewResult {
   success: boolean;
   data?: ResumeData;
   optimizedScore?: number;
   error?: string;
 }
 
-export async function synthesizeOptimizedResumeForPreview(
+export async function generateResumePreview(
   analysisId: string,
   selectedHardSkills?: string[],
   selectedSoftSkills?: string[]
-): Promise<SynthesizeOptimizedResumeResult> {
+): Promise<GenerateResumePreviewResult> {
   const supabase = await createClient();
   const {
     data: { user },
@@ -82,7 +82,7 @@ export async function synthesizeOptimizedResumeForPreview(
   const soft = selectedSoftSkills ?? [];
   const hasAnyMissing = hard.length > 0 || soft.length > 0;
 
-  const synthesis = await synthesizeOptimizedResume(
+  const synthesis = await synthesizeResumeContent(
     resumeData,
     jobSnapshot,
     matchedSkills,
@@ -92,8 +92,8 @@ export async function synthesizeOptimizedResumeForPreview(
   if (!synthesis.success) {
     logServerError({
       context: "server_action",
-      operation: "synthesizeOptimizedResumeForPreview",
-      action: "synthesizeOptimizedResumeForPreview",
+      operation: "generateResumePreview",
+      action: "generateResumePreview",
       message: "Síntese de currículo otimizado retornou erro.",
       errorMessage: synthesis.error,
     });
@@ -116,7 +116,7 @@ export async function synthesizeOptimizedResumeForPreview(
   if (updateStatusError) {
     logServerError({
       context: "db",
-      operation: "synthesizeOptimizedResumeForPreview_status_update",
+      operation: "generateResumePreview_status_update",
       message: updateStatusError.message,
     });
   }
