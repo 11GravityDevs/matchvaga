@@ -133,7 +133,7 @@ export async function synthesizeResumeContent(
     const userContent = JSON.stringify(params);
     const message = await client.messages.create({
       model: MODEL,
-      max_tokens: 4096,
+      max_tokens: 8192,
       system: RESUME_SYNTHESIS_SYSTEM_PROMPT,
       messages: [{ role: "user", content: userContent }],
     });
