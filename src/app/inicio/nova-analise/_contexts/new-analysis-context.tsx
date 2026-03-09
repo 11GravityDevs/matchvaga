@@ -47,10 +47,10 @@ interface NewAnalysisContextValue {
   score: number | null;
   optimizedScore: number | null;
   matchedSkillsCount: number;
-  technicalSkills: MissingSkill[];
-  behavioralSkills: MissingSkill[];
-  selectedTechnicalSkills: string[];
-  selectedBehavioralSkills: string[];
+  hardSkills: MissingSkill[];
+  softSkills: MissingSkill[];
+  selectedHardSkills: string[];
+  selectedSoftSkills: string[];
   setStep: (step: WizardStep) => void;
   setJobDescription: (value: string) => void;
   setJobRole: (value: string) => void;
@@ -58,14 +58,14 @@ interface NewAnalysisContextValue {
     analysisId: string;
     score: number;
     matchedSkillsCount: number;
-    technicalSkills: string[];
-    behavioralSkills: string[];
+    hardSkills: string[];
+    softSkills: string[];
   }) => void;
   setOptimizedResumeData: (data: ResumeData | null) => void;
   setOptimizedScore: (value: number | null) => void;
   toggleSkill: (id: string) => void;
-  setSelectedTechnicalSkills: (skills: string[]) => void;
-  setSelectedBehavioralSkills: (skills: string[]) => void;
+  setSelectedHardSkills: (skills: string[]) => void;
+  setSelectedSoftSkills: (skills: string[]) => void;
   refreshResume: () => Promise<void>;
   reset: () => void;
 }
@@ -80,7 +80,7 @@ function slugify(str: string): string {
 }
 
 function toMissingSkillsWithPrefix(
-  prefix: "technical" | "behavioral",
+  prefix: "hard" | "soft",
   labels: string[]
 ): MissingSkill[] {
   return labels.map((label) => ({
@@ -101,10 +101,10 @@ const INITIAL_STATE = {
   score: null as number | null,
   optimizedScore: null as number | null,
   matchedSkillsCount: 0,
-  technicalSkills: [] as MissingSkill[],
-  behavioralSkills: [] as MissingSkill[],
-  selectedTechnicalSkills: [] as string[],
-  selectedBehavioralSkills: [] as string[],
+  hardSkills: [] as MissingSkill[],
+  softSkills: [] as MissingSkill[],
+  selectedHardSkills: [] as string[],
+  selectedSoftSkills: [] as string[],
 };
 
 interface NewAnalysisProviderProps {
@@ -153,18 +153,18 @@ export function NewAnalysisProvider({
   const [matchedSkillsCount, setMatchedSkillsCount] = useState<number>(
     INITIAL_STATE.matchedSkillsCount
   );
-  const [technicalSkills, setTechnicalSkills] = useState<MissingSkill[]>(
-    INITIAL_STATE.technicalSkills
+  const [hardSkills, setHardSkills] = useState<MissingSkill[]>(
+    INITIAL_STATE.hardSkills
   );
-  const [behavioralSkills, setBehavioralSkills] = useState<MissingSkill[]>(
-    INITIAL_STATE.behavioralSkills
+  const [softSkills, setSoftSkills] = useState<MissingSkill[]>(
+    INITIAL_STATE.softSkills
   );
-  const [selectedTechnicalSkills, setSelectedTechnicalSkills] = useState<
-    string[]
-  >(INITIAL_STATE.selectedTechnicalSkills);
-  const [selectedBehavioralSkills, setSelectedBehavioralSkills] = useState<
-    string[]
-  >(INITIAL_STATE.selectedBehavioralSkills);
+  const [selectedHardSkills, setSelectedHardSkills] = useState<string[]>(
+    INITIAL_STATE.selectedHardSkills
+  );
+  const [selectedSoftSkills, setSelectedSoftSkills] = useState<string[]>(
+    INITIAL_STATE.selectedSoftSkills
+  );
   const [optimizedResumeData, setOptimizedResumeData] =
     useState<ResumeData | null>(INITIAL_STATE.optimizedResumeData);
   const [optimizedScore, setOptimizedScore] = useState<number | null>(
@@ -175,29 +175,25 @@ export function NewAnalysisProvider({
     analysisId: string;
     score: number;
     matchedSkillsCount: number;
-    technicalSkills: string[];
-    behavioralSkills: string[];
+    hardSkills: string[];
+    softSkills: string[];
   }) {
     setAnalysisId(result.analysisId);
     setScore(result.score);
     setMatchedSkillsCount(result.matchedSkillsCount);
-    setTechnicalSkills(
-      toMissingSkillsWithPrefix("technical", result.technicalSkills)
-    );
-    setBehavioralSkills(
-      toMissingSkillsWithPrefix("behavioral", result.behavioralSkills)
-    );
-    setSelectedTechnicalSkills(result.technicalSkills);
-    setSelectedBehavioralSkills(result.behavioralSkills);
+    setHardSkills(toMissingSkillsWithPrefix("hard", result.hardSkills));
+    setSoftSkills(toMissingSkillsWithPrefix("soft", result.softSkills));
+    setSelectedHardSkills(result.hardSkills);
+    setSelectedSoftSkills(result.softSkills);
   }
 
   function toggleSkill(id: string) {
-    if (id.startsWith("technical-")) {
-      setTechnicalSkills((prev) =>
+    if (id.startsWith("hard-")) {
+      setHardSkills((prev) =>
         prev.map((s) => (s.id === id ? { ...s, selected: !s.selected } : s))
       );
     } else {
-      setBehavioralSkills((prev) =>
+      setSoftSkills((prev) =>
         prev.map((s) => (s.id === id ? { ...s, selected: !s.selected } : s))
       );
     }
@@ -214,10 +210,10 @@ export function NewAnalysisProvider({
     setAnalysisId(INITIAL_STATE.analysisId);
     setScore(INITIAL_STATE.score);
     setMatchedSkillsCount(INITIAL_STATE.matchedSkillsCount);
-    setTechnicalSkills(INITIAL_STATE.technicalSkills);
-    setBehavioralSkills(INITIAL_STATE.behavioralSkills);
-    setSelectedTechnicalSkills(INITIAL_STATE.selectedTechnicalSkills);
-    setSelectedBehavioralSkills(INITIAL_STATE.selectedBehavioralSkills);
+    setHardSkills(INITIAL_STATE.hardSkills);
+    setSoftSkills(INITIAL_STATE.softSkills);
+    setSelectedHardSkills(INITIAL_STATE.selectedHardSkills);
+    setSelectedSoftSkills(INITIAL_STATE.selectedSoftSkills);
     setOptimizedResumeData(INITIAL_STATE.optimizedResumeData);
     setOptimizedScore(INITIAL_STATE.optimizedScore);
   }
@@ -259,8 +255,8 @@ export function NewAnalysisProvider({
         analysisId: analysis.id,
         score: analysis.score,
         matchedSkillsCount: analysis.matched_skills_count,
-        technicalSkills: analysis.missing_skills.technical,
-        behavioralSkills: analysis.missing_skills.behavioral,
+        hardSkills: analysis.missing_skills.hard,
+        softSkills: analysis.missing_skills.soft,
       });
       setOptimizedScore(analysis.optimized_score ?? null);
       setStep(2);
@@ -291,10 +287,10 @@ export function NewAnalysisProvider({
         score,
         optimizedScore,
         matchedSkillsCount,
-        technicalSkills,
-        behavioralSkills,
-        selectedTechnicalSkills,
-        selectedBehavioralSkills,
+        hardSkills,
+        softSkills,
+        selectedHardSkills,
+        selectedSoftSkills,
         setStep,
         setJobDescription,
         setJobRole,
@@ -302,8 +298,8 @@ export function NewAnalysisProvider({
         setOptimizedResumeData,
         setOptimizedScore,
         toggleSkill,
-        setSelectedTechnicalSkills,
-        setSelectedBehavioralSkills,
+        setSelectedHardSkills,
+        setSelectedSoftSkills,
         refreshResume,
         reset,
       }}

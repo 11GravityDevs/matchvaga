@@ -32,8 +32,8 @@ export function StepPreviewExport() {
     score,
     optimizedScore,
     matchedSkillsCount,
-    selectedTechnicalSkills,
-    selectedBehavioralSkills,
+    selectedHardSkills,
+    selectedSoftSkills,
     reset,
   } = useNewAnalysis();
 
@@ -80,7 +80,7 @@ export function StepPreviewExport() {
 
   const skillsPresentCount = matchedSkillsCount;
   const skillsAddedCount =
-    selectedTechnicalSkills.length + selectedBehavioralSkills.length;
+    selectedHardSkills.length + selectedSoftSkills.length;
 
   return (
     <div className="flex flex-1 flex-col gap-4 overflow-hidden page-padding">

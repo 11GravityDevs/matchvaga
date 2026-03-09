@@ -24,8 +24,8 @@ export interface SynthesizeOptimizedResumeResult {
 
 export async function synthesizeOptimizedResumeForPreview(
   analysisId: string,
-  selectedTechnicalSkills?: string[],
-  selectedBehavioralSkills?: string[]
+  selectedHardSkills?: string[],
+  selectedSoftSkills?: string[]
 ): Promise<SynthesizeOptimizedResumeResult> {
   const supabase = await createClient();
   const {
@@ -78,15 +78,15 @@ export async function synthesizeOptimizedResumeForPreview(
     ...((analysisRow.user_hard_skills ?? []) as string[]),
     ...((analysisRow.user_soft_skills ?? []) as string[]),
   ];
-  const technical = selectedTechnicalSkills ?? [];
-  const behavioral = selectedBehavioralSkills ?? [];
-  const hasAnyMissing = technical.length > 0 || behavioral.length > 0;
+  const hard = selectedHardSkills ?? [];
+  const soft = selectedSoftSkills ?? [];
+  const hasAnyMissing = hard.length > 0 || soft.length > 0;
 
   const synthesis = await synthesizeOptimizedResume(
     resumeData,
     jobSnapshot,
     matchedSkills,
-    hasAnyMissing ? { technical, behavioral } : undefined
+    hasAnyMissing ? { hard, soft } : undefined
   );
 
   if (!synthesis.success) {

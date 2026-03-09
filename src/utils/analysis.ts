@@ -1,18 +1,8 @@
 import type { JobSkill } from "@/lib/ai/config/job-skills-schema";
 
 export interface MissingSkillsByCategory {
-  technical: string[];
-  behavioral: string[];
-}
-
-export function missingSkillsFromColumns(
-  technical: unknown,
-  behavioral: unknown
-): MissingSkillsByCategory {
-  return {
-    technical: Array.isArray(technical) ? technical : [],
-    behavioral: Array.isArray(behavioral) ? behavioral : [],
-  };
+  hard: string[];
+  soft: string[];
 }
 
 function jobSkillToLabel(s: unknown): string {
@@ -38,28 +28,8 @@ export function missingSkillsFromJobSkillColumns(
     ? (missingSoft as unknown[]).map(jobSkillToLabel).filter(Boolean)
     : [];
   return {
-    technical: hard,
-    behavioral: soft,
-  };
-}
-
-export function parseMissingSkillsFromDb(
-  raw: unknown
-): MissingSkillsByCategory {
-  if (
-    !raw ||
-    typeof raw !== "object" ||
-    !("technical" in raw) ||
-    !("behavioral" in raw)
-  ) {
-    return { technical: [], behavioral: [] };
-  }
-
-  const typed = raw as MissingSkillsByCategory;
-
-  return {
-    technical: Array.isArray(typed.technical) ? typed.technical : [],
-    behavioral: Array.isArray(typed.behavioral) ? typed.behavioral : [],
+    hard,
+    soft,
   };
 }
 

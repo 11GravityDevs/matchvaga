@@ -57,33 +57,33 @@ export type JobSkillsOutput = JobSkillsResult | JobSkillsError;
 function buildMissingSkillsBlock(
   missing:
     | {
-        technical: string[];
-        behavioral: string[];
+        hard: string[];
+        soft: string[];
       }
     | undefined
 ): string {
   if (!missing) {
     return "Missing skills: none — do not add any skills beyond the matched skills list above.";
   }
-  const { technical, behavioral } = missing;
-  const hasTechnical = technical.length > 0;
-  const hasBehavioral = behavioral.length > 0;
+  const { hard, soft } = missing;
+  const hasHard = hard.length > 0;
+  const hasSoft = soft.length > 0;
 
-  if (!hasTechnical && !hasBehavioral) {
+  if (!hasHard && !hasSoft) {
     return "Missing skills: none — do not add any skills beyond the matched skills list above.";
   }
 
   const lines: string[] = [];
 
-  if (hasTechnical) {
+  if (hasHard) {
     lines.push(
-      `Missing technical skills (weave in where truthful): ${technical.join(", ")}`
+      `Missing hard skills (weave in where truthful): ${hard.join(", ")}`
     );
   }
 
-  if (hasBehavioral) {
+  if (hasSoft) {
     lines.push(
-      `Missing behavioral skills (weave in where truthful): ${behavioral.join(", ")}`
+      `Missing soft skills (weave in where truthful): ${soft.join(", ")}`
     );
   }
 
@@ -94,7 +94,7 @@ function buildUserPrompt(
   resumeData: ResumeData,
   job: { title: string; company: string; rawText: string },
   matchedSkills: string[],
-  missingSkills: { technical: string[]; behavioral: string[] } | undefined
+  missingSkills: { hard: string[]; soft: string[] } | undefined
 ): string {
   return `Job: ${job.title} at ${job.company}
 
@@ -118,7 +118,7 @@ export async function synthesizeOptimizedResume(
   resumeData: ResumeData,
   job: { title: string; company: string; rawText: string },
   matchedSkills: string[],
-  missingSkills: { technical: string[]; behavioral: string[] } | undefined
+  missingSkills: { hard: string[]; soft: string[] } | undefined
 ): Promise<SynthesisOutput> {
   if (USE_SYNTHESIS_MOCK) {
     const data = (optimizedMock as { success: boolean; data: unknown }).data;

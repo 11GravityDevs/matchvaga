@@ -4,17 +4,17 @@ import { useMutation } from "@tanstack/react-query";
 import { Check, Lightbulb, RefreshCw, Sparkles } from "lucide-react";
 
 import { synthesizeOptimizedResumeForPreview } from "@/app/actions/document";
+import { StepIndicator } from "@/components/shared/step-indicator";
 import { Button } from "@/components/ui/button";
 import { Loading } from "@/components/ui/loading";
+import { useToastNotification } from "@/hooks/use-toast-notification";
 import { cn } from "@/utils/style";
-import { getScoreFeedback } from "../_utils/analysis";
 import {
   useNewAnalysis,
   WIZARD_STEPS,
 } from "../_contexts/new-analysis-context";
+import { getScoreFeedback } from "../_utils/analysis";
 import { ScoreRing } from "./score-ring";
-import { StepIndicator } from "@/components/shared/step-indicator";
-import { useToastNotification } from "@/hooks/use-toast-notification";
 
 const GENERATE_RESUME_THINKING_MESSAGES = [
   "Gerando currículo otimizado...",
@@ -100,28 +100,27 @@ export function StepGapAnalysis() {
     jobRole,
     score,
     matchedSkillsCount,
-    technicalSkills,
-    behavioralSkills,
+    hardSkills,
+    softSkills,
     toggleSkill,
     setStep,
-    setSelectedTechnicalSkills,
-    setSelectedBehavioralSkills,
+    setSelectedHardSkills,
+    setSelectedSoftSkills,
     setOptimizedResumeData,
     setOptimizedScore,
     analysisId,
   } = useNewAnalysis();
   const { showErrorToastNotification } = useToastNotification();
 
-  const selectedTechnical = technicalSkills
-    .filter((s) => s.selected)
-    .map((s) => s.label);
-  const selectedBehavioral = behavioralSkills
-    .filter((s) => s.selected)
-    .map((s) => s.label);
+  const selectedHard = hardSkills.filter((s) => s.selected).map((s) => s.label);
+
+  const selectedSoft = softSkills.filter((s) => s.selected).map((s) => s.label);
+
   const selectedCount =
-    technicalSkills.filter((s) => s.selected).length +
-    behavioralSkills.filter((s) => s.selected).length;
-  const totalSkillsCount = technicalSkills.length + behavioralSkills.length;
+    hardSkills.filter((s) => s.selected).length +
+    softSkills.filter((s) => s.selected).length;
+
+  const totalSkillsCount = hardSkills.length + softSkills.length;
 
   const { mutate: generateDocument, isPending: isGenerating } = useMutation({
     mutationFn: async () => {
@@ -129,8 +128,8 @@ export function StepGapAnalysis() {
 
       const result = await synthesizeOptimizedResumeForPreview(
         analysisId,
-        selectedTechnical,
-        selectedBehavioral
+        selectedHard,
+        selectedSoft
       );
 
       if (!result.success) {
@@ -142,8 +141,8 @@ export function StepGapAnalysis() {
       return result;
     },
     onSuccess: (result) => {
-      setSelectedTechnicalSkills(selectedTechnical);
-      setSelectedBehavioralSkills(selectedBehavioral);
+      setSelectedHardSkills(selectedHard);
+      setSelectedSoftSkills(selectedSoft);
       if (result.data) {
         setOptimizedResumeData(result.data);
       }
@@ -200,19 +199,17 @@ export function StepGapAnalysis() {
               <SkillsColumn
                 title="Técnico"
                 description="Selecione as habilidades que deseja incorporar ao currículo"
-                skills={technicalSkills}
-                selectedCount={technicalSkills.filter((s) => s.selected).length}
-                totalCount={technicalSkills.length}
+                skills={hardSkills}
+                selectedCount={hardSkills.filter((s) => s.selected).length}
+                totalCount={hardSkills.length}
                 onToggleSkill={toggleSkill}
               />
               <SkillsColumn
                 title="Comportamental"
                 description="Selecione as competências que deseja incorporar ao currículo"
-                skills={behavioralSkills}
-                selectedCount={
-                  behavioralSkills.filter((s) => s.selected).length
-                }
-                totalCount={behavioralSkills.length}
+                skills={softSkills}
+                selectedCount={softSkills.filter((s) => s.selected).length}
+                totalCount={softSkills.length}
                 onToggleSkill={toggleSkill}
               />
             </div>

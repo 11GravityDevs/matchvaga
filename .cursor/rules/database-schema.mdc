@@ -6,12 +6,18 @@ alwaysApply: false
 
 # Database Schema
 
-Ref: `supabase/migrations/20250222000000_initial_schema.sql`
+Ref: `supabase/migrations/20250222000000_initial_schema.sql`, `supabase/migrations/20250222000001_storage_documents.sql`
 
-**Tabelas:** resumes (id, user_id, parsed_data JSONB → ResumeData). analyses (id, user_id, resume_id, job_snapshot, score, matched_skills, missing_technical_skills, missing_behavioral_skills, status pending|completed|abandoned). user_credits (user_id, credits). purchases (id, stripe_session_id UNIQUE, user_id, package_id, credits_granted) — só service client. optimized_documents (id, analysis_id, file_path, format pdf|docx).
+**Tabelas:**
 
-**Mapping:** parsed_data → resumeDataSchema; job_snapshot → jobSnapshotSchema; matched/missing_skills = string[]; status em runGapAnalysis/synthesizeOptimizedResumeForPreview.
+- **resumes** — id, user_id, parsed_data (JSONB → ResumeData), created_at, updated_at.
+- **analyses** — id, user_id, resume_id, job_snapshot (JSONB → jobSnapshotSchema), score (0–100), optimized_score (0–100, opcional), matched_skills_count (≥0), user_hard_skills (JSONB array), user_soft_skills (JSONB array), missing_hard_skills (JSONB array), missing_soft_skills (JSONB array), status (pending|completed|abandoned), created_at.
+- **user_credits** — user_id (PK), credits (≥0, default 3), updated_at.
+- **purchases** — id, stripe_session_id (UNIQUE), user_id, package_id, credits_granted (>0), created_at. Sem policies RLS; só service client (webhook).
+- **optimized_documents** — id, analysis_id, file_path, format (pdf|docx), created_at.
 
-**RLS:** resumes, analyses, user_credits = auth.uid()=user_id. purchases = sem policies, só service client. optimized_documents = via analysis.
+**Mapping:** parsed_data → resumeDataSchema; job_snapshot → jobSnapshotSchema; user_hard_skills/user_soft_skills = skills matched; missing_hard_skills/missing_soft_skills = skills faltantes; status em runGapAnalysis/synthesizeOptimizedResumeForPreview.
 
-**Storage:** bucket `documents` para arquivos gerados (PDF/DOCX), com RLS por prefixo `{user_id}/*` (ver `supabase/migrations/20250222000001_storage_documents.sql`); usuários só podem inserir/selecionar arquivos no próprio diretório.
+**RLS:** resumes, analyses, user_credits = auth.uid()=user_id. user_credits usa WITH CHECK. optimized_documents = SELECT/INSERT via análise (EXISTS analysis do user). purchases = RLS ativado mas sem policies (apenas service role).
+
+**Storage:** bucket `documents` para PDF/DOCX; políticas em `20250222000001_storage_documents.sql`: INSERT e SELECT apenas quando `(storage.foldername(name))[1] = auth.uid()::text` (path `{user_id}/*`).
