@@ -71,8 +71,8 @@ export function StepJobInput() {
         analysisId: result.analysisId!,
         score: result.score ?? 0,
         matchedSkillsCount: result.matched_skills_count ?? 0,
-        technicalSkills: (result.missing_hard_skills ?? []).map((s) => s.name),
-        behavioralSkills: (result.missing_soft_skills ?? []).map((s) => s.name),
+        hardSkills: (result.missing_hard_skills ?? []).map((s) => s.name),
+        softSkills: (result.missing_soft_skills ?? []).map((s) => s.name),
       });
 
       setStep(2);

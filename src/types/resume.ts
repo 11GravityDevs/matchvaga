@@ -33,6 +33,7 @@ export interface ResumeData {
   summary: string;
   hardSkills: string[];
   softSkills: string[];
+  skillsByCategory?: SkillCategory[];
   languages?: string[];
   experience: ExperienceEntry[];
   education: EducationEntry[];

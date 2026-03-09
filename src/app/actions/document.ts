@@ -1,12 +1,14 @@
 "use server";
 
-import { synthesizeOptimizedResume } from "@/lib/ai/clients/anthropic";
+import { synthesizeResumeContent } from "@/lib/ai/clients/anthropic";
+import type { JobSkill } from "@/lib/ai/config/job-skills-schema";
 import { buildResumeDocx } from "@/lib/document/resume-to-docx";
 import { ResumeDocument } from "@/lib/document/resume-to-pdf";
 import { logServerError } from "@/lib/logger";
 import { createClient } from "@/lib/supabase/server";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
+import { calculateOptimizedScore } from "@/utils/analysis";
 import { translateAuthError } from "@/utils/auth";
 import { renderToBuffer } from "@react-pdf/renderer";
 import { revalidatePath } from "next/cache";
@@ -15,18 +17,18 @@ import React from "react";
 const BUCKET = "documents";
 const SIGNED_URL_EXPIRES_IN = 3600;
 
-export interface SynthesizeOptimizedResumeResult {
+export interface GenerateResumePreviewResult {
   success: boolean;
   data?: ResumeData;
   optimizedScore?: number;
   error?: string;
 }
 
-export async function synthesizeOptimizedResumeForPreview(
+export async function generateResumePreview(
   analysisId: string,
-  selectedTechnicalSkills?: string[],
-  selectedBehavioralSkills?: string[]
-): Promise<SynthesizeOptimizedResumeResult> {
+  selectedHardSkills?: string[],
+  selectedSoftSkills?: string[]
+): Promise<GenerateResumePreviewResult> {
   const supabase = await createClient();
   const {
     data: { user },
@@ -43,7 +45,9 @@ export async function synthesizeOptimizedResumeForPreview(
 
   const { data: analysisRow, error: analysisError } = await supabase
     .from("analyses")
-    .select("id, resume_id, job_snapshot, user_hard_skills, user_soft_skills")
+    .select(
+      "id, resume_id, score, user_hard_skills, user_soft_skills, missing_hard_skills, missing_soft_skills"
+    )
     .eq("id", analysisId)
     .eq("user_id", user.id)
     .single();
@@ -69,38 +73,86 @@ export async function synthesizeOptimizedResumeForPreview(
   }
 
   const resumeData = resumeParsed.data as ResumeData;
-  const jobSnapshot = analysisRow.job_snapshot as {
-    title: string;
-    company: string;
-    rawText: string;
-  };
-  const matchedSkills = [
-    ...((analysisRow.user_hard_skills ?? []) as string[]),
-    ...((analysisRow.user_soft_skills ?? []) as string[]),
-  ];
-  const technical = selectedTechnicalSkills ?? [];
-  const behavioral = selectedBehavioralSkills ?? [];
-  const hasAnyMissing = technical.length > 0 || behavioral.length > 0;
 
-  const synthesis = await synthesizeOptimizedResume(
-    resumeData,
-    jobSnapshot,
-    matchedSkills,
-    hasAnyMissing ? { technical, behavioral } : undefined
+  const userHardSkills = (analysisRow.user_hard_skills ?? []) as string[];
+  const userSoftSkills = (analysisRow.user_soft_skills ?? []) as string[];
+  const missingHard = (analysisRow.missing_hard_skills ?? []) as JobSkill[];
+  const missingSoft = (analysisRow.missing_soft_skills ?? []) as JobSkill[];
+
+  function selectedLabelsToOriginalTerms(
+    selectedLabels: string[],
+    skills: JobSkill[]
+  ): string[] {
+    const byName = new Map(skills.map((s) => [s.name, s.original_term]));
+    return selectedLabels
+      .map((label) => byName.get(label) ?? label)
+      .filter(Boolean);
+  }
+
+  const selectedHardOriginalTerms = selectedLabelsToOriginalTerms(
+    selectedHardSkills ?? [],
+    missingHard
   );
+  const selectedSoftOriginalTerms = selectedLabelsToOriginalTerms(
+    selectedSoftSkills ?? [],
+    missingSoft
+  );
+
+  const mergedHardSkills = [
+    ...userHardSkills,
+    ...selectedHardOriginalTerms.filter((t) => !userHardSkills.includes(t)),
+  ];
+  const mergedSoftSkills = [
+    ...userSoftSkills,
+    ...selectedSoftOriginalTerms.filter((t) => !userSoftSkills.includes(t)),
+  ];
+
+  const synthesisParams = {
+    summary: resumeData.summary,
+    hardSkills: mergedHardSkills,
+    softSkills: mergedSoftSkills,
+    experienceDescriptions: resumeData.experience.map((e) => e.description),
+    educationDescriptions: resumeData.education.map((e) => e.description ?? ""),
+  };
+
+  const synthesis = await synthesizeResumeContent(synthesisParams);
 
   if (!synthesis.success) {
     logServerError({
       context: "server_action",
-      operation: "synthesizeOptimizedResumeForPreview",
-      action: "synthesizeOptimizedResumeForPreview",
+      operation: "generateResumePreview",
+      action: "generateResumePreview",
       message: "Síntese de currículo otimizado retornou erro.",
       errorMessage: synthesis.error,
     });
     return { success: false, error: synthesis.error };
   }
 
-  const optimizedScore = 0; //TODO: Implement the optimized score calculation
+  const optimizedScore = calculateOptimizedScore(
+    (analysisRow.score ?? 0) as number,
+    missingHard,
+    missingSoft,
+    mergedHardSkills,
+    mergedSoftSkills
+  );
+
+  const mergedResumeData: ResumeData = {
+    ...resumeData,
+    summary: synthesis.data.summary,
+    hardSkills: synthesis.data.hardSkills,
+    softSkills: synthesis.data.softSkills,
+    skillsByCategory: synthesis.data.skillsByCategory,
+    experience: resumeData.experience.map((entry, i) => ({
+      ...entry,
+      description:
+        synthesis.data.experienceDescriptions[i] ?? entry.description,
+    })),
+    education: resumeData.education.map((entry, i) => ({
+      ...entry,
+      description:
+        synthesis.data.educationDescriptions[i] ?? entry.description ?? "",
+    })),
+  };
 
   const updatePayload: { status: string; optimized_score?: number } = {
     status: "completed",
@@ -116,14 +168,14 @@ export async function synthesizeOptimizedResumeForPreview(
   if (updateStatusError) {
     logServerError({
       context: "db",
-      operation: "synthesizeOptimizedResumeForPreview_status_update",
+      operation: "generateResumePreview_status_update",
       message: updateStatusError.message,
     });
   }
 
   return {
     success: true,
-    data: synthesis.data,
+    data: mergedResumeData,
     ...(optimizedScore != null && { optimizedScore }),
   };
 }

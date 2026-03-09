@@ -1,18 +1,8 @@
 import type { JobSkill } from "@/lib/ai/config/job-skills-schema";
 
 export interface MissingSkillsByCategory {
-  technical: string[];
-  behavioral: string[];
-}
-
-export function missingSkillsFromColumns(
-  technical: unknown,
-  behavioral: unknown
-): MissingSkillsByCategory {
-  return {
-    technical: Array.isArray(technical) ? technical : [],
-    behavioral: Array.isArray(behavioral) ? behavioral : [],
-  };
+  hard: string[];
+  soft: string[];
 }
 
 function jobSkillToLabel(s: unknown): string {
@@ -38,28 +28,8 @@ export function missingSkillsFromJobSkillColumns(
     ? (missingSoft as unknown[]).map(jobSkillToLabel).filter(Boolean)
     : [];
   return {
-    technical: hard,
-    behavioral: soft,
-  };
-}
-
-export function parseMissingSkillsFromDb(
-  raw: unknown
-): MissingSkillsByCategory {
-  if (
-    !raw ||
-    typeof raw !== "object" ||
-    !("technical" in raw) ||
-    !("behavioral" in raw)
-  ) {
-    return { technical: [], behavioral: [] };
-  }
-
-  const typed = raw as MissingSkillsByCategory;
-
-  return {
-    technical: Array.isArray(typed.technical) ? typed.technical : [],
-    behavioral: Array.isArray(typed.behavioral) ? typed.behavioral : [],
+    hard,
+    soft,
   };
 }
 
@@ -107,38 +77,80 @@ export function applySkillsMatchToUserSkills(
   return { user_hard_skills: hard, user_soft_skills: soft };
 }
 
+function skillPoints(skills: JobSkill[], isHard: boolean): number {
+  return skills.reduce(
+    (sum, s) =>
+      sum +
+      (isHard
+        ? s.type === "required"
+          ? 5
+          : 2
+        : s.type === "required"
+          ? 3
+          : 1),
+    0
+  );
+}
+
 export function calculateAtsScore(
   jobHardSkills: JobSkill[],
   jobSoftSkills: JobSkill[],
   missingHardSkills: JobSkill[],
   missingSoftSkills: JobSkill[]
 ): number {
-  let totalPoints = 0;
-  let missingPoints = 0;
-
-  const calculatePoints = (skills: JobSkill[], isHard: boolean) => {
-    let points = 0;
-    for (const skill of skills) {
-      if (isHard) {
-        points += skill.type === "required" ? 5 : 2;
-        continue;
-      }
-      points += skill.type === "required" ? 3 : 1;
-    }
-    return points;
-  };
-
-  totalPoints += calculatePoints(jobHardSkills, true);
-  totalPoints += calculatePoints(jobSoftSkills, false);
-
-  missingPoints += calculatePoints(missingHardSkills, true);
-  missingPoints += calculatePoints(missingSoftSkills, false);
-
+  const totalPoints =
+    skillPoints(jobHardSkills, true) + skillPoints(jobSoftSkills, false);
   if (totalPoints === 0) return 0;
-
-  const score = Math.max(
+  const missingPoints =
+    skillPoints(missingHardSkills, true) +
+    skillPoints(missingSoftSkills, false);
+  return Math.max(
     0,
     Math.round(((totalPoints - missingPoints) / totalPoints) * 100)
   );
-  return score;
+}
+
+export function calculateMissingPoints(
+  missingHardSkills: JobSkill[],
+  missingSoftSkills: JobSkill[]
+): number {
+  return (
+    skillPoints(missingHardSkills, true) + skillPoints(missingSoftSkills, false)
+  );
+}
+
+export function calculateOptimizedScore(
+  analysisScore: number,
+  missingHard: JobSkill[],
+  missingSoft: JobSkill[],
+  mergedHardSkills: string[],
+  mergedSoftSkills: string[]
+): number {
+  const hardSet = new Set(mergedHardSkills);
+  const softSet = new Set(mergedSoftSkills);
+  const stillMissingHard = missingHard.filter(
+    (s) => !hardSet.has(s.original_term) && !hardSet.has(s.name)
+  );
+  const stillMissingSoft = missingSoft.filter(
+    (s) => !softSet.has(s.original_term) && !softSet.has(s.name)
+  );
+
+  const originalMissingPoints = calculateMissingPoints(
+    missingHard,
+    missingSoft
+  );
+  const totalPoints =
+    originalMissingPoints === 0
+      ? 100
+      : originalMissingPoints / (1 - analysisScore / 100);
+  const optimizedMissingPoints = calculateMissingPoints(
+    stillMissingHard,
+    stillMissingSoft
+  );
+
+  if (totalPoints <= 0) return 0;
+  return Math.max(
+    0,
+    Math.round(((totalPoints - optimizedMissingPoints) / totalPoints) * 100)
+  );
 }
