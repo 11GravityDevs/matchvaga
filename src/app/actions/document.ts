@@ -1,6 +1,7 @@
 "use server";
 
 import { synthesizeResumeContent } from "@/lib/ai/clients/anthropic";
+import type { JobSkill } from "@/lib/ai/config/job-skills-schema";
 import { buildResumeDocx } from "@/lib/document/resume-to-docx";
 import { ResumeDocument } from "@/lib/document/resume-to-pdf";
 import { logServerError } from "@/lib/logger";
@@ -43,7 +44,9 @@ export async function generateResumePreview(
 
   const { data: analysisRow, error: analysisError } = await supabase
     .from("analyses")
-    .select("id, resume_id, job_snapshot, user_hard_skills, user_soft_skills")
+    .select(
+      "id, resume_id, user_hard_skills, user_soft_skills, missing_hard_skills, missing_soft_skills"
+    )
     .eq("id", analysisId)
     .eq("user_id", user.id)
     .single();
@@ -70,14 +73,48 @@ export async function generateResumePreview(
 
   const resumeData = resumeParsed.data as ResumeData;
 
-  const userHardSkills = analysisRow.user_hard_skills ?? [];
-  const userSoftSkills = analysisRow.user_soft_skills ?? [];
+  const userHardSkills = (analysisRow.user_hard_skills ?? []) as string[];
+  const userSoftSkills = (analysisRow.user_soft_skills ?? []) as string[];
+  const missingHard = (analysisRow.missing_hard_skills ?? []) as JobSkill[];
+  const missingSoft = (analysisRow.missing_soft_skills ?? []) as JobSkill[];
 
-  const hard = selectedHardSkills ?? [];
-  const soft = selectedSoftSkills ?? [];
-  const hasAnyMissing = hard.length > 0 || soft.length > 0;
+  function selectedLabelsToOriginalTerms(
+    selectedLabels: string[],
+    skills: JobSkill[]
+  ): string[] {
+    const byName = new Map(skills.map((s) => [s.name, s.original_term]));
+    return selectedLabels
+      .map((label) => byName.get(label) ?? label)
+      .filter(Boolean);
+  }
 
-  const synthesis = await synthesizeResumeContent(); //TODO: Implement the synthesis of the resume content
+  const selectedHardOriginalTerms = selectedLabelsToOriginalTerms(
+    selectedHardSkills ?? [],
+    missingHard
+  );
+  const selectedSoftOriginalTerms = selectedLabelsToOriginalTerms(
+    selectedSoftSkills ?? [],
+    missingSoft
+  );
+
+  const mergedHardSkills = [
+    ...userHardSkills,
+    ...selectedHardOriginalTerms.filter((t) => !userHardSkills.includes(t)),
+  ];
+  const mergedSoftSkills = [
+    ...userSoftSkills,
+    ...selectedSoftOriginalTerms.filter((t) => !userSoftSkills.includes(t)),
+  ];
+
+  const synthesisParams = {
+    summary: resumeData.summary,
+    hardSkills: mergedHardSkills,
+    softSkills: mergedSoftSkills,
+    experienceDescriptions: resumeData.experience.map((e) => e.description),
+    educationDescriptions: resumeData.education.map((e) => e.description ?? ""),
+  };
+
+  const synthesis = await synthesizeResumeContent(synthesisParams);
 
   if (!synthesis.success) {
     logServerError({
@@ -90,7 +127,25 @@ export async function generateResumePreview(
     return { success: false, error: synthesis.error };
   }
 
-  const optimizedScore = 0; //TODO: Implement the optimized score calculation
+  const optimizedScore = 0; // TODO: Implement the optimized score calculation
+
+  const mergedResumeData: ResumeData = {
+    ...resumeData,
+    summary: synthesis.data.summary,
+    hardSkills: synthesis.data.hardSkills,
+    softSkills: synthesis.data.softSkills,
+    skillsByCategory: synthesis.data.skillsByCategory,
+    experience: resumeData.experience.map((entry, i) => ({
+      ...entry,
+      description:
+        synthesis.data.experienceDescriptions[i] ?? entry.description,
+    })),
+    education: resumeData.education.map((entry, i) => ({
+      ...entry,
+      description:
+        synthesis.data.educationDescriptions[i] ?? entry.description ?? "",
+    })),
+  };
 
   const updatePayload: { status: string; optimized_score?: number } = {
     status: "completed",
@@ -113,7 +168,7 @@ export async function generateResumePreview(
 
   return {
     success: true,
-    data: synthesis.data,
+    data: mergedResumeData,
     ...(optimizedScore != null && { optimizedScore }),
   };
 }

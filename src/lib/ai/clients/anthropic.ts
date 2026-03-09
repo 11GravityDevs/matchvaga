@@ -5,9 +5,12 @@ import Anthropic from "@anthropic-ai/sdk";
 import { JOB_SKILLS_JSON_SCHEMA } from "@/lib/ai/config/job-skills-json-schema";
 import { jobSkillsResponseSchema } from "@/lib/ai/config/job-skills-schema";
 import { JOB_SKILLS_EXTRACTION_PROMPT } from "@/lib/ai/prompts/job-skills";
+import { RESUME_SYNTHESIS_SYSTEM_PROMPT } from "@/lib/ai/prompts/resume-synthesis";
 import { logServerError } from "@/lib/logger";
-import { resumeDataSchema } from "@/schemas/resume";
-import type { ResumeData } from "@/types/resume";
+import {
+  synthesizedFieldsSchema,
+  type SynthesizedFields,
+} from "@/schemas/resume";
 import { NOT_JOB_DESCRIPTION_MESSAGE } from "@/utils/job-description";
 
 import extractedMock from "../../../../extracted-mock.json";
@@ -15,9 +18,17 @@ import optimizedMock from "../../../../optimized-mock.json";
 
 const MODEL = "claude-haiku-4-5";
 
+export interface SynthesisParams {
+  summary: string;
+  hardSkills: string[];
+  softSkills: string[];
+  experienceDescriptions: string[];
+  educationDescriptions: string[];
+}
+
 export interface SynthesisResult {
   success: true;
-  data: ResumeData;
+  data: SynthesizedFields;
 }
 
 export interface SynthesisError {
@@ -52,82 +63,130 @@ export interface JobSkillsError {
 
 export type JobSkillsOutput = JobSkillsResult | JobSkillsError;
 
-function buildMissingSkillsBlock(
-  missing:
-    | {
-        hard: string[];
-        soft: string[];
-      }
-    | undefined
-): string {
-  if (!missing) {
-    return "Missing skills: none — do not add any skills beyond the matched skills list above.";
-  }
-  const { hard, soft } = missing;
-  const hasHard = hard.length > 0;
-  const hasSoft = soft.length > 0;
-
-  if (!hasHard && !hasSoft) {
-    return "Missing skills: none — do not add any skills beyond the matched skills list above.";
-  }
-
-  const lines: string[] = [];
-
-  if (hasHard) {
-    lines.push(
-      `Missing hard skills (weave in where truthful): ${hard.join(", ")}`
-    );
-  }
-
-  if (hasSoft) {
-    lines.push(
-      `Missing soft skills (weave in where truthful): ${soft.join(", ")}`
-    );
-  }
-
-  return lines.join("\n");
-}
-
-function buildUserPrompt(
-  resumeData: ResumeData,
-  job: { title: string; company: string; rawText: string },
-  matchedSkills: string[],
-  missingSkills: { hard: string[]; soft: string[] } | undefined
-): string {
-  return `Job: ${job.title} at ${job.company}
-
-Job description:
-${job.rawText}
-
----
-Matched skills (emphasize these): ${matchedSkills.join(", ") || "none"}
-${buildMissingSkillsBlock(missingSkills)}
-
----
-Current resume (JSON):
-${JSON.stringify(resumeData, null, 2)}
-
-Return the optimized resume as JSON. Include skillsByCategory (array of { category, items }), skills (flat array), and all other fields. Experience and education descriptions: one bullet per line. Output only valid JSON.`;
-}
-
 const USE_SYNTHESIS_MOCK = true;
 
-export async function synthesizeResumeContent(): Promise<SynthesisOutput> {
+function stripJsonCodeFences(raw: string): string {
+  let s = raw.trim();
+  const open = /^```(?:json)?\s*\n?/i;
+  const close = /\n?```\s*$/;
+  if (open.test(s)) s = s.replace(open, "");
+  if (close.test(s)) s = s.replace(close, "");
+  return s.trim();
+}
+
+function mockToSynthesizedFields(mockData: {
+  summary: string;
+  hardSkills: string[];
+  softSkills: string[];
+  experience: Array<{ description: string }>;
+  education: Array<{ description?: string }>;
+  skillsByCategory?: Array<{ category: string; items: string[] }>;
+}): SynthesizedFields {
+  const skillsByCategory =
+    mockData.skillsByCategory && mockData.skillsByCategory.length > 0
+      ? mockData.skillsByCategory
+      : [
+          {
+            category: "Ferramentas de Desenvolvimento",
+            items: mockData.hardSkills,
+          },
+          {
+            category: "Competências Comportamentais",
+            items: mockData.softSkills,
+          },
+        ];
+  return {
+    summary: mockData.summary,
+    hardSkills: mockData.hardSkills,
+    softSkills: mockData.softSkills,
+    skillsByCategory,
+    experienceDescriptions: mockData.experience.map((e) => e.description),
+    educationDescriptions: mockData.education.map((e) => e.description ?? ""),
+  };
+}
+
+export async function synthesizeResumeContent(
+  params: SynthesisParams
+): Promise<SynthesisOutput> {
   if (USE_SYNTHESIS_MOCK) {
-    const data = (optimizedMock as { success: boolean; data: unknown }).data;
-    const validated = resumeDataSchema.parse(data);
+    const raw = (optimizedMock as { success: boolean; data: unknown }).data;
+    const data = raw as {
+      summary: string;
+      hardSkills: string[];
+      softSkills: string[];
+      experience: Array<{ description: string }>;
+      education: Array<{ description?: string }>;
+    };
+    const synthesized = mockToSynthesizedFields(data);
+    const validated = synthesizedFieldsSchema.parse(synthesized);
     return { success: true, data: validated };
   }
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
-
   if (!apiKey) {
     return { success: false, error: "ANTHROPIC_API_KEY is not configured" };
   }
 
   const client = new Anthropic({ apiKey });
 
-  return { success: false, error: "Será implementado em breve." };
+  try {
+    const userContent = JSON.stringify(params);
+    const message = await client.messages.create({
+      model: MODEL,
+      max_tokens: 4096,
+      system: RESUME_SYNTHESIS_SYSTEM_PROMPT,
+      messages: [{ role: "user", content: userContent }],
+    });
+
+    const textBlock = message.content.find((b) => b.type === "text");
+    const content =
+      textBlock && textBlock.type === "text" ? textBlock.text : "";
+
+    if (!content) {
+      return { success: false, error: "Resposta vazia do modelo." };
+    }
+
+    const jsonStr = stripJsonCodeFences(content);
+    const parsed = JSON.parse(jsonStr) as unknown;
+    const validated = synthesizedFieldsSchema.safeParse(parsed);
+
+    if (!validated.success) {
+      logServerError(
+        {
+          context: "ai",
+          operation: "synthesizeResumeContent",
+          message: "Validação Zod falhou na resposta da síntese.",
+        },
+        validated.error
+      );
+      return {
+        success: false,
+        error: "Não foi possível interpretar a resposta do modelo.",
+      };
+    }
+
+    return { success: true, data: validated.data };
+  } catch (error) {
+    logServerError(
+      {
+        context: "ai",
+        operation: "synthesizeResumeContent",
+        message: "Síntese de currículo (IA) falhou.",
+        model: MODEL,
+      },
+      error
+    );
+    if (error instanceof SyntaxError) {
+      return {
+        success: false,
+        error: "Não foi possível interpretar a resposta do modelo.",
+      };
+    }
+    if (error instanceof Error) {
+      return { success: false, error: error.message };
+    }
+    return { success: false, error: "Erro ao sintetizar currículo." };
+  }
 }
 
 const USE_JOB_SKILLS_MOCK = true;
