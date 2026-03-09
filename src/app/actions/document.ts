@@ -8,6 +8,7 @@ import { logServerError } from "@/lib/logger";
 import { createClient } from "@/lib/supabase/server";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
+import { calculateOptimizedScore } from "@/utils/analysis";
 import { translateAuthError } from "@/utils/auth";
 import { renderToBuffer } from "@react-pdf/renderer";
 import { revalidatePath } from "next/cache";
@@ -45,7 +46,7 @@ export async function generateResumePreview(
   const { data: analysisRow, error: analysisError } = await supabase
     .from("analyses")
     .select(
-      "id, resume_id, user_hard_skills, user_soft_skills, missing_hard_skills, missing_soft_skills"
+      "id, resume_id, score, user_hard_skills, user_soft_skills, missing_hard_skills, missing_soft_skills"
     )
     .eq("id", analysisId)
     .eq("user_id", user.id)
@@ -127,7 +128,13 @@ export async function generateResumePreview(
     return { success: false, error: synthesis.error };
   }
 
-  const optimizedScore = 0; // TODO: Implement the optimized score calculation
+  const optimizedScore = calculateOptimizedScore(
+    (analysisRow.score ?? 0) as number,
+    missingHard,
+    missingSoft,
+    mergedHardSkills,
+    mergedSoftSkills
+  );
 
   const mergedResumeData: ResumeData = {
     ...resumeData,
