@@ -128,13 +128,19 @@ export async function generateResumePreview(
     return { success: false, error: synthesis.error };
   }
 
-  const optimizedScore = calculateOptimizedScore(
-    (analysisRow.score ?? 0) as number,
+  const analysisScore = (analysisRow.score ?? 0) as number;
+
+  let optimizedScore = calculateOptimizedScore(
+    analysisScore,
     missingHard,
     missingSoft,
     mergedHardSkills,
     mergedSoftSkills
   );
+
+  if (analysisScore > optimizedScore) {
+    optimizedScore = analysisScore;
+  }
 
   const mergedResumeData: ResumeData = {
     ...resumeData,
@@ -176,7 +182,7 @@ export async function generateResumePreview(
   return {
     success: true,
     data: mergedResumeData,
-    ...(optimizedScore != null && { optimizedScore }),
+    optimizedScore,
   };
 }
 
