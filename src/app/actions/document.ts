@@ -144,8 +144,6 @@ export async function generateResumePreview(
   const mergedResumeData: ResumeData = {
     ...resumeData,
     summary: synthesis.data.summary,
-    hardSkills: mergedHardSkills,
-    softSkills: mergedSoftSkills,
     hardSkillsByCategory: synthesis.data.hardSkillsByCategory,
   };
 
