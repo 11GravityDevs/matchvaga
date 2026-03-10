@@ -1,5 +1,3 @@
-"use server";
-
 import { type Schema, GoogleGenerativeAI } from "@google/generative-ai";
 
 import { resumeExtractionResponseSchema } from "@/lib/ai/config/resume-extraction-schema";

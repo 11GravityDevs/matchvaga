@@ -1,5 +1,8 @@
 import { createServerClient } from "@supabase/ssr";
+import type { User } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
+
+import { translateAuthError } from "@/utils/auth";
 
 export async function createClient() {
   const cookieStore = await cookies();
@@ -29,4 +32,35 @@ export async function createClient() {
       },
     },
   });
+}
+
+export type GetAuthenticatedUserSuccess = {
+  success: true;
+  user: User;
+  supabase: Awaited<ReturnType<typeof createClient>>;
+};
+
+export type GetAuthenticatedUserFailure = {
+  success: false;
+  error: string;
+};
+
+export type GetAuthenticatedUserResult =
+  | GetAuthenticatedUserSuccess
+  | GetAuthenticatedUserFailure;
+
+export async function getAuthenticatedUser(): Promise<GetAuthenticatedUserResult> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser();
+
+  if (authError) {
+    return { success: false, error: translateAuthError(authError) };
+  }
+  if (!user) {
+    return { success: false, error: "Faça login para continuar." };
+  }
+  return { success: true, user, supabase };
 }

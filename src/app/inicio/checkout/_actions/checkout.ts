@@ -2,11 +2,10 @@
 
 import { z } from "zod";
 
-import { createClient } from "@/lib/supabase/server";
+import { getAuthenticatedUser } from "@/lib/supabase/server";
 import { getStripe } from "@/lib/stripe/client";
 import { SITE_URL } from "@/constants/site";
 import { logServerError } from "@/lib/logger";
-import { translateAuthError } from "@/utils/auth";
 import {
   type CheckoutPackageId,
   CHECKOUT_PACKAGE_IDS,
@@ -35,20 +34,11 @@ export async function createCheckoutSession(input: {
 
   const { packageId } = parsed.data as { packageId: CheckoutPackageId };
 
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-    error: authError,
-  } = await supabase.auth.getUser();
-
-  if (authError) {
-    return { success: false, error: translateAuthError(authError) };
+  const auth = await getAuthenticatedUser();
+  if (!auth.success) {
+    return { success: false, error: auth.error };
   }
-
-  if (!user) {
-    return { success: false, error: "Faça login para continuar." };
-  }
+  const { user } = auth;
 
   let stripe;
   try {

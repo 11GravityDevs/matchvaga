@@ -1,5 +1,3 @@
-"use server";
-
 import { jobSkillsResponseSchema } from "@/lib/ai/config/job-skills-schema";
 import type { SkillsMatchPair } from "@/lib/ai/config/skills-match-schema";
 import { skillsMatchResponseSchema } from "@/lib/ai/config/skills-match-schema";

@@ -2,11 +2,10 @@
 
 import { revalidatePath } from "next/cache";
 
-import { extractJobSkills } from "@/lib/ai/clients/anthropic";
-import { matchJobSkillsToResume } from "@/lib/ai/clients/openai";
+import { extractJobSkills, matchJobSkillsToResume } from "@/lib/ai/clients";
 import type { JobSkill } from "@/lib/ai/config/job-skills-schema";
 import { logServerError } from "@/lib/logger";
-import { createClient } from "@/lib/supabase/server";
+import { getAuthenticatedUser } from "@/lib/supabase/server";
 import { jobSnapshotSchema } from "@/schemas/job";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
@@ -16,7 +15,6 @@ import {
   missingSkillsFromJobSkillColumns,
   type MissingSkillsByCategory,
 } from "@/utils/analysis";
-import { translateAuthError } from "@/utils/auth";
 import {
   JOB_DESCRIPTION_TOO_LONG_MESSAGE,
   NOT_JOB_DESCRIPTION_MESSAGE,
@@ -72,18 +70,11 @@ export async function runSkillsMatch(
     return { success: false, error };
   }
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-    error: authError,
-  } = await supabase.auth.getUser();
-
-  if (authError) {
-    return { success: false, error: translateAuthError(authError) };
+  const auth = await getAuthenticatedUser();
+  if (!auth.success) {
+    return { success: false, error: auth.error };
   }
-  if (!user) {
-    return { success: false, error: "Faça login para continuar." };
-  }
+  const { user, supabase } = auth;
 
   const { data: resumeRow, error: resumeError } = await supabase
     .from("resumes")
@@ -257,18 +248,11 @@ export async function runSkillsMatch(
 }
 
 export async function getAnalysesForUser(): Promise<GetAnalysesForUserResult> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-    error: authError,
-  } = await supabase.auth.getUser();
-
-  if (authError) {
-    return { success: false, error: translateAuthError(authError) };
+  const auth = await getAuthenticatedUser();
+  if (!auth.success) {
+    return { success: false, error: auth.error };
   }
-  if (!user) {
-    return { success: false, error: "Faça login para continuar." };
-  }
+  const { user, supabase } = auth;
 
   const { data, error } = await supabase
     .from("analyses")
@@ -324,18 +308,11 @@ export interface GetAnalysisByIdResult {
 export async function getAnalysisById(
   analysisId: string
 ): Promise<GetAnalysisByIdResult> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-    error: authError,
-  } = await supabase.auth.getUser();
-
-  if (authError) {
-    return { success: false, error: translateAuthError(authError) };
+  const auth = await getAuthenticatedUser();
+  if (!auth.success) {
+    return { success: false, error: auth.error };
   }
-  if (!user) {
-    return { success: false, error: "Faça login para continuar." };
-  }
+  const { user, supabase } = auth;
 
   const { data: row, error } = await supabase
     .from("analyses")

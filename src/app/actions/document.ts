@@ -1,15 +1,14 @@
 "use server";
 
-import { synthesizeResumeContent } from "@/lib/ai/clients/anthropic";
+import { synthesizeResumeContent } from "@/lib/ai/clients";
 import type { JobSkill } from "@/lib/ai/config/job-skills-schema";
 import { buildResumeDocx } from "@/lib/document/resume-to-docx";
 import { ResumeDocument } from "@/lib/document/resume-to-pdf";
 import { logServerError } from "@/lib/logger";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, getAuthenticatedUser } from "@/lib/supabase/server";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
 import { calculateOptimizedScore } from "@/utils/analysis";
-import { translateAuthError } from "@/utils/auth";
 import { renderToBuffer } from "@react-pdf/renderer";
 import { revalidatePath } from "next/cache";
 import React from "react";
@@ -29,19 +28,11 @@ export async function generateResumePreview(
   selectedHardSkills?: string[],
   selectedSoftSkills?: string[]
 ): Promise<GenerateResumePreviewResult> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-    error: authError,
-  } = await supabase.auth.getUser();
-
-  if (authError) {
-    return { success: false, error: translateAuthError(authError) };
+  const auth = await getAuthenticatedUser();
+  if (!auth.success) {
+    return { success: false, error: auth.error };
   }
-
-  if (!user) {
-    return { success: false, error: "Faça login para continuar." };
-  }
+  const { user, supabase } = auth;
 
   const { data: analysisRow, error: analysisError } = await supabase
     .from("analyses")
@@ -319,19 +310,11 @@ export async function downloadOptimizedDocument(
   analysisId: string,
   format: "pdf" | "docx"
 ): Promise<GenerateOptimizedDocumentResult> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-    error: authError,
-  } = await supabase.auth.getUser();
-
-  if (authError) {
-    return { success: false, error: translateAuthError(authError) };
+  const auth = await getAuthenticatedUser();
+  if (!auth.success) {
+    return { success: false, error: auth.error };
   }
-
-  if (!user) {
-    return { success: false, error: "Faça login para continuar." };
-  }
+  const { user, supabase } = auth;
 
   const { data: analysisRow, error: analysisError } = await supabase
     .from("analyses")
@@ -374,19 +357,11 @@ export async function generateOptimizedDocument(
   format: "pdf" | "docx",
   resumeData: ResumeData
 ): Promise<GenerateOptimizedDocumentResult> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-    error: authError,
-  } = await supabase.auth.getUser();
-
-  if (authError) {
-    return { success: false, error: translateAuthError(authError) };
+  const auth = await getAuthenticatedUser();
+  if (!auth.success) {
+    return { success: false, error: auth.error };
   }
-
-  if (!user) {
-    return { success: false, error: "Faça login para continuar." };
-  }
+  const { user, supabase } = auth;
 
   return generateOptimizedDocumentWithContext(
     supabase,

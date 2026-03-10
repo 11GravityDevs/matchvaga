@@ -1,5 +1,3 @@
-"use server";
-
 import Anthropic from "@anthropic-ai/sdk";
 
 import { JOB_SKILLS_JSON_SCHEMA } from "@/lib/ai/config/job-skills-json-schema";

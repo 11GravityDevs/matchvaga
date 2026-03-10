@@ -3,13 +3,12 @@
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
-import { createClient } from "@/lib/supabase/server";
-import { extractResumeFromFile } from "@/lib/ai/clients/gemini";
+import { getAuthenticatedUser } from "@/lib/supabase/server";
+import { extractResumeFromFile } from "@/lib/ai/clients";
 import { logServerError } from "@/lib/logger";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
 import { RESUME_STATUS_COOKIE_NAME } from "@/utils/resume-status-cookie";
-import { translateAuthError } from "@/utils/auth";
 import { capitalizeResumeData, normalizeBrazilianPhone } from "@/utils/resume";
 
 const ERROR_ALREADY_HAS_RESUME =
@@ -48,19 +47,11 @@ export async function createResumeWithData(
     };
   }
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-    error: authError,
-  } = await supabase.auth.getUser();
-
-  if (authError) {
-    return { success: false, error: translateAuthError(authError) };
+  const auth = await getAuthenticatedUser();
+  if (!auth.success) {
+    return { success: false, error: auth.error };
   }
-
-  if (!user) {
-    return { success: false, error: "Faça login para continuar." };
-  }
+  const { user, supabase } = auth;
 
   const alreadyHasResume = await hasResume();
   if (alreadyHasResume) {
@@ -132,18 +123,11 @@ export async function uploadResume(
     return { success: false, error: "Nenhum arquivo enviado." };
   }
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-    error: authError,
-  } = await supabase.auth.getUser();
-
-  if (authError) {
-    return { success: false, error: translateAuthError(authError) };
+  const auth = await getAuthenticatedUser();
+  if (!auth.success) {
+    return { success: false, error: auth.error };
   }
-  if (!user) {
-    return { success: false, error: "Faça login para continuar." };
-  }
+  const { user, supabase } = auth;
 
   const alreadyHasResume = await hasResume();
 
@@ -243,18 +227,11 @@ export async function saveResumeData(
     };
   }
 
-  const supabase = await createClient();
-  const {
-    data: { user },
-    error: authError,
-  } = await supabase.auth.getUser();
-
-  if (authError) {
-    return { success: false, error: translateAuthError(authError) };
+  const auth = await getAuthenticatedUser();
+  if (!auth.success) {
+    return { success: false, error: auth.error };
   }
-  if (!user) {
-    return { success: false, error: "Faça login para continuar." };
-  }
+  const { user, supabase } = auth;
 
   const { error: updateError } = await supabase
     .from("resumes")
@@ -294,18 +271,11 @@ export interface GetResumeForUserResult {
 }
 
 export async function getResumeForUser(): Promise<GetResumeForUserResult> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-    error: authError,
-  } = await supabase.auth.getUser();
-
-  if (authError) {
-    return { success: false, error: translateAuthError(authError) };
+  const auth = await getAuthenticatedUser();
+  if (!auth.success) {
+    return { success: false, error: auth.error };
   }
-  if (!user) {
-    return { success: false, error: "Faça login para continuar." };
-  }
+  const { user, supabase } = auth;
 
   const { data: row, error } = await supabase
     .from("resumes")
@@ -339,16 +309,11 @@ export async function getResumeForUser(): Promise<GetResumeForUserResult> {
 }
 
 export async function hasResume(): Promise<boolean> {
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-    error: authError,
-  } = await supabase.auth.getUser();
-
-  if (authError || !user) {
+  const auth = await getAuthenticatedUser();
+  if (!auth.success) {
     return false;
   }
+  const { user, supabase } = auth;
 
   const { data, error } = await supabase
     .from("resumes")

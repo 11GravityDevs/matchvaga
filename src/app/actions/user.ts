@@ -2,8 +2,7 @@
 
 import { z } from "zod";
 
-import { createClient } from "@/lib/supabase/server";
-import { translateAuthError } from "@/utils/auth";
+import { getAuthenticatedUser } from "@/lib/supabase/server";
 
 const displayDataSchema = z.object({
   fullName: z.string().optional(),
@@ -19,20 +18,11 @@ export interface GetCurrentUserDisplayResult {
 }
 
 export async function getCurrentUserDisplay(): Promise<GetCurrentUserDisplayResult> {
-  const supabase = await createClient();
-
-  const {
-    data: { user },
-    error: authError,
-  } = await supabase.auth.getUser();
-
-  if (authError) {
-    return { success: false, error: translateAuthError(authError) };
+  const auth = await getAuthenticatedUser();
+  if (!auth.success) {
+    return { success: false, error: auth.error };
   }
-
-  if (!user) {
-    return { success: false, error: "Faça login para continuar." };
-  }
+  const { user, supabase } = auth;
 
   const { data: creditsRow } = await supabase
     .from("user_credits")
