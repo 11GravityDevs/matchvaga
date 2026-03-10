@@ -65,7 +65,7 @@ export const resumeDataSchema = z.object({
       message: `Máximo de ${RESUME_LIMITS.LANGUAGES_MAX} idiomas`,
     })
     .default([]),
-  skillsByCategory: z.array(skillCategorySchema).optional(),
+  hardSkillsByCategory: z.array(skillCategorySchema).optional(),
   experience: z.array(experienceEntrySchema).max(RESUME_LIMITS.EXPERIENCE_MAX, {
     message: `Máximo de ${RESUME_LIMITS.EXPERIENCE_MAX} experiências`,
   }),
@@ -80,7 +80,7 @@ export const synthesizedFieldsSchema = z.object({
   summary: z.string().max(RESUME_LIMITS.SUMMARY_MAX, {
     message: `Resumo com no máximo ${RESUME_LIMITS.SUMMARY_MAX} caracteres`,
   }),
-  skillsByCategory: z.array(skillCategorySchema),
+  hardSkillsByCategory: z.array(skillCategorySchema),
 });
 
 export type SynthesizedFields = z.infer<typeof synthesizedFieldsSchema>;

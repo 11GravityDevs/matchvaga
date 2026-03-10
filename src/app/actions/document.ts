@@ -146,7 +146,7 @@ export async function generateResumePreview(
     summary: synthesis.data.summary,
     hardSkills: mergedHardSkills,
     softSkills: mergedSoftSkills,
-    skillsByCategory: synthesis.data.skillsByCategory,
+    hardSkillsByCategory: synthesis.data.hardSkillsByCategory,
   };
 
   const updatePayload: { status: string; optimized_score?: number } = {

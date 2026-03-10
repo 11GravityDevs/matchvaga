@@ -75,11 +75,11 @@ function stripJsonCodeFences(raw: string): string {
 function mockToSynthesizedFields(mockData: {
   summary: string;
   hardSkills: string[];
-  skillsByCategory?: Array<{ category: string; items: string[] }>;
+  hardSkillsByCategory?: Array<{ category: string; items: string[] }>;
 }): SynthesizedFields {
-  const skillsByCategory =
-    mockData.skillsByCategory && mockData.skillsByCategory.length > 0
-      ? mockData.skillsByCategory
+  const hardSkillsByCategory =
+    mockData.hardSkillsByCategory && mockData.hardSkillsByCategory.length > 0
+      ? mockData.hardSkillsByCategory
       : [
           {
             category: "Ferramentas de Desenvolvimento",
@@ -88,7 +88,7 @@ function mockToSynthesizedFields(mockData: {
         ];
   return {
     summary: mockData.summary,
-    skillsByCategory,
+    hardSkillsByCategory,
   };
 }
 
@@ -100,7 +100,7 @@ export async function synthesizeResumeContent(
     const data = raw as {
       summary: string;
       hardSkills: string[];
-      skillsByCategory?: Array<{ category: string; items: string[] }>;
+      hardSkillsByCategory?: Array<{ category: string; items: string[] }>;
     };
     const synthesized = mockToSynthesizedFields(data);
     const validated = synthesizedFieldsSchema.parse(synthesized);

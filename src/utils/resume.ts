@@ -280,7 +280,7 @@ export function getFlattenedSkills(data: ResumeData): string[] {
 export function getSkillsByCategoryForDisplay(
   data: ResumeData
 ): SkillCategory[] {
-  return data.skillsByCategory ?? [];
+  return data.hardSkillsByCategory ?? [];
 }
 
 export function formatLinkLabel(url: string): string {
