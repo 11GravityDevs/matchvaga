@@ -241,7 +241,7 @@ export function StepPreviewExport() {
                   ) : (
                     <FileText className="h-4 w-4" />
                   )}
-                  Download DOCX
+                  Baixar DOCX
                 </Button>
               </div>
               {downloadError && (
@@ -260,7 +260,7 @@ export function StepPreviewExport() {
                 ) : (
                   <File className="h-4 w-4" />
                 )}
-                Download PDF
+                Baixar PDF
               </Button>
             </div>
           </div>
