@@ -102,6 +102,7 @@ export async function generateResumePreview(
     ...userHardSkills,
     ...selectedHardOriginalTerms.filter((t) => !userHardSkills.includes(t)),
   ];
+
   const mergedSoftSkills = [
     ...userSoftSkills,
     ...selectedSoftOriginalTerms.filter((t) => !userSoftSkills.includes(t)),
@@ -111,8 +112,6 @@ export async function generateResumePreview(
     summary: resumeData.summary,
     hardSkills: mergedHardSkills,
     softSkills: mergedSoftSkills,
-    experienceDescriptions: resumeData.experience.map((e) => e.description),
-    educationDescriptions: resumeData.education.map((e) => e.description ?? ""),
   };
 
   const synthesis = await synthesizeResumeContent(synthesisParams);
@@ -145,19 +144,9 @@ export async function generateResumePreview(
   const mergedResumeData: ResumeData = {
     ...resumeData,
     summary: synthesis.data.summary,
-    hardSkills: synthesis.data.hardSkills,
-    softSkills: synthesis.data.softSkills,
+    hardSkills: mergedHardSkills,
+    softSkills: mergedSoftSkills,
     skillsByCategory: synthesis.data.skillsByCategory,
-    experience: resumeData.experience.map((entry, i) => ({
-      ...entry,
-      description:
-        synthesis.data.experienceDescriptions[i] ?? entry.description,
-    })),
-    education: resumeData.education.map((entry, i) => ({
-      ...entry,
-      description:
-        synthesis.data.educationDescriptions[i] ?? entry.description ?? "",
-    })),
   };
 
   const updatePayload: { status: string; optimized_score?: number } = {
