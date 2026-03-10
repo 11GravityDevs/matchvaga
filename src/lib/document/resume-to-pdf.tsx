@@ -272,7 +272,10 @@ export function ResumeDocument({ data }: ResumeDocumentProps) {
                     </Text>
                     <View style={styles.skillCategoryItemsWrap}>
                       {cat.items.map((item, j) => (
-                        <Text key={j} style={styles.skillCategoryItems}>
+                        <Text
+                          key={`${cat.category}-${j}`}
+                          style={styles.skillCategoryItems}
+                        >
                           {item}
                           {j < cat.items.length - 1 ? ", " : ""}
                         </Text>
