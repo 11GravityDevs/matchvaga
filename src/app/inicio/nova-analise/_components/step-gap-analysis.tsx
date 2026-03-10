@@ -1,11 +1,19 @@
 "use client";
 
+import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { Check, Lightbulb, RefreshCw, Sparkles } from "lucide-react";
 
 import { generateResumePreview } from "@/app/actions/document";
 import { StepIndicator } from "@/components/shared/step-indicator";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Loading } from "@/components/ui/loading";
 import { useToastNotification } from "@/hooks/use-toast-notification";
 import { cn } from "@/utils/style";
@@ -112,6 +120,9 @@ export function StepGapAnalysis() {
   } = useNewAnalysis();
   const { showErrorToastNotification } = useToastNotification();
 
+  const [isConfirmNoSkillsDialogOpen, setIsConfirmNoSkillsDialogOpen] =
+    useState(false);
+
   const selectedHard = hardSkills.filter((s) => s.selected).map((s) => s.label);
 
   const selectedSoft = softSkills.filter((s) => s.selected).map((s) => s.label);
@@ -165,6 +176,10 @@ export function StepGapAnalysis() {
   const feedbackClasses = FEEDBACK_BADGE_CLASSES[feedback.variant];
 
   const handleGenerate = () => {
+    if (selectedCount === 0) {
+      setIsConfirmNoSkillsDialogOpen(true);
+      return;
+    }
     generateDocument();
   };
 
@@ -180,136 +195,181 @@ export function StepGapAnalysis() {
   }
 
   return (
-    <div className="flex flex-1 flex-col gap-10 overflow-hidden page-padding">
-      {/* Header strip */}
-      <div className="flex min-h-0 flex-1 flex-col section-gap">
-        <div className="flex shrink-0 items-center justify-between">
-          <div className="flex flex-col gap-1">
-            <h1 className="text-page-title">Análise de Compatibilidade</h1>
-            <p className="text-page-subtitle">{jobRole}</p>
-          </div>
-          <StepIndicator steps={WIZARD_STEPS} currentStepIndex={1} />
-        </div>
-
-        {/* Two-column body */}
-        <div className="flex min-h-0 flex-1 column-gap overflow-hidden">
-          {/* Left side — two skill columns + tip */}
-          <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-hidden">
-            <div className="flex min-h-0 flex-1 column-gap overflow-hidden">
-              <SkillsColumn
-                title="Técnico"
-                description="Selecione as habilidades que deseja incorporar ao currículo"
-                skills={hardSkills}
-                selectedCount={hardSkills.filter((s) => s.selected).length}
-                totalCount={hardSkills.length}
-                onToggleSkill={toggleSkill}
-              />
-              <SkillsColumn
-                title="Comportamental"
-                description="Selecione as competências que deseja incorporar ao currículo"
-                skills={softSkills}
-                selectedCount={softSkills.filter((s) => s.selected).length}
-                totalCount={softSkills.length}
-                onToggleSkill={toggleSkill}
-              />
+    <>
+      <div className="flex flex-1 flex-col gap-10 overflow-hidden page-padding">
+        {/* Header strip */}
+        <div className="flex min-h-0 flex-1 flex-col section-gap">
+          <div className="flex shrink-0 items-center justify-between">
+            <div className="flex flex-col gap-1">
+              <h1 className="text-page-title">Análise de Compatibilidade</h1>
+              <p className="text-page-subtitle">{jobRole}</p>
             </div>
-            {/* Tip */}
-            <div className="shrink-0 self-start px-0">
-              <div className="flex items-start gap-2 rounded-lg border border-accent-success-border bg-accent-success-light tip-banner-padding">
-                <Lightbulb className="mt-0.5 h-4 w-4 shrink-0 text-accent-success" />
-                <p className="text-small-leading text-accent-success-text">
-                  <span className="font-semibold">Dica:</span> Selecione apenas
-                  habilidades com as quais você já teve contato. Isso garante um
-                  currículo mais autêntico.
+            <StepIndicator steps={WIZARD_STEPS} currentStepIndex={1} />
+          </div>
+
+          {/* Two-column body */}
+          <div className="flex min-h-0 flex-1 column-gap overflow-hidden">
+            {/* Left side — two skill columns + tip */}
+            <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-hidden">
+              <div className="flex min-h-0 flex-1 column-gap overflow-hidden">
+                <SkillsColumn
+                  title="Técnico"
+                  description="Selecione as habilidades que deseja incorporar ao currículo"
+                  skills={hardSkills}
+                  selectedCount={hardSkills.filter((s) => s.selected).length}
+                  totalCount={hardSkills.length}
+                  onToggleSkill={toggleSkill}
+                />
+                <SkillsColumn
+                  title="Comportamental"
+                  description="Selecione as competências que deseja incorporar ao currículo"
+                  skills={softSkills}
+                  selectedCount={softSkills.filter((s) => s.selected).length}
+                  totalCount={softSkills.length}
+                  onToggleSkill={toggleSkill}
+                />
+              </div>
+              {/* Tip */}
+              <div className="shrink-0 self-start px-0">
+                <div className="flex items-start gap-2 rounded-lg border border-accent-success-border bg-accent-success-light tip-banner-padding">
+                  <Lightbulb className="mt-0.5 h-4 w-4 shrink-0 text-accent-success" />
+                  <p className="text-small-leading text-accent-success-text">
+                    <span className="font-semibold">Dica:</span> Selecione
+                    apenas habilidades com as quais você já teve contato. Isso
+                    garante um currículo mais autêntico.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Right column — Score + actions (fixed, non-scrolling) */}
+            <div className="flex w-column shrink-0 flex-col self-stretch overflow-hidden rounded-xl border border-border bg-card">
+              <div className="flex flex-1 flex-col items-center gap-4 card-content-padding">
+                <h2 className="w-full text-section-header tracking-[-0.3px]">
+                  Score de Compatibilidade
+                </h2>
+
+                <ScoreRing score={displayScore} />
+
+                {/* Feedback badge */}
+                <div
+                  className={cn(
+                    "flex items-center justify-center rounded-full border px-4 py-1.5",
+                    feedbackClasses
+                  )}
+                >
+                  <span className="text-small-semibold">{feedback.label}</span>
+                </div>
+
+                {/* Hint text */}
+                <p className="text-center text-small-leading text-muted-foreground">
+                  {displayScore >= 75
+                    ? "Seu currículo está bem alinhado com a vaga."
+                    : displayScore >= 50
+                      ? "Seu currículo tem potencial, mas precisa de ajustes nas habilidades técnicas."
+                      : "Seu currículo precisa de ajustes significativos para esta vaga."}
                 </p>
-              </div>
-            </div>
-          </div>
 
-          {/* Right column — Score + actions (fixed, non-scrolling) */}
-          <div className="flex w-column shrink-0 flex-col self-stretch overflow-hidden rounded-xl border border-border bg-card">
-            <div className="flex flex-1 flex-col items-center gap-4 card-content-padding">
-              <h2 className="w-full text-section-header tracking-[-0.3px]">
-                Score de Compatibilidade
-              </h2>
-
-              <ScoreRing score={displayScore} />
-
-              {/* Feedback badge */}
-              <div
-                className={cn(
-                  "flex items-center justify-center rounded-full border px-4 py-1.5",
-                  feedbackClasses
-                )}
-              >
-                <span className="text-small-semibold">{feedback.label}</span>
-              </div>
-
-              {/* Hint text */}
-              <p className="text-center text-small-leading text-muted-foreground">
-                {displayScore >= 75
-                  ? "Seu currículo está bem alinhado com a vaga."
-                  : displayScore >= 50
-                    ? "Seu currículo tem potencial, mas precisa de ajustes nas habilidades técnicas."
-                    : "Seu currículo precisa de ajustes significativos para esta vaga."}
-              </p>
-
-              {/* Breakdown */}
-              <div className="flex w-full flex-col gap-2.5 border-t border-border pt-7">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5">
-                    <div className="h-2 w-2 rounded-full bg-accent-success" />
-                    <span className="text-small-leading text-muted-foreground">
-                      Habilidades presentes
+                {/* Breakdown */}
+                <div className="flex w-full flex-col gap-2.5 border-t border-border pt-7">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5">
+                      <div className="h-2 w-2 rounded-full bg-accent-success" />
+                      <span className="text-small-leading text-muted-foreground">
+                        Habilidades presentes
+                      </span>
+                    </div>
+                    <span className="text-small-semibold font-bold text-foreground">
+                      {matchedSkillsCount}
                     </span>
                   </div>
-                  <span className="text-small-semibold font-bold text-foreground">
-                    {matchedSkillsCount}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5">
-                    <div className="h-2 w-2 rounded-full bg-accent-warning" />
-                    <span className="text-small-leading text-muted-foreground">
-                      Ausentes selecionadas
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5">
+                      <div className="h-2 w-2 rounded-full bg-accent-warning" />
+                      <span className="text-small-leading text-muted-foreground">
+                        Ausentes selecionadas
+                      </span>
+                    </div>
+                    <span className="text-small-semibold font-bold text-accent-brand">
+                      {selectedCount}/{totalSkillsCount}
                     </span>
                   </div>
-                  <span className="text-small-semibold font-bold text-accent-brand">
-                    {selectedCount}/{totalSkillsCount}
-                  </span>
                 </div>
               </div>
-            </div>
 
-            {/* Action buttons — mesma largura/estrutura do card do próximo step */}
-            <div className="flex shrink-0 flex-col gap-3 p-6">
-              <div className="flex gap-3">
-                <Button
-                  type="button"
-                  size="brand"
-                  variant="outline"
-                  onClick={() => setStep(1)}
-                  className="flex-1 gap-1.5"
-                  disabled={isGenerating}
-                >
-                  <RefreshCw className="h-4 w-4" />
-                  Nova Análise
-                </Button>
+              {/* Action buttons — mesma largura/estrutura do card do próximo step */}
+              <div className="flex shrink-0 flex-col gap-3 p-6">
+                <div className="flex gap-3">
+                  <Button
+                    type="button"
+                    size="brand"
+                    variant="outline"
+                    onClick={() => setStep(1)}
+                    className="flex-1 gap-1.5"
+                    disabled={isGenerating}
+                  >
+                    <RefreshCw className="h-4 w-4" />
+                    Nova Análise
+                  </Button>
 
-                <Button
-                  size="brand"
-                  onClick={handleGenerate}
-                  disabled={!analysisId || isGenerating}
-                  className="flex-1 gap-1.5 rounded-lg bg-accent-brand text-base font-bold hover:bg-accent-brand-hover"
-                >
-                  <Sparkles className="h-4 w-4" />
-                  Gerar Currículo
-                </Button>
+                  <Button
+                    size="brand"
+                    onClick={handleGenerate}
+                    disabled={!analysisId || isGenerating}
+                    className="flex-1 gap-1.5 rounded-lg bg-accent-brand text-base font-bold hover:bg-accent-brand-hover"
+                  >
+                    <Sparkles className="h-4 w-4" />
+                    Gerar Currículo
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
         </div>
+
+        <Dialog
+          open={isConfirmNoSkillsDialogOpen}
+          onOpenChange={(open) => {
+            if (!open) {
+              setIsConfirmNoSkillsDialogOpen(false);
+            }
+          }}
+        >
+          <DialogContent className="sm:max-w-sm">
+            <DialogHeader>
+              <DialogTitle>Nenhuma habilidade selecionada</DialogTitle>
+            </DialogHeader>
+            <p className="text-small-leading text-muted-foreground">
+              Você não selecionou nenhuma habilidade para incorporar ao
+              currículo. Deseja mesmo prosseguir?
+            </p>
+            <DialogFooter className="flex-row gap-3 sm:justify-end">
+              <Button
+                type="button"
+                size="brand"
+                variant="outline"
+                onClick={() => {
+                  setIsConfirmNoSkillsDialogOpen(false);
+                  generateDocument();
+                }}
+                disabled={!analysisId || isGenerating}
+              >
+                Prosseguir
+              </Button>
+              <Button
+                type="button"
+                size="brand"
+                variant="brand"
+                className="gap-1.5"
+                onClick={() => setIsConfirmNoSkillsDialogOpen(false)}
+                disabled={isGenerating}
+              >
+                Cancelar
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
-    </div>
+    </>
   );
 }

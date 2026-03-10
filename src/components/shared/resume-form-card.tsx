@@ -221,7 +221,7 @@ export function ResumeFormCard({
           id="resume-form-hardSkills"
           title="Habilidades Técnicas"
           placeholder="Digite uma habilidade técnica e pressione Enter"
-          addButtonText="Adicionar habilidade técnica"
+          addButtonText="Adicionar habilidade"
           skills={data.hardSkills}
           onChange={(skills) => updateField("hardSkills", skills)}
           isSaving={isSaving}

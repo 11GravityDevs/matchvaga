@@ -110,11 +110,11 @@ export function UnsavedChangesProvider({
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex-row gap-3 sm:justify-end">
-            <Button size="brand" variant="outline" onClick={handleCloseDialog}>
-              Cancelar
-            </Button>
-            <Button size="brand" variant="brand" onClick={handleConfirmLeave}>
+            <Button size="brand" variant="outline" onClick={handleConfirmLeave}>
               Sair
+            </Button>
+            <Button size="brand" variant="brand" onClick={handleCloseDialog}>
+              Cancelar
             </Button>
           </DialogFooter>
         </DialogContent>

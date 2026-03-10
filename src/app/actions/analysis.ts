@@ -64,15 +64,18 @@ export async function runSkillsMatch(
   }
 
   const heuristic = validateJobDescriptionText(rawText);
+
   if (!heuristic.valid) {
     const error =
       heuristic.errorCode === "max"
         ? JOB_DESCRIPTION_TOO_LONG_MESSAGE
         : NOT_JOB_DESCRIPTION_MESSAGE;
+
     return { success: false, error };
   }
 
   const supabase = await createClient();
+
   const {
     data: { user },
     error: authError,
@@ -81,6 +84,7 @@ export async function runSkillsMatch(
   if (authError) {
     return { success: false, error: translateAuthError(authError) };
   }
+
   if (!user) {
     return { success: false, error: "Faça login para continuar." };
   }
@@ -101,6 +105,7 @@ export async function runSkillsMatch(
   }
 
   const resumeParsed = resumeDataSchema.safeParse(resumeRow.parsed_data);
+
   if (!resumeParsed.success) {
     return { success: false, error: "Dados do currículo inválidos." };
   }
@@ -114,6 +119,7 @@ export async function runSkillsMatch(
     .single();
 
   const credits = creditsRow?.credits ?? 0;
+
   if (credits < 1) {
     return {
       success: false,
@@ -131,6 +137,7 @@ export async function runSkillsMatch(
       message: "Extração de skills da vaga (IA) retornou erro.",
       errorMessage: jobSkillsResult.error,
     });
+
     return { success: false, error: jobSkillsResult.error };
   }
 
@@ -138,6 +145,7 @@ export async function runSkillsMatch(
     jobSkillsResult.data,
     resumeData
   );
+
   if (!matchResult.success) {
     logServerError({
       context: "server_action",
@@ -146,6 +154,7 @@ export async function runSkillsMatch(
       message: "Match de habilidades vaga x currículo retornou erro.",
       errorMessage: matchResult.error,
     });
+
     return { success: false, error: matchResult.error };
   }
 
@@ -162,9 +171,11 @@ export async function runSkillsMatch(
 
   const appliedHardSet = new Set(applied.user_hard_skills);
   const appliedSoftSet = new Set(applied.user_soft_skills);
+
   const missing_hard_skills = jobSkillsResult.data.hard_skills.filter(
     (s) => !appliedHardSet.has(s.original_term)
   );
+
   const missing_soft_skills = jobSkillsResult.data.soft_skills.filter(
     (s) => !appliedSoftSet.has(s.original_term)
   );
