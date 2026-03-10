@@ -86,7 +86,7 @@ function toMissingSkillsWithPrefix(
   return labels.map((label) => ({
     id: `${prefix}-${slugify(label)}`,
     label,
-    selected: true,
+    selected: false,
   }));
 }
 
@@ -183,8 +183,6 @@ export function NewAnalysisProvider({
     setMatchedSkillsCount(result.matchedSkillsCount);
     setHardSkills(toMissingSkillsWithPrefix("hard", result.hardSkills));
     setSoftSkills(toMissingSkillsWithPrefix("soft", result.softSkills));
-    setSelectedHardSkills(result.hardSkills);
-    setSelectedSoftSkills(result.softSkills);
   }
 
   function toggleSkill(id: string) {

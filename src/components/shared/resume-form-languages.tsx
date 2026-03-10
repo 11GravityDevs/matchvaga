@@ -153,7 +153,7 @@ export function ResumeFormLanguages({
               className="w-fit gap-1.5 text-small"
             >
               <Plus className="h-4 w-4" />
-              Adicionar idiomas
+              Adicionar idioma
             </Button>
           </div>
         )}

@@ -74,6 +74,9 @@ export function AnalysisHistoryTable({
   onDownload,
 }: AnalysisHistoryTableProps) {
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
+  const [downloadingFormat, setDownloadingFormat] = useState<
+    "pdf" | "docx" | null
+  >(null);
   const [openAnalysisId, setOpenAnalysisId] = useState<string | null>(null);
   const { showErrorToastNotification } = useToastNotification();
 
@@ -81,6 +84,7 @@ export function AnalysisHistoryTable({
     if (!onDownload) return;
 
     setDownloadingId(analysisId);
+    setDownloadingFormat(format);
 
     try {
       const result = await onDownload(analysisId, format);
@@ -94,6 +98,7 @@ export function AnalysisHistoryTable({
       setOpenAnalysisId(null);
     } finally {
       setDownloadingId(null);
+      setDownloadingFormat(null);
     }
   };
 
@@ -275,6 +280,9 @@ export function AnalysisHistoryTable({
               size="brand"
               variant="outline"
               className="gap-1.5"
+              loading={
+                downloadingId === openAnalysisId && downloadingFormat === "docx"
+              }
               disabled={!openAnalysisId || downloadingId === openAnalysisId}
               onClick={() =>
                 openAnalysisId && handleDownload(openAnalysisId, "docx")
@@ -288,6 +296,9 @@ export function AnalysisHistoryTable({
               size="brand"
               variant="brand"
               className="gap-1.5"
+              loading={
+                downloadingId === openAnalysisId && downloadingFormat === "pdf"
+              }
               disabled={!openAnalysisId || downloadingId === openAnalysisId}
               onClick={() =>
                 openAnalysisId && handleDownload(openAnalysisId, "pdf")
