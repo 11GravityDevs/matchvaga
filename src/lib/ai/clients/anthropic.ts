@@ -63,7 +63,7 @@ export interface JobSkillsError {
 
 export type JobSkillsOutput = JobSkillsResult | JobSkillsError;
 
-const USE_MOCK = true;
+const USE_MOCK = process.env.ANTHROPIC_USE_MOCK !== "false";
 
 function stripJsonCodeFences(raw: string): string {
   let s = raw.trim();
