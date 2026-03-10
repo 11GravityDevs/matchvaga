@@ -280,23 +280,7 @@ export function getFlattenedSkills(data: ResumeData): string[] {
 export function getSkillsByCategoryForDisplay(
   data: ResumeData
 ): SkillCategory[] {
-  const categories: SkillCategory[] = [];
-
-  if (data.hardSkills && data.hardSkills.length > 0) {
-    categories.push({
-      category: "Habilidades Técnicas",
-      items: data.hardSkills,
-    });
-  }
-
-  if (data.softSkills && data.softSkills.length > 0) {
-    categories.push({
-      category: "Competências Comportamentais",
-      items: data.softSkills,
-    });
-  }
-
-  return categories;
+  return data.hardSkillsByCategory ?? [];
 }
 
 export function formatLinkLabel(url: string): string {

@@ -117,6 +117,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: colors.foreground,
   },
+  skillCategoryItemsWrap: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    flex: 1,
+  },
   skillCategoryItems: {
     color: colors.foreground,
   },
@@ -265,9 +270,17 @@ export function ResumeDocument({ data }: ResumeDocumentProps) {
                     <Text style={styles.skillCategoryLabel}>
                       {cat.category}:{" "}
                     </Text>
-                    <Text style={styles.skillCategoryItems}>
-                      {cat.items.join(", ")}
-                    </Text>
+                    <View style={styles.skillCategoryItemsWrap}>
+                      {cat.items.map((item, j) => (
+                        <Text
+                          key={`${cat.category}-${j}`}
+                          style={styles.skillCategoryItems}
+                        >
+                          {item}
+                          {j < cat.items.length - 1 ? ", " : ""}
+                        </Text>
+                      ))}
+                    </View>
                   </View>
                 ))}
               </View>

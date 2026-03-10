@@ -22,8 +22,6 @@ export interface SynthesisParams {
   summary: string;
   hardSkills: string[];
   softSkills: string[];
-  experienceDescriptions: string[];
-  educationDescriptions: string[];
 }
 
 export interface SynthesisResult {
@@ -77,31 +75,20 @@ function stripJsonCodeFences(raw: string): string {
 function mockToSynthesizedFields(mockData: {
   summary: string;
   hardSkills: string[];
-  softSkills: string[];
-  experience: Array<{ description: string }>;
-  education: Array<{ description?: string }>;
-  skillsByCategory?: Array<{ category: string; items: string[] }>;
+  hardSkillsByCategory?: Array<{ category: string; items: string[] }>;
 }): SynthesizedFields {
-  const skillsByCategory =
-    mockData.skillsByCategory && mockData.skillsByCategory.length > 0
-      ? mockData.skillsByCategory
+  const hardSkillsByCategory =
+    mockData.hardSkillsByCategory && mockData.hardSkillsByCategory.length > 0
+      ? mockData.hardSkillsByCategory
       : [
           {
             category: "Ferramentas de Desenvolvimento",
             items: mockData.hardSkills,
           },
-          {
-            category: "Competências Comportamentais",
-            items: mockData.softSkills,
-          },
         ];
   return {
     summary: mockData.summary,
-    hardSkills: mockData.hardSkills,
-    softSkills: mockData.softSkills,
-    skillsByCategory,
-    experienceDescriptions: mockData.experience.map((e) => e.description),
-    educationDescriptions: mockData.education.map((e) => e.description ?? ""),
+    hardSkillsByCategory,
   };
 }
 
@@ -113,9 +100,7 @@ export async function synthesizeResumeContent(
     const data = raw as {
       summary: string;
       hardSkills: string[];
-      softSkills: string[];
-      experience: Array<{ description: string }>;
-      education: Array<{ description?: string }>;
+      hardSkillsByCategory?: Array<{ category: string; items: string[] }>;
     };
     const synthesized = mockToSynthesizedFields(data);
     const validated = synthesizedFieldsSchema.parse(synthesized);
@@ -123,6 +108,7 @@ export async function synthesizeResumeContent(
   }
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
+
   if (!apiKey) {
     return { success: false, error: "ANTHROPIC_API_KEY is not configured" };
   }
