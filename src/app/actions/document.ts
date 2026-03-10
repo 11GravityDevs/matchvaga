@@ -5,7 +5,10 @@ import type { JobSkill } from "@/lib/ai/config/job-skills-schema";
 import { buildResumeDocx } from "@/lib/document/resume-to-docx";
 import { ResumeDocument } from "@/lib/document/resume-to-pdf";
 import { logServerError } from "@/lib/logger";
-import { createClient, getAuthenticatedUser } from "@/lib/supabase/server";
+import {
+  getAuthenticatedUser,
+  type GetAuthenticatedUserSuccess,
+} from "@/lib/supabase/server";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
 import { calculateOptimizedScore } from "@/utils/analysis";
@@ -170,7 +173,7 @@ export interface GenerateOptimizedDocumentResult {
   error?: string;
 }
 
-type SupabaseServer = Awaited<ReturnType<typeof createClient>>;
+type SupabaseServer = GetAuthenticatedUserSuccess["supabase"];
 
 async function generateOptimizedDocumentWithContext(
   supabase: SupabaseServer,
