@@ -21,6 +21,7 @@ import {
   useNewAnalysis,
   WIZARD_STEPS,
 } from "../_contexts/new-analysis-context";
+import { formatJobRoleLabel } from "../_utils/format-job-role-label";
 
 const GAP_ANALYSIS_THINKING_MESSAGES = [
   "Analisando descrição da vaga...",
@@ -60,12 +61,7 @@ export function StepJobInput() {
         queryKey: QUERY_KEY_CURRENT_USER_DISPLAY,
       });
 
-      const roleLabel =
-        result.job_title && result.job_company
-          ? `${result.job_title} - ${result.job_company}`
-          : (result.job_title ?? result.job_company ?? "Vaga");
-
-      setJobRole(roleLabel);
+      setJobRole(formatJobRoleLabel(result.job_title, result.job_company));
 
       setAnalysisResult({
         analysisId: result.analysisId!,

@@ -18,6 +18,7 @@ import {
   QUERY_CONTINUE_ANALYSIS,
   ROUTE_HOME_NEW_ANALYSIS,
 } from "@/constants/routes";
+import { formatJobRoleLabel } from "../_utils/format-job-role-label";
 import { resumeQueryOptions } from "@/lib/query/query-options";
 import type { ResumeData } from "@/types/resume";
 
@@ -245,8 +246,7 @@ export function NewAnalysisProvider({
       }
       const analysis = result.data;
       const job = analysis.job_snapshot;
-
-      setJobRole(job.title);
+      setJobRole(formatJobRoleLabel(job.title, job.company));
 
       setAnalysisResult({
         analysisId: analysis.id,
