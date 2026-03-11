@@ -2,6 +2,7 @@ import Anthropic from "@anthropic-ai/sdk";
 
 import { JOB_SKILLS_JSON_SCHEMA } from "@/lib/ai/config/job-skills-json-schema";
 import { jobSkillsResponseSchema } from "@/lib/ai/config/job-skills-schema";
+import { RESUME_SYNTHESIS_JSON_SCHEMA } from "@/lib/ai/config/resume-synthesis-json-schema";
 import { JOB_SKILLS_EXTRACTION_PROMPT } from "@/lib/ai/prompts/job-skills";
 import { RESUME_SYNTHESIS_SYSTEM_PROMPT } from "@/lib/ai/prompts/resume-synthesis";
 import { logServerError } from "@/lib/logger";
@@ -14,7 +15,8 @@ import { NOT_JOB_DESCRIPTION_MESSAGE } from "@/utils/job-description";
 import extractedMock from "../../../../extracted-mock.json";
 import optimizedMock from "../../../../optimized-mock.json";
 
-const MODEL = "claude-haiku-4-5";
+const HAIKU_MODEL = "claude-haiku-4-5";
+const SONNET_MODEL = "claude-sonnet-4-6";
 
 export interface SynthesisParams {
   summary: string;
@@ -60,15 +62,6 @@ export interface JobSkillsError {
 export type JobSkillsOutput = JobSkillsResult | JobSkillsError;
 
 const USE_MOCK = process.env.ANTHROPIC_USE_MOCK !== "false";
-
-function stripJsonCodeFences(raw: string): string {
-  let s = raw.trim();
-  const open = /^```(?:json)?\s*\n?/i;
-  const close = /\n?```\s*$/;
-  if (open.test(s)) s = s.replace(open, "");
-  if (close.test(s)) s = s.replace(close, "");
-  return s.trim();
-}
 
 function mockToSynthesizedFields(mockData: {
   summary: string;
@@ -116,10 +109,18 @@ export async function synthesizeResumeContent(
   try {
     const userContent = JSON.stringify(params);
     const message = await client.messages.create({
-      model: MODEL,
-      max_tokens: 8192,
+      model: SONNET_MODEL,
+      max_tokens: 4096,
       system: RESUME_SYNTHESIS_SYSTEM_PROMPT,
       messages: [{ role: "user", content: userContent }],
+      output_config: {
+        effort: "medium",
+        format: {
+          type: "json_schema",
+          schema: RESUME_SYNTHESIS_JSON_SCHEMA,
+        },
+      },
+      temperature: 0.4,
     });
 
     const textBlock = message.content.find((b) => b.type === "text");
@@ -130,8 +131,7 @@ export async function synthesizeResumeContent(
       return { success: false, error: "Resposta vazia do modelo." };
     }
 
-    const jsonStr = stripJsonCodeFences(content);
-    const parsed = JSON.parse(jsonStr) as unknown;
+    const parsed = JSON.parse(content) as unknown;
     const validated = synthesizedFieldsSchema.safeParse(parsed);
 
     if (!validated.success) {
@@ -156,7 +156,7 @@ export async function synthesizeResumeContent(
         context: "ai",
         operation: "synthesizeResumeContent",
         message: "Síntese de currículo (IA) falhou.",
-        model: MODEL,
+        model: SONNET_MODEL,
       },
       error
     );
@@ -191,7 +191,7 @@ export async function extractJobSkills(
 
   try {
     const message = await client.messages.create({
-      model: MODEL,
+      model: HAIKU_MODEL,
       max_tokens: 4096,
       system: JOB_SKILLS_EXTRACTION_PROMPT,
       messages: [{ role: "user", content: jobDescription }],
@@ -248,7 +248,7 @@ export async function extractJobSkills(
         context: "ai",
         operation: "extractJobSkills",
         message: "Extração de skills da vaga (IA) falhou.",
-        model: MODEL,
+        model: HAIKU_MODEL,
       },
       error
     );
