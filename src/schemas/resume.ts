@@ -74,8 +74,6 @@ export const resumeDataSchema = z.object({
   }),
 });
 
-export type ResumeDataSchema = z.infer<typeof resumeDataSchema>;
-
 export const synthesizedFieldsSchema = z.object({
   summary: z.string().max(RESUME_LIMITS.SUMMARY_MAX, {
     message: `Resumo com no máximo ${RESUME_LIMITS.SUMMARY_MAX} caracteres`,
@@ -84,3 +82,13 @@ export const synthesizedFieldsSchema = z.object({
 });
 
 export type SynthesizedFields = z.infer<typeof synthesizedFieldsSchema>;
+
+export const synthesizedSummaryResponseSchema = z.object({
+  summary: z.string().max(RESUME_LIMITS.SUMMARY_MAX, {
+    message: `Resumo com no máximo ${RESUME_LIMITS.SUMMARY_MAX} caracteres`,
+  }),
+});
+
+export const synthesizedHardSkillsResponseSchema = z.object({
+  hardSkillsByCategory: z.array(skillCategorySchema),
+});

@@ -2,26 +2,28 @@ import Anthropic from "@anthropic-ai/sdk";
 
 import { JOB_SKILLS_JSON_SCHEMA } from "@/lib/ai/config/job-skills-json-schema";
 import { jobSkillsResponseSchema } from "@/lib/ai/config/job-skills-schema";
-import { RESUME_SYNTHESIS_JSON_SCHEMA } from "@/lib/ai/config/resume-synthesis-json-schema";
 import { JOB_SKILLS_EXTRACTION_PROMPT } from "@/lib/ai/prompts/job-skills";
-import { RESUME_SYNTHESIS_SYSTEM_PROMPT } from "@/lib/ai/prompts/resume-synthesis";
 import { logServerError } from "@/lib/logger";
 import {
   synthesizedFieldsSchema,
   type SynthesizedFields,
 } from "@/schemas/resume";
 import { NOT_JOB_DESCRIPTION_MESSAGE } from "@/utils/job-description";
+import {
+  synthesizeHardSkillsByCategory,
+  synthesizeSummary,
+} from "./resume-synthesis-calls";
 
 import extractedMock from "../../../../extracted-mock.json";
 import optimizedMock from "../../../../optimized-mock.json";
 
 const HAIKU_MODEL = "claude-haiku-4-5";
-const SONNET_MODEL = "claude-sonnet-4-6";
 
 export interface SynthesisParams {
   summary: string;
   hardSkills: string[];
   softSkills: string[];
+  jobTitle?: string;
 }
 
 export interface SynthesisResult {
@@ -106,71 +108,51 @@ export async function synthesizeResumeContent(
 
   const client = new Anthropic({ apiKey });
 
-  try {
-    const userContent = JSON.stringify(params);
-    const message = await client.messages.create({
-      model: SONNET_MODEL,
-      max_tokens: 4096,
-      system: RESUME_SYNTHESIS_SYSTEM_PROMPT,
-      messages: [{ role: "user", content: userContent }],
-      output_config: {
-        effort: "medium",
-        format: {
-          type: "json_schema",
-          schema: RESUME_SYNTHESIS_JSON_SCHEMA,
-        },
-      },
-      temperature: 0.4,
-    });
+  const [resultSummary, resultHardSkills] = await Promise.all([
+    synthesizeSummary(client, {
+      summary: params.summary,
+      softSkills: params.softSkills,
+      jobTitle: params.jobTitle,
+    }),
+    synthesizeHardSkillsByCategory(client, { hardSkills: params.hardSkills }),
+  ]);
 
-    const textBlock = message.content.find((b) => b.type === "text");
-    const content =
-      textBlock && textBlock.type === "text" ? textBlock.text : "";
+  if (!resultSummary.success) {
+    return {
+      success: false,
+      error: "Síntese de currículo falhou.",
+    };
+  }
+  if (!resultHardSkills.success) {
+    return {
+      success: false,
+      error: "Síntese de currículo falhou.",
+    };
+  }
 
-    if (!content) {
-      return { success: false, error: "Resposta vazia do modelo." };
-    }
+  const merged: SynthesizedFields = {
+    summary: resultSummary.data.summary,
+    hardSkillsByCategory: resultHardSkills.data.hardSkillsByCategory,
+  };
 
-    const parsed = JSON.parse(content) as unknown;
-    const validated = synthesizedFieldsSchema.safeParse(parsed);
+  const validated = synthesizedFieldsSchema.safeParse(merged);
 
-    if (!validated.success) {
-      logServerError(
-        {
-          context: "ai",
-          operation: "synthesizeResumeContent",
-          message: "Validação Zod falhou na resposta da síntese.",
-        },
-        validated.error
-      );
-      return {
-        success: false,
-        error: "Não foi possível interpretar a resposta do modelo.",
-      };
-    }
-
-    return { success: true, data: validated.data };
-  } catch (error) {
+  if (!validated.success) {
     logServerError(
       {
         context: "ai",
         operation: "synthesizeResumeContent",
-        message: "Síntese de currículo (IA) falhou.",
-        model: SONNET_MODEL,
+        message: "Validação Zod falhou na resposta da síntese.",
       },
-      error
+      validated.error
     );
-    if (error instanceof SyntaxError) {
-      return {
-        success: false,
-        error: "Não foi possível interpretar a resposta do modelo.",
-      };
-    }
-    if (error instanceof Error) {
-      return { success: false, error: error.message };
-    }
-    return { success: false, error: "Erro ao sintetizar currículo." };
+    return {
+      success: false,
+      error: "Não foi possível interpretar a resposta do modelo.",
+    };
   }
+
+  return { success: true, data: validated.data };
 }
 
 export async function extractJobSkills(
