@@ -246,7 +246,6 @@ export function NewAnalysisProvider({
       const analysis = result.data;
       const job = analysis.job_snapshot;
 
-      setJobDescription(job.rawText);
       setJobRole(job.title);
 
       setAnalysisResult({
