@@ -201,6 +201,8 @@ function VerifyFormWithKey({
 
   return (
     <ResumeFormCard
+      headerTitle="Verifique seus dados"
+      headerSubtitle="Revisamos e extraimos as informações do seu currículo. Confira e edite se necessário."
       data={data}
       updateField={wrappedUpdateField}
       updateExperience={wrappedUpdateExperience}

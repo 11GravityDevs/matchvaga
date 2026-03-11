@@ -87,13 +87,9 @@ function ResumeEditForm({ initialData, save, isSaving }: ResumeEditFormProps) {
 
   return (
     <div className="flex w-full flex-col items-center section-gap overflow-auto page-padding">
-      <div className="flex w-content flex-col gap-1">
-        <h1 className="text-page-title">Edite seu currículo</h1>
-        <p className="text-page-subtitle">
-          Atualize suas informações e salve as alterações.
-        </p>
-      </div>
       <ResumeFormCard
+        headerTitle="Edite seu currículo"
+        headerSubtitle="Atualize suas informações e salve as alterações."
         data={data}
         updateField={wrappedUpdateField}
         updateExperience={wrappedUpdateExperience}
@@ -110,7 +106,6 @@ function ResumeEditForm({ initialData, save, isSaving }: ResumeEditFormProps) {
           disabled: isSaving,
           loading: isSaving,
         }}
-        hideHeader
         validationErrors={validationErrors}
         scrollToFirstError={scrollToFirstError}
       />

@@ -1,11 +1,18 @@
 "use client";
 
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import { RESUME_LIMITS } from "@/constants/resume";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
@@ -54,37 +61,52 @@ export function ResumeFormEducation({
   educationError,
   educationEntryErrors,
 }: ResumeFormEducationProps) {
+  const [removeIndex, setRemoveIndex] = useState<number | null>(null);
+
+  const handleConfirmRemove = () => {
+    if (removeIndex !== null) {
+      removeEducation(removeIndex);
+      setRemoveIndex(null);
+    }
+  };
+
   return (
     <div
       id="resume-form-education"
-      className="flex scroll-mt-6 scroll-mb-6 flex-col gap-4"
+      className="flex scroll-mt-6 scroll-mb-6 flex-col"
     >
       <div className="flex flex-col gap-1.5">
-        <h3 className="text-section-title">
-          <span className="inline-flex items-baseline gap-1">
-            Formação
-            <span className="align-baseline text-small font-normal text-muted-foreground">
-              (opcional)
-            </span>
-          </span>
-        </h3>
         {educationError && (
           <p className="text-sm text-destructive" role="alert">
             {educationError}
           </p>
         )}
       </div>
+
       {education.map((edu, eduIndex) => (
         <Fragment key={eduIndex}>
           <div
             id={`resume-form-education-entry-${eduIndex}`}
             className="flex scroll-mt-6 scroll-mb-6 flex-col gap-4"
           >
-            {education.length > 1 && (
+            <div className="flex items-center justify-between gap-2">
               <h4 className="text-section-item-label">
                 Formação {eduIndex + 1}
               </h4>
-            )}
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="text-destructive hover:bg-destructive/10 hover:text-destructive aria-expanded:text-destructive"
+                onClick={() => setRemoveIndex(eduIndex)}
+                disabled={isSaving}
+                aria-label="Remover formação"
+                aria-haspopup="dialog"
+                aria-expanded={removeIndex === eduIndex}
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </div>
             <div className="flex flex-col gap-2.5">
               <FormField
                 label="Curso"
@@ -235,6 +257,7 @@ export function ResumeFormEducation({
                 labelClassName="text-sub-label"
               >
                 <Textarea
+                  autoResize
                   id={`edu-desc-${eduIndex}`}
                   value={edu.description ?? ""}
                   onChange={(e) =>
@@ -246,24 +269,16 @@ export function ResumeFormEducation({
                   maxLength={RESUME_LIMITS.EDUCATION_DESCRIPTION_MAX}
                   placeholder="Uma conquista por linha"
                   variant="form"
-                  className="h-32 w-full resize-none"
+                  className="w-full"
                 />
               </FormField>
             </div>
-            <div className="flex justify-end">
-              <Button
-                type="button"
-                variant="destructiveSolid"
-                size="sm"
-                onClick={() => removeEducation(eduIndex)}
-                className="w-fit gap-1.5 text-small"
-              >
-                <Trash2 className="h-4 w-4" />
-                Remover
-              </Button>
-            </div>
           </div>
-          {eduIndex < education.length - 1 && <FormSectionSeparator />}
+          {eduIndex < education.length - 1 ? (
+            <FormSectionSeparator />
+          ) : (
+            <div className="h-7" />
+          )}
         </Fragment>
       ))}
 
@@ -285,6 +300,40 @@ export function ResumeFormEducation({
           </p>
         )}
       </div>
+
+      <Dialog
+        open={removeIndex !== null}
+        onOpenChange={(open) => !open && setRemoveIndex(null)}
+      >
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Remover formação</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-muted-foreground">
+            Tem certeza que deseja remover esta formação?
+          </p>
+          <DialogFooter className="flex-row gap-3">
+            <Button
+              type="button"
+              size="brand"
+              variant="outline"
+              className="gap-1.5"
+              onClick={() => setRemoveIndex(null)}
+            >
+              Cancelar
+            </Button>
+            <Button
+              type="button"
+              size="brand"
+              variant="destructiveSolid"
+              className="gap-1.5"
+              onClick={handleConfirmRemove}
+            >
+              Remover
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

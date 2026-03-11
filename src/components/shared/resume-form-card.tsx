@@ -1,6 +1,16 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
+import type { LucideIcon } from "lucide-react";
+import {
+  Brain,
+  BriefcaseBusiness,
+  Code2,
+  FileText,
+  GraduationCap,
+  Languages,
+  UserRound,
+} from "lucide-react";
 import type {
   EducationEntry,
   ExperienceEntry,
@@ -8,15 +18,17 @@ import type {
 } from "@/types/resume";
 import type { ResumeValidationErrors } from "@/hooks/use-resume-form";
 import { RESUME_LIMITS } from "@/constants/resume";
-
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { ResumeFormPersonalData } from "@/components/shared/resume-form-personal-data";
-import { ResumeFormSkills } from "@/components/shared/resume-form-skills";
-import { ResumeFormLanguages } from "@/components/shared/resume-form-languages";
 import { ResumeFormEducation } from "@/components/shared/resume-form-education";
 import { ResumeFormExperience } from "@/components/shared/resume-form-experience";
-import { FormSectionSeparator } from "@/components/shared/form-section-separator";
+import { ResumeFormLanguages } from "@/components/shared/resume-form-languages";
+import { ResumeFormPersonalData } from "@/components/shared/resume-form-personal-data";
+import {
+  ResumeFormCollapsibleSectionCard,
+  type ResumeFormSectionId,
+} from "@/components/shared/resume-form-collapsible-section-card";
+import { ResumeFormSkills } from "@/components/shared/resume-form-skills";
 
 export interface ResumeFormCardPrimaryAction {
   label: string;
@@ -42,16 +54,26 @@ export interface ResumeFormCardProps {
   primaryAction: ResumeFormCardPrimaryAction;
   headerTitle?: string;
   headerSubtitle?: string;
-  hideHeader?: boolean;
   validationErrors?: ResumeValidationErrors | null;
   scrollToFirstError?: boolean;
+}
+
+interface SectionErrorConfig {
+  id: ResumeFormSectionId;
+  errorKeys: Array<(typeof ERROR_FIELD_ORDER)[number]>;
+}
+
+interface SectionConfig {
+  id: ResumeFormSectionId;
+  title: string;
+  icon: LucideIcon;
+  content: ReactNode;
 }
 
 export { INPUT_CLASS };
 
 const INPUT_CLASS =
   "h-9 bg-background px-3 shadow-none focus-visible:border-accent-brand focus-visible:ring-1 focus-visible:ring-accent-brand/30";
-
 const DEFAULT_HEADER_TITLE = "Verifique seus dados";
 const DEFAULT_HEADER_SUBTITLE =
   "Revisamos e extraimos as informações do seu currículo. Confira e edite se necessário.";
@@ -69,6 +91,55 @@ const ERROR_FIELD_ORDER = [
   "experience",
 ] as const;
 
+const SECTION_ERROR_CONFIGS: SectionErrorConfig[] = [
+  { id: "personalData", errorKeys: ["fullName", "email", "location", "phone"] },
+  { id: "summary", errorKeys: ["summary"] },
+  { id: "hardSkills", errorKeys: ["hardSkills"] },
+  { id: "softSkills", errorKeys: ["softSkills"] },
+  { id: "languages", errorKeys: [] },
+  { id: "education", errorKeys: ["education"] },
+  { id: "experience", errorKeys: ["experience"] },
+];
+
+function createInitialExpandedSections(): Record<ResumeFormSectionId, boolean> {
+  return {
+    personalData: true,
+    summary: false,
+    hardSkills: false,
+    softSkills: false,
+    languages: false,
+    education: false,
+    experience: false,
+  };
+}
+
+function hasValidationError(
+  key: (typeof ERROR_FIELD_ORDER)[number],
+  validationErrors: ResumeValidationErrors
+): boolean {
+  if (key === "education") {
+    return (
+      !!validationErrors.education ||
+      (!!validationErrors.educationEntryErrors?.length &&
+        validationErrors.educationEntryErrors.some(
+          (entryError) => Object.keys(entryError).length > 0
+        ))
+    );
+  }
+
+  if (key === "experience") {
+    return (
+      !!validationErrors.experience ||
+      (!!validationErrors.experienceEntryErrors?.length &&
+        validationErrors.experienceEntryErrors.some(
+          (entryError) => Object.keys(entryError).length > 0
+        ))
+    );
+  }
+
+  return !!validationErrors[key];
+}
+
 function getScrollTargetId(
   key: (typeof ERROR_FIELD_ORDER)[number],
   validationErrors: ResumeValidationErrors
@@ -77,7 +148,7 @@ function getScrollTargetId(
 
   if (key === "education") {
     const firstErrorIndex = validationErrors.educationEntryErrors?.findIndex(
-      (e) => Object.keys(e).length > 0
+      (entryError) => Object.keys(entryError).length > 0
     );
 
     if (firstErrorIndex !== undefined && firstErrorIndex >= 0) {
@@ -89,7 +160,7 @@ function getScrollTargetId(
 
   if (key === "experience") {
     const firstErrorIndex = validationErrors.experienceEntryErrors?.findIndex(
-      (e) => Object.keys(e).length > 0
+      (entryError) => Object.keys(entryError).length > 0
     );
 
     if (firstErrorIndex !== undefined && firstErrorIndex >= 0) {
@@ -102,31 +173,14 @@ function getScrollTargetId(
   return `resume-form-${key}`;
 }
 
-function hasValidationError(
-  key: (typeof ERROR_FIELD_ORDER)[number],
+function getSectionsWithErrors(
   validationErrors: ResumeValidationErrors
-): boolean {
-  if (key === "education") {
-    return (
-      !!validationErrors.education ||
-      (!!validationErrors.educationEntryErrors?.length &&
-        validationErrors.educationEntryErrors.some(
-          (e) => Object.keys(e).length > 0
-        ))
-    );
-  }
-
-  if (key === "experience") {
-    return (
-      !!validationErrors.experience ||
-      (!!validationErrors.experienceEntryErrors?.length &&
-        validationErrors.experienceEntryErrors.some(
-          (e) => Object.keys(e).length > 0
-        ))
-    );
-  }
-
-  return !!validationErrors[key];
+): ResumeFormSectionId[] {
+  return SECTION_ERROR_CONFIGS.filter((section) =>
+    section.errorKeys.some((errorKey) =>
+      hasValidationError(errorKey, validationErrors)
+    )
+  ).map((section) => section.id);
 }
 
 export function ResumeFormCard({
@@ -143,65 +197,41 @@ export function ResumeFormCard({
   primaryAction,
   headerTitle = DEFAULT_HEADER_TITLE,
   headerSubtitle = DEFAULT_HEADER_SUBTITLE,
-  hideHeader = false,
   validationErrors,
   scrollToFirstError = false,
 }: ResumeFormCardProps) {
-  useEffect(() => {
-    if (!scrollToFirstError || !validationErrors) return;
+  const [expandedSections, setExpandedSections] = useState(
+    createInitialExpandedSections
+  );
 
-    const firstKey = ERROR_FIELD_ORDER.find((key) =>
-      hasValidationError(key, validationErrors)
-    );
-
-    if (!firstKey) return;
-
-    const id = getScrollTargetId(firstKey, validationErrors);
-    const timer = setTimeout(() => {
-      const el = document.getElementById(id);
-      el?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 0);
-
-    return () => clearTimeout(timer);
-  }, [scrollToFirstError, validationErrors]);
-
-  return (
-    <div className="w-content rounded-xl border border-border bg-card">
-      {!hideHeader && (
-        <div className="flex flex-col gap-1 p-7">
-          <h2 className="text-card-title">{headerTitle}</h2>
-          <p className="text-card-description">{headerSubtitle}</p>
-        </div>
-      )}
-
-      <div
-        className={`flex flex-col gap-6 overflow-hidden p-7 ${hideHeader ? "" : "pt-0"}`}
-      >
-        {validationErrors?.form && (
-          <div id="resume-form-error" className="scroll-mt-6 scroll-mb-6">
-            <p className="text-sm text-destructive" role="alert">
-              {validationErrors.form}
-            </p>
-          </div>
-        )}
+  const sections: SectionConfig[] = [
+    {
+      id: "personalData",
+      title: "Dados pessoais",
+      icon: UserRound,
+      content: (
         <ResumeFormPersonalData
           data={data}
           updateField={updateField}
           isSaving={isSaving}
           validationErrors={validationErrors}
         />
-
-        <FormSectionSeparator />
-
+      ),
+    },
+    {
+      id: "summary",
+      title: "Resumo profissional",
+      icon: FileText,
+      content: (
         <div
           id="resume-form-summary"
           className="flex scroll-mt-6 scroll-mb-6 flex-col gap-4"
         >
-          <h3 className="text-section-title">Resumo profissional</h3>
           <Textarea
+            autoResize
             id="summary"
             value={data.summary}
-            onChange={(e) => handleSummaryChange(e.target.value)}
+            onChange={(event) => handleSummaryChange(event.target.value)}
             disabled={isSaving}
             maxLength={RESUME_LIMITS.SUMMARY_MAX}
             variant="form"
@@ -214,12 +244,15 @@ export function ResumeFormCard({
             </p>
           )}
         </div>
-
-        <FormSectionSeparator />
-
+      ),
+    },
+    {
+      id: "hardSkills",
+      title: "Habilidades Técnicas",
+      icon: Code2,
+      content: (
         <ResumeFormSkills
           id="resume-form-hardSkills"
-          title="Habilidades Técnicas"
           placeholder="Digite uma habilidade técnica e pressione Enter"
           addButtonText="Adicionar habilidade"
           skills={data.hardSkills}
@@ -228,12 +261,15 @@ export function ResumeFormCard({
           skillsError={validationErrors?.hardSkills}
           duplicateErrorMessage="Esta habilidade técnica já foi adicionada."
         />
-
-        <FormSectionSeparator />
-
+      ),
+    },
+    {
+      id: "softSkills",
+      title: "Competências Comportamentais",
+      icon: Brain,
+      content: (
         <ResumeFormSkills
           id="resume-form-softSkills"
-          title="Competências Comportamentais"
           placeholder="Digite uma competência e pressione Enter"
           addButtonText="Adicionar competência"
           skills={data.softSkills}
@@ -242,17 +278,25 @@ export function ResumeFormCard({
           skillsError={validationErrors?.softSkills}
           duplicateErrorMessage="Esta competência já foi adicionada."
         />
-
-        <FormSectionSeparator />
-
+      ),
+    },
+    {
+      id: "languages",
+      title: "Idiomas",
+      icon: Languages,
+      content: (
         <ResumeFormLanguages
           languages={data.languages ?? []}
           onChange={(languages) => updateField("languages", languages)}
           isSaving={isSaving}
         />
-
-        <FormSectionSeparator />
-
+      ),
+    },
+    {
+      id: "education",
+      title: "Formação",
+      icon: GraduationCap,
+      content: (
         <ResumeFormEducation
           education={data.education}
           updateEducation={updateEducation}
@@ -262,9 +306,13 @@ export function ResumeFormCard({
           educationError={validationErrors?.education}
           educationEntryErrors={validationErrors?.educationEntryErrors}
         />
-
-        <FormSectionSeparator />
-
+      ),
+    },
+    {
+      id: "experience",
+      title: "Experiência",
+      icon: BriefcaseBusiness,
+      content: (
         <ResumeFormExperience
           experience={data.experience}
           updateExperience={updateExperience}
@@ -274,8 +322,84 @@ export function ResumeFormCard({
           experienceError={validationErrors?.experience}
           experienceEntryErrors={validationErrors?.experienceEntryErrors}
         />
+      ),
+    },
+  ];
 
-        <div className="h-6" />
+  const sectionsWithErrors = useMemo(() => {
+    if (!validationErrors) {
+      return new Set<ResumeFormSectionId>();
+    }
+
+    return new Set(getSectionsWithErrors(validationErrors));
+  }, [validationErrors]);
+
+  useEffect(() => {
+    if (!scrollToFirstError || !validationErrors) return;
+
+    const firstKey = ERROR_FIELD_ORDER.find((errorKey) =>
+      hasValidationError(errorKey, validationErrors)
+    );
+
+    if (!firstKey) return;
+
+    const scrollTargetId = getScrollTargetId(firstKey, validationErrors);
+    const timer = setTimeout(() => {
+      const element = document.getElementById(scrollTargetId);
+      element?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, [scrollToFirstError, validationErrors]);
+
+  const handleToggleSection = (sectionId: ResumeFormSectionId) => {
+    setExpandedSections((currentExpandedSections) => {
+      const sectionHasErrors = sectionsWithErrors.has(sectionId);
+
+      if (sectionHasErrors) {
+        return {
+          ...currentExpandedSections,
+          [sectionId]: true,
+        };
+      }
+
+      return {
+        ...currentExpandedSections,
+        [sectionId]: !currentExpandedSections[sectionId],
+      };
+    });
+  };
+
+  return (
+    <div className="flex w-content flex-col section-gap">
+      <div className="flex w-content flex-col gap-1">
+        <h1 className="text-page-title">{headerTitle}</h1>
+        <p className="text-page-subtitle">{headerSubtitle}</p>
+      </div>
+
+      <div className="flex flex-col gap-6">
+        {validationErrors?.form && (
+          <div id="resume-form-error" className="scroll-mt-6 scroll-mb-6">
+            <p className="text-sm text-destructive" role="alert">
+              {validationErrors.form}
+            </p>
+          </div>
+        )}
+
+        {sections.map((section) => (
+          <ResumeFormCollapsibleSectionCard
+            key={section.id}
+            sectionId={section.id}
+            title={section.title}
+            icon={section.icon}
+            isExpanded={
+              expandedSections[section.id] || sectionsWithErrors.has(section.id)
+            }
+            onToggle={handleToggleSection}
+          >
+            {section.content}
+          </ResumeFormCollapsibleSectionCard>
+        ))}
 
         <div className="flex justify-end">
           <Button

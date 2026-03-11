@@ -232,6 +232,7 @@ export function AnalysisHistoryTable({
               <div className="flex w-action shrink-0 items-center justify-center gap-1 p-4">
                 {row.status === "pending" ? (
                   <Button
+                    asChild
                     size="icon"
                     className="text-accent-brand hover:text-accent-brand-hover [&_svg]:size-5"
                     variant="ghost"

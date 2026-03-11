@@ -51,7 +51,7 @@ export function OnboardingLayoutClient({
     <OnboardingProvider>
       <main className="flex min-h-screen flex-col bg-background">
         <OnboardingTopBar />
-        <div className="flex flex-1 flex-col items-center justify-center gap-7 bg-surface-subtle py-12">
+        <div className="flex flex-1 flex-col items-center justify-center gap-7 bg-surface-subtle pt-7 pb-12">
           <StepIndicator
             steps={ONBOARDING_STEPS}
             currentStepIndex={currentStepIndex}

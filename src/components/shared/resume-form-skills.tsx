@@ -13,7 +13,6 @@ interface ResumeFormSkillsProps {
   isSaving?: boolean;
   skillsError?: string;
   duplicateErrorMessage?: string;
-  title?: string;
   placeholder?: string;
   addButtonText?: string;
   id?: string;
@@ -25,7 +24,6 @@ export function ResumeFormSkills({
   isSaving,
   skillsError,
   duplicateErrorMessage,
-  title = "Habilidades",
   placeholder = "Digite uma habilidade e pressione Enter",
   addButtonText = "Adicionar habilidades",
   id = "resume-form-skills",
@@ -64,21 +62,15 @@ export function ResumeFormSkills({
   };
 
   return (
-    <div id={id} className="flex scroll-mt-6 scroll-mb-6 flex-col gap-4">
+    <div id={id} className="flex scroll-mt-6 scroll-mb-6 flex-col">
       <div className="flex flex-col gap-1.5">
-        <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <h3 className="text-section-title">{title}</h3>
-          <span className="text-small text-muted-foreground">
-            {skills.length} / {RESUME_LIMITS.SKILLS_MAX}
-          </span>
-        </div>
         {skillsError && (
           <p className="text-sm text-destructive" role="alert">
             {skillsError}
           </p>
         )}
       </div>
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-7">
         {skills.length > 0 && (
           <div className="flex flex-wrap gap-2">
             {skills.map((skill, index) => (
@@ -143,8 +135,8 @@ export function ResumeFormSkills({
             )}
           </div>
         )}
-        {!isAddingSkill && (
-          <div className="flex flex-col gap-1">
+        <div className="flex items-center justify-between gap-3">
+          {!isAddingSkill ? (
             <Button
               type="button"
               variant="brand"
@@ -159,8 +151,14 @@ export function ResumeFormSkills({
               <Plus className="h-4 w-4" />
               {addButtonText}
             </Button>
-          </div>
-        )}
+          ) : (
+            <span />
+          )}
+
+          <span className="text-small text-muted-foreground">
+            {skills.length} / {RESUME_LIMITS.SKILLS_MAX}
+          </span>
+        </div>
       </div>
     </div>
   );

@@ -65,7 +65,7 @@ function SkillsColumn({
           </p>
         </div>
         <div className="flex shrink-0 items-center self-start rounded-full border border-accent-brand-light bg-accent-brand-light px-3 py-1">
-          <span className="text-xs font-semibold text-accent-brand">
+          <span className="text-xs font-semibold whitespace-nowrap text-accent-brand">
             {selectedCount} de {totalCount} selecionadas
           </span>
         </div>

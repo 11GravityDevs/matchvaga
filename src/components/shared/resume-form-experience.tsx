@@ -1,13 +1,21 @@
 "use client";
 
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Plus, Trash2 } from "lucide-react";
 import { RESUME_LIMITS } from "@/constants/resume";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { FormField } from "@/components/shared/form-field";
 import { MonthYearPickerField } from "@/components/shared/month-year-picker-field";
+import { Textarea } from "@/components/ui/textarea";
 import type { ExperienceEntry } from "@/types/resume";
 import type { ExperienceEntryFieldErrors } from "@/hooks/use-resume-form";
 import { FormSectionSeparator } from "@/components/shared/form-section-separator";
@@ -34,20 +42,21 @@ export function ResumeFormExperience({
   experienceError,
   experienceEntryErrors,
 }: ResumeFormExperienceProps) {
+  const [removeIndex, setRemoveIndex] = useState<number | null>(null);
+
+  const handleConfirmRemove = () => {
+    if (removeIndex !== null) {
+      removeExperience(removeIndex);
+      setRemoveIndex(null);
+    }
+  };
+
   return (
     <div
       id="resume-form-experience"
-      className="flex scroll-mt-6 scroll-mb-6 flex-col gap-4"
+      className="flex scroll-mt-6 scroll-mb-6 flex-col"
     >
       <div className="flex flex-col gap-1.5">
-        <h3 className="text-section-title">
-          <span className="inline-flex items-baseline gap-1">
-            Experiência
-            <span className="align-baseline text-small font-normal text-muted-foreground">
-              (opcional)
-            </span>
-          </span>
-        </h3>
         {experienceError && (
           <p className="text-sm text-destructive" role="alert">
             {experienceError}
@@ -60,11 +69,24 @@ export function ResumeFormExperience({
             id={`resume-form-experience-entry-${expIndex}`}
             className="flex scroll-mt-6 scroll-mb-6 flex-col gap-4"
           >
-            {experience.length > 1 && (
+            <div className="flex items-center justify-between gap-2">
               <h4 className="text-section-item-label">
                 Experiência {expIndex + 1}
               </h4>
-            )}
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="text-destructive hover:bg-destructive/10 hover:text-destructive aria-expanded:text-destructive"
+                onClick={() => setRemoveIndex(expIndex)}
+                disabled={isSaving}
+                aria-label="Remover experiência"
+                aria-haspopup="dialog"
+                aria-expanded={removeIndex === expIndex}
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </div>
             <div className="flex flex-col gap-2.5">
               <div className="flex gap-8">
                 <FormField
@@ -194,7 +216,8 @@ export function ResumeFormExperience({
                 labelClassName="text-sub-label"
                 error={experienceEntryErrors?.[expIndex]?.description}
               >
-                <textarea
+                <Textarea
+                  autoResize
                   id={`exp-desc-${expIndex}`}
                   value={exp.description}
                   onChange={(e) =>
@@ -202,27 +225,20 @@ export function ResumeFormExperience({
                   }
                   disabled={isSaving}
                   maxLength={RESUME_LIMITS.EXPERIENCE_DESCRIPTION_MAX}
-                  className="h-32 w-full resize-none rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground shadow-none transition-[color,box-shadow] outline-none placeholder:text-muted-foreground focus-visible:border-accent-brand focus-visible:ring-1 focus-visible:ring-accent-brand/30 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-1 aria-invalid:ring-destructive/30"
+                  variant="form"
+                  className="w-full"
                   aria-invalid={
                     !!experienceEntryErrors?.[expIndex]?.description
                   }
                 />
               </FormField>
             </div>
-            <div className="flex justify-end">
-              <Button
-                type="button"
-                variant="destructiveSolid"
-                size="sm"
-                onClick={() => removeExperience(expIndex)}
-                className="w-fit gap-1.5 text-small"
-              >
-                <Trash2 className="h-4 w-4" />
-                Remover
-              </Button>
-            </div>
           </div>
-          {expIndex < experience.length - 1 && <FormSectionSeparator />}
+          {expIndex < experience.length - 1 ? (
+            <FormSectionSeparator />
+          ) : (
+            <div className="h-7" />
+          )}
         </Fragment>
       ))}
 
@@ -246,6 +262,40 @@ export function ResumeFormExperience({
           </p>
         )}
       </div>
+
+      <Dialog
+        open={removeIndex !== null}
+        onOpenChange={(open) => !open && setRemoveIndex(null)}
+      >
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Remover experiência</DialogTitle>
+          </DialogHeader>
+          <p className="text-sm text-muted-foreground">
+            Tem certeza que deseja remover esta experiência?
+          </p>
+          <DialogFooter className="flex-row gap-3">
+            <Button
+              type="button"
+              size="brand"
+              variant="outline"
+              className="gap-1.5"
+              onClick={() => setRemoveIndex(null)}
+            >
+              Cancelar
+            </Button>
+            <Button
+              type="button"
+              size="brand"
+              variant="destructiveSolid"
+              className="gap-1.5"
+              onClick={handleConfirmRemove}
+            >
+              Remover
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -11,7 +11,7 @@ const textareaVariants = cva(
       variant: {
         default:
           "rounded-md border-input min-h-16 px-2.5 focus-visible:border-ring",
-        form: "h-32 resize-none rounded-md border-input bg-background focus-visible:border-accent-brand focus-visible:ring-1 focus-visible:ring-accent-brand/30 aria-invalid:border-destructive aria-invalid:ring-1 aria-invalid:ring-destructive/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/30 text-[13px] leading-normal text-foreground",
+        form: "min-h-32 resize-none rounded-md border-input bg-background focus-visible:border-accent-brand focus-visible:ring-1 focus-visible:ring-accent-brand/30 aria-invalid:border-destructive aria-invalid:ring-1 aria-invalid:ring-destructive/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/30 text-[13px] leading-normal text-foreground",
       },
     },
     defaultVariants: {
@@ -23,13 +23,49 @@ const textareaVariants = cva(
 interface TextareaProps
   extends
     React.ComponentProps<"textarea">,
-    VariantProps<typeof textareaVariants> {}
+    VariantProps<typeof textareaVariants> {
+  autoResize?: boolean;
+}
 
-function Textarea({ className, variant, ...props }: TextareaProps) {
+function Textarea({
+  className,
+  variant,
+  autoResize,
+  value,
+  onChange,
+  ...props
+}: TextareaProps) {
+  const textareaRef = React.useRef<HTMLTextAreaElement | null>(null);
+
+  const resizeToFitContent = React.useCallback(() => {
+    if (!autoResize || !textareaRef.current) {
+      return;
+    }
+
+    const element = textareaRef.current;
+    element.style.height = "auto";
+    element.style.height = `${element.scrollHeight}px`;
+  }, [autoResize]);
+
+  React.useEffect(() => {
+    resizeToFitContent();
+  }, [resizeToFitContent, value]);
+
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    resizeToFitContent();
+    onChange?.(event);
+  };
+
   return (
     <textarea
+      ref={textareaRef}
       data-slot="textarea"
-      className={cn(textareaVariants({ variant, className }))}
+      className={cn(
+        textareaVariants({ variant, className }),
+        autoResize && "overflow-hidden"
+      )}
+      value={value}
+      onChange={handleChange}
       {...props}
     />
   );

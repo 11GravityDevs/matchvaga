@@ -53,24 +53,12 @@ export function ResumeFormLanguages({
   return (
     <div
       id="resume-form-languages"
-      className="flex scroll-mt-6 scroll-mb-6 flex-col gap-4"
+      className="flex scroll-mt-6 scroll-mb-6 flex-col"
     >
       <div className="flex flex-col justify-center gap-1.5">
-        <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <h3 className="text-section-title">
-            <span className="inline-flex items-baseline gap-1">
-              Idiomas
-              <span className="align-baseline text-small font-normal text-muted-foreground">
-                (opcional)
-              </span>
-            </span>
-          </h3>
-          <span className="text-small text-muted-foreground">
-            {languages.length} / {RESUME_LIMITS.LANGUAGES_MAX}
-          </span>
-        </div>
+        <div className="flex flex-wrap items-baseline justify-between gap-2"></div>
       </div>
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-7">
         {languages.length > 0 && (
           <div className="flex flex-wrap gap-2">
             {languages.map((language, index) => (
@@ -137,8 +125,8 @@ export function ResumeFormLanguages({
             )}
           </div>
         )}
-        {!isAddingLanguage && (
-          <div className="flex flex-col gap-1">
+        <div className="flex items-center justify-between gap-3">
+          {!isAddingLanguage ? (
             <Button
               type="button"
               variant="brand"
@@ -155,8 +143,13 @@ export function ResumeFormLanguages({
               <Plus className="h-4 w-4" />
               Adicionar idioma
             </Button>
-          </div>
-        )}
+          ) : (
+            <span />
+          )}
+          <span className="text-small text-muted-foreground">
+            {languages.length} / {RESUME_LIMITS.LANGUAGES_MAX}
+          </span>
+        </div>
       </div>
     </div>
   );

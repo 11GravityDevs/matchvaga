@@ -30,7 +30,6 @@ export function ResumeFormPersonalData({
 }: ResumeFormPersonalDataProps) {
   return (
     <div className="flex flex-col gap-4">
-      <h3 className="text-section-title">Dados pessoais</h3>
       <div className="flex gap-8">
         <div
           id="resume-form-fullName"
