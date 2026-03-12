@@ -5,6 +5,13 @@ export interface MissingSkillsByCategory {
   soft: string[];
 }
 
+export function sortMissingJobSkills(skills: JobSkill[]): JobSkill[] {
+  return [...skills].sort((a, b) => {
+    if (a.type !== b.type) return a.type === "required" ? -1 : 1;
+    return a.name.localeCompare(b.name, "pt-BR");
+  });
+}
+
 function jobSkillToLabel(s: unknown): string {
   if (
     s &&
@@ -32,7 +39,6 @@ export function missingSkillsFromJobSkillColumns(
     soft,
   };
 }
-
 export interface SkillsMatchPair {
   job_term: string;
   resume_term: string;

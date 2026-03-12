@@ -1,6 +1,6 @@
 "use server";
 
-import { synthesizeResumeContent } from "@/lib/ai/clients";
+import { synthesizeResumeContent } from "@/lib/ai/synthesize-resume";
 import type { JobSkill } from "@/lib/ai/config/job-skills-schema";
 import { buildResumeDocx } from "@/lib/document/resume-to-docx";
 import { ResumeDocument } from "@/lib/document/resume-to-pdf";
@@ -40,7 +40,7 @@ export async function generateResumePreview(
   const { data: analysisRow, error: analysisError } = await supabase
     .from("analyses")
     .select(
-      "id, resume_id, score, user_hard_skills, user_soft_skills, missing_hard_skills, missing_soft_skills"
+      "id, resume_id, job_snapshot, score, user_hard_skills, user_soft_skills, missing_hard_skills, missing_soft_skills"
     )
     .eq("id", analysisId)
     .eq("user_id", user.id)
@@ -102,10 +102,15 @@ export async function generateResumePreview(
     ...selectedSoftOriginalTerms.filter((t) => !userSoftSkills.includes(t)),
   ];
 
+  const jobSnapshot = analysisRow.job_snapshot as
+    | { title?: string; company?: string }
+    | null
+    | undefined;
   const synthesisParams = {
     summary: resumeData.summary,
     hardSkills: mergedHardSkills,
     softSkills: mergedSoftSkills,
+    jobTitle: jobSnapshot?.title ?? undefined,
   };
 
   const synthesis = await synthesizeResumeContent(synthesisParams);

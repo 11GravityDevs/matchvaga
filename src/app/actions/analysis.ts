@@ -6,13 +6,14 @@ import { extractJobSkills, matchJobSkillsToResume } from "@/lib/ai/clients";
 import type { JobSkill } from "@/lib/ai/config/job-skills-schema";
 import { logServerError } from "@/lib/logger";
 import { getAuthenticatedUser } from "@/lib/supabase/server";
-import { jobSnapshotSchema } from "@/schemas/job";
+import { jobSnapshotSchema, type JobSnapshot } from "@/schemas/job";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
 import {
   applySkillsMatchToUserSkills,
   calculateAtsScore,
   missingSkillsFromJobSkillColumns,
+  sortMissingJobSkills,
   type MissingSkillsByCategory,
 } from "@/utils/analysis";
 import {
@@ -38,7 +39,7 @@ export interface RunSkillsMatchResult {
 export interface AnalysisRow {
   id: string;
   resume_id: string;
-  job_snapshot: { title: string; company: string; rawText: string };
+  job_snapshot: JobSnapshot;
   score: number;
   optimized_score: number;
   matched_skills_count: number;
@@ -162,12 +163,16 @@ export async function runSkillsMatch(
   const appliedHardSet = new Set(applied.user_hard_skills);
   const appliedSoftSet = new Set(applied.user_soft_skills);
 
-  const missing_hard_skills = jobSkillsResult.data.hard_skills.filter(
-    (s) => !appliedHardSet.has(s.original_term)
+  const missing_hard_skills = sortMissingJobSkills(
+    jobSkillsResult.data.hard_skills.filter(
+      (s) => !appliedHardSet.has(s.original_term)
+    )
   );
 
-  const missing_soft_skills = jobSkillsResult.data.soft_skills.filter(
-    (s) => !appliedSoftSet.has(s.original_term)
+  const missing_soft_skills = sortMissingJobSkills(
+    jobSkillsResult.data.soft_skills.filter(
+      (s) => !appliedSoftSet.has(s.original_term)
+    )
   );
 
   const score = calculateAtsScore(
@@ -180,7 +185,6 @@ export async function runSkillsMatch(
   const jobSnapshot = {
     title: jobSkillsResult.data.job_title,
     company: jobSkillsResult.data.job_company,
-    rawText,
   };
 
   const jobParsed = jobSnapshotSchema.safeParse(jobSnapshot);
@@ -290,11 +294,7 @@ export async function getAnalysesForUser(): Promise<GetAnalysesForUserResult> {
       return {
         id: row.id,
         resume_id: row.resume_id,
-        job_snapshot: row.job_snapshot as {
-          title: string;
-          company: string;
-          rawText: string;
-        },
+        job_snapshot: row.job_snapshot as JobSnapshot,
         score: row.score,
         optimized_score: row.optimized_score,
         matched_skills_count: row.matched_skills_count,
@@ -342,11 +342,7 @@ export async function getAnalysisById(
     data: {
       id: row.id,
       resume_id: row.resume_id,
-      job_snapshot: row.job_snapshot as {
-        title: string;
-        company: string;
-        rawText: string;
-      },
+      job_snapshot: row.job_snapshot as JobSnapshot,
       score: row.score,
       optimized_score: row.optimized_score,
       matched_skills_count: row.matched_skills_count,

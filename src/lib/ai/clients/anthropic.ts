@@ -1,38 +1,172 @@
-import Anthropic from "@anthropic-ai/sdk";
-
+import { getAnthropicClient } from "@/lib/ai/clients/create-client";
 import { JOB_SKILLS_JSON_SCHEMA } from "@/lib/ai/config/job-skills-json-schema";
 import { jobSkillsResponseSchema } from "@/lib/ai/config/job-skills-schema";
+import {
+  RESUME_SYNTHESIS_HARD_SKILLS_JSON_SCHEMA,
+  RESUME_SYNTHESIS_SUMMARY_JSON_SCHEMA,
+} from "@/lib/ai/config/resume-synthesis-json-schema";
 import { JOB_SKILLS_EXTRACTION_PROMPT } from "@/lib/ai/prompts/job-skills";
-import { RESUME_SYNTHESIS_SYSTEM_PROMPT } from "@/lib/ai/prompts/resume-synthesis";
+import {
+  RESUME_SYNTHESIS_HARD_SKILLS_SYSTEM_PROMPT,
+  RESUME_SYNTHESIS_SUMMARY_SYSTEM_PROMPT,
+} from "@/lib/ai/prompts/resume-synthesis";
 import { logServerError } from "@/lib/logger";
 import {
-  synthesizedFieldsSchema,
+  synthesizedHardSkillsResponseSchema,
+  synthesizedSummaryResponseSchema,
   type SynthesizedFields,
 } from "@/schemas/resume";
+import { isLanguageSkill } from "@/lib/ai/utils/job-skills";
 import { NOT_JOB_DESCRIPTION_MESSAGE } from "@/utils/job-description";
 
-import extractedMock from "../../../../extracted-mock.json";
-import optimizedMock from "../../../../optimized-mock.json";
+const HAIKU_MODEL = "claude-haiku-4-5";
+const SONNET_MODEL = "claude-sonnet-4-6";
 
-const MODEL = "claude-haiku-4-5";
+export type SummaryResult =
+  | { success: true; data: { summary: string } }
+  | { success: false; error: string };
 
-export interface SynthesisParams {
+export type HardSkillsResult =
+  | {
+      success: true;
+      data: {
+        hardSkillsByCategory: SynthesizedFields["hardSkillsByCategory"];
+      };
+    }
+  | { success: false; error: string };
+
+export async function synthesizeSummary(params: {
   summary: string;
-  hardSkills: string[];
   softSkills: string[];
+  jobTitle?: string;
+}): Promise<SummaryResult> {
+  const result = getAnthropicClient();
+  if (!result.ok) return { success: false, error: result.error };
+  const { client } = result;
+  try {
+    const userContent = JSON.stringify(params);
+    const message = await client.messages.create({
+      model: SONNET_MODEL,
+      max_tokens: 2000,
+      system: RESUME_SYNTHESIS_SUMMARY_SYSTEM_PROMPT,
+      messages: [{ role: "user", content: userContent }],
+      output_config: {
+        effort: "high",
+        format: {
+          type: "json_schema",
+          schema: RESUME_SYNTHESIS_SUMMARY_JSON_SCHEMA,
+        },
+      },
+      temperature: 0.25,
+    });
+
+    const textBlock = message.content.find((b) => b.type === "text");
+    const content =
+      textBlock && textBlock.type === "text" ? textBlock.text : "";
+
+    if (!content) {
+      return { success: false, error: "Resposta vazia do modelo (resumo)." };
+    }
+
+    const parsed = JSON.parse(content) as unknown;
+    const validated = synthesizedSummaryResponseSchema.safeParse(parsed);
+    if (!validated.success) {
+      logServerError(
+        {
+          context: "ai",
+          operation: "synthesizeSummary",
+          message: "Validação Zod falhou na resposta do resumo.",
+        },
+        validated.error
+      );
+      return { success: false, error: "Resposta inválida (resumo)." };
+    }
+    return { success: true, data: { summary: validated.data.summary } };
+  } catch (error) {
+    logServerError(
+      {
+        context: "ai",
+        operation: "synthesizeSummary",
+        message: "Síntese de resumo (IA) falhou.",
+        model: SONNET_MODEL,
+      },
+      error
+    );
+
+    return { success: false, error: "Erro ao sintetizar resumo." };
+  }
 }
 
-export interface SynthesisResult {
-  success: true;
-  data: SynthesizedFields;
-}
+export async function synthesizeHardSkillsByCategory(params: {
+  hardSkills: string[];
+}): Promise<HardSkillsResult> {
+  const result = getAnthropicClient();
+  if (!result.ok) return { success: false, error: result.error };
+  const { client } = result;
+  try {
+    const userContent = JSON.stringify(params);
+    const message = await client.messages.create({
+      model: SONNET_MODEL,
+      max_tokens: 2000,
+      system: RESUME_SYNTHESIS_HARD_SKILLS_SYSTEM_PROMPT,
+      messages: [{ role: "user", content: userContent }],
+      output_config: {
+        effort: "high",
+        format: {
+          type: "json_schema",
+          schema: RESUME_SYNTHESIS_HARD_SKILLS_JSON_SCHEMA,
+        },
+      },
+      temperature: 0.4,
+    });
 
-export interface SynthesisError {
-  success: false;
-  error: string;
-}
+    const textBlock = message.content.find((b) => b.type === "text");
+    const content =
+      textBlock && textBlock.type === "text" ? textBlock.text : "";
 
-export type SynthesisOutput = SynthesisResult | SynthesisError;
+    if (!content) {
+      return {
+        success: false,
+        error: "Resposta vazia do modelo (categorias).",
+      };
+    }
+
+    const parsed = JSON.parse(content) as unknown;
+    const validated = synthesizedHardSkillsResponseSchema.safeParse(parsed);
+    if (!validated.success) {
+      logServerError(
+        {
+          context: "ai",
+          operation: "synthesizeHardSkillsByCategory",
+          message: "Validação Zod falhou na resposta de categorias.",
+        },
+        validated.error
+      );
+      return { success: false, error: "Resposta inválida (categorias)." };
+    }
+    return {
+      success: true,
+      data: {
+        hardSkillsByCategory: validated.data.hardSkillsByCategory,
+      },
+    };
+  } catch (error) {
+    logServerError(
+      {
+        context: "ai",
+        operation: "synthesizeHardSkillsByCategory",
+        message: "Síntese de categorias de hard skills (IA) falhou.",
+        model: SONNET_MODEL,
+      },
+      error
+    );
+
+    return {
+      success: false,
+      error: "Erro ao sintetizar categorias de hard skills.",
+    };
+  }
+}
 
 export interface JobSkillsResult {
   success: true;
@@ -59,139 +193,15 @@ export interface JobSkillsError {
 
 export type JobSkillsOutput = JobSkillsResult | JobSkillsError;
 
-const USE_MOCK = process.env.ANTHROPIC_USE_MOCK !== "false";
-
-function stripJsonCodeFences(raw: string): string {
-  let s = raw.trim();
-  const open = /^```(?:json)?\s*\n?/i;
-  const close = /\n?```\s*$/;
-  if (open.test(s)) s = s.replace(open, "");
-  if (close.test(s)) s = s.replace(close, "");
-  return s.trim();
-}
-
-function mockToSynthesizedFields(mockData: {
-  summary: string;
-  hardSkills: string[];
-  hardSkillsByCategory?: Array<{ category: string; items: string[] }>;
-}): SynthesizedFields {
-  const hardSkillsByCategory =
-    mockData.hardSkillsByCategory && mockData.hardSkillsByCategory.length > 0
-      ? mockData.hardSkillsByCategory
-      : [
-          {
-            category: "Ferramentas de Desenvolvimento",
-            items: mockData.hardSkills,
-          },
-        ];
-  return {
-    summary: mockData.summary,
-    hardSkillsByCategory,
-  };
-}
-
-export async function synthesizeResumeContent(
-  params: SynthesisParams
-): Promise<SynthesisOutput> {
-  if (USE_MOCK) {
-    const raw = (optimizedMock as { success: boolean; data: unknown }).data;
-    const data = raw as {
-      summary: string;
-      hardSkills: string[];
-      hardSkillsByCategory?: Array<{ category: string; items: string[] }>;
-    };
-    const synthesized = mockToSynthesizedFields(data);
-    const validated = synthesizedFieldsSchema.parse(synthesized);
-    return { success: true, data: validated };
-  }
-
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-
-  if (!apiKey) {
-    return { success: false, error: "ANTHROPIC_API_KEY is not configured" };
-  }
-
-  const client = new Anthropic({ apiKey });
-
-  try {
-    const userContent = JSON.stringify(params);
-    const message = await client.messages.create({
-      model: MODEL,
-      max_tokens: 8192,
-      system: RESUME_SYNTHESIS_SYSTEM_PROMPT,
-      messages: [{ role: "user", content: userContent }],
-    });
-
-    const textBlock = message.content.find((b) => b.type === "text");
-    const content =
-      textBlock && textBlock.type === "text" ? textBlock.text : "";
-
-    if (!content) {
-      return { success: false, error: "Resposta vazia do modelo." };
-    }
-
-    const jsonStr = stripJsonCodeFences(content);
-    const parsed = JSON.parse(jsonStr) as unknown;
-    const validated = synthesizedFieldsSchema.safeParse(parsed);
-
-    if (!validated.success) {
-      logServerError(
-        {
-          context: "ai",
-          operation: "synthesizeResumeContent",
-          message: "Validação Zod falhou na resposta da síntese.",
-        },
-        validated.error
-      );
-      return {
-        success: false,
-        error: "Não foi possível interpretar a resposta do modelo.",
-      };
-    }
-
-    return { success: true, data: validated.data };
-  } catch (error) {
-    logServerError(
-      {
-        context: "ai",
-        operation: "synthesizeResumeContent",
-        message: "Síntese de currículo (IA) falhou.",
-        model: MODEL,
-      },
-      error
-    );
-    if (error instanceof SyntaxError) {
-      return {
-        success: false,
-        error: "Não foi possível interpretar a resposta do modelo.",
-      };
-    }
-    if (error instanceof Error) {
-      return { success: false, error: error.message };
-    }
-    return { success: false, error: "Erro ao sintetizar currículo." };
-  }
-}
-
 export async function extractJobSkills(
   jobDescription: string
 ): Promise<JobSkillsOutput> {
-  if (USE_MOCK) {
-    const data = (extractedMock as { success: boolean; data: unknown }).data;
-    const validated = jobSkillsResponseSchema.parse(data);
-    return { success: true, data: validated };
-  }
-
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) {
-    return { success: false, error: "ANTHROPIC_API_KEY is not configured" };
-  }
-
-  const client = new Anthropic({ apiKey });
-
+  const result = getAnthropicClient();
+  if (!result.ok) return { success: false, error: result.error };
+  const { client } = result;
   try {
     const message = await client.messages.create({
-      model: MODEL,
+      model: HAIKU_MODEL,
       max_tokens: 4096,
       system: JOB_SKILLS_EXTRACTION_PROMPT,
       messages: [{ role: "user", content: jobDescription }],
@@ -233,11 +243,18 @@ export async function extractJobSkills(
       return { success: false, error: NOT_JOB_DESCRIPTION_MESSAGE };
     }
 
+    const hard_skills = validated.data.hard_skills.filter(
+      (s) => !isLanguageSkill(s)
+    );
+    const soft_skills = validated.data.soft_skills.filter(
+      (s) => !isLanguageSkill(s)
+    );
+
     return {
       success: true,
       data: {
-        hard_skills: validated.data.hard_skills,
-        soft_skills: validated.data.soft_skills,
+        hard_skills,
+        soft_skills,
         job_title: validated.data.job_title,
         job_company: validated.data.job_company,
       },
@@ -248,19 +265,11 @@ export async function extractJobSkills(
         context: "ai",
         operation: "extractJobSkills",
         message: "Extração de skills da vaga (IA) falhou.",
-        model: MODEL,
+        model: HAIKU_MODEL,
       },
       error
     );
-    if (error instanceof SyntaxError) {
-      return {
-        success: false,
-        error: "Não foi possível interpretar a resposta.",
-      };
-    }
-    if (error instanceof Error) {
-      return { success: false, error: error.message };
-    }
+
     return { success: false, error: "Erro ao extrair skills da vaga." };
   }
 }
