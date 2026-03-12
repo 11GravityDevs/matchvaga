@@ -13,6 +13,7 @@ import {
   applySkillsMatchToUserSkills,
   calculateAtsScore,
   missingSkillsFromJobSkillColumns,
+  sortMissingJobSkills,
   type MissingSkillsByCategory,
 } from "@/utils/analysis";
 import {
@@ -162,12 +163,16 @@ export async function runSkillsMatch(
   const appliedHardSet = new Set(applied.user_hard_skills);
   const appliedSoftSet = new Set(applied.user_soft_skills);
 
-  const missing_hard_skills = jobSkillsResult.data.hard_skills.filter(
-    (s) => !appliedHardSet.has(s.original_term)
+  const missing_hard_skills = sortMissingJobSkills(
+    jobSkillsResult.data.hard_skills.filter(
+      (s) => !appliedHardSet.has(s.original_term)
+    )
   );
 
-  const missing_soft_skills = jobSkillsResult.data.soft_skills.filter(
-    (s) => !appliedSoftSet.has(s.original_term)
+  const missing_soft_skills = sortMissingJobSkills(
+    jobSkillsResult.data.soft_skills.filter(
+      (s) => !appliedSoftSet.has(s.original_term)
+    )
   );
 
   const score = calculateAtsScore(
