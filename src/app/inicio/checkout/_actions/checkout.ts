@@ -1,13 +1,14 @@
 "use server";
 
+import type Stripe from "stripe";
 import { z } from "zod";
 
 import { getAuthenticatedUser } from "@/lib/supabase/server";
 import { getStripe } from "@/lib/stripe/client";
+import { ROUTE_HOME_CHECKOUT_SUCCESS } from "@/constants/routes";
 import { SITE_URL } from "@/constants/site";
 import { logServerError } from "@/lib/logger";
 import {
-  type CheckoutPackageId,
   CHECKOUT_PACKAGE_IDS,
   getPackageName,
   getPackagePriceCentavos,
@@ -19,7 +20,8 @@ const createCheckoutSessionSchema = z.object({
 
 export interface CreateCheckoutSessionResult {
   success: boolean;
-  checkoutUrl?: string;
+  clientSecret?: string;
+  sessionId?: string;
   error?: string;
 }
 
@@ -32,7 +34,7 @@ export async function createCheckoutSession(input: {
     return { success: false, error: "Pacote inválido." };
   }
 
-  const { packageId } = parsed.data as { packageId: CheckoutPackageId };
+  const { packageId } = parsed.data;
 
   const auth = await getAuthenticatedUser();
   if (!auth.success) {
@@ -61,7 +63,8 @@ export async function createCheckoutSession(input: {
   const packageName = getPackageName(packageId);
 
   try {
-    const session = await stripe.checkout.sessions.create({
+    const sessionCreateParams = {
+      ui_mode: "custom",
       mode: "payment",
       currency: "brl",
       locale: "pt-BR",
@@ -78,20 +81,22 @@ export async function createCheckoutSession(input: {
         },
       ],
       payment_method_types: ["card"],
-      success_url: `${SITE_URL}/inicio/checkout/sucesso?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${SITE_URL}/inicio/checkout/cancelar`,
+      return_url: `${SITE_URL}${ROUTE_HOME_CHECKOUT_SUCCESS}?session_id={CHECKOUT_SESSION_ID}`,
+      customer_email: user.email ?? undefined,
       metadata: {
         packageId,
         userId: user.id,
       },
-    });
+    } as Stripe.Checkout.SessionCreateParams;
 
-    if (!session.url) {
+    const session = await stripe.checkout.sessions.create(sessionCreateParams);
+
+    if (!session.client_secret) {
       logServerError({
         context: "server_action",
         operation: "createCheckoutSession",
         action: "createCheckoutSession",
-        message: "Stripe session has no url",
+        message: "Stripe session has no client_secret",
       });
       return {
         success: false,
@@ -99,7 +104,11 @@ export async function createCheckoutSession(input: {
       };
     }
 
-    return { success: true, checkoutUrl: session.url };
+    return {
+      success: true,
+      clientSecret: session.client_secret,
+      sessionId: session.id,
+    };
   } catch (err) {
     logServerError(
       {

@@ -1,63 +1,64 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
+import { CheckoutProvider } from "@stripe/react-stripe-js/checkout";
+import type { Appearance } from "@stripe/stripe-js";
 import { CreditCard, Clock, Shield } from "lucide-react";
 
+import { Card, CardContent } from "@/components/ui/card";
 import { CheckoutPackagesGrid } from "@/components/shared/checkout-packages-grid";
-import {
-  type CheckoutPackageId,
-  getCreditsForPackage,
-  getPackagePriceCentavos,
-} from "@/constants/checkout-packages";
-import {
-  trackCheckoutStartedEvent,
-  trackPricingPackageSelectedEvent,
-  trackPricingViewedEvent,
-} from "@/lib/analytics/posthog-events";
+import type { CheckoutPackageId } from "@/constants/checkout-packages";
+import { trackPricingViewedEvent } from "@/lib/analytics/posthog-events";
+import { stripeCheckoutPromise } from "@/lib/stripe/checkout-client";
 import { useToastNotification } from "@/hooks/use-toast-notification";
 
-import { createCheckoutSession } from "../_actions/checkout";
+import { useCheckoutSelectPackage } from "../_hooks/use-checkout-select-package";
+import { CheckoutPaymentForm } from "./checkout-payment-form";
+
+const checkoutAppearance: Appearance = {
+  theme: "stripe",
+  inputs: "spaced",
+  labels: "above",
+};
 
 export function CheckoutContent() {
-  const [loadingPackageId, setLoadingPackageId] =
+  const [selectedPackageId, setSelectedPackageId] =
     useState<CheckoutPackageId | null>(null);
+  const [checkoutClientSecret, setCheckoutClientSecret] = useState<
+    string | null
+  >(null);
   const { showErrorToastNotification } = useToastNotification();
+
+  const onSuccess = useCallback(
+    (data: { clientSecret: string; packageId: CheckoutPackageId }) => {
+      if (!stripeCheckoutPromise) {
+        showErrorToastNotification(
+          "Configuração de pagamento indisponível no cliente."
+        );
+        return;
+      }
+      setSelectedPackageId(data.packageId);
+      setCheckoutClientSecret(data.clientSecret);
+    },
+    [showErrorToastNotification]
+  );
+
+  const onError = useCallback(
+    (message: string) => {
+      showErrorToastNotification(message);
+    },
+    [showErrorToastNotification]
+  );
+
+  const { loadingPackageId, handleSelectPackage } = useCheckoutSelectPackage({
+    onSuccess,
+    onError,
+  });
 
   useEffect(() => {
     trackPricingViewedEvent();
   }, []);
-
-  const handleSelectPackage = async (id: CheckoutPackageId) => {
-    const credits = getCreditsForPackage(id);
-    const priceCentavos = getPackagePriceCentavos(id);
-
-    trackPricingPackageSelectedEvent(id, credits, priceCentavos);
-    trackCheckoutStartedEvent(id, priceCentavos);
-
-    setLoadingPackageId(id);
-
-    try {
-      const result = await createCheckoutSession({ packageId: id });
-
-      if (result.success && result.checkoutUrl) {
-        window.location.assign(result.checkoutUrl);
-        return;
-      }
-
-      setLoadingPackageId(null);
-      showErrorToastNotification(
-        result.error ?? "Erro ao iniciar checkout. Tente novamente."
-      );
-    } catch (error) {
-      console.error(
-        "[CheckoutContent] Unexpected error creating checkout session:",
-        error
-      );
-      setLoadingPackageId(null);
-      showErrorToastNotification("Erro ao iniciar checkout. Tente novamente.");
-    }
-  };
 
   return (
     <main className="flex w-full flex-col items-center section-gap page-padding">
@@ -69,10 +70,48 @@ export function CheckoutContent() {
       </div>
 
       <div className="flex w-content flex-col gap-10">
-        <CheckoutPackagesGrid
-          loadingPackageId={loadingPackageId}
-          onSelectPackage={handleSelectPackage}
-        />
+        {!checkoutClientSecret ? (
+          <CheckoutPackagesGrid
+            loadingPackageId={loadingPackageId}
+            onSelectPackage={handleSelectPackage}
+          />
+        ) : !stripeCheckoutPromise ? (
+          <Card className="w-full border border-border">
+            <CardContent className="pt-6">
+              <p className="text-small text-muted-foreground">
+                Configuração de pagamento indisponível.{" "}
+                <button
+                  type="button"
+                  className="text-primary underline underline-offset-2 hover:no-underline"
+                  onClick={() => {
+                    setCheckoutClientSecret(null);
+                    setSelectedPackageId(null);
+                  }}
+                >
+                  Escolher outro pacote
+                </button>
+              </p>
+            </CardContent>
+          </Card>
+        ) : selectedPackageId ? (
+          <CheckoutProvider
+            stripe={stripeCheckoutPromise}
+            options={{
+              clientSecret: checkoutClientSecret,
+              elementsOptions: {
+                appearance: checkoutAppearance,
+              },
+            }}
+          >
+            <CheckoutPaymentForm
+              packageId={selectedPackageId}
+              onChooseAnotherPackage={() => {
+                setCheckoutClientSecret(null);
+                setSelectedPackageId(null);
+              }}
+            />
+          </CheckoutProvider>
+        ) : null}
 
         <div className="flex flex-wrap items-center justify-center gap-6 text-small text-muted-foreground">
           <span className="inline-flex items-center gap-1.5">

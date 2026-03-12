@@ -1,13 +1,16 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import { CheckCircle2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
+  ROUTE_HOME_CHECKOUT_CANCEL,
   ROUTE_HOME_DASHBOARD,
   ROUTE_HOME_NEW_ANALYSIS,
 } from "@/constants/routes";
 
+import { getCheckoutSessionStatus } from "../_actions/get-checkout-session-status";
 import { CheckoutSuccessTracker } from "../_components/checkout-success-tracker";
 
 interface CheckoutSuccessPageProps {
@@ -18,6 +21,19 @@ export default async function CheckoutSuccessPage({
   searchParams,
 }: CheckoutSuccessPageProps) {
   const { session_id: sessionId } = await searchParams;
+
+  if (!sessionId) {
+    redirect(ROUTE_HOME_CHECKOUT_CANCEL);
+  }
+
+  const sessionStatusResult = await getCheckoutSessionStatus({ sessionId });
+
+  if (
+    !sessionStatusResult.success ||
+    sessionStatusResult.status !== "complete"
+  ) {
+    redirect(ROUTE_HOME_CHECKOUT_CANCEL);
+  }
 
   return (
     <main className="flex flex-1 flex-col items-center justify-center section-gap page-padding">

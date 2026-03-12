@@ -47,8 +47,7 @@ export function PricingSection() {
     try {
       const result = await createCheckoutSession({ packageId: id });
 
-      if (result.success && result.checkoutUrl) {
-        // window.location.assign(result.checkoutUrl);
+      if (result.success && result.clientSecret) {
         return;
       }
 
