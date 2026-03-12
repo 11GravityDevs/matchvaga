@@ -191,15 +191,7 @@ export async function extractJobSkills(
       },
       error
     );
-    if (error instanceof SyntaxError) {
-      return {
-        success: false,
-        error: "Não foi possível interpretar a resposta.",
-      };
-    }
-    if (error instanceof Error) {
-      return { success: false, error: error.message };
-    }
+
     return { success: false, error: "Erro ao extrair skills da vaga." };
   }
 }

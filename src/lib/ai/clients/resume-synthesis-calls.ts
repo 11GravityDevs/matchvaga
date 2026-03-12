@@ -83,15 +83,7 @@ export async function synthesizeSummary(
       },
       error
     );
-    if (error instanceof SyntaxError) {
-      return {
-        success: false,
-        error: "Não foi possível interpretar a resposta do modelo.",
-      };
-    }
-    if (error instanceof Error) {
-      return { success: false, error: error.message };
-    }
+
     return { success: false, error: "Erro ao sintetizar resumo." };
   }
 }
@@ -157,15 +149,7 @@ export async function synthesizeHardSkillsByCategory(
       },
       error
     );
-    if (error instanceof SyntaxError) {
-      return {
-        success: false,
-        error: "Não foi possível interpretar a resposta do modelo.",
-      };
-    }
-    if (error instanceof Error) {
-      return { success: false, error: error.message };
-    }
+
     return {
       success: false,
       error: "Erro ao sintetizar categorias de hard skills.",
