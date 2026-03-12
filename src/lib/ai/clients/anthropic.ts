@@ -14,9 +14,6 @@ import {
   synthesizeSummary,
 } from "./resume-synthesis-calls";
 
-import extractedMock from "../../../../extracted-mock.json";
-import optimizedMock from "../../../../optimized-mock.json";
-
 const HAIKU_MODEL = "claude-haiku-4-5";
 
 export interface SynthesisParams {
@@ -63,43 +60,9 @@ export interface JobSkillsError {
 
 export type JobSkillsOutput = JobSkillsResult | JobSkillsError;
 
-const USE_MOCK = process.env.ANTHROPIC_USE_MOCK !== "false";
-
-function mockToSynthesizedFields(mockData: {
-  summary: string;
-  hardSkills: string[];
-  hardSkillsByCategory?: Array<{ category: string; items: string[] }>;
-}): SynthesizedFields {
-  const hardSkillsByCategory =
-    mockData.hardSkillsByCategory && mockData.hardSkillsByCategory.length > 0
-      ? mockData.hardSkillsByCategory
-      : [
-          {
-            category: "Ferramentas de Desenvolvimento",
-            items: mockData.hardSkills,
-          },
-        ];
-  return {
-    summary: mockData.summary,
-    hardSkillsByCategory,
-  };
-}
-
 export async function synthesizeResumeContent(
   params: SynthesisParams
 ): Promise<SynthesisOutput> {
-  if (USE_MOCK) {
-    const raw = (optimizedMock as { success: boolean; data: unknown }).data;
-    const data = raw as {
-      summary: string;
-      hardSkills: string[];
-      hardSkillsByCategory?: Array<{ category: string; items: string[] }>;
-    };
-    const synthesized = mockToSynthesizedFields(data);
-    const validated = synthesizedFieldsSchema.parse(synthesized);
-    return { success: true, data: validated };
-  }
-
   const apiKey = process.env.ANTHROPIC_API_KEY;
 
   if (!apiKey) {
@@ -158,12 +121,6 @@ export async function synthesizeResumeContent(
 export async function extractJobSkills(
   jobDescription: string
 ): Promise<JobSkillsOutput> {
-  if (USE_MOCK) {
-    const data = (extractedMock as { success: boolean; data: unknown }).data;
-    const validated = jobSkillsResponseSchema.parse(data);
-    return { success: true, data: validated };
-  }
-
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
     return { success: false, error: "ANTHROPIC_API_KEY is not configured" };
