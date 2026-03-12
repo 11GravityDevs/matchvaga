@@ -1,6 +1,6 @@
 "use server";
 
-import { synthesizeResumeContent } from "@/lib/ai/clients";
+import { synthesizeResumeContent } from "@/lib/ai/synthesize-resume";
 import type { JobSkill } from "@/lib/ai/config/job-skills-schema";
 import { buildResumeDocx } from "@/lib/document/resume-to-docx";
 import { ResumeDocument } from "@/lib/document/resume-to-pdf";

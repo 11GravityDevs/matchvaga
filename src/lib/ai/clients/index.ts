@@ -5,15 +5,11 @@ export type {
   ExtractResumeResult,
 } from "./gemini";
 
-export { extractJobSkills, synthesizeResumeContent } from "./anthropic";
+export { extractJobSkills } from "./anthropic";
 export type {
   JobSkillsError,
   JobSkillsOutput,
   JobSkillsResult,
-  SynthesisError,
-  SynthesisOutput,
-  SynthesisParams,
-  SynthesisResult,
 } from "./anthropic";
 
 export { matchJobSkillsToResume } from "./openai";
