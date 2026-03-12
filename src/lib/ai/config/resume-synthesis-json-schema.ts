@@ -31,16 +31,3 @@ export const RESUME_SYNTHESIS_HARD_SKILLS_JSON_SCHEMA = {
   required: ["hardSkillsByCategory"] as const,
   additionalProperties: false,
 };
-
-export const RESUME_SYNTHESIS_JSON_SCHEMA = {
-  type: "object" as const,
-  properties: {
-    summary: { type: "string" as const },
-    hardSkillsByCategory: {
-      type: "array" as const,
-      items: hardSkillsByCategoryItem,
-    },
-  },
-  required: ["summary", "hardSkillsByCategory"] as const,
-  additionalProperties: false,
-};
