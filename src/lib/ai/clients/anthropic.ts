@@ -1,5 +1,5 @@
-import { JOB_SKILLS_JSON_SCHEMA } from "@/lib/ai/config/job-skills-json-schema";
 import { getAnthropicClient } from "@/lib/ai/clients/create-client";
+import { JOB_SKILLS_JSON_SCHEMA } from "@/lib/ai/config/job-skills-json-schema";
 import { jobSkillsResponseSchema } from "@/lib/ai/config/job-skills-schema";
 import {
   RESUME_SYNTHESIS_HARD_SKILLS_JSON_SCHEMA,
@@ -16,6 +16,7 @@ import {
   synthesizedSummaryResponseSchema,
   type SynthesizedFields,
 } from "@/schemas/resume";
+import { isLanguageSkill } from "@/lib/ai/utils/job-skills";
 import { NOT_JOB_DESCRIPTION_MESSAGE } from "@/utils/job-description";
 
 const HAIKU_MODEL = "claude-haiku-4-5";
@@ -242,11 +243,18 @@ export async function extractJobSkills(
       return { success: false, error: NOT_JOB_DESCRIPTION_MESSAGE };
     }
 
+    const hard_skills = validated.data.hard_skills.filter(
+      (s) => !isLanguageSkill(s)
+    );
+    const soft_skills = validated.data.soft_skills.filter(
+      (s) => !isLanguageSkill(s)
+    );
+
     return {
       success: true,
       data: {
-        hard_skills: validated.data.hard_skills,
-        soft_skills: validated.data.soft_skills,
+        hard_skills,
+        soft_skills,
         job_title: validated.data.job_title,
         job_company: validated.data.job_company,
       },
