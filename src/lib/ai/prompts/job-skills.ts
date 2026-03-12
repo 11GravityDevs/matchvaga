@@ -9,8 +9,10 @@ export const JOB_SKILLS_EXTRACTION_PROMPT = `Você é um assistente de IA especi
 Extraia as habilidades da descrição da vaga. Use rótulos claros e uma habilidade por item.
 
 **Categorias:**
-- **hard_skills**: conhecimento técnico (tecnologias, ferramentas, frameworks, linguagens, métodos, certificações).
-- **soft_skills**: competências comportamentais (comunicação, trabalho em equipe, liderança, resolução de problemas, colaboração).
+- **hard_skills**: conhecimento técnico (tecnologias, ferramentas, frameworks, linguagens de programação, métodos, certificações).
+- **soft_skills**: competências comportamentais (comunicação, trabalho em equipe, liderança, resolução de problemas, colaboração). 
+
+**Exclusão (obrigatório):** Não inclua em hard_skills nem em soft_skills requisitos de **idioma/língua** (ex.: inglês, espanhol, português, francês). Esses requisitos devem ser ignorados na extração de skills.
 
 **Tipo por habilidade:**
 - **required**: a vaga deixa claro que a habilidade é obrigatória (exige, obrigatório, requisito, necessário, must have, required).
