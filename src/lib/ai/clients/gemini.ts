@@ -1,5 +1,6 @@
 import { type Schema, GoogleGenerativeAI } from "@google/generative-ai";
 
+import { getGeminiClient } from "@/lib/ai/clients/create-client";
 import { resumeExtractionResponseSchema } from "@/lib/ai/config/resume-extraction-schema";
 import { logServerError } from "@/lib/logger";
 import { extractTextFromDocx } from "@/lib/document/extract-docx-text";
@@ -141,10 +142,9 @@ function normalizeExtractedSkills(parsed: unknown): unknown {
 export async function extractResumeFromFile(
   file: File
 ): Promise<ExtractResumeOutput> {
-  const apiKey = process.env.GOOGLE_AI_API_KEY;
-  if (!apiKey) {
-    return { success: false, error: "GOOGLE_AI_API_KEY is not configured" };
-  }
+  const result = getGeminiClient();
+  if (!result.ok) return { success: false, error: result.error };
+  const genAI = result.client;
 
   if (file.size > MAX_FILE_SIZE_BYTES) {
     return { success: false, error: "Arquivo muito grande. Máximo 5 MB." };
@@ -166,7 +166,6 @@ export async function extractResumeFromFile(
   const { RESUME_SYSTEM_INSTRUCTION, RESUME_USER_PROMPT } =
     await import("@/lib/ai/prompts/extraction");
 
-  const genAI = new GoogleGenerativeAI(apiKey);
   const model = genAI.getGenerativeModel({
     model: GEMINI_MODEL,
     systemInstruction: RESUME_SYSTEM_INSTRUCTION,

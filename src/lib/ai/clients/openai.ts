@@ -1,3 +1,4 @@
+import { getOpenAIClient } from "@/lib/ai/clients/create-client";
 import { jobSkillsResponseSchema } from "@/lib/ai/config/job-skills-schema";
 import type { SkillsMatchPair } from "@/lib/ai/config/skills-match-schema";
 import { skillsMatchResponseSchema } from "@/lib/ai/config/skills-match-schema";
@@ -43,10 +44,9 @@ export async function matchJobSkillsToResume(
     return { success: false, error: "Dados do currículo inválidos." };
   }
 
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
-    return { success: false, error: "OPENAI_API_KEY is not configured" };
-  }
+  const result = getOpenAIClient();
+  if (!result.ok) return { success: false, error: result.error };
+  const { client } = result;
 
   const jobTerms = [
     ...jobParsed.data.hard_skills.map((s) => s.original_term),
@@ -64,8 +64,6 @@ export async function matchJobSkillsToResume(
   </resume_skills>
 
   Respond with a JSON object with a "matches" array of pairs { "job_term", "resume_term" }.`;
-
-  const client = new OpenAI({ apiKey });
 
   try {
     const completion = await client.chat.completions.create({

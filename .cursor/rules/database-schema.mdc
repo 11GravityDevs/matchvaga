@@ -16,7 +16,7 @@ Ref: `supabase/migrations/20250222000000_initial_schema.sql`, `supabase/migratio
 - **purchases** — id, stripe_session_id (UNIQUE), user_id, package_id, credits_granted (>0), created_at. Sem policies RLS; só service client (webhook).
 - **optimized_documents** — id, analysis_id, file_path, format (pdf|docx), created_at.
 
-**Mapping:** parsed_data → resumeDataSchema; job_snapshot → jobSnapshotSchema; user_hard_skills/user_soft_skills = skills matched; missing_hard_skills/missing_soft_skills = skills faltantes; status em runGapAnalysis/generateResumePreview.
+**Mapping:** parsed_data → resumeDataSchema; job_snapshot → jobSnapshotSchema; user_hard_skills/user_soft_skills = skills matched; missing_hard_skills/missing_soft_skills = skills faltantes; status atualizado em runSkillsMatch e generateResumePreview.
 
 **RLS:** resumes, analyses, user_credits = auth.uid()=user_id. user_credits usa WITH CHECK. optimized_documents = SELECT/INSERT via análise (EXISTS analysis do user). purchases = RLS ativado mas sem policies (apenas service role).
 
