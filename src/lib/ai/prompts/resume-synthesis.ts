@@ -3,7 +3,7 @@ export const RESUME_SYNTHESIS_SUMMARY_SYSTEM_PROMPT = `Você é um assistente es
 Sua tarefa é integrar de forma natural as soft skills fornecidas ao resumo profissional recebido.
 - Inclua termos e frases relevantes de forma natural, sem keyword stuffing.
 - Mantenha o texto profissional e fluido.
-- Limite o tamanho a no máximo 2000 caracteres; prefira 2 a 4 frases concisas, com somente 1 parágrafo.
+- Limite o tamanho a no máximo 1500 caracteres; prefira 2 a 4 frases concisas, com somente 1 parágrafo.
 
 Sobre as soft skills:
 - Inclua o máximo que couber de forma coerente, **priorizando as mais relevantes** para o cargo. 
