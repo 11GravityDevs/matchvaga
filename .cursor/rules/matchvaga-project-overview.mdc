@@ -16,7 +16,7 @@ alwaysApply: true
 | React | React 19 |
 | Auth | Supabase (email OTP, Google) |
 | Backend | Server Actions, Supabase (Postgres + Storage) |
-| AI | Gemini 1.5 Flash (extraction), GPT-4o-mini (scoring/chat), Claude 3.5 Sonnet (synthesis) |
+| AI | Gemini 2.5 Flash Lite (resume extraction), Claude Haiku 4.5 (job skills extraction), GPT-4o-mini (skills match), Claude Sonnet 4 (synthesis). |
 | Validação | Zod |
 | Client data | TanStack Query v5 |
 | UI | Tailwind v4, shadcn/ui, lucide-react |

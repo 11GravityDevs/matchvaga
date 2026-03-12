@@ -12,19 +12,19 @@ MatchVaga helps job seekers:
 
 ## Tech Stack
 
-| Layer                  | Technology                                                                                |
-| ---------------------- | ----------------------------------------------------------------------------------------- |
-| Framework              | Next.js 16 (App Router)                                                                   |
-| React                  | React 19                                                                                  |
-| Auth                   | Supabase Auth (email OTP, Google OAuth)                                                   |
-| Backend                | Server Actions, Supabase (Postgres + Storage)                                             |
-| AI/LLM                 | Gemini 1.5 Flash (extraction), GPT-4o-mini (scoring, chat), Claude 3.5 Sonnet (synthesis) |
-| Validation             | Zod                                                                                       |
-| Data fetching (client) | TanStack Query v5                                                                         |
-| Styling                | Tailwind CSS v4                                                                           |
-| UI Components          | shadcn/ui (radix-vega style), Base UI, Radix UI                                           |
-| Icons                  | lucide-react                                                                              |
-| Utils                  | clsx, tailwind-merge, class-variance-authority                                            |
+| Layer                  | Technology                                                                                                                                      |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| Framework              | Next.js 16 (App Router)                                                                                                                         |
+| React                  | React 19                                                                                                                                        |
+| Auth                   | Supabase Auth (email OTP, Google OAuth)                                                                                                         |
+| Backend                | Server Actions, Supabase (Postgres + Storage)                                                                                                   |
+| AI/LLM                 | Gemini 2.5 Flash Lite (resume extraction), Claude Haiku 4.5 (job skills extraction), GPT-4o-mini (skills match), Claude Sonnet 4.6 (synthesis). |
+| Validation             | Zod                                                                                                                                             |
+| Data fetching (client) | TanStack Query v5                                                                                                                               |
+| Styling                | Tailwind CSS v4                                                                                                                                 |
+| UI Components          | shadcn/ui (radix-vega style), Base UI, Radix UI                                                                                                 |
+| Icons                  | lucide-react                                                                                                                                    |
+| Utils                  | clsx, tailwind-merge, class-variance-authority                                                                                                  |
 
 ## Getting Started
 
@@ -38,7 +38,7 @@ MatchVaga helps job seekers:
 ```bash
 # Clone the repository
 git clone <repository-url>
-cd matchvaga-frontend
+cd matchvaga
 
 # Install dependencies
 
@@ -79,12 +79,12 @@ src/
 
 ### Route Architecture
 
-| Route Group   | Purpose                          |
-| ------------- | -------------------------------- |
-| `(auth)/`     | Login (email → token flow)       |
-| `(legal)/`    | Privacy policy, Terms of service |
-| `onboarding/` | Resume upload → verify flow      |
-| `dashboard/`  | Main app after onboarding        |
+| Route Group   | Purpose                                                     |
+| ------------- | ----------------------------------------------------------- |
+| `(auth)/`     | Login (email → token flow)                                  |
+| `(legal)/`    | Privacy policy, Terms of service                            |
+| `onboarding/` | Resume upload → verify flow                                 |
+| `inicio/`     | Main app after onboarding (`/inicio` → `/inicio/dashboard`) |
 
 ### Path Aliases
 
