@@ -7,7 +7,6 @@ import { logServerError } from "@/lib/logger";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
 import { getFlattenedSkills } from "@/utils/resume";
-import OpenAI from "openai";
 import { z } from "zod";
 
 const MODEL = "gpt-4o-mini";

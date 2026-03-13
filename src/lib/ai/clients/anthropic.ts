@@ -10,13 +10,13 @@ import {
   RESUME_SYNTHESIS_HARD_SKILLS_SYSTEM_PROMPT,
   RESUME_SYNTHESIS_SUMMARY_SYSTEM_PROMPT,
 } from "@/lib/ai/prompts/resume-synthesis";
+import { isLanguageSkill } from "@/lib/ai/utils/job-skills";
 import { logServerError } from "@/lib/logger";
 import {
   synthesizedHardSkillsResponseSchema,
   synthesizedSummaryResponseSchema,
   type SynthesizedFields,
 } from "@/schemas/resume";
-import { isLanguageSkill } from "@/lib/ai/utils/job-skills";
 import { NOT_JOB_DESCRIPTION_MESSAGE } from "@/utils/job-description";
 
 const HAIKU_MODEL = "claude-haiku-4-5";
@@ -211,6 +211,7 @@ export async function extractJobSkills(
           schema: JOB_SKILLS_JSON_SCHEMA,
         },
       },
+      temperature: 0.2,
     });
 
     const textBlock = message.content.find((b) => b.type === "text");
