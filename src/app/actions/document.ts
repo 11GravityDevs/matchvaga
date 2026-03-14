@@ -146,9 +146,14 @@ export async function generateResumePreview(
     hardSkillsByCategory: synthesis.data.hardSkillsByCategory,
   };
 
-  const updatePayload: { status: string; optimized_score?: number } = {
+  const updatePayload: {
+    status: string;
+    optimized_score?: number;
+    optimized_resume_data?: ResumeData;
+  } = {
     status: "completed",
     optimized_score: optimizedScore,
+    optimized_resume_data: mergedResumeData,
   };
 
   const { error: updateStatusError } = await supabase
@@ -326,7 +331,7 @@ export async function downloadOptimizedDocument(
 
   const { data: analysisRow, error: analysisError } = await supabase
     .from("analyses")
-    .select("id, resume_id")
+    .select("id, optimized_resume_data")
     .eq("id", analysisId)
     .eq("user_id", user.id)
     .single();
@@ -335,20 +340,17 @@ export async function downloadOptimizedDocument(
     return { success: false, error: "Análise não encontrada." };
   }
 
-  const { data: resumeRow, error: resumeError } = await supabase
-    .from("resumes")
-    .select("parsed_data")
-    .eq("id", analysisRow.resume_id)
-    .eq("user_id", user.id)
-    .single();
+  const optimizedParsed =
+    analysisRow.optimized_resume_data != null
+      ? resumeDataSchema.safeParse(analysisRow.optimized_resume_data)
+      : null;
 
-  if (resumeError || !resumeRow) {
-    return { success: false, error: "Currículo não encontrado." };
-  }
-
-  const resumeParsed = resumeDataSchema.safeParse(resumeRow.parsed_data);
-  if (!resumeParsed.success) {
-    return { success: false, error: "Dados do currículo inválidos." };
+  if (!optimizedParsed?.success) {
+    return {
+      success: false,
+      error:
+        "Conclua a otimização do currículo nesta análise antes de baixar o documento.",
+    };
   }
 
   return generateOptimizedDocumentWithContext(
@@ -356,7 +358,7 @@ export async function downloadOptimizedDocument(
     user.id,
     analysisId,
     format,
-    resumeParsed.data
+    optimizedParsed.data as ResumeData
   );
 }
 

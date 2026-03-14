@@ -15,3 +15,10 @@ CREATE POLICY "documents_select_own"
     bucket_id = 'documents'
     AND (storage.foldername(name))[1] = auth.uid()::text
   );
+
+CREATE POLICY "documents_delete_own"
+  ON storage.objects FOR DELETE
+  USING (
+    bucket_id = 'documents'
+    AND (storage.foldername(name))[1] = auth.uid()::text
+  );

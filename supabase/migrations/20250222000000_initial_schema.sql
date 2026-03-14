@@ -25,6 +25,7 @@ CREATE TABLE analyses (
   missing_hard_skills JSONB NOT NULL DEFAULT '[]',
   missing_soft_skills JSONB NOT NULL DEFAULT '[]',
   status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'completed', 'abandoned')),
+  optimized_resume_data JSONB,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -72,3 +73,5 @@ CREATE POLICY "optimized_documents_select_via_analysis" ON optimized_documents F
   USING (EXISTS (SELECT 1 FROM analyses a WHERE a.id = analysis_id AND a.user_id = auth.uid()));
 CREATE POLICY "optimized_documents_insert_via_analysis" ON optimized_documents FOR INSERT
   WITH CHECK (EXISTS (SELECT 1 FROM analyses a WHERE a.id = analysis_id AND a.user_id = auth.uid()));
+CREATE POLICY "optimized_documents_delete_via_analysis" ON optimized_documents FOR DELETE
+  USING (EXISTS (SELECT 1 FROM analyses a WHERE a.id = analysis_id AND a.user_id = auth.uid()));
