@@ -12,4 +12,4 @@ alwaysApply: false
 
 **Vocabulário:** Upload, Extract (ResumeData), Analyze (gap), Skills Match, Optimize, Export, Lateral Chat, Checkout (BRL). Naming: resume, jobDescription/job, gapAnalysis/analysis, optimizedResume/optimizedDocument, lateralChat/chat.
 
-**AI impl:** Outputs validados com Zod (`src/lib/ai/config/`). safeParse antes de usar. Erros: nunca expor raw; retornar `{ success: false, error: "..." }`.
+**AI impl:** Outputs validados com Zod (`src/lib/ai/config/` ou `@/schemas/resume`). Usar `safeParse` antes de usar a resposta. Contrato de erro: respostas expostas ao usuário no formato `{ success: true, data?: T } | { success: false, error: string }`; `error` sempre em PT-BR, nunca JSON bruto, stack ou mensagem do provedor. Logs completos só no servidor. Helper central: `handleAiError` em `src/lib/ai/errors.ts`.
