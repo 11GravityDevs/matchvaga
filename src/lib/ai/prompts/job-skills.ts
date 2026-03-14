@@ -3,8 +3,8 @@ export const JOB_SKILLS_EXTRACTION_PROMPT = `Você é um assistente de IA especi
 **Validação (obrigatório):** Antes de extrair os dados, verifique se o texto é de fato uma descrição de vaga de emprego. Se o texto NÃO for uma oportunidade de emprego real (ex.: texto aleatório, receita, conversa, artigo, spam, piada), defina **is_job_description** como false e retorne **hard_skills** e **soft_skills** como arrays vazios, **job_title** e **job_company** como strings vazias. Só defina **is_job_description** como true e extraia quando o texto for uma descrição real de vaga (cargo, requisitos, responsabilidades, empresa, etc.).
 
 **Cargo e empresa:**
-- **job_title**: Cargo/título da vaga (ex.: "Desenvolvedor Front-end", "Analista de Dados"). Se não houver no texto, use "Não especificado".
-- **job_company**: Nome da empresa ou contratante quando mencionado; se não houver, use "Não especificado".
+- **job_title**: Cargo/título da vaga (ex.: "Desenvolvedor Front-end", "Analista de Dados"). Se não houver no texto, retorne string vazia.
+- **job_company**: Nome da empresa ou contratante quando mencionado. Se não houver no texto, retorne string vazia.
 
 Extraia as habilidades da descrição da vaga. Use rótulos claros e uma habilidade por item.
 
@@ -19,7 +19,7 @@ Extraia as habilidades da descrição da vaga. Use rótulos claros e uma habilid
 - **differential**: a habilidade é um diferencial (diferencial, desejável, nice to have, bônus).
 
 **Campos por habilidade:**
-- **name**: Rótulo normalizado para exibição — apenas substantivo ou frase nominal (ex.: "Colaboração em equipe", "Testes unitários", "React.js"). Nunca verbo no infinitivo (use "Proposição de melhorias", não "Propor melhorias").
+- **name**: Rótulo normalizado para exibição — apenas substantivo ou frase nominal (ex.: "Colaboração em equipe", "Testes unitários", "React.js"). Nunca verbo no infinitivo (use "Colaboração em equipe", não "Colaborar em equipe").
 - **original_term**: Texto exato da descrição da vaga; preserve ortografia e maiúsculas. Usado para matching em ATS.
 - **type**: "required" ou "differential".
 

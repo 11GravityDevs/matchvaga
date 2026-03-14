@@ -251,13 +251,16 @@ export async function extractJobSkills(
       (s) => !isLanguageSkill(s)
     );
 
+    const jobTitle = validated.data.job_title?.trim() || "Não especificado";
+    const jobCompany = validated.data.job_company?.trim() || "Não especificado";
+
     return {
       success: true,
       data: {
         hard_skills,
         soft_skills,
-        job_title: validated.data.job_title,
-        job_company: validated.data.job_company,
+        job_title: jobTitle,
+        job_company: jobCompany,
       },
     };
   } catch (error) {
