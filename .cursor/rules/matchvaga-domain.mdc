@@ -6,9 +6,9 @@ alwaysApply: false
 
 # MatchVaga Domain
 
-**Conceitos:** PT-BR, BRL. Resume = currículo; Job = vaga; Gap Analysis = comparação (score 0–100 local + skills match com GPT-4o-mini); Optimized Document = PDF/DOCX (Claude Sonnet); Lateral Chat = painel AI (GPT-4o-mini) para sugestões/edições quando implementado.
+**Conceitos:** PT-BR, BRL. Resume = currículo; Job = vaga; Gap Analysis = comparação (score 0–100 local + skills match por algoritmo local); Optimized Document = PDF/DOCX (Claude Sonnet); Lateral Chat = painel AI (GPT-4o-mini) para sugestões/edições quando implementado.
 
-**AI por fluxo:** Resume extraction → Gemini 2.5 Flash Lite (`gemini.ts`). Job skills extraction → Claude Haiku 4.5 (`anthropic.ts`). Skills match (currículo×vaga) → GPT-4o-mini (`openai.ts`). Score → local (`calculateAtsScore` em `utils/analysis.ts`). Synthesis (resumo, hard skills, documento) → Claude Sonnet 4 (`anthropic.ts`). Chat → GPT-4o-mini (quando implementado).
+**AI por fluxo:** Resume extraction → Gemini 2.5 Flash Lite (`gemini.ts`). Job skills extraction → Claude Haiku 4.5 (`anthropic.ts`). Skills match (currículo×vaga) → algoritmo local (similaridade de termos em `utils/skills-match.ts`). Score → local (`calculateAtsScore` em `utils/analysis.ts`). Synthesis (resumo, hard skills, documento) → Claude Sonnet 4 (`anthropic.ts`). Chat → GPT-4o-mini (quando implementado).
 
 **Vocabulário:** Upload, Extract (ResumeData), Analyze (gap), Skills Match, Optimize, Export, Lateral Chat, Checkout (BRL). Naming: resume, jobDescription/job, gapAnalysis/analysis, optimizedResume/optimizedDocument, lateralChat/chat.
 

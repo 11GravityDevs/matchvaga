@@ -12,10 +12,9 @@ export type {
   JobSkillsResult,
 } from "./anthropic";
 
-export { matchJobSkillsToResume } from "./openai";
 export type {
   JobSkillsInput,
   MatchSkillsError,
   MatchSkillsOutput,
   MatchSkillsResult,
-} from "./openai";
+} from "@/utils/skills-match";

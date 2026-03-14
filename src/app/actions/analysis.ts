@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import { extractJobSkills, matchJobSkillsToResume } from "@/lib/ai/clients";
+import { extractJobSkills } from "@/lib/ai/clients";
 import type { JobSkill } from "@/lib/ai/config/job-skills-schema";
 import { logServerError } from "@/lib/logger";
 import { getAuthenticatedUser } from "@/lib/supabase/server";
@@ -21,6 +21,7 @@ import {
   NOT_JOB_DESCRIPTION_MESSAGE,
   validateJobDescriptionText,
 } from "@/utils/job-description";
+import { matchJobSkillsToResume } from "@/utils/skills-match";
 
 export type { MissingSkillsByCategory } from "@/utils/analysis";
 
