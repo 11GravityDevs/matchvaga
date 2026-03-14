@@ -306,7 +306,7 @@ export async function refineResumeTexts(data: ResumeData): Promise<ResumeData> {
     generationConfig: {
       responseMimeType: "application/json",
       responseSchema: refineResumeTextsResponseSchema as unknown as Schema,
-      temperature: 0.3,
+      temperature: 0.5,
     },
   });
 
