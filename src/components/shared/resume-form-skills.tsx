@@ -16,6 +16,9 @@ interface ResumeFormSkillsProps {
   placeholder?: string;
   addButtonText?: string;
   id?: string;
+  skillsMax:
+    | typeof RESUME_LIMITS.HARD_SKILLS_MAX
+    | typeof RESUME_LIMITS.SOFT_SKILLS_MAX;
 }
 
 export function ResumeFormSkills({
@@ -23,6 +26,7 @@ export function ResumeFormSkills({
   onChange,
   isSaving,
   skillsError,
+  skillsMax,
   duplicateErrorMessage,
   placeholder = "Digite uma habilidade e pressione Enter",
   addButtonText = "Adicionar habilidades",
@@ -41,17 +45,22 @@ export function ResumeFormSkills({
 
   const addSkill = () => {
     const trimmed = newSkill.trim();
-    if (!trimmed || skills.length >= RESUME_LIMITS.SKILLS_MAX) return;
+
+    if (!trimmed || skills.length >= skillsMax) return;
+
     const capitalized = capitalizeSkill(trimmed);
+
     const isDuplicate = skills.some(
       (s) => s.toLowerCase() === capitalized.toLowerCase()
     );
+
     if (isDuplicate) {
       setDuplicateError(
         duplicateErrorMessage ?? "Esta habilidade já foi adicionada."
       );
       return;
     }
+
     setDuplicateError(null);
     onChange([...skills, capitalized]);
     setNewSkill("");
@@ -124,7 +133,7 @@ export function ResumeFormSkills({
                 }
               }}
               placeholder={placeholder}
-              disabled={isSaving || skills.length >= RESUME_LIMITS.SKILLS_MAX}
+              disabled={isSaving || skills.length >= skillsMax}
               className="h-9 bg-background px-3 shadow-none focus-visible:border-accent-brand focus-visible:ring-1 focus-visible:ring-accent-brand/30"
               aria-invalid={!!skillsError || !!duplicateError}
             />
@@ -145,7 +154,7 @@ export function ResumeFormSkills({
                 setDuplicateError(null);
                 setIsAddingSkill(true);
               }}
-              disabled={isSaving || skills.length >= RESUME_LIMITS.SKILLS_MAX}
+              disabled={isSaving || skills.length >= skillsMax}
               className="w-fit gap-1.5 text-small"
             >
               <Plus className="h-4 w-4" />
@@ -156,7 +165,7 @@ export function ResumeFormSkills({
           )}
 
           <span className="text-small text-muted-foreground">
-            {skills.length} / {RESUME_LIMITS.SKILLS_MAX}
+            {skills.length} / {skillsMax}
           </span>
         </div>
       </div>

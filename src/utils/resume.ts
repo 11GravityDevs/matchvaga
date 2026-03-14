@@ -214,13 +214,13 @@ export function truncateResumeDataToLimits(obj: unknown): unknown {
 
   const hardSkills = Array.isArray(o.hardSkills)
     ? o.hardSkills
-        .slice(0, RESUME_LIMITS.SKILLS_MAX)
+        .slice(0, RESUME_LIMITS.HARD_SKILLS_MAX)
         .map((s) => truncateStr(s, RESUME_LIMITS.TEXT_FIELD_MAX))
     : o.hardSkills;
 
   const softSkills = Array.isArray(o.softSkills)
     ? o.softSkills
-        .slice(0, RESUME_LIMITS.SKILLS_MAX)
+        .slice(0, RESUME_LIMITS.SOFT_SKILLS_MAX)
         .map((s) => truncateStr(s, RESUME_LIMITS.TEXT_FIELD_MAX))
     : o.softSkills;
 

@@ -51,13 +51,13 @@ export const resumeDataSchema = z.object({
   }),
   hardSkills: z
     .array(z.string().max(RESUME_LIMITS.TEXT_FIELD_MAX))
-    .max(RESUME_LIMITS.SKILLS_MAX, {
-      message: `Máximo de ${RESUME_LIMITS.SKILLS_MAX} habilidades técnicas`,
+    .max(RESUME_LIMITS.HARD_SKILLS_MAX, {
+      message: `Máximo de ${RESUME_LIMITS.HARD_SKILLS_MAX} habilidades técnicas`,
     }),
   softSkills: z
     .array(z.string().max(RESUME_LIMITS.TEXT_FIELD_MAX))
-    .max(RESUME_LIMITS.SKILLS_MAX, {
-      message: `Máximo de ${RESUME_LIMITS.SKILLS_MAX} competências comportamentais`,
+    .max(RESUME_LIMITS.SOFT_SKILLS_MAX, {
+      message: `Máximo de ${RESUME_LIMITS.SOFT_SKILLS_MAX} competências comportamentais`,
     }),
   languages: z
     .array(z.string().max(RESUME_LIMITS.TEXT_FIELD_MAX))

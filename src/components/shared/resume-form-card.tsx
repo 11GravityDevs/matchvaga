@@ -252,6 +252,7 @@ export function ResumeFormCard({
       icon: Code2,
       content: (
         <ResumeFormSkills
+          skillsMax={100}
           id="resume-form-hardSkills"
           placeholder="Digite uma habilidade técnica e pressione Enter"
           addButtonText="Adicionar habilidade"
@@ -269,6 +270,7 @@ export function ResumeFormCard({
       icon: Brain,
       content: (
         <ResumeFormSkills
+          skillsMax={60}
           id="resume-form-softSkills"
           placeholder="Digite uma competência e pressione Enter"
           addButtonText="Adicionar competência"
