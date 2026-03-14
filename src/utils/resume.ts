@@ -372,14 +372,6 @@ export function getContactLine1ForDisplay(data: ResumeData): string {
   return parts.join(" | ");
 }
 
-export function getContactLine2ForDisplay(data: ResumeData): string {
-  const parts: string[] = [];
-  if (data.linkedin) parts.push(formatLinkLabel(data.linkedin));
-  if (data.github) parts.push(formatLinkLabel(data.github));
-  if (data.email) parts.push(data.email);
-  return parts.join(" | ");
-}
-
 const SORT_KEY_CURRENT = 9999 * 12 + 12;
 
 export function parseResumeDateToSortKey(dateStr: string): number {
