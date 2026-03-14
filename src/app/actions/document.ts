@@ -274,8 +274,7 @@ async function generateOptimizedDocumentWithContext(
     });
     return {
       success: false,
-      error:
-        "Erro ao salvar documento. Verifique se o bucket 'documents' existe.",
+      error: "Erro ao salvar documento. Tente novamente.",
     };
   }
 

@@ -15,6 +15,7 @@ import {
   REFINE_TEXTS_USER_PROMPT_PREFIX,
 } from "@/lib/ai/prompts/refine-resume-texts";
 import { extractTextFromDocx } from "@/lib/document/extract-docx-text";
+import { handleAiError } from "@/lib/ai/errors";
 import { logServerError } from "@/lib/logger";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
@@ -213,25 +214,11 @@ export async function extractResumeFromFile(
 
     return parseAndValidateResult(result);
   } catch (error) {
-    logServerError(
-      {
-        context: "ai",
-        operation: "extractResume",
-        message: "Extração de currículo falhou.",
-        model: GEMINI_MODEL,
-      },
-      error
-    );
-    if (error instanceof SyntaxError) {
-      return {
-        success: false,
-        error: "Não foi possível extrair dados do documento.",
-      };
-    }
-    if (error instanceof Error) {
-      return { success: false, error: error.message };
-    }
-    return { success: false, error: "Erro ao processar currículo." };
+    const userMessage = handleAiError(error, {
+      operation: "extractResume",
+      model: GEMINI_MODEL,
+    });
+    return { success: false, error: userMessage };
   }
 }
 
@@ -253,13 +240,21 @@ function parseAndValidateResult(
     const parsed = JSON.parse(text.trim()) as unknown;
     const normalizedSkills = normalizeExtractedSkills(parsed);
     const truncated = truncateResumeDataToLimits(normalizedSkills);
-    const validated = resumeDataSchema.parse(truncated);
-    return { success: true, data: capitalizeResumeData(validated) };
-  } catch {
-    return {
-      success: false,
-      error: "Não foi possível extrair dados do documento.",
-    };
+    const validated = resumeDataSchema.safeParse(truncated);
+    if (!validated.success) {
+      const userMessage = handleAiError(validated.error, {
+        operation: "extractResume",
+        model: GEMINI_MODEL,
+      });
+      return { success: false, error: userMessage };
+    }
+    return { success: true, data: capitalizeResumeData(validated.data) };
+  } catch (error) {
+    const userMessage = handleAiError(error, {
+      operation: "extractResume",
+      model: GEMINI_MODEL,
+    });
+    return { success: false, error: userMessage };
   }
 }
 
@@ -335,7 +330,20 @@ export async function refineResumeTexts(data: ResumeData): Promise<ResumeData> {
     }
 
     const parsed = JSON.parse(text.trim()) as unknown;
-    const refined = refineResumeTextsResponseZodSchema.parse(parsed);
+    const refinedResult = refineResumeTextsResponseZodSchema.safeParse(parsed);
+    if (!refinedResult.success) {
+      logServerError(
+        {
+          context: "ai",
+          operation: "refineResumeTexts",
+          message: "Validação Zod falhou na resposta de refinamento.",
+          model: GEMINI_MODEL,
+        },
+        refinedResult.error
+      );
+      return data;
+    }
+    const refined = refinedResult.data;
 
     const expById = new Map(
       refined.experienceDescriptions.map((item) => [item.id, item.description])
@@ -384,18 +392,10 @@ export async function refineResumeTexts(data: ResumeData): Promise<ResumeData> {
       }),
     };
   } catch (error) {
-    const errMessage = error instanceof Error ? error.message : String(error);
-    logServerError(
-      {
-        context: "ai",
-        operation: "refineResumeTexts",
-        message:
-          "Refinamento de textos do currículo falhou; usando dados originais.",
-        model: GEMINI_MODEL,
-        errorMessage: errMessage,
-      },
-      error
-    );
+    handleAiError(error, {
+      operation: "refineResumeTexts",
+      model: GEMINI_MODEL,
+    });
     return data;
   }
 }
