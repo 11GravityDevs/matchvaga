@@ -263,6 +263,18 @@ export async function refineResumeTexts(data: ResumeData): Promise<ResumeData> {
   if (!result.ok) {
     return data;
   }
+
+  const hasSummary = data.summary.trim().length > 0;
+  const hasExperienceDescriptions = data.experience.some(
+    (e) => e.description.trim().length > 0
+  );
+  const hasEducationDescriptions = data.education.some(
+    (e) => (e.description ?? "").trim().length > 0
+  );
+  if (!hasSummary && !hasExperienceDescriptions && !hasEducationDescriptions) {
+    return data;
+  }
+
   const genAI = result.client;
 
   const inputPayload = {
@@ -299,9 +311,24 @@ export async function refineResumeTexts(data: ResumeData): Promise<ResumeData> {
   try {
     const generateResult = await model.generateContent([{ text: userMessage }]);
     const response = generateResult.response;
-    const text = response.text();
 
-    if (!text) {
+    const candidates = (response as { candidates?: unknown[] }).candidates;
+    if (!candidates?.length) {
+      logServerError(
+        {
+          context: "ai",
+          operation: "refineResumeTexts",
+          message:
+            "Resposta do Gemini vazia ou bloqueada; usando dados originais.",
+          model: GEMINI_MODEL,
+        },
+        new Error("No candidates in response")
+      );
+      return data;
+    }
+
+    const text = response.text();
+    if (!text?.trim()) {
       return data;
     }
 
@@ -314,6 +341,24 @@ export async function refineResumeTexts(data: ResumeData): Promise<ResumeData> {
     const eduById = new Map(
       refined.educationDescriptions.map((item) => [item.id, item.description])
     );
+
+    const expectedExpIds = data.experience.length;
+    const expectedEduIds = data.education.length;
+    if (expById.size !== expectedExpIds || eduById.size !== expectedEduIds) {
+      logServerError(
+        {
+          context: "ai",
+          operation: "refineResumeTexts",
+          message:
+            "Resposta com quantidade de ids diferente do esperado; usando dados originais.",
+          model: GEMINI_MODEL,
+        },
+        new Error(
+          `Expected ${expectedExpIds} exp, ${expectedEduIds} edu; got ${expById.size}, ${eduById.size}`
+        )
+      );
+      return data;
+    }
 
     return {
       ...data,
@@ -337,6 +382,7 @@ export async function refineResumeTexts(data: ResumeData): Promise<ResumeData> {
       }),
     };
   } catch (error) {
+    const errMessage = error instanceof Error ? error.message : String(error);
     logServerError(
       {
         context: "ai",
@@ -344,6 +390,7 @@ export async function refineResumeTexts(data: ResumeData): Promise<ResumeData> {
         message:
           "Refinamento de textos do currículo falhou; usando dados originais.",
         model: GEMINI_MODEL,
+        errorMessage: errMessage,
       },
       error
     );
