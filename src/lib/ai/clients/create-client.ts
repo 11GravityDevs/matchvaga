@@ -1,6 +1,9 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
+import { AI_SERVICE_UNAVAILABLE_MESSAGE } from "@/lib/ai/errors";
+import { logServerError } from "@/lib/logger";
+
 const ANTHROPIC_KEY = "ANTHROPIC_API_KEY";
 const GOOGLE_AI_KEY = "GOOGLE_AI_API_KEY";
 
@@ -17,9 +20,16 @@ let geminiCache: GeminiResult | undefined;
 export function getAnthropicClient(): AnthropicResult {
   if (anthropicCache === undefined) {
     const apiKey = process.env[ANTHROPIC_KEY];
-    anthropicCache = apiKey
-      ? { ok: true, client: new Anthropic({ apiKey }) }
-      : { ok: false, error: `${ANTHROPIC_KEY} is not configured` };
+    if (!apiKey) {
+      logServerError({
+        context: "ai",
+        operation: "getAnthropicClient",
+        message: `${ANTHROPIC_KEY} is not configured`,
+      });
+      anthropicCache = { ok: false, error: AI_SERVICE_UNAVAILABLE_MESSAGE };
+    } else {
+      anthropicCache = { ok: true, client: new Anthropic({ apiKey }) };
+    }
   }
   return anthropicCache;
 }
@@ -27,9 +37,16 @@ export function getAnthropicClient(): AnthropicResult {
 export function getGeminiClient(): GeminiResult {
   if (geminiCache === undefined) {
     const apiKey = process.env[GOOGLE_AI_KEY];
-    geminiCache = apiKey
-      ? { ok: true, client: new GoogleGenerativeAI(apiKey) }
-      : { ok: false, error: `${GOOGLE_AI_KEY} is not configured` };
+    if (!apiKey) {
+      logServerError({
+        context: "ai",
+        operation: "getGeminiClient",
+        message: `${GOOGLE_AI_KEY} is not configured`,
+      });
+      geminiCache = { ok: false, error: AI_SERVICE_UNAVAILABLE_MESSAGE };
+    } else {
+      geminiCache = { ok: true, client: new GoogleGenerativeAI(apiKey) };
+    }
   }
   return geminiCache;
 }

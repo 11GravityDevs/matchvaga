@@ -10,6 +10,7 @@ import {
   RESUME_SYNTHESIS_HARD_SKILLS_SYSTEM_PROMPT,
   RESUME_SYNTHESIS_SUMMARY_SYSTEM_PROMPT,
 } from "@/lib/ai/prompts/resume-synthesis";
+import { handleAiError } from "@/lib/ai/errors";
 import { isLanguageSkill } from "@/lib/ai/utils/job-skills";
 import { logServerError } from "@/lib/logger";
 import {
@@ -83,17 +84,13 @@ export async function synthesizeSummary(params: {
     }
     return { success: true, data: { summary: validated.data.summary } };
   } catch (error) {
-    logServerError(
-      {
-        context: "ai",
+    return {
+      success: false,
+      error: handleAiError(error, {
         operation: "synthesizeSummary",
-        message: "Síntese de resumo (IA) falhou.",
         model: SONNET_MODEL,
-      },
-      error
-    );
-
-    return { success: false, error: "Erro ao sintetizar resumo." };
+      }),
+    };
   }
 }
 
@@ -151,19 +148,12 @@ export async function synthesizeHardSkillsByCategory(params: {
       },
     };
   } catch (error) {
-    logServerError(
-      {
-        context: "ai",
-        operation: "synthesizeHardSkillsByCategory",
-        message: "Síntese de categorias de hard skills (IA) falhou.",
-        model: SONNET_MODEL,
-      },
-      error
-    );
-
     return {
       success: false,
-      error: "Erro ao sintetizar categorias de hard skills.",
+      error: handleAiError(error, {
+        operation: "synthesizeHardSkillsByCategory",
+        model: SONNET_MODEL,
+      }),
     };
   }
 }
@@ -264,16 +254,12 @@ export async function extractJobSkills(
       },
     };
   } catch (error) {
-    logServerError(
-      {
-        context: "ai",
+    return {
+      success: false,
+      error: handleAiError(error, {
         operation: "extractJobSkills",
-        message: "Extração de skills da vaga (IA) falhou.",
         model: HAIKU_MODEL,
-      },
-      error
-    );
-
-    return { success: false, error: "Erro ao extrair skills da vaga." };
+      }),
+    };
   }
 }
