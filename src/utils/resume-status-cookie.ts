@@ -21,11 +21,6 @@ export function isResumeStatus(
   );
 }
 
-export interface ResumeRowForStatus {
-  id: string;
-  parsed_data: unknown;
-}
-
 export function computeResumeStatusFromRow(
   row: { id: string; parsed_data: unknown } | null
 ): ResumeStatus {
@@ -41,10 +36,6 @@ export function computeResumeStatusFromRow(
 
   const data = parsed.data as ResumeData;
 
-  return getResumeValidationErrors(data) === null ? "complete" : "incomplete";
-}
-
-export function computeResumeStatusFromData(data: ResumeData): ResumeStatus {
   return getResumeValidationErrors(data) === null ? "complete" : "incomplete";
 }
 
