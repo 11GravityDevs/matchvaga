@@ -6,14 +6,22 @@ import {
   refineResumeTextsResponseZodSchema,
 } from "@/lib/ai/config/refine-resume-texts-schema";
 import { resumeExtractionResponseSchema } from "@/lib/ai/config/resume-extraction-schema";
-import { logServerError } from "@/lib/logger";
+import {
+  RESUME_SYSTEM_INSTRUCTION,
+  RESUME_USER_PROMPT,
+} from "@/lib/ai/prompts/extraction";
+import {
+  REFINE_TEXTS_SYSTEM_INSTRUCTION,
+  REFINE_TEXTS_USER_PROMPT_PREFIX,
+} from "@/lib/ai/prompts/refine-resume-texts";
 import { extractTextFromDocx } from "@/lib/document/extract-docx-text";
+import { logServerError } from "@/lib/logger";
 import { resumeDataSchema } from "@/schemas/resume";
+import type { ResumeData } from "@/types/resume";
 import {
   capitalizeResumeData,
   truncateResumeDataToLimits,
 } from "@/utils/resume";
-import type { ResumeData } from "@/types/resume";
 
 const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5MB
 const MIME_PDF = "application/pdf";
@@ -167,9 +175,6 @@ export async function extractResumeFromFile(
     };
   }
 
-  const { RESUME_SYSTEM_INSTRUCTION, RESUME_USER_PROMPT } =
-    await import("@/lib/ai/prompts/extraction");
-
   const model = genAI.getGenerativeModel({
     model: GEMINI_MODEL,
     systemInstruction: RESUME_SYSTEM_INSTRUCTION,
@@ -292,9 +297,6 @@ export async function refineResumeTexts(data: ResumeData): Promise<ResumeData> {
       description: e.description ?? "",
     })),
   };
-
-  const { REFINE_TEXTS_SYSTEM_INSTRUCTION, REFINE_TEXTS_USER_PROMPT_PREFIX } =
-    await import("@/lib/ai/prompts/refine-resume-texts");
 
   const userMessage = `${REFINE_TEXTS_USER_PROMPT_PREFIX}${JSON.stringify(inputPayload)}`;
 
