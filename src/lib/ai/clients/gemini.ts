@@ -6,6 +6,7 @@ import {
   refineResumeTextsResponseZodSchema,
 } from "@/lib/ai/config/refine-resume-texts-schema";
 import { resumeExtractionResponseSchema } from "@/lib/ai/config/resume-extraction-schema";
+import { handleAiError } from "@/lib/ai/errors";
 import {
   RESUME_SYSTEM_INSTRUCTION,
   RESUME_USER_PROMPT,
@@ -15,7 +16,11 @@ import {
   REFINE_TEXTS_USER_PROMPT_PREFIX,
 } from "@/lib/ai/prompts/refine-resume-texts";
 import { extractTextFromDocx } from "@/lib/document/extract-docx-text";
-import { handleAiError } from "@/lib/ai/errors";
+import {
+  MIME_PDF,
+  MIME_DOCX,
+  validateResumeFile,
+} from "@/lib/document/validate-resume-file";
 import { logServerError } from "@/lib/logger";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
@@ -23,13 +28,6 @@ import {
   capitalizeResumeData,
   truncateResumeDataToLimits,
 } from "@/utils/resume";
-
-const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5MB
-const MIME_PDF = "application/pdf";
-const MIME_DOCX =
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
-
-const ALLOWED_MIME_TYPES = [MIME_PDF, MIME_DOCX] as const;
 
 export interface ExtractResumeResult {
   success: true;
@@ -159,22 +157,12 @@ export async function extractResumeFromFile(
   if (!result.ok) return { success: false, error: result.error };
   const genAI = result.client;
 
-  if (file.size > MAX_FILE_SIZE_BYTES) {
-    return { success: false, error: "Arquivo muito grande. Máximo 5 MB." };
+  const fileValidation = await validateResumeFile(file);
+  if (!fileValidation.valid) {
+    return { success: false, error: fileValidation.error };
   }
 
-  const mimeType = file.type;
-
-  if (
-    !ALLOWED_MIME_TYPES.includes(
-      mimeType as (typeof ALLOWED_MIME_TYPES)[number]
-    )
-  ) {
-    return {
-      success: false,
-      error: "Formato não suportado. Use PDF ou DOCX.",
-    };
-  }
+  const { arrayBuffer, mimeType } = fileValidation;
 
   const model = genAI.getGenerativeModel({
     model: GEMINI_MODEL,
@@ -187,8 +175,6 @@ export async function extractResumeFromFile(
   });
 
   try {
-    const arrayBuffer = await file.arrayBuffer();
-
     if (mimeType === MIME_DOCX) {
       const documentText = await extractTextFromDocx(arrayBuffer);
       const textPrompt = `Você está recebendo o currículo como texto.\n\nTexto do documento:\n\n${documentText}`;
