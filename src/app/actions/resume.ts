@@ -16,14 +16,6 @@ const ERROR_ALREADY_HAS_RESUME =
 
 const ERROR_INVALID_DATA = "Dados inválidos. Verifique os campos.";
 
-function firstZodErrorMessage(error: {
-  issues?: Array<{ message?: string }>;
-}): string | undefined {
-  const issues = error.issues ?? [];
-  const msg = issues[0]?.message;
-  return typeof msg === "string" && msg.length > 0 ? msg : undefined;
-}
-
 export interface CreateResumeWithDataResult {
   success: boolean;
   resumeId?: string;
@@ -41,10 +33,7 @@ export async function createResumeWithData(
   });
 
   if (!parsed.success) {
-    return {
-      success: false,
-      error: firstZodErrorMessage(parsed.error) ?? ERROR_INVALID_DATA,
-    };
+    return { success: false, error: ERROR_INVALID_DATA };
   }
 
   const auth = await getAuthenticatedUser();
@@ -223,10 +212,7 @@ export async function saveResumeData(
   });
 
   if (!parsed.success) {
-    return {
-      success: false,
-      error: firstZodErrorMessage(parsed.error) ?? ERROR_INVALID_DATA,
-    };
+    return { success: false, error: ERROR_INVALID_DATA };
   }
 
   const auth = await getAuthenticatedUser();
