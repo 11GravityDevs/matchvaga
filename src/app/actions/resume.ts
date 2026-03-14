@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
 import { getAuthenticatedUser } from "@/lib/supabase/server";
-import { extractResumeFromFile } from "@/lib/ai/clients";
+import { extractResumeFromFile, refineResumeTexts } from "@/lib/ai/clients";
 import { logServerError } from "@/lib/logger";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
@@ -150,9 +150,11 @@ export async function uploadResume(
 
   const { data: parsedData } = extraction;
 
+  const refinedData = await refineResumeTexts(parsedData);
+
   const dataToStore: ResumeData = {
-    ...parsedData,
-    phone: normalizeBrazilianPhone(parsedData.phone),
+    ...refinedData,
+    phone: normalizeBrazilianPhone(refinedData.phone),
   };
 
   const { data: row, error: insertError } = await supabase

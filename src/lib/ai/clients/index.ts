@@ -1,4 +1,4 @@
-export { extractResumeFromFile } from "./gemini";
+export { extractResumeFromFile, refineResumeTexts } from "./gemini";
 export type {
   ExtractResumeError,
   ExtractResumeOutput,
