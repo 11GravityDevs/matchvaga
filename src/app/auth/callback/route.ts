@@ -8,14 +8,25 @@ import {
 import { createClient } from "@/lib/supabase/server";
 import { RESUME_STATUS_COOKIE_NAME } from "@/utils/resume-status-cookie";
 
+const ALLOWED_REDIRECT_PREFIXES = ["/", "/inicio", "/onboarding", "/entrar"];
+
+function isAllowedRedirectPath(path: string): boolean {
+  if (!path.startsWith("/") || path.startsWith("//")) {
+    return false;
+  }
+  return ALLOWED_REDIRECT_PREFIXES.some(
+    (prefix) =>
+      path === prefix || (prefix !== "/" && path.startsWith(`${prefix}/`))
+  );
+}
+
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  let next = searchParams.get("next") ?? ROUTE_ONBOARDING_UPLOAD;
-
-  if (!next.startsWith("/")) {
-    next = ROUTE_ONBOARDING_UPLOAD;
-  }
+  const nextParam = searchParams.get("next") ?? ROUTE_ONBOARDING_UPLOAD;
+  let next = isAllowedRedirectPath(nextParam)
+    ? nextParam
+    : ROUTE_ONBOARDING_UPLOAD;
 
   if (code) {
     const supabase = await createClient();
