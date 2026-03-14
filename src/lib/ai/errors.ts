@@ -3,7 +3,18 @@ import { logServerError } from "@/lib/logger";
 const DEFAULT_USER_MESSAGE =
   "Algo deu errado. Tente novamente em alguns instantes.";
 
-const MESSAGES_BY_OPERATION: Record<string, string> = {
+export const AI_OPERATIONS = [
+  "extractResume",
+  "refineResumeTexts",
+  "extractJobSkills",
+  "synthesizeSummary",
+  "synthesizeHardSkillsByCategory",
+  "synthesizeResumeContent",
+] as const;
+
+export type AiOperation = (typeof AI_OPERATIONS)[number];
+
+const MESSAGES_BY_OPERATION: Record<AiOperation, string> = {
   extractResume: "Não foi possível extrair dados do documento.",
   refineResumeTexts: "Não foi possível melhorar os textos do currículo.",
   extractJobSkills: "Erro ao extrair skills da vaga.",
@@ -14,7 +25,7 @@ const MESSAGES_BY_OPERATION: Record<string, string> = {
 };
 
 export interface HandleAiErrorContext {
-  operation: string;
+  operation: AiOperation;
   model?: string;
 }
 
