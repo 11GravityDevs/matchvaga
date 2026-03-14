@@ -1,6 +1,10 @@
 import { type Schema, GoogleGenerativeAI } from "@google/generative-ai";
 
 import { getGeminiClient } from "@/lib/ai/clients/create-client";
+import {
+  refineResumeTextsResponseSchema,
+  refineResumeTextsResponseZodSchema,
+} from "@/lib/ai/config/refine-resume-texts-schema";
 import { resumeExtractionResponseSchema } from "@/lib/ai/config/resume-extraction-schema";
 import { logServerError } from "@/lib/logger";
 import { extractTextFromDocx } from "@/lib/document/extract-docx-text";
@@ -251,5 +255,145 @@ function parseAndValidateResult(
       success: false,
       error: "Não foi possível extrair dados do documento.",
     };
+  }
+}
+
+export async function refineResumeTexts(data: ResumeData): Promise<ResumeData> {
+  const result = getGeminiClient();
+  if (!result.ok) {
+    return data;
+  }
+
+  const hasSummary = data.summary.trim().length > 0;
+  const hasExperienceDescriptions = data.experience.some(
+    (e) => e.description.trim().length > 0
+  );
+  const hasEducationDescriptions = data.education.some(
+    (e) => (e.description ?? "").trim().length > 0
+  );
+  if (!hasSummary && !hasExperienceDescriptions && !hasEducationDescriptions) {
+    return data;
+  }
+
+  const genAI = result.client;
+
+  const inputPayload = {
+    summary: data.summary,
+    experienceDescriptions: data.experience.map((e, i) => ({
+      id: `exp${i}`,
+      jobTitle: e.jobTitle,
+      company: e.company,
+      description: e.description,
+    })),
+    educationDescriptions: data.education.map((e, i) => ({
+      id: `edu${i}`,
+      institution: e.institution,
+      course: e.course,
+      description: e.description ?? "",
+    })),
+  };
+
+  const { REFINE_TEXTS_SYSTEM_INSTRUCTION, REFINE_TEXTS_USER_PROMPT_PREFIX } =
+    await import("@/lib/ai/prompts/refine-resume-texts");
+
+  const userMessage = `${REFINE_TEXTS_USER_PROMPT_PREFIX}${JSON.stringify(inputPayload)}`;
+
+  const model = genAI.getGenerativeModel({
+    model: GEMINI_MODEL,
+    systemInstruction: REFINE_TEXTS_SYSTEM_INSTRUCTION,
+    generationConfig: {
+      responseMimeType: "application/json",
+      responseSchema: refineResumeTextsResponseSchema as unknown as Schema,
+      temperature: 0.3,
+    },
+  });
+
+  try {
+    const generateResult = await model.generateContent([{ text: userMessage }]);
+    const response = generateResult.response;
+
+    const candidates = (response as { candidates?: unknown[] }).candidates;
+    if (!candidates?.length) {
+      logServerError(
+        {
+          context: "ai",
+          operation: "refineResumeTexts",
+          message:
+            "Resposta do Gemini vazia ou bloqueada; usando dados originais.",
+          model: GEMINI_MODEL,
+        },
+        new Error("No candidates in response")
+      );
+      return data;
+    }
+
+    const text = response.text();
+    if (!text?.trim()) {
+      return data;
+    }
+
+    const parsed = JSON.parse(text.trim()) as unknown;
+    const refined = refineResumeTextsResponseZodSchema.parse(parsed);
+
+    const expById = new Map(
+      refined.experienceDescriptions.map((item) => [item.id, item.description])
+    );
+    const eduById = new Map(
+      refined.educationDescriptions.map((item) => [item.id, item.description])
+    );
+
+    const expectedExpIds = data.experience.length;
+    const expectedEduIds = data.education.length;
+    if (expById.size !== expectedExpIds || eduById.size !== expectedEduIds) {
+      logServerError(
+        {
+          context: "ai",
+          operation: "refineResumeTexts",
+          message:
+            "Resposta com quantidade de ids diferente do esperado; usando dados originais.",
+          model: GEMINI_MODEL,
+        },
+        new Error(
+          `Expected ${expectedExpIds} exp, ${expectedEduIds} edu; got ${expById.size}, ${eduById.size}`
+        )
+      );
+      return data;
+    }
+
+    return {
+      ...data,
+      summary: refined.summary,
+      experience: data.experience.map((entry, i) => {
+        const id = `exp${i}`;
+        const refinedDesc = expById.get(id);
+        return {
+          ...entry,
+          description: refinedDesc ?? entry.description,
+        };
+      }),
+      education: data.education.map((entry, i) => {
+        const id = `edu${i}`;
+        const refinedDesc = eduById.get(id);
+        return {
+          ...entry,
+          description:
+            refinedDesc !== undefined ? refinedDesc : entry.description,
+        };
+      }),
+    };
+  } catch (error) {
+    const errMessage = error instanceof Error ? error.message : String(error);
+    logServerError(
+      {
+        context: "ai",
+        operation: "refineResumeTexts",
+        message:
+          "Refinamento de textos do currículo falhou; usando dados originais.",
+        model: GEMINI_MODEL,
+        errorMessage: errMessage,
+      },
+      error
+    );
+    return data;
   }
 }
