@@ -19,38 +19,27 @@ import {
 } from "@/constants/routes";
 import { cn } from "@/utils/style";
 import { useToastNotification } from "@/hooks/use-toast-notification";
-
-export interface AnalysisTableRow {
-  analysisId: string;
-  role: string;
-  company: string;
-  companyInitials: string;
-  companyBg: string;
-  companyTextColor: string;
-  date: string;
-  before: string;
-  beforeColor: string;
-  after: string;
-  afterColor: string;
-  status: string;
-}
+import type {
+  AnalysisHistoryTableRowViewModel,
+  AnalysisStatus,
+} from "@/types/analysis";
 
 interface AnalysisHistoryTableProps {
-  rows: AnalysisTableRow[];
+  rows: AnalysisHistoryTableRowViewModel[];
   onDownload?: (
     analysisId: string,
     format: "pdf" | "docx"
   ) => Promise<{ success: boolean; url?: string; error?: string }>;
 }
 
-const STATUS_LABEL_PT_BR: Record<string, string> = {
+const STATUS_LABEL_PT_BR: Record<AnalysisStatus, string> = {
   pending: "Pendente",
   pending_payment: "Pagamento pendente",
   completed: "Concluído",
   abandoned: "Abandonado",
 };
 
-const STATUS_BADGE_CLASSES: Record<string, string> = {
+const STATUS_BADGE_CLASSES: Record<AnalysisStatus, string> = {
   pending:
     "border-accent-warning-border bg-accent-warning-light text-accent-warning-text",
   pending_payment:
@@ -61,15 +50,12 @@ const STATUS_BADGE_CLASSES: Record<string, string> = {
     "border-accent-low-border bg-accent-low-light text-accent-low-text",
 };
 
-function getStatusLabel(status: string): string {
-  return STATUS_LABEL_PT_BR[status] ?? status;
+function getStatusLabel(status: AnalysisStatus): string {
+  return STATUS_LABEL_PT_BR[status];
 }
 
-function getStatusBadgeClass(status: string): string {
-  return (
-    STATUS_BADGE_CLASSES[status] ??
-    "border-border bg-muted text-muted-foreground"
-  );
+function getStatusBadgeClass(status: AnalysisStatus): string {
+  return STATUS_BADGE_CLASSES[status];
 }
 
 export function AnalysisHistoryTable({

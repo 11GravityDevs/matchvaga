@@ -1,7 +1,7 @@
 import { queryOptions } from "@tanstack/react-query";
 
 import { getAnalysesForUser } from "@/app/actions/analysis";
-import type { AnalysisRow } from "@/app/actions/analysis";
+import type { AnalysisSummaryRow } from "@/types/analysis";
 import { getResumeForUser } from "@/app/actions/resume";
 import type { GetResumeForUserResult } from "@/app/actions/resume";
 import { getCurrentUserDisplay } from "@/app/actions/user";
@@ -34,7 +34,7 @@ async function currentUserDisplayQueryFn(): Promise<GetCurrentUserDisplayResult>
   return result;
 }
 
-async function analysesQueryFn(): Promise<AnalysisRow[]> {
+async function analysesQueryFn(): Promise<AnalysisSummaryRow[]> {
   const result = await getAnalysesForUser();
 
   if (!result.success) {
@@ -50,7 +50,7 @@ export const resumeQueryOptions = queryOptions({
   staleTime: STALE_TIME,
 });
 
-export const analysesQueryOptions = queryOptions({
+export const analysesQueryOptions = queryOptions<AnalysisSummaryRow[]>({
   queryKey: QUERY_KEY_ANALYSES,
   queryFn: analysesQueryFn,
   staleTime: STALE_TIME,

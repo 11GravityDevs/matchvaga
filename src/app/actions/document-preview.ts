@@ -7,6 +7,7 @@ import { getAuthenticatedUser } from "@/lib/supabase/server";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
 import { calculateOptimizedScore } from "@/utils/analysis";
+import type { AnalysisStatus } from "@/types/analysis";
 import { revalidatePath } from "next/cache";
 
 export interface GenerateResumePreviewResult {
@@ -137,7 +138,8 @@ export async function generateResumePreview(
     hardSkillsByCategory: synthesis.data.hardSkillsByCategory,
   };
 
-  let status: "completed" | "pending_payment" = "pending_payment";
+  let status: Extract<AnalysisStatus, "completed" | "pending_payment"> =
+    "pending_payment";
   let needsUnlock = true;
 
   const { data: newCredits, error: decrementError } = await supabase.rpc(
@@ -154,7 +156,7 @@ export async function generateResumePreview(
   }
 
   const updatePayload: {
-    status: string;
+    status: AnalysisStatus;
     optimized_score?: number;
     optimized_resume_data?: ResumeData;
   } = {

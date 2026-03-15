@@ -267,7 +267,7 @@ export function NewAnalysisProvider({
       }
 
       const analysis = result.data;
-      const job = analysis.job_snapshot;
+      const job = analysis.jobSnapshot;
       const status = analysis.status ?? "pending";
 
       setJobRole(formatJobRoleLabel(job.title, job.company));
@@ -275,18 +275,18 @@ export function NewAnalysisProvider({
       setAnalysisResult({
         analysisId: analysis.id,
         score: analysis.score,
-        matchedSkillsCount: analysis.matched_skills_count,
-        hardSkills: analysis.missing_skills.hard,
-        softSkills: analysis.missing_skills.soft,
+        matchedSkillsCount: analysis.matchedSkillsCount,
+        hardSkills: analysis.missingSkills.hard,
+        softSkills: analysis.missingSkills.soft,
       });
 
-      setOptimizedScore(analysis.optimized_score ?? null);
+      setOptimizedScore(analysis.optimizedScore ?? null);
 
       if (
         (status === "completed" || status === "pending_payment") &&
-        analysis.optimized_resume_data
+        analysis.optimizedResumeData
       ) {
-        setOptimizedResumeData(analysis.optimized_resume_data);
+        setOptimizedResumeData(analysis.optimizedResumeData);
         setNeedsUnlock(status === "pending_payment");
         setStep(3);
       } else {

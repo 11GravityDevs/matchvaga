@@ -6,15 +6,18 @@ import { extractJobSkills } from "@/lib/ai/clients";
 import type { JobSkill } from "@/lib/ai/config/job-skills-schema";
 import { logServerError } from "@/lib/logger";
 import { getAuthenticatedUser } from "@/lib/supabase/server";
-import { jobSnapshotSchema, type JobSnapshot } from "@/schemas/job";
+import { jobSnapshotSchema } from "@/schemas/job";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
+import type { DbAnalysisRow } from "@/types/db";
+import type { AnalysisDetail, AnalysisSummaryRow } from "@/types/analysis";
 import {
   applySkillsMatchToUserSkills,
   calculateAtsScore,
+  mapDbAnalysisRowToDetail,
+  mapDbAnalysisRowToSummary,
   missingSkillsFromJobSkillColumns,
   sortMissingJobSkills,
-  type MissingSkillsByCategory,
 } from "@/utils/analysis";
 import {
   JOB_DESCRIPTION_TOO_LONG_MESSAGE,
@@ -37,22 +40,9 @@ export interface RunSkillsMatchResult {
   error?: string;
 }
 
-export interface AnalysisRow {
-  id: string;
-  resume_id: string;
-  job_snapshot: JobSnapshot;
-  score: number;
-  optimized_score: number;
-  matched_skills_count: number;
-  missing_skills: MissingSkillsByCategory;
-  created_at: string;
-  status: string;
-  optimized_resume_data?: ResumeData | null;
-}
-
 export interface GetAnalysesForUserResult {
   success: boolean;
-  data?: AnalysisRow[];
+  data?: AnalysisSummaryRow[];
   error?: string;
 }
 
@@ -279,28 +269,15 @@ export async function getAnalysesForUser(): Promise<GetAnalysesForUserResult> {
 
   return {
     success: true,
-    data: (data ?? []).map((row) => {
-      return {
-        id: row.id,
-        resume_id: row.resume_id,
-        job_snapshot: row.job_snapshot as JobSnapshot,
-        score: row.score,
-        optimized_score: row.optimized_score,
-        matched_skills_count: row.matched_skills_count,
-        missing_skills: missingSkillsFromJobSkillColumns(
-          row.missing_hard_skills,
-          row.missing_soft_skills
-        ),
-        created_at: row.created_at,
-        status: row.status ?? "pending",
-      };
-    }),
+    data: (data ?? []).map((row) =>
+      mapDbAnalysisRowToSummary(row as DbAnalysisRow)
+    ),
   };
 }
 
 export interface GetAnalysisByIdResult {
   success: boolean;
-  data?: AnalysisRow;
+  data?: AnalysisDetail;
   error?: string;
 }
 
@@ -335,20 +312,13 @@ export async function getAnalysisById(
 
   return {
     success: true,
-    data: {
-      id: row.id,
-      resume_id: row.resume_id,
-      job_snapshot: row.job_snapshot as JobSnapshot,
-      score: row.score,
-      optimized_score: row.optimized_score,
-      matched_skills_count: row.matched_skills_count,
-      missing_skills: missingSkillsFromJobSkillColumns(
+    data: mapDbAnalysisRowToDetail(
+      row as DbAnalysisRow,
+      optimizedResumeData,
+      missingSkillsFromJobSkillColumns(
         row.missing_hard_skills,
         row.missing_soft_skills
-      ),
-      created_at: row.created_at,
-      status: row.status,
-      optimized_resume_data: optimizedResumeData,
-    },
+      )
+    ),
   };
 }

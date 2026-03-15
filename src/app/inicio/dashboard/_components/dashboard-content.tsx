@@ -6,9 +6,9 @@ import { Zap, Gauge, TrendingUp, CircleCheck } from "lucide-react";
 
 import { downloadOptimizedDocument } from "@/app/actions/document-export";
 import { ROUTE_HOME_NEW_ANALYSIS } from "@/constants/routes";
+import { KpiCard } from "@/components/shared/kpi-card";
 import { DashboardHeader } from "./dashboard-header";
 import { AnalysisHistoryTable } from "./analysis-history-table";
-import { KpiCard } from "@/components/shared/kpi-card";
 import {
   formatAnalysisDate,
   getCompanyColor,
@@ -18,6 +18,7 @@ import {
   analysesQueryOptions,
   currentUserDisplayQueryOptions,
 } from "@/lib/query/query-options";
+import type { AnalysisHistoryTableRowViewModel } from "@/types/analysis";
 import { useQuery } from "@tanstack/react-query";
 import { Loading } from "@/components/ui/loading";
 import { getScoreColorToken } from "../../nova-analise/_utils/analysis";
@@ -67,14 +68,16 @@ export function DashboardContent({
   const completedWithScore = analyses.filter(
     (a) =>
       a.status === "completed" &&
-      a.optimized_score != null &&
-      a.optimized_score !== 0
+      a.optimizedScore != null &&
+      a.optimizedScore !== 0
   );
   const avgScoreFinal =
     completedWithScore.length > 0
       ? Math.round(
-          completedWithScore.reduce((sum, a) => sum + a.optimized_score, 0) /
-            completedWithScore.length
+          completedWithScore.reduce(
+            (sum, a) => sum + (a.optimizedScore ?? 0),
+            0
+          ) / completedWithScore.length
         )
       : 0;
 
@@ -83,13 +86,14 @@ export function DashboardContent({
   const scoreBadge = (score: number) =>
     score >= 75 ? "Alto" : score >= 50 ? "Médio" : "Baixo";
 
-  const tableRows = analyses.map((a) => {
-    const job = a.job_snapshot;
+  const tableRows: AnalysisHistoryTableRowViewModel[] = analyses.map((a) => {
+    const job = a.jobSnapshot;
     const { bg: companyBg, text: companyTextColor } = getCompanyColor(
       job.company
     );
 
-    const showOptimized = a.status === "completed" && a.optimized_score != 0;
+    const showOptimized =
+      a.status === "completed" && (a.optimizedScore ?? 0) !== 0;
 
     return {
       analysisId: a.id,
@@ -98,12 +102,12 @@ export function DashboardContent({
       companyInitials: getCompanyInitials(job.company),
       companyBg,
       companyTextColor,
-      date: formatAnalysisDate(a.created_at),
+      date: formatAnalysisDate(a.createdAt),
       before: `${a.score}%`,
       beforeColor: getScoreColorToken(a.score),
-      after: showOptimized ? `${a.optimized_score}%` : "—",
+      after: showOptimized ? `${a.optimizedScore}%` : "—",
       afterColor: showOptimized
-        ? getScoreColorToken(a.optimized_score!)
+        ? getScoreColorToken(a.optimizedScore!)
         : "var(--muted-foreground)",
       status: a.status,
     };

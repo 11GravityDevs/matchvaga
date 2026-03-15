@@ -1,4 +1,12 @@
 import type { JobSkill } from "@/lib/ai/config/job-skills-schema";
+import { JobSnapshot } from "@/schemas/job";
+import {
+  AnalysisDetail,
+  AnalysisStatus,
+  AnalysisSummaryRow,
+} from "@/types/analysis";
+import { DbAnalysisRow } from "@/types/db";
+import { ResumeData } from "@/types/resume";
 
 export interface MissingSkillsByCategory {
   hard: string[];
@@ -159,4 +167,38 @@ export function calculateOptimizedScore(
     0,
     Math.round(((totalPoints - optimizedMissingPoints) / totalPoints) * 100)
   );
+}
+
+export function mapDbAnalysisRowToSummary(
+  row: DbAnalysisRow
+): AnalysisSummaryRow {
+  return {
+    id: row.id,
+    resumeId: row.resume_id,
+    jobSnapshot: row.job_snapshot as JobSnapshot,
+    score: row.score,
+    optimizedScore: row.optimized_score,
+    matchedSkillsCount: row.matched_skills_count,
+    createdAt: row.created_at,
+    status: (row.status ?? "pending") as AnalysisStatus,
+  };
+}
+
+export function mapDbAnalysisRowToDetail(
+  row: DbAnalysisRow,
+  optimizedResumeData: ResumeData | null,
+  missingSkills: MissingSkillsByCategory
+): AnalysisDetail {
+  return {
+    id: row.id,
+    resumeId: row.resume_id,
+    jobSnapshot: row.job_snapshot as JobSnapshot,
+    score: row.score,
+    optimizedScore: row.optimized_score,
+    matchedSkillsCount: row.matched_skills_count,
+    missingSkills,
+    createdAt: row.created_at,
+    status: (row.status ?? "pending") as AnalysisStatus,
+    optimizedResumeData,
+  };
 }
