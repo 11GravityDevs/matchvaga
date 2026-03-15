@@ -140,15 +140,38 @@ export async function generateResumePreview(
   let status: "completed" | "pending_payment" = "pending_payment";
   let needsUnlock = true;
 
-  const { data: newCredits, error: decrementError } = await supabase.rpc(
-    "decrement_user_credits",
-    {
-      user_id_param: user.id,
-      amount: 1,
-    }
-  );
+  const { data: userCreditsRow, error: userCreditsError } = await supabase
+    .from("user_credits")
+    .select("credits")
+    .eq("user_id", user.id)
+    .maybeSingle();
 
-  if (!decrementError && newCredits !== null) {
+  if (!userCreditsError && userCreditsRow && userCreditsRow.credits >= 1) {
+    const { data: updatedCreditsRow, error: updateCreditsError } =
+      await supabase
+        .from("user_credits")
+        .update({
+          credits: userCreditsRow.credits - 1,
+        })
+        .eq("user_id", user.id)
+        .select("credits")
+        .maybeSingle();
+
+    if (!updateCreditsError && updatedCreditsRow) {
+      status = "completed";
+      needsUnlock = false;
+    }
+  }
+
+  if (userCreditsError) {
+    logServerError({
+      context: "db",
+      operation: "generateResumePreview_credit_decrement",
+      message: userCreditsError.message,
+    });
+  }
+
+  if (status === "completed" && needsUnlock === false) {
     status = "completed";
     needsUnlock = false;
   }
@@ -176,11 +199,43 @@ export async function generateResumePreview(
       message: updateStatusError.message,
     });
 
-    if (status === "completed") {
-      await supabase.rpc("increment_user_credits", {
-        user_id_param: user.id,
-        amount: 1,
-      });
+    if (status === "completed" && needsUnlock === false) {
+      const { data: rollbackCreditsRow, error: rollbackSelectError } =
+        await supabase
+          .from("user_credits")
+          .select("credits")
+          .eq("user_id", user.id)
+          .maybeSingle();
+
+      if (!rollbackSelectError) {
+        const newRollbackCreditsTotal = (rollbackCreditsRow?.credits ?? 0) + 1;
+
+        const { error: rollbackUpdateError } = await supabase
+          .from("user_credits")
+          .upsert(
+            {
+              user_id: user.id,
+              credits: newRollbackCreditsTotal,
+            },
+            {
+              onConflict: "user_id",
+            }
+          );
+
+        if (rollbackUpdateError) {
+          logServerError({
+            context: "db",
+            operation: "generateResumePreview_credit_increment_rollback",
+            message: rollbackUpdateError.message,
+          });
+        }
+      } else {
+        logServerError({
+          context: "db",
+          operation: "generateResumePreview_credit_increment_rollback_select",
+          message: rollbackSelectError.message,
+        });
+      }
     }
 
     return {
@@ -246,20 +301,41 @@ export async function unlockAnalysis(
     };
   }
 
-  const { data: newCredits, error: decrementError } = await supabase.rpc(
-    "decrement_user_credits",
-    {
-      user_id_param: user.id,
-      amount: 1,
-    }
-  );
+  const { data: userCreditsRow, error: userCreditsError } = await supabase
+    .from("user_credits")
+    .select("credits")
+    .eq("user_id", user.id)
+    .maybeSingle();
 
-  if (decrementError || newCredits === null) {
-    if (decrementError) {
+  if (userCreditsError || !userCreditsRow || userCreditsRow.credits < 1) {
+    if (userCreditsError) {
       logServerError({
         context: "db",
         operation: "unlockAnalysis_credit_decrement",
-        message: decrementError.message,
+        message: userCreditsError.message,
+      });
+    }
+    return {
+      success: false,
+      error: "Sem créditos disponíveis. Aguarde o processamento do pagamento.",
+    };
+  }
+
+  const { data: updatedCreditsRow, error: updateCreditsError } = await supabase
+    .from("user_credits")
+    .update({
+      credits: userCreditsRow.credits - 1,
+    })
+    .eq("user_id", user.id)
+    .select("credits")
+    .maybeSingle();
+
+  if (updateCreditsError || !updatedCreditsRow) {
+    if (updateCreditsError) {
+      logServerError({
+        context: "db",
+        operation: "unlockAnalysis_credit_decrement_update",
+        message: updateCreditsError.message,
       });
     }
     return {
@@ -280,10 +356,42 @@ export async function unlockAnalysis(
       operation: "unlockAnalysis_status_update",
       message: updateError.message,
     });
-    await supabase.rpc("increment_user_credits", {
-      user_id_param: user.id,
-      amount: 1,
-    });
+    const { data: rollbackCreditsRow, error: rollbackSelectError } =
+      await supabase
+        .from("user_credits")
+        .select("credits")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+    if (!rollbackSelectError) {
+      const newRollbackCreditsTotal = (rollbackCreditsRow?.credits ?? 0) + 1;
+
+      const { error: rollbackUpdateError } = await supabase
+        .from("user_credits")
+        .upsert(
+          {
+            user_id: user.id,
+            credits: newRollbackCreditsTotal,
+          },
+          {
+            onConflict: "user_id",
+          }
+        );
+
+      if (rollbackUpdateError) {
+        logServerError({
+          context: "db",
+          operation: "unlockAnalysis_credit_increment_rollback",
+          message: rollbackUpdateError.message,
+        });
+      }
+    } else {
+      logServerError({
+        context: "db",
+        operation: "unlockAnalysis_credit_increment_rollback_select",
+        message: rollbackSelectError.message,
+      });
+    }
     return {
       success: false,
       error: "Erro ao desbloquear. Tente novamente.",

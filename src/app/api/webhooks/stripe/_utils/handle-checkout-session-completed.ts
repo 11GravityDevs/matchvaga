@@ -64,16 +64,43 @@ export async function handleCheckoutSessionCompleted(
       return NextResponse.json({ message: "Database error" }, { status: 500 });
     }
 
-    const { error: rpcError } = await supabase.rpc("increment_user_credits", {
-      user_id_param: userId,
-      amount: creditsToGrant,
-    });
+    const { data: currentCreditsRow, error: creditsSelectError } =
+      await supabase
+        .from("user_credits")
+        .select("credits")
+        .eq("user_id", userId)
+        .maybeSingle();
 
-    if (rpcError) {
+    if (creditsSelectError) {
+      logServerError({
+        context: "api",
+        operation: "checkout_session_completed_user_credits_select",
+        message: creditsSelectError.message,
+      });
+      return NextResponse.json({ message: "Database error" }, { status: 500 });
+    }
+
+    const newCreditsTotal =
+      ((currentCreditsRow?.credits as number | null | undefined) ?? 0) +
+      creditsToGrant;
+
+    const { error: creditsUpsertError } = await supabase
+      .from("user_credits")
+      .upsert(
+        {
+          user_id: userId,
+          credits: newCreditsTotal,
+        },
+        {
+          onConflict: "user_id",
+        }
+      );
+
+    if (creditsUpsertError) {
       logServerError({
         context: "api",
         operation: "checkout_session_completed_user_credits_increment",
-        message: rpcError.message,
+        message: creditsUpsertError.message,
       });
       return NextResponse.json({ message: "Database error" }, { status: 500 });
     }
