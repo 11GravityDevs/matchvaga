@@ -17,12 +17,9 @@ export function FinalCtaButton() {
       asChild
       onClick={trackLandingFinalCtaClicked}
     >
-      {/* TODO(lancamento): restaurar navegação para login/dashboard em vez de /em-breve */}
       <AuthAwareLink
         loggedOutLabel="Começar Grátis"
         loggedInLabel="Acessar Dashboard"
-        loggedOutHref="/em-breve"
-        loggedInHref="/em-breve"
         icon={<Zap className="size-4.5 text-accent-brand" />}
         className="flex items-center gap-2"
         labelClassName="text-base font-semibold text-accent-brand"

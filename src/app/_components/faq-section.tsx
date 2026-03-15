@@ -34,40 +34,53 @@ export function FAQSection() {
           {FAQ_ITEMS.map((item, i) => {
             const isOpen = openIndex === i;
             const isLast = i === FAQ_ITEMS.length - 1;
+            const answerId = `faq-answer-${i}`;
 
             return (
-              <button
+              <div
                 key={item.question}
-                type="button"
-                onClick={() => setOpenIndex(isOpen ? null : i)}
-                aria-expanded={isOpen}
-                className={cn(
-                  "flex w-full cursor-pointer flex-col py-6 text-left focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-                  !isLast && "border-b border-border"
-                )}
+                className={!isLast ? "border-b border-border" : undefined}
               >
-                <div className="flex w-full items-center justify-between">
-                  <span className="text-base font-medium text-foreground">
-                    {item.question}
-                  </span>
-                  <ChevronDown
+                <h3>
+                  <button
+                    type="button"
+                    id={`faq-question-${i}`}
+                    onClick={() => setOpenIndex(isOpen ? null : i)}
+                    aria-expanded={isOpen}
+                    aria-controls={answerId}
                     className={cn(
-                      "size-5 shrink-0 text-muted-foreground transition-transform duration-200 ease-in-out",
-                      isOpen && "rotate-180"
+                      "flex w-full cursor-pointer flex-col items-start py-6 text-left focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                     )}
-                  />
-                </div>
+                  >
+                    <span className="flex w-full items-center justify-between">
+                      <span className="text-base font-medium text-foreground">
+                        {item.question}
+                      </span>
+                      <ChevronDown
+                        className={cn(
+                          "size-5 shrink-0 text-muted-foreground transition-transform duration-200 ease-in-out",
+                          isOpen && "rotate-180"
+                        )}
+                        aria-hidden
+                      />
+                    </span>
+                  </button>
+                </h3>
                 <div
+                  id={answerId}
+                  role="region"
+                  aria-labelledby={`faq-question-${i}`}
+                  aria-hidden={!isOpen}
                   className="grid transition-[grid-template-rows] duration-300 ease-in-out"
                   style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}
                 >
                   <div className="overflow-hidden">
-                    <p className="pt-3 text-sm leading-relaxed text-muted-foreground">
+                    <p className="pt-2 pb-6 text-sm leading-relaxed text-muted-foreground">
                       {item.answer}
                     </p>
                   </div>
                 </div>
-              </button>
+              </div>
             );
           })}
         </div>

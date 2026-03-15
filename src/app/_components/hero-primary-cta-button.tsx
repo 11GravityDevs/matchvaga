@@ -18,12 +18,9 @@ export function HeroPrimaryCtaButton() {
       asChild
       onClick={trackLandingHeroPrimaryCtaClicked}
     >
-      {/* TODO(lancamento): restaurar navegação para login/dashboard em vez de /em-breve */}
       <AuthAwareLink
         loggedOutLabel="Começar Grátis"
         loggedInLabel="Acessar Dashboard"
-        loggedOutHref="/em-breve"
-        loggedInHref="/em-breve"
         icon={<Zap className="size-4" />}
       />
     </Button>

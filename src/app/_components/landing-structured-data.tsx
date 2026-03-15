@@ -2,6 +2,32 @@ import { SITE_URL } from "@/constants/site";
 
 import { FAQ_ITEMS } from "../_constants/faq";
 
+const ORGANIZATION_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "MatchVaga",
+  url: SITE_URL,
+  logo: `${SITE_URL}/opengraph-image.png`,
+  description:
+    "MatchVaga é uma plataforma SaaS que adapta currículos automaticamente para cada vaga, otimiza para sistemas ATS e gera mensagens de apresentação com IA. Focada no mercado de candidatos no Brasil.",
+  inLanguage: "pt-BR",
+};
+
+const WEBSITE_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "MatchVaga",
+  url: SITE_URL,
+  description:
+    "MatchVaga é uma plataforma que adapta seu currículo automaticamente para cada vaga, otimiza para ATS e gera mensagens de apresentação — tudo em segundos.",
+  publisher: {
+    "@type": "Organization",
+    name: "MatchVaga",
+    url: SITE_URL,
+  },
+  inLanguage: "pt-BR",
+};
+
 const SOFTWARE_APPLICATION_JSON_LD = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
@@ -9,6 +35,11 @@ const SOFTWARE_APPLICATION_JSON_LD = {
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web",
   url: SITE_URL,
+  publisher: {
+    "@type": "Organization",
+    name: "MatchVaga",
+    url: SITE_URL,
+  },
   description:
     "O MatchVaga adapta seu currículo automaticamente para cada vaga, otimiza para ATS e gera mensagens de apresentação — tudo em segundos. Plataforma #1 para candidatos no Brasil.",
   inLanguage: "pt-BR",
@@ -51,6 +82,18 @@ const FAQ_PAGE_JSON_LD = {
 export function LandingStructuredData() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(ORGANIZATION_JSON_LD),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(WEBSITE_JSON_LD),
+        }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{

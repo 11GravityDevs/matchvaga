@@ -19,7 +19,7 @@ import { SocialProofSection } from "./_components/social-proof-section";
 export const metadata: Metadata = {
   title: "MatchVaga - Chega de perder tempo com candidaturas",
   description:
-    "O MatchVaga adapta seu currículo automaticamente para cada vaga, otimiza para ATS e gera mensagens de apresentação — tudo em segundos.",
+    "MatchVaga é uma plataforma que adapta seu currículo automaticamente para cada vaga, otimiza para passar em sistemas ATS e gera mensagens de apresentação — tudo em segundos. Plataforma #1 para candidatos no Brasil.",
   keywords: [
     "currículo",
     "otimização ATS",
@@ -34,21 +34,23 @@ export const metadata: Metadata = {
 
 export default async function Page() {
   return (
-    <main className="flex min-h-screen flex-col bg-background">
+    <div className="flex min-h-screen flex-col bg-background">
       <LandingPageTracker />
       <LandingStructuredData />
       <LandingHeader />
-      <div className="mx-auto w-full max-w-landing-content px-4 sm:px-8 xl:px-0">
-        <HeroSection />
-        <HowItWorksSection />
-        <CoreFeaturesSection />
-        <SecondaryFeaturesSection />
-        <SocialProofSection />
-        <PricingSection />
-        <FAQSection />
-      </div>
-      <FinalCTASection />
+      <main className="flex flex-1 flex-col">
+        <div className="mx-auto w-full max-w-landing-content px-4 sm:px-8 xl:px-0">
+          <HeroSection />
+          <HowItWorksSection />
+          <CoreFeaturesSection />
+          <SecondaryFeaturesSection />
+          <SocialProofSection />
+          <PricingSection />
+          <FAQSection />
+        </div>
+        <FinalCTASection />
+      </main>
       <LandingFooter />
-    </main>
+    </div>
   );
 }

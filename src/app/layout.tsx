@@ -34,12 +34,23 @@ export const metadata: Metadata = {
   },
   description: DEFAULT_DESCRIPTION,
   keywords: KEYWORDS,
+  applicationName: "MatchVaga",
+  authors: [{ name: "MatchVaga", url: SITE_URL }],
+  creator: "MatchVaga",
+  publisher: "MatchVaga",
+  generator: "Next.js",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   openGraph: {
     type: "website",
     locale: "pt_BR",
     siteName: "MatchVaga",
     title: "MatchVaga - Chega de perder tempo com candidaturas",
     description: DEFAULT_DESCRIPTION,
+    url: SITE_URL,
   },
   twitter: {
     card: "summary_large_image",

@@ -20,7 +20,10 @@ interface LandingNavProps {
 
 export function LandingNav({ className }: LandingNavProps) {
   return (
-    <nav className={cn("flex items-center gap-8", className)}>
+    <nav
+      className={cn("flex items-center gap-8", className)}
+      aria-label="Navegação principal"
+    >
       {NAV_LINKS.map((link) => {
         const sectionId = link.href.replace("#", "");
         return (
