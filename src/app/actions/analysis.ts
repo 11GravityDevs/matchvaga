@@ -47,6 +47,7 @@ export interface AnalysisRow {
   missing_skills: MissingSkillsByCategory;
   created_at: string;
   status: string;
+  optimized_resume_data?: ResumeData | null;
 }
 
 export interface GetAnalysesForUserResult {
@@ -104,18 +105,30 @@ export async function runSkillsMatch(
 
   const resumeData = resumeParsed.data as ResumeData;
 
-  const { data: creditsRow } = await supabase
-    .from("user_credits")
-    .select("credits")
+  const { count, error: countError } = await supabase
+    .from("analyses")
+    .select("id", { count: "exact", head: true })
     .eq("user_id", user.id)
-    .single();
+    .in("status", ["pending", "pending_payment"]);
 
-  const credits = creditsRow?.credits ?? 0;
+  if (countError) {
+    logServerError({
+      context: "db",
+      operation: "runSkillsMatch_count_pending",
+      message: countError.message,
+    });
 
-  if (credits < 1) {
     return {
       success: false,
-      error: "Sem análises disponíveis",
+      error: "Erro ao verificar análises. Tente novamente.",
+    };
+  }
+
+  if ((count ?? 0) >= 3) {
+    return {
+      success: false,
+      error:
+        "Você tem 3 análises em andamento. Finalize ou compre uma antes de iniciar outra.",
     };
   }
 
@@ -223,31 +236,6 @@ export async function runSkillsMatch(
     };
   }
 
-  const { data: updatedCredits, error: decrementError } = await supabase
-    .from("user_credits")
-    .update({
-      credits: credits - 1,
-      updated_at: new Date().toISOString(),
-    })
-    .eq("user_id", user.id)
-    .gte("credits", 1)
-    .select("credits");
-
-  if (decrementError || !updatedCredits?.length) {
-    if (decrementError) {
-      logServerError({
-        context: "db",
-        operation: "runSkillsMatch_credit_decrement",
-        message: decrementError.message,
-      });
-    }
-    await supabase.from("analyses").delete().eq("id", analysisRow.id);
-    return {
-      success: false,
-      error: "Sem análises disponíveis",
-    };
-  }
-
   revalidatePath("/inicio");
 
   return {
@@ -328,7 +316,7 @@ export async function getAnalysisById(
   const { data: row, error } = await supabase
     .from("analyses")
     .select(
-      "id, resume_id, job_snapshot, score, optimized_score, matched_skills_count, missing_hard_skills, missing_soft_skills, created_at, status"
+      "id, resume_id, job_snapshot, score, optimized_score, matched_skills_count, missing_hard_skills, missing_soft_skills, created_at, status, optimized_resume_data"
     )
     .eq("id", analysisId)
     .eq("user_id", user.id)
@@ -337,6 +325,13 @@ export async function getAnalysisById(
   if (error || !row) {
     return { success: false, error: "Análise não encontrada." };
   }
+
+  const optimizedResumeData =
+    row.optimized_resume_data != null
+      ? resumeDataSchema.safeParse(row.optimized_resume_data).success
+        ? (row.optimized_resume_data as ResumeData)
+        : null
+      : null;
 
   return {
     success: true,
@@ -353,6 +348,7 @@ export async function getAnalysisById(
       ),
       created_at: row.created_at,
       status: row.status,
+      optimized_resume_data: optimizedResumeData,
     },
   };
 }

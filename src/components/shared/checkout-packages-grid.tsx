@@ -22,11 +22,16 @@ import { cn } from "@/utils/style";
 const RECOMMENDED_PACKAGE_ID: CheckoutPackageId = "padrao";
 const BASE_PACKAGE_ID: CheckoutPackageId = "entrada";
 
+const DISPLAYED_PACKAGE_IDS = CHECKOUT_PACKAGE_IDS.filter(
+  (id) => id !== "avulso"
+);
+
 const BASE_PRICE_PER_ANALYSIS_CENTAVOS =
   getPackagePriceCentavos(BASE_PACKAGE_ID) /
   getCreditsForPackage(BASE_PACKAGE_ID);
 
 const FEATURES: Record<CheckoutPackageId, string[]> = {
+  avulso: ["1 análise avulsa", "Sem validade"],
   entrada: ["Ideal para experimentar", "Sem validade"],
   basico: ["Bom para busca ativa", "Sem validade"],
   padrao: ["Melhor custo-benefício", "Sem validade", "Prioridade no suporte"],
@@ -49,7 +54,7 @@ export function CheckoutPackagesGrid({
   return (
     <>
       <div className="grid w-full grid-cols-1 items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        {CHECKOUT_PACKAGE_IDS.map((packageId) => {
+        {DISPLAYED_PACKAGE_IDS.map((packageId) => {
           const name = getPackageName(packageId);
           const priceCentavos = getPackagePriceCentavos(packageId);
           const credits = getCreditsForPackage(packageId);

@@ -1,16 +1,13 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Lightbulb, Sparkles } from "lucide-react";
 import { runSkillsMatch } from "@/app/actions/analysis";
-import { ConfirmLeaveLink } from "@/components/shared/confirm-leave-link";
 import { JOB_DESCRIPTION_MAX } from "@/constants/job";
 import {
   QUERY_KEY_ANALYSES,
   QUERY_KEY_CURRENT_USER_DISPLAY,
 } from "@/constants/query-keys";
-import { ROUTE_HOME_CHECKOUT } from "@/constants/routes";
-import { currentUserDisplayQueryOptions } from "@/lib/query/query-options";
 import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
@@ -33,8 +30,6 @@ const GAP_ANALYSIS_THINKING_MESSAGES = [
 
 export function StepJobInput() {
   const queryClient = useQueryClient();
-  const { data: displayData } = useQuery(currentUserDisplayQueryOptions);
-  const credits = displayData?.credits ?? 0;
 
   const {
     jobDescription,
@@ -82,8 +77,7 @@ export function StepJobInput() {
     },
   });
 
-  const canAnalyze =
-    jobDescription.trim().length > 0 && !isAnalyzing && credits > 0;
+  const canAnalyze = jobDescription.trim().length > 0 && !isAnalyzing;
 
   const handleAnalyze = () => {
     runAnalysis();
@@ -97,26 +91,6 @@ export function StepJobInput() {
             thinkingMessages={[...GAP_ANALYSIS_THINKING_MESSAGES]}
             className="min-h-0 flex-1"
           />
-        </div>
-      </div>
-    );
-  }
-
-  if (credits === 0) {
-    return (
-      <div className="flex min-h-0 w-full flex-1 flex-col items-center section-gap overflow-hidden page-padding">
-        <div className="flex min-h-0 w-content flex-1 flex-col items-center justify-center gap-6">
-          <h2 className="text-center text-page-title text-foreground">
-            Você não tem análises disponíveis.
-          </h2>
-          <p className="max-w-content text-center text-page-subtitle text-muted-foreground">
-            Clique no botão abaixo para comprar mais análises e continuar.
-          </p>
-          <Button size="brand" className="gap-1.5" asChild>
-            <ConfirmLeaveLink href={ROUTE_HOME_CHECKOUT}>
-              Comprar análises
-            </ConfirmLeaveLink>
-          </Button>
         </div>
       </div>
     );

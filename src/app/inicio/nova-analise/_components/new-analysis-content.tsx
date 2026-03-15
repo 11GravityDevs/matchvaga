@@ -1,5 +1,6 @@
 "use client";
 
+import { useNewAnalysisReset } from "@/app/inicio/_contexts/new-analysis-reset-context";
 import { NewAnalysisProvider } from "../_contexts/new-analysis-context";
 import { WizardInner } from "./wizard-inner";
 
@@ -10,8 +11,10 @@ interface NewAnalysisContentProps {
 export function NewAnalysisContent({
   initialContinueId = null,
 }: NewAnalysisContentProps) {
+  const resetKey = useNewAnalysisReset();
+
   return (
-    <NewAnalysisProvider initialContinueId={initialContinueId}>
+    <NewAnalysisProvider key={resetKey} initialContinueId={initialContinueId}>
       <WizardInner />
     </NewAnalysisProvider>
   );

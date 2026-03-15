@@ -21,6 +21,8 @@
   --color-accent-brand-light: var(--accent-brand-light);
   --color-accent-brand-dark: var(--accent-brand-dark);
   --color-accent-brand-end: var(--accent-brand-end);
+  --color-accent-brand-border: var(--accent-brand-border);
+  --color-accent-brand-text: var(--accent-brand-text);
   --color-accent-success: var(--accent-success);
   --color-accent-success-light: var(--accent-success-light);
   --color-accent-success-border: var(--accent-success-border);
@@ -108,6 +110,8 @@
   --accent-brand-light: #dbeafe;
   --accent-brand-dark: #1e3a8a;
   --accent-brand-end: #3b82f6;
+  --accent-brand-border: #bfdbfe;
+  --accent-brand-text: #3050a8;
   --accent-success: #10b981;
   --accent-success-light: #f0fdf4;
   --accent-success-border: #bbf7d0;

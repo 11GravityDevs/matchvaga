@@ -11,8 +11,8 @@ Ref: `supabase/migrations/20250222000000_initial_schema.sql`, `supabase/migratio
 **Tabelas:**
 
 - **resumes** — id, user_id, parsed_data (JSONB → ResumeData), created_at, updated_at.
-- **analyses** — id, user_id, resume_id, job_snapshot (JSONB → jobSnapshotSchema), score (0–100), optimized_score (0–100, opcional), matched_skills_count (≥0), user_hard_skills (JSONB array), user_soft_skills (JSONB array), missing_hard_skills (JSONB array), missing_soft_skills (JSONB array), status (pending|completed|abandoned), optimized_resume_data (JSONB, opcional; preenchido ao concluir o passo de melhorar currículo em generateResumePreview; usado na geração do documento otimizado no download), created_at.
-- **user_credits** — user_id (PK), credits (≥0, default 3), updated_at.
+- **analyses** — id, user_id, resume_id, job_snapshot (JSONB → jobSnapshotSchema), score (0–100), optimized_score (0–100, opcional), matched_skills_count (≥0), user_hard_skills (JSONB array), user_soft_skills (JSONB array), missing_hard_skills (JSONB array), missing_soft_skills (JSONB array), status (pending|pending_payment|completed|abandoned), optimized_resume_data (JSONB, opcional; preenchido ao concluir o passo de melhorar currículo em generateResumePreview; usado na geração do documento otimizado no download), created_at.
+- **user_credits** — user_id (PK), credits (≥0, default 0), updated_at.
 - **purchases** — id, stripe_session_id (UNIQUE), user_id, package_id, credits_granted (>0), created_at. Sem policies RLS; só service client (webhook).
 - **optimized_documents** — id, analysis_id, file_path, format (pdf|docx), created_at.
 

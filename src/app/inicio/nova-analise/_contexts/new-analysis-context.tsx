@@ -2,6 +2,7 @@
 
 import {
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -16,6 +17,7 @@ import { getAnalysisById } from "@/app/actions/analysis";
 import { Loading } from "@/components/ui/loading";
 import {
   QUERY_CONTINUE_ANALYSIS,
+  QUERY_RESET,
   ROUTE_HOME_NEW_ANALYSIS,
 } from "@/constants/routes";
 import { formatJobRoleLabel } from "../_utils/format-job-role-label";
@@ -41,6 +43,8 @@ interface NewAnalysisContextValue {
   resumeId: string | null;
   resumeData: ResumeData | null;
   optimizedResumeData: ResumeData | null;
+  needsUnlock: boolean;
+  isAnalysisUnlocked: boolean;
   isLoadingResume: boolean;
   jobDescription: string;
   jobRole: string;
@@ -64,6 +68,7 @@ interface NewAnalysisContextValue {
   }) => void;
   setOptimizedResumeData: (data: ResumeData | null) => void;
   setOptimizedScore: (value: number | null) => void;
+  setNeedsUnlock: (value: boolean) => void;
   toggleSkill: (id: string) => void;
   setSelectedHardSkills: (skills: string[]) => void;
   setSelectedSoftSkills: (skills: string[]) => void;
@@ -96,6 +101,7 @@ const INITIAL_STATE = {
   resumeId: null as string | null,
   resumeData: null as ResumeData | null,
   optimizedResumeData: null as ResumeData | null,
+  needsUnlock: false,
   jobDescription: "",
   jobRole: "",
   analysisId: null as string | null,
@@ -171,6 +177,8 @@ export function NewAnalysisProvider({
   const [optimizedScore, setOptimizedScore] = useState<number | null>(
     INITIAL_STATE.optimizedScore
   );
+  const [needsUnlock, setNeedsUnlock] = useState(INITIAL_STATE.needsUnlock);
+  const isAnalysisUnlocked = !needsUnlock;
 
   function setAnalysisResult(result: {
     analysisId: string;
@@ -202,7 +210,10 @@ export function NewAnalysisProvider({
     await refetchResume();
   }
 
-  function reset() {
+  const reset = useCallback(() => {
+    lastLoadedContinueIdRef.current = null;
+    continueLoadStartedRef.current = false;
+    setHasFinishedContinueLoad(false);
     setStep(INITIAL_STATE.step);
     setJobDescription(INITIAL_STATE.jobDescription);
     setJobRole(INITIAL_STATE.jobRole);
@@ -215,7 +226,16 @@ export function NewAnalysisProvider({
     setSelectedSoftSkills(INITIAL_STATE.selectedSoftSkills);
     setOptimizedResumeData(INITIAL_STATE.optimizedResumeData);
     setOptimizedScore(INITIAL_STATE.optimizedScore);
-  }
+    setNeedsUnlock(INITIAL_STATE.needsUnlock);
+  }, []);
+
+  useEffect(() => {
+    const resetParam = searchParams.get(QUERY_RESET);
+    if (resetParam) {
+      router.replace(ROUTE_HOME_NEW_ANALYSIS);
+      queueMicrotask(reset);
+    }
+  }, [searchParams, reset, router]);
 
   useEffect(() => {
     if (
@@ -236,6 +256,7 @@ export function NewAnalysisProvider({
       continueLoadStartedRef.current
     )
       return;
+
     continueLoadStartedRef.current = true;
 
     getAnalysisById(continueAnalysisId).then((result) => {
@@ -244,8 +265,11 @@ export function NewAnalysisProvider({
         router.replace(ROUTE_HOME_NEW_ANALYSIS);
         return;
       }
+
       const analysis = result.data;
       const job = analysis.job_snapshot;
+      const status = analysis.status ?? "pending";
+
       setJobRole(formatJobRoleLabel(job.title, job.company));
 
       setAnalysisResult({
@@ -255,18 +279,31 @@ export function NewAnalysisProvider({
         hardSkills: analysis.missing_skills.hard,
         softSkills: analysis.missing_skills.soft,
       });
+
       setOptimizedScore(analysis.optimized_score ?? null);
-      setStep(2);
+
+      if (
+        (status === "completed" || status === "pending_payment") &&
+        analysis.optimized_resume_data
+      ) {
+        setOptimizedResumeData(analysis.optimized_resume_data);
+        setNeedsUnlock(status === "pending_payment");
+        setStep(3);
+      } else {
+        setStep(2);
+      }
+
       lastLoadedContinueIdRef.current = continueAnalysisId;
       setHasFinishedContinueLoad(true);
       router.replace(ROUTE_HOME_NEW_ANALYSIS);
     });
   }, [continueAnalysisId, hasFinishedContinueLoad, router]);
 
-  const isLoadingContinueAnalysis =
-    Boolean(continueAnalysisId) && !hasFinishedContinueLoad;
+  const hasResetParam = searchParams.get(QUERY_RESET) != null;
+  const isWaitingForContinueLoad =
+    Boolean(continueAnalysisId) && (step === 1 || !hasFinishedContinueLoad);
 
-  if (isLoadingContinueAnalysis) {
+  if (hasResetParam || isWaitingForContinueLoad) {
     return <Loading className="min-h-0 flex-1" />;
   }
 
@@ -277,6 +314,8 @@ export function NewAnalysisProvider({
         resumeId,
         resumeData,
         optimizedResumeData,
+        needsUnlock,
+        isAnalysisUnlocked,
         isLoadingResume,
         jobDescription,
         jobRole,
@@ -294,6 +333,7 @@ export function NewAnalysisProvider({
         setAnalysisResult,
         setOptimizedResumeData,
         setOptimizedScore,
+        setNeedsUnlock,
         toggleSkill,
         setSelectedHardSkills,
         setSelectedSoftSkills,

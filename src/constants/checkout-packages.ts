@@ -1,4 +1,5 @@
 export const CHECKOUT_PACKAGE_IDS = [
+  "avulso",
   "entrada",
   "basico",
   "padrao",
@@ -8,6 +9,7 @@ export const CHECKOUT_PACKAGE_IDS = [
 export type CheckoutPackageId = (typeof CHECKOUT_PACKAGE_IDS)[number];
 
 const PACKAGE_PRICE_CENTAVOS: Record<CheckoutPackageId, number> = {
+  avulso: 290, // R$ 2,90
   entrada: 590, // R$ 5,90
   basico: 1490, // R$ 14,90
   padrao: 2990, // R$ 29,90
@@ -15,6 +17,7 @@ const PACKAGE_PRICE_CENTAVOS: Record<CheckoutPackageId, number> = {
 };
 
 const PACKAGE_NAMES: Record<CheckoutPackageId, string> = {
+  avulso: "Avulso",
   entrada: "Entrada",
   basico: "Básico",
   padrao: "Padrão",
@@ -22,6 +25,7 @@ const PACKAGE_NAMES: Record<CheckoutPackageId, string> = {
 };
 
 const PACKAGE_CREDITS: Record<CheckoutPackageId, number> = {
+  avulso: 1,
   entrada: 3,
   basico: 10,
   padrao: 25,

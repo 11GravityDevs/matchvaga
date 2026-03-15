@@ -45,6 +45,7 @@ interface AnalysisHistoryTableProps {
 
 const STATUS_LABEL_PT_BR: Record<string, string> = {
   pending: "Pendente",
+  pending_payment: "Pagamento pendente",
   completed: "Concluído",
   abandoned: "Abandonado",
 };
@@ -52,6 +53,8 @@ const STATUS_LABEL_PT_BR: Record<string, string> = {
 const STATUS_BADGE_CLASSES: Record<string, string> = {
   pending:
     "border-accent-warning-border bg-accent-warning-light text-accent-warning-text",
+  pending_payment:
+    "border-accent-brand-border bg-accent-brand-light text-accent-brand-text",
   completed:
     "border-accent-success-border bg-accent-success-light text-accent-success-text",
   abandoned:
@@ -113,37 +116,41 @@ export function AnalysisHistoryTable({
       <div className="flex flex-1 flex-col overflow-hidden rounded-xl border border-border bg-card">
         {/* Header Row */}
         <div className="flex w-full items-center border-b border-border bg-muted/50">
-          <div className="flex min-w-0 flex-[1.5] items-center gap-2 border-b-0 table-cell-padding">
+          <div className="flex min-w-0 flex-[1.5] items-center gap-2 table-cell-padding">
             <span className="truncate text-sm leading-snug text-muted-foreground">
               Cargo
             </span>
           </div>
-          <div className="flex min-w-0 flex-1 items-center gap-2 p-4">
+          <div className="flex min-w-0 flex-1 items-center gap-2 table-cell-padding">
             <span className="truncate text-sm leading-snug text-muted-foreground">
               Empresa
             </span>
           </div>
-          <div className="flex min-w-0 flex-1 items-center gap-2 p-4">
+          <div className="flex min-w-0 flex-1 items-center gap-2 table-cell-padding">
             <span className="truncate text-sm leading-snug text-muted-foreground">
               Data
             </span>
           </div>
-          <div className="flex min-w-0 flex-1 items-center gap-2 p-4">
+          <div className="flex min-w-0 flex-1 items-center justify-center gap-2 table-cell-padding">
             <span className="truncate text-sm leading-snug text-muted-foreground">
               Antes
             </span>
           </div>
-          <div className="flex min-w-0 flex-1 items-center gap-2 p-4">
+          <div className="flex min-w-0 flex-1 items-center justify-center gap-2 table-cell-padding">
             <span className="truncate text-sm leading-snug text-muted-foreground">
               Depois
             </span>
           </div>
-          <div className="flex min-w-0 flex-1 items-center gap-2 border-r border-border p-4">
+          <div className="flex min-w-0 flex-1 items-center justify-center gap-2 table-cell-padding">
             <span className="truncate text-sm leading-snug text-muted-foreground">
               Status
             </span>
           </div>
-          <div className="flex w-action shrink-0 p-4" />
+          <div className="flex w-action shrink-0 items-center justify-center gap-2 border-r border-border table-cell-padding">
+            <span className="truncate text-sm leading-snug text-muted-foreground">
+              Ação
+            </span>
+          </div>
         </div>
 
         {/* Data Rows */}
@@ -160,7 +167,7 @@ export function AnalysisHistoryTable({
               className="flex w-full items-center border-b border-border last:border-b-0"
             >
               {/* Role + Logo */}
-              <div className="flex min-w-0 flex-[1.5] items-center gap-2 border-r border-border p-4">
+              <div className="flex min-w-0 flex-[1.5] items-center gap-2 border-r border-border table-cell-padding">
                 <div
                   className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md text-xs font-bold"
                   style={{
@@ -176,21 +183,21 @@ export function AnalysisHistoryTable({
               </div>
 
               {/* Company */}
-              <div className="flex min-w-0 flex-1 items-center gap-2 border-r border-border p-4">
+              <div className="flex min-w-0 flex-1 items-center gap-2 border-r border-border table-cell-padding">
                 <span className="truncate text-sm text-foreground">
                   {row.company}
                 </span>
               </div>
 
               {/* Date */}
-              <div className="flex min-w-0 flex-1 items-center gap-2 border-r border-border p-4">
+              <div className="flex min-w-0 flex-1 items-center gap-2 border-r border-border table-cell-padding">
                 <span className="truncate text-sm text-muted-foreground">
                   {row.date}
                 </span>
               </div>
 
               {/* Before */}
-              <div className="flex min-w-0 flex-1 items-center gap-2 border-r border-border p-4">
+              <div className="flex min-w-0 flex-1 items-center justify-center gap-2 border-r border-border table-cell-padding">
                 <span
                   className="rounded-full px-2 py-0.5 text-caption-leading font-semibold text-on-accent-brand"
                   style={{ backgroundColor: row.beforeColor }}
@@ -200,7 +207,7 @@ export function AnalysisHistoryTable({
               </div>
 
               {/* After */}
-              <div className="flex min-w-0 flex-1 items-center gap-2 border-r border-border p-4">
+              <div className="flex min-w-0 flex-1 items-center justify-center gap-2 border-r border-border table-cell-padding">
                 {row.after === "—" ? (
                   <span className="text-caption-leading text-muted-foreground">
                     {row.after}
@@ -216,7 +223,7 @@ export function AnalysisHistoryTable({
               </div>
 
               {/* Status */}
-              <div className="flex min-w-0 flex-1 items-center gap-2 border-r border-border p-4">
+              <div className="flex min-w-0 flex-1 items-center justify-center gap-2 border-r border-border table-cell-padding">
                 <Badge
                   variant="outline"
                   className={cn(
@@ -229,8 +236,9 @@ export function AnalysisHistoryTable({
               </div>
 
               {/* Action */}
-              <div className="flex w-action shrink-0 items-center justify-center gap-1 p-4">
-                {row.status === "pending" ? (
+              <div className="flex w-action shrink-0 items-center justify-center gap-1 table-cell-padding">
+                {row.status === "pending" ||
+                row.status === "pending_payment" ? (
                   <Button
                     asChild
                     size="icon"

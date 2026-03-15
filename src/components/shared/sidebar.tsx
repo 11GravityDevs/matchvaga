@@ -1,8 +1,9 @@
 "use client";
 
 import type { ComponentType } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { usePathname } from "next/navigation";
+import { useEffect, useRef } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { usePathname, useRouter } from "next/navigation";
 
 import { ConfirmLeaveLink } from "@/components/shared/confirm-leave-link";
 import {
@@ -22,7 +23,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { QUERY_KEY_CURRENT_USER_DISPLAY } from "@/constants/query-keys";
 import {
+  QUERY_RESET,
   ROUTE_HOME_DASHBOARD,
   ROUTE_HOME_NEW_ANALYSIS,
   ROUTE_HOME_RESUME,
@@ -59,8 +62,21 @@ const navItems: NavItem[] = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const prevPathnameRef = useRef(pathname);
   const { data: displayData } = useQuery(currentUserDisplayQueryOptions);
   const { signOut, isPending } = useSignOut();
+
+  useEffect(() => {
+    if (prevPathnameRef.current !== pathname) {
+      void queryClient.invalidateQueries({
+        queryKey: QUERY_KEY_CURRENT_USER_DISPLAY,
+      });
+
+      prevPathnameRef.current = pathname;
+    }
+  }, [pathname, queryClient]);
 
   const displayName = displayData?.fullName?.split(" ")[0] ?? "Usuário";
   const email = displayData?.email ?? "—";
@@ -87,10 +103,27 @@ export function Sidebar() {
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           const Icon = item.icon;
+          const isNewAnalysisAndActive =
+            item.href === ROUTE_HOME_NEW_ANALYSIS && isActive;
+
           return (
             <ConfirmLeaveLink
               key={item.href}
-              href={item.href}
+              href={
+                isNewAnalysisAndActive
+                  ? `${ROUTE_HOME_NEW_ANALYSIS}?${QUERY_RESET}=1`
+                  : item.href
+              }
+              onClick={
+                isNewAnalysisAndActive
+                  ? (e) => {
+                      e.preventDefault();
+                      router.push(
+                        `${ROUTE_HOME_NEW_ANALYSIS}?${QUERY_RESET}=1`
+                      );
+                    }
+                  : undefined
+              }
               className={cn(
                 "flex items-center justify-between gap-2 rounded-md px-2 py-1.5 text-sm transition-colors",
                 isActive

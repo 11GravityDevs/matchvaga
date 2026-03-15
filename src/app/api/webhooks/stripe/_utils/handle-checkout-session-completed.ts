@@ -64,35 +64,43 @@ export async function handleCheckoutSessionCompleted(
       return NextResponse.json({ message: "Database error" }, { status: 500 });
     }
 
-    const { data: creditsRow } = await supabase
-      .from("user_credits")
-      .select("credits")
-      .eq("user_id", userId)
-      .single();
+    const { data: currentCreditsRow, error: creditsSelectError } =
+      await supabase
+        .from("user_credits")
+        .select("credits")
+        .eq("user_id", userId)
+        .maybeSingle();
 
-    if (creditsRow == null) {
+    if (creditsSelectError) {
       logServerError({
         context: "api",
-        operation: "checkout_session_completed_user_credits_lookup",
-        message: "user_credits not found",
-        errorMessage: userId,
+        operation: "checkout_session_completed_user_credits_select",
+        message: creditsSelectError.message,
       });
       return NextResponse.json({ message: "Database error" }, { status: 500 });
     }
 
-    const { error: updateError } = await supabase
-      .from("user_credits")
-      .update({
-        credits: creditsRow.credits + creditsToGrant,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("user_id", userId);
+    const newCreditsTotal =
+      ((currentCreditsRow?.credits as number | null | undefined) ?? 0) +
+      creditsToGrant;
 
-    if (updateError) {
+    const { error: creditsUpsertError } = await supabase
+      .from("user_credits")
+      .upsert(
+        {
+          user_id: userId,
+          credits: newCreditsTotal,
+        },
+        {
+          onConflict: "user_id",
+        }
+      );
+
+    if (creditsUpsertError) {
       logServerError({
         context: "api",
-        operation: "checkout_session_completed_user_credits_update",
-        message: updateError.message,
+        operation: "checkout_session_completed_user_credits_increment",
+        message: creditsUpsertError.message,
       });
       return NextResponse.json({ message: "Database error" }, { status: 500 });
     }

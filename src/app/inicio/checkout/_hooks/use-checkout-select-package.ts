@@ -30,7 +30,7 @@ export function useCheckoutSelectPackage({
     useState<CheckoutPackageId | null>(null);
 
   const handleSelectPackage = useCallback(
-    async (id: CheckoutPackageId) => {
+    async (id: CheckoutPackageId, analysisId?: string) => {
       const credits = getCreditsForPackage(id);
       const priceCentavos = getPackagePriceCentavos(id);
 
@@ -40,7 +40,10 @@ export function useCheckoutSelectPackage({
       setLoadingPackageId(id);
 
       try {
-        const result = await createCheckoutSession({ packageId: id });
+        const result = await createCheckoutSession({
+          packageId: id,
+          ...(analysisId && { analysisId }),
+        });
 
         if (result.success && result.clientSecret) {
           onSuccess({ clientSecret: result.clientSecret, packageId: id });
