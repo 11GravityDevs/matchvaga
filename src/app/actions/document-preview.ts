@@ -171,11 +171,6 @@ export async function generateResumePreview(
     });
   }
 
-  if (status === "completed" && needsUnlock === false) {
-    status = "completed";
-    needsUnlock = false;
-  }
-
   const updatePayload: {
     status: string;
     optimized_score?: number;
