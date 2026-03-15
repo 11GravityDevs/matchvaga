@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { CheckoutProvider } from "@stripe/react-stripe-js/checkout";
 import type { Appearance } from "@stripe/stripe-js";
@@ -22,12 +22,19 @@ const checkoutAppearance: Appearance = {
   labels: "above",
 };
 
-export function CheckoutContent() {
+interface CheckoutContentProps {
+  unlockAnalysisId?: string;
+}
+
+export function CheckoutContent({
+  unlockAnalysisId,
+}: CheckoutContentProps = {}) {
   const [selectedPackageId, setSelectedPackageId] =
     useState<CheckoutPackageId | null>(null);
   const [checkoutClientSecret, setCheckoutClientSecret] = useState<
     string | null
   >(null);
+  const unlockTriggeredRef = useRef(false);
   const { showErrorToastNotification } = useToastNotification();
 
   const onSuccess = useCallback(
@@ -59,6 +66,17 @@ export function CheckoutContent() {
   useEffect(() => {
     trackPricingViewedEvent();
   }, []);
+
+  useEffect(() => {
+    if (
+      unlockAnalysisId &&
+      !unlockTriggeredRef.current &&
+      !checkoutClientSecret
+    ) {
+      unlockTriggeredRef.current = true;
+      void handleSelectPackage("avulso", unlockAnalysisId);
+    }
+  }, [unlockAnalysisId, checkoutClientSecret, handleSelectPackage]);
 
   return (
     <main className="flex w-full flex-col items-center section-gap page-padding">

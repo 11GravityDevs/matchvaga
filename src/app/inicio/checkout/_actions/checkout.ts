@@ -5,7 +5,10 @@ import { z } from "zod";
 
 import { getAuthenticatedUser } from "@/lib/supabase/server";
 import { getStripe } from "@/lib/stripe/client";
-import { ROUTE_HOME_CHECKOUT_SUCCESS } from "@/constants/routes";
+import {
+  ROUTE_HOME_CHECKOUT_SUCCESS,
+  ROUTE_HOME_NEW_ANALYSIS,
+} from "@/constants/routes";
 import { SITE_URL } from "@/constants/site";
 import { logServerError } from "@/lib/logger";
 import {
@@ -16,6 +19,8 @@ import {
 
 const createCheckoutSessionSchema = z.object({
   packageId: z.enum(CHECKOUT_PACKAGE_IDS),
+  analysisId: z.uuid().optional(),
+  returnToModal: z.boolean().optional(),
 });
 
 export interface CreateCheckoutSessionResult {
@@ -27,6 +32,8 @@ export interface CreateCheckoutSessionResult {
 
 export async function createCheckoutSession(input: {
   packageId: string;
+  analysisId?: string;
+  returnToModal?: boolean;
 }): Promise<CreateCheckoutSessionResult> {
   const parsed = createCheckoutSessionSchema.safeParse(input);
 
@@ -34,15 +41,18 @@ export async function createCheckoutSession(input: {
     return { success: false, error: "Pacote inválido." };
   }
 
-  const { packageId } = parsed.data;
+  const { packageId, analysisId, returnToModal } = parsed.data;
 
   const auth = await getAuthenticatedUser();
+
   if (!auth.success) {
     return { success: false, error: auth.error };
   }
+
   const { user } = auth;
 
   let stripe;
+
   try {
     stripe = getStripe();
   } catch (err) {
@@ -63,6 +73,16 @@ export async function createCheckoutSession(input: {
   const packageName = getPackageName(packageId);
 
   try {
+    let returnUrl: string;
+
+    if (returnToModal === true && analysisId) {
+      returnUrl = `${SITE_URL}${ROUTE_HOME_NEW_ANALYSIS}?continue=${analysisId}&payment_return=1&session_id={CHECKOUT_SESSION_ID}`;
+    } else if (analysisId) {
+      returnUrl = `${SITE_URL}${ROUTE_HOME_CHECKOUT_SUCCESS}?unlock=${analysisId}&session_id={CHECKOUT_SESSION_ID}`;
+    } else {
+      returnUrl = `${SITE_URL}${ROUTE_HOME_CHECKOUT_SUCCESS}?session_id={CHECKOUT_SESSION_ID}`;
+    }
+
     const sessionCreateParams = {
       ui_mode: "custom",
       mode: "payment",
@@ -81,11 +101,12 @@ export async function createCheckoutSession(input: {
         },
       ],
       payment_method_types: ["card"],
-      return_url: `${SITE_URL}${ROUTE_HOME_CHECKOUT_SUCCESS}?session_id={CHECKOUT_SESSION_ID}`,
+      return_url: returnUrl,
       customer_email: user.email ?? undefined,
       metadata: {
         packageId,
         userId: user.id,
+        ...(analysisId && { analysisId }),
       },
     } as Stripe.Checkout.SessionCreateParams;
 

@@ -68,22 +68,6 @@ export async function createResumeWithData(
     };
   }
 
-  const { error: creditsError } = await supabase
-    .from("user_credits")
-    .insert({ user_id: user.id, credits: 3 });
-
-  if (creditsError) {
-    logServerError({
-      context: "db",
-      operation: "createResumeWithData_user_credits",
-      message: creditsError.message,
-    });
-    return {
-      success: false,
-      error: "Erro ao salvar. Tente novamente.",
-    };
-  }
-
   revalidatePath("/inicio");
   revalidatePath("/onboarding");
 
@@ -160,22 +144,6 @@ export async function uploadResume(
       context: "db",
       operation: "uploadResume_insert",
       message: insertError.message,
-    });
-    return {
-      success: false,
-      error: "Erro ao salvar. Tente novamente.",
-    };
-  }
-
-  const { error: creditsError } = await supabase
-    .from("user_credits")
-    .insert({ user_id: user.id, credits: 3 });
-
-  if (creditsError) {
-    logServerError({
-      context: "db",
-      operation: "uploadResume_user_credits",
-      message: creditsError.message,
     });
     return {
       success: false,

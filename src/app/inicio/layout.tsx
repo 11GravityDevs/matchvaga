@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 
+import { NewAnalysisResetProvider } from "@/app/inicio/_contexts/new-analysis-reset-context";
 import { Sidebar } from "@/components/shared/sidebar";
 import { getQueryClient } from "@/lib/query/get-query-client";
 import { currentUserDisplayQueryOptions } from "@/lib/query/query-options";
@@ -23,7 +24,9 @@ export default async function HomeLayout({ children }: HomeLayoutProps) {
     <HydrationBoundary state={dehydrate(queryClient)}>
       <main className="flex h-screen w-full overflow-hidden bg-background [--primary:var(--accent-brand)]">
         <Sidebar />
-        <div className="flex flex-1 flex-col overflow-auto">{children}</div>
+        <NewAnalysisResetProvider>
+          <div className="flex flex-1 flex-col overflow-auto">{children}</div>
+        </NewAnalysisResetProvider>
       </main>
     </HydrationBoundary>
   );

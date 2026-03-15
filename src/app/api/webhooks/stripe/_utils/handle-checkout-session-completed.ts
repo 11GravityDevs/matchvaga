@@ -64,35 +64,16 @@ export async function handleCheckoutSessionCompleted(
       return NextResponse.json({ message: "Database error" }, { status: 500 });
     }
 
-    const { data: creditsRow } = await supabase
-      .from("user_credits")
-      .select("credits")
-      .eq("user_id", userId)
-      .single();
+    const { error: rpcError } = await supabase.rpc("increment_user_credits", {
+      user_id_param: userId,
+      amount: creditsToGrant,
+    });
 
-    if (creditsRow == null) {
+    if (rpcError) {
       logServerError({
         context: "api",
-        operation: "checkout_session_completed_user_credits_lookup",
-        message: "user_credits not found",
-        errorMessage: userId,
-      });
-      return NextResponse.json({ message: "Database error" }, { status: 500 });
-    }
-
-    const { error: updateError } = await supabase
-      .from("user_credits")
-      .update({
-        credits: creditsRow.credits + creditsToGrant,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("user_id", userId);
-
-    if (updateError) {
-      logServerError({
-        context: "api",
-        operation: "checkout_session_completed_user_credits_update",
-        message: updateError.message,
+        operation: "checkout_session_completed_user_credits_increment",
+        message: rpcError.message,
       });
       return NextResponse.json({ message: "Database error" }, { status: 500 });
     }

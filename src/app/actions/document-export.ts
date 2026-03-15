@@ -1,7 +1,5 @@
 "use server";
 
-import { synthesizeResumeContent } from "@/lib/ai/synthesize-resume";
-import type { JobSkill } from "@/lib/ai/config/job-skills-schema";
 import { buildResumeDocx } from "@/lib/document/resume-to-docx";
 import { ResumeDocument } from "@/lib/document/resume-to-pdf";
 import { logServerError } from "@/lib/logger";
@@ -11,171 +9,12 @@ import {
 } from "@/lib/supabase/server";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
-import { calculateOptimizedScore } from "@/utils/analysis";
 import { renderToBuffer } from "@react-pdf/renderer";
 import { revalidatePath } from "next/cache";
-import React from "react";
+import { createElement } from "react";
 
 const BUCKET = "documents";
 const SIGNED_URL_EXPIRES_IN = 3600;
-
-export interface GenerateResumePreviewResult {
-  success: boolean;
-  data?: ResumeData;
-  optimizedScore?: number;
-  error?: string;
-}
-
-export async function generateResumePreview(
-  analysisId: string,
-  selectedHardSkills?: string[],
-  selectedSoftSkills?: string[]
-): Promise<GenerateResumePreviewResult> {
-  const auth = await getAuthenticatedUser();
-  if (!auth.success) {
-    return { success: false, error: auth.error };
-  }
-  const { user, supabase } = auth;
-
-  const { data: analysisRow, error: analysisError } = await supabase
-    .from("analyses")
-    .select(
-      "id, resume_id, job_snapshot, score, user_hard_skills, user_soft_skills, missing_hard_skills, missing_soft_skills"
-    )
-    .eq("id", analysisId)
-    .eq("user_id", user.id)
-    .single();
-
-  if (analysisError || !analysisRow) {
-    return { success: false, error: "Análise não encontrada." };
-  }
-
-  const { data: resumeRow, error: resumeError } = await supabase
-    .from("resumes")
-    .select("parsed_data")
-    .eq("id", analysisRow.resume_id)
-    .eq("user_id", user.id)
-    .single();
-
-  if (resumeError || !resumeRow) {
-    return { success: false, error: "Currículo não encontrado." };
-  }
-
-  const resumeParsed = resumeDataSchema.safeParse(resumeRow.parsed_data);
-  if (!resumeParsed.success) {
-    return { success: false, error: "Dados do currículo inválidos." };
-  }
-
-  const resumeData = resumeParsed.data as ResumeData;
-
-  const userHardSkills = (analysisRow.user_hard_skills ?? []) as string[];
-  const userSoftSkills = (analysisRow.user_soft_skills ?? []) as string[];
-  const missingHard = (analysisRow.missing_hard_skills ?? []) as JobSkill[];
-  const missingSoft = (analysisRow.missing_soft_skills ?? []) as JobSkill[];
-
-  function selectedLabelsToOriginalTerms(
-    selectedLabels: string[],
-    skills: JobSkill[]
-  ): string[] {
-    const byName = new Map(skills.map((s) => [s.name, s.original_term]));
-    return selectedLabels
-      .map((label) => byName.get(label) ?? label)
-      .filter(Boolean);
-  }
-
-  const selectedHardOriginalTerms = selectedLabelsToOriginalTerms(
-    selectedHardSkills ?? [],
-    missingHard
-  );
-  const selectedSoftOriginalTerms = selectedLabelsToOriginalTerms(
-    selectedSoftSkills ?? [],
-    missingSoft
-  );
-
-  const mergedHardSkills = [
-    ...userHardSkills,
-    ...selectedHardOriginalTerms.filter((t) => !userHardSkills.includes(t)),
-  ];
-
-  const mergedSoftSkills = [
-    ...userSoftSkills,
-    ...selectedSoftOriginalTerms.filter((t) => !userSoftSkills.includes(t)),
-  ];
-
-  const jobSnapshot = analysisRow.job_snapshot as
-    | { title?: string; company?: string }
-    | null
-    | undefined;
-  const synthesisParams = {
-    summary: resumeData.summary,
-    hardSkills: mergedHardSkills,
-    softSkills: mergedSoftSkills,
-    jobTitle: jobSnapshot?.title ?? undefined,
-  };
-
-  const synthesis = await synthesizeResumeContent(synthesisParams);
-
-  if (!synthesis.success) {
-    logServerError({
-      context: "server_action",
-      operation: "generateResumePreview",
-      action: "generateResumePreview",
-      message: "Síntese de currículo otimizado retornou erro.",
-      errorMessage: synthesis.error,
-    });
-    return { success: false, error: synthesis.error };
-  }
-
-  const analysisScore = (analysisRow.score ?? 0) as number;
-
-  let optimizedScore = calculateOptimizedScore(
-    analysisScore,
-    missingHard,
-    missingSoft,
-    mergedHardSkills,
-    mergedSoftSkills
-  );
-
-  if (analysisScore > optimizedScore) {
-    optimizedScore = analysisScore;
-  }
-
-  const mergedResumeData: ResumeData = {
-    ...resumeData,
-    summary: synthesis.data.summary,
-    hardSkillsByCategory: synthesis.data.hardSkillsByCategory,
-  };
-
-  const updatePayload: {
-    status: string;
-    optimized_score?: number;
-    optimized_resume_data?: ResumeData;
-  } = {
-    status: "completed",
-    optimized_score: optimizedScore,
-    optimized_resume_data: mergedResumeData,
-  };
-
-  const { error: updateStatusError } = await supabase
-    .from("analyses")
-    .update(updatePayload)
-    .eq("id", analysisId)
-    .eq("user_id", user.id);
-
-  if (updateStatusError) {
-    logServerError({
-      context: "db",
-      operation: "generateResumePreview_status_update",
-      message: updateStatusError.message,
-    });
-  }
-
-  return {
-    success: true,
-    data: mergedResumeData,
-    optimizedScore,
-  };
-}
 
 export interface GenerateOptimizedDocumentResult {
   success: boolean;
@@ -194,13 +33,20 @@ async function generateOptimizedDocumentWithContext(
 ): Promise<GenerateOptimizedDocumentResult> {
   const { data: analysisRow, error: analysisError } = await supabase
     .from("analyses")
-    .select("id")
+    .select("id, status")
     .eq("id", analysisId)
     .eq("user_id", userId)
     .single();
 
   if (analysisError || !analysisRow) {
     return { success: false, error: "Análise não encontrada." };
+  }
+
+  if (analysisRow.status !== "completed") {
+    return {
+      success: false,
+      error: "Conclua o desbloqueio desta análise antes de baixar o documento.",
+    };
   }
 
   const { data: existingDoc, error: docLookupError } = await supabase
@@ -244,7 +90,7 @@ async function generateOptimizedDocumentWithContext(
   let buffer: Buffer;
 
   if (format === "pdf") {
-    const docElement = React.createElement(ResumeDocument, {
+    const docElement = createElement(ResumeDocument, {
       data: validResumeData,
     });
     buffer = await renderToBuffer(
@@ -330,13 +176,20 @@ export async function downloadOptimizedDocument(
 
   const { data: analysisRow, error: analysisError } = await supabase
     .from("analyses")
-    .select("id, optimized_resume_data")
+    .select("id, status, optimized_resume_data")
     .eq("id", analysisId)
     .eq("user_id", user.id)
     .single();
 
   if (analysisError || !analysisRow) {
     return { success: false, error: "Análise não encontrada." };
+  }
+
+  if (analysisRow.status !== "completed") {
+    return {
+      success: false,
+      error: "Conclua o desbloqueio desta análise antes de baixar o documento.",
+    };
   }
 
   const optimizedParsed =

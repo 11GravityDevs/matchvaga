@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { PaymentElement, useCheckout } from "@stripe/react-stripe-js/checkout";
 
@@ -14,58 +14,22 @@ import {
 } from "@/components/ui/card";
 import {
   getPackageName,
+  getPackagePriceCentavos,
   type CheckoutPackageId,
 } from "@/constants/checkout-packages";
 
 interface CheckoutPaymentFormProps {
   packageId: CheckoutPackageId;
   onChooseAnotherPackage: () => void;
+  chooseAnotherLabel?: string;
+  onPaymentSuccess?: () => void;
+  onSubmittingChange?: (isSubmitting: boolean) => void;
 }
 
 const brlFormatter = new Intl.NumberFormat("pt-BR", {
   style: "currency",
   currency: "BRL",
 });
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null;
-}
-
-function getString(value: unknown, key: string): string | null {
-  if (!isRecord(value)) return null;
-  const property = value[key];
-  return typeof property === "string" && property.length > 0 ? property : null;
-}
-
-function getNumber(value: unknown, key: string): number | null {
-  if (!isRecord(value)) return null;
-  const property = value[key];
-  return typeof property === "number" ? property : null;
-}
-
-function getLineItemTotalCentavos(lineItem: unknown): number | null {
-  if (!isRecord(lineItem)) return null;
-  const amountTotal = lineItem.amountTotal;
-  if (!isRecord(amountTotal)) return null;
-  const amount = amountTotal.amount;
-  if (typeof amount === "number") return amount;
-  if (typeof amount === "string") {
-    const parsedAmount = Number(amount);
-    return Number.isFinite(parsedAmount) ? parsedAmount : null;
-  }
-  return null;
-}
-
-function getAmountCentavos(value: unknown): number {
-  if (typeof value === "number") return value;
-  if (typeof value === "string") {
-    const parsedAmount = Number(value);
-    if (Number.isFinite(parsedAmount)) {
-      return parsedAmount;
-    }
-  }
-  return 0;
-}
 
 function formatCentavosToBrl(amountCentavos: number): string {
   return brlFormatter.format(amountCentavos / 100);
@@ -74,6 +38,9 @@ function formatCentavosToBrl(amountCentavos: number): string {
 export function CheckoutPaymentForm({
   packageId,
   onChooseAnotherPackage,
+  chooseAnotherLabel = "Escolher outro pacote",
+  onPaymentSuccess,
+  onSubmittingChange,
 }: CheckoutPaymentFormProps) {
   const checkoutState = useCheckout();
   const [isSubmittingPayment, setIsSubmittingPayment] = useState(false);
@@ -82,18 +49,11 @@ export function CheckoutPaymentForm({
   );
 
   const packageName = getPackageName(packageId);
+  const packagePriceCentavos = getPackagePriceCentavos(packageId);
 
-  if (checkoutState.type === "loading") {
-    return (
-      <Card className="w-full border border-border">
-        <CardHeader>
-          <CardTitle className="text-card-title">
-            Carregando checkout...
-          </CardTitle>
-        </CardHeader>
-      </Card>
-    );
-  }
+  useEffect(() => {
+    onSubmittingChange?.(isSubmittingPayment);
+  }, [isSubmittingPayment, onSubmittingChange]);
 
   if (checkoutState.type === "error") {
     return (
@@ -113,37 +73,21 @@ export function CheckoutPaymentForm({
             type="button"
             onClick={onChooseAnotherPackage}
           >
-            Escolher outro pacote
+            {chooseAnotherLabel}
           </Button>
         </CardFooter>
       </Card>
     );
   }
 
-  const lineItems = checkoutState.checkout.lineItems as unknown[];
-  const checkoutTotalCentavos = getAmountCentavos(
-    checkoutState.checkout.total.total.amount
-  );
-
-  const checkoutSummaryItems = lineItems.map((lineItem, index) => {
-    const itemName =
-      getString(lineItem, "name") ??
-      getString(lineItem, "description") ??
-      `Item ${index + 1}`;
-    const quantity = getNumber(lineItem, "quantity") ?? 1;
-    const totalCentavos = getLineItemTotalCentavos(lineItem);
-
-    return {
-      id: `${itemName}-${index}`,
-      itemName,
-      quantity,
-      totalCentavos,
-    };
-  });
-
   const handleSubmitPayment = async () => {
     setSubmitErrorMessage(null);
     setIsSubmittingPayment(true);
+
+    if (checkoutState.type !== "success") {
+      setIsSubmittingPayment(false);
+      return;
+    }
 
     const result = await checkoutState.checkout.confirm();
 
@@ -151,6 +95,8 @@ export function CheckoutPaymentForm({
       setSubmitErrorMessage(
         result.error.message ?? "Não foi possível concluir o pagamento."
       );
+    } else {
+      onPaymentSuccess?.();
     }
 
     setIsSubmittingPayment(false);
@@ -159,43 +105,24 @@ export function CheckoutPaymentForm({
   return (
     <div className="flex w-full flex-col gap-6">
       <Card className="w-full border border-border">
-        <CardHeader>
-          <CardTitle className="text-card-title">
-            Finalizar compra do pacote {packageName}
-          </CardTitle>
-        </CardHeader>
+        <CardContent className="flex items-center justify-between">
+          <div className="flex flex-col gap-1">
+            <CardTitle>Finalizar compra do pacote</CardTitle>
 
-        <CardContent className="flex flex-col gap-3">
-          <div className="flex flex-col gap-2">
-            {checkoutSummaryItems.map((summaryItem) => (
-              <div
-                key={summaryItem.id}
-                className="flex items-center justify-between"
-              >
-                <span className="text-small text-foreground">
-                  {summaryItem.quantity}x {summaryItem.itemName}
-                </span>
-                <span className="text-small-medium text-foreground">
-                  {summaryItem.totalCentavos !== null
-                    ? formatCentavosToBrl(summaryItem.totalCentavos)
-                    : "-"}
-                </span>
-              </div>
-            ))}
-          </div>
-
-          <div className="flex items-center justify-between border-t border-border pt-3">
-            <span className="text-small-semibold">Total</span>
-            <span className="text-small-semibold">
-              {formatCentavosToBrl(checkoutTotalCentavos)}
+            <span className="text-base font-semibold text-accent-brand">
+              {packageName}
             </span>
           </div>
+
+          <span className="text-xl font-bold">
+            {formatCentavosToBrl(packagePriceCentavos)}
+          </span>
         </CardContent>
       </Card>
 
       <Card className="w-full border border-border">
         <CardHeader>
-          <CardTitle className="text-card-title">Dados de pagamento</CardTitle>
+          <CardTitle>Dados de pagamento</CardTitle>
         </CardHeader>
 
         <CardContent className="flex flex-col gap-4">
@@ -208,7 +135,7 @@ export function CheckoutPaymentForm({
           )}
         </CardContent>
 
-        <CardFooter className="flex flex-wrap justify-end gap-3 border-t border-border pt-4">
+        <CardFooter className="flex flex-wrap justify-end gap-3 pt-4">
           <Button
             variant="outline"
             size="brand"
@@ -216,7 +143,7 @@ export function CheckoutPaymentForm({
             onClick={onChooseAnotherPackage}
             disabled={isSubmittingPayment}
           >
-            Escolher outro pacote
+            {chooseAnotherLabel}
           </Button>
           <Button
             variant="brand"
@@ -225,7 +152,7 @@ export function CheckoutPaymentForm({
             loading={isSubmittingPayment}
             onClick={handleSubmitPayment}
           >
-            Pagar agora
+            Continuar
           </Button>
         </CardFooter>
       </Card>

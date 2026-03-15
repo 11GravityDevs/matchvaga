@@ -12,15 +12,16 @@ import {
 
 import { getCheckoutSessionStatus } from "../_actions/get-checkout-session-status";
 import { CheckoutSuccessTracker } from "../_components/checkout-success-tracker";
+import { CheckoutUnlockHandler } from "../_components/checkout-unlock-handler";
 
 interface CheckoutSuccessPageProps {
-  searchParams: Promise<{ session_id?: string }>;
+  searchParams: Promise<{ session_id?: string; unlock?: string }>;
 }
 
 export default async function CheckoutSuccessPage({
   searchParams,
 }: CheckoutSuccessPageProps) {
-  const { session_id: sessionId } = await searchParams;
+  const { session_id: sessionId, unlock } = await searchParams;
 
   if (!sessionId) {
     redirect(ROUTE_HOME_CHECKOUT_CANCEL);
@@ -38,6 +39,7 @@ export default async function CheckoutSuccessPage({
   return (
     <main className="flex flex-1 flex-col items-center justify-center section-gap page-padding">
       <CheckoutSuccessTracker sessionId={sessionId} />
+      {unlock && <CheckoutUnlockHandler analysisId={unlock} />}
       <div className="flex flex-col items-center justify-center gap-6 text-center">
         <div className="flex size-20 items-center justify-center rounded-full bg-accent-success-light">
           <CheckCircle2 className="size-16 text-accent-success" />
@@ -47,17 +49,27 @@ export default async function CheckoutSuccessPage({
           <h1 className="text-page-title">Pagamento concluído</h1>
           <p className="max-w-content text-page-subtitle text-muted-foreground">
             Obrigado pela compra. Seu pagamento foi processado com sucesso.
-            {sessionId && " Em breve você terá acesso às análises."}
+            {!unlock && sessionId && " Em breve você terá acesso às análises."}
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center justify-center gap-3">
-          <Button variant="outline" size="brand" asChild>
-            <Link href={ROUTE_HOME_DASHBOARD}>Ir para o Dashboard</Link>
-          </Button>
-          <Button variant="brand" size="brand" asChild>
-            <Link href={ROUTE_HOME_NEW_ANALYSIS}>Nova análise</Link>
-          </Button>
+        <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-wrap items-center justify-center gap-3">
+            <Button variant="outline" size="brand" asChild>
+              <Link href={ROUTE_HOME_DASHBOARD}>Ir para o Dashboard</Link>
+            </Button>
+            <Button variant="brand" size="brand" asChild>
+              <Link
+                href={
+                  unlock
+                    ? `${ROUTE_HOME_NEW_ANALYSIS}?continue=${unlock}`
+                    : ROUTE_HOME_NEW_ANALYSIS
+                }
+              >
+                {unlock ? "Ver currículo desbloqueado" : "Nova análise"}
+              </Link>
+            </Button>
+          </div>
         </div>
       </div>
     </main>

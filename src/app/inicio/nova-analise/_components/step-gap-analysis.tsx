@@ -1,19 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Check, Lightbulb, RefreshCw, Sparkles } from "lucide-react";
 
-import { generateResumePreview } from "@/app/actions/document";
+import { generateResumePreview } from "@/app/actions/document-preview";
+import { QUERY_KEY_CURRENT_USER_DISPLAY } from "@/constants/query-keys";
+import { currentUserDisplayQueryOptions } from "@/lib/query/query-options";
 import { StepIndicator } from "@/components/shared/step-indicator";
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+  GenerateResumeDialogs,
+  shouldSkipCreditConsumptionDialog,
+} from "./generate-resume-dialogs";
 import { Loading } from "@/components/ui/loading";
 import { useToastNotification } from "@/hooks/use-toast-notification";
 import { cn } from "@/utils/style";
@@ -104,6 +103,10 @@ function SkillsColumn({
 }
 
 export function StepGapAnalysis() {
+  const queryClient = useQueryClient();
+  const { data: displayData } = useQuery(currentUserDisplayQueryOptions);
+  const credits = displayData?.credits ?? 0;
+
   const {
     jobRole,
     score,
@@ -111,16 +114,20 @@ export function StepGapAnalysis() {
     hardSkills,
     softSkills,
     toggleSkill,
+    reset,
     setStep,
     setSelectedHardSkills,
     setSelectedSoftSkills,
     setOptimizedResumeData,
     setOptimizedScore,
+    setNeedsUnlock,
     analysisId,
   } = useNewAnalysis();
   const { showErrorToastNotification } = useToastNotification();
 
   const [isConfirmNoSkillsDialogOpen, setIsConfirmNoSkillsDialogOpen] =
+    useState(false);
+  const [isConfirmCreditDialogOpen, setIsConfirmCreditDialogOpen] =
     useState(false);
 
   const selectedHard = hardSkills.filter((s) => s.selected).map((s) => s.label);
@@ -152,6 +159,9 @@ export function StepGapAnalysis() {
       return result;
     },
     onSuccess: (result) => {
+      void queryClient.invalidateQueries({
+        queryKey: QUERY_KEY_CURRENT_USER_DISPLAY,
+      });
       setSelectedHardSkills(selectedHard);
       setSelectedSoftSkills(selectedSoft);
       if (result.data) {
@@ -160,6 +170,7 @@ export function StepGapAnalysis() {
       if (result.optimizedScore != null) {
         setOptimizedScore(result.optimizedScore);
       }
+      setNeedsUnlock(result.needsUnlock ?? false);
       setStep(3);
     },
     onError: (error) => {
@@ -180,7 +191,20 @@ export function StepGapAnalysis() {
       setIsConfirmNoSkillsDialogOpen(true);
       return;
     }
+    if (credits > 0 && !shouldSkipCreditConsumptionDialog()) {
+      setIsConfirmCreditDialogOpen(true);
+      return;
+    }
     generateDocument();
+  };
+
+  const handleConfirmNoSkills = () => {
+    setIsConfirmNoSkillsDialogOpen(false);
+    if (credits > 0 && !shouldSkipCreditConsumptionDialog()) {
+      setIsConfirmCreditDialogOpen(true);
+    } else {
+      generateDocument();
+    }
   };
 
   if (isGenerating) {
@@ -304,7 +328,7 @@ export function StepGapAnalysis() {
                     type="button"
                     size="brand"
                     variant="outline"
-                    onClick={() => setStep(1)}
+                    onClick={reset}
                     className="flex-1 gap-1.5"
                     disabled={isGenerating}
                   >
@@ -327,48 +351,16 @@ export function StepGapAnalysis() {
           </div>
         </div>
 
-        <Dialog
-          open={isConfirmNoSkillsDialogOpen}
-          onOpenChange={(open) => {
-            if (!open) {
-              setIsConfirmNoSkillsDialogOpen(false);
-            }
-          }}
-        >
-          <DialogContent className="sm:max-w-sm">
-            <DialogHeader>
-              <DialogTitle>Nenhuma habilidade selecionada</DialogTitle>
-            </DialogHeader>
-            <p className="text-small-leading text-muted-foreground">
-              Você não selecionou nenhuma habilidade para incorporar ao
-              currículo. Deseja mesmo prosseguir?
-            </p>
-            <DialogFooter className="flex-row gap-3 sm:justify-end">
-              <Button
-                type="button"
-                size="brand"
-                variant="outline"
-                onClick={() => {
-                  setIsConfirmNoSkillsDialogOpen(false);
-                  generateDocument();
-                }}
-                disabled={!analysisId || isGenerating}
-              >
-                Prosseguir
-              </Button>
-              <Button
-                type="button"
-                size="brand"
-                variant="brand"
-                className="gap-1.5"
-                onClick={() => setIsConfirmNoSkillsDialogOpen(false)}
-                disabled={isGenerating}
-              >
-                Cancelar
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <GenerateResumeDialogs
+          isConfirmNoSkillsDialogOpen={isConfirmNoSkillsDialogOpen}
+          onConfirmNoSkillsDialogOpenChange={setIsConfirmNoSkillsDialogOpen}
+          isConfirmCreditDialogOpen={isConfirmCreditDialogOpen}
+          onConfirmCreditDialogOpenChange={setIsConfirmCreditDialogOpen}
+          isGenerating={isGenerating}
+          analysisId={analysisId}
+          onConfirmNoSkills={handleConfirmNoSkills}
+          onConfirmCredit={generateDocument}
+        />
       </div>
     </>
   );
