@@ -19,6 +19,10 @@ export function CookieConsent() {
   useEffect(() => {
     const stored = localStorage.getItem(STORAGE_KEY);
 
+    if (stored === "accepted") {
+      posthog.opt_in_capturing();
+    }
+
     if (!stored) {
       queueMicrotask(() => setIsVisible(true));
     }
@@ -54,16 +58,16 @@ export function CookieConsent() {
               Usamos cookies
             </p>
             <p className="text-small text-muted-foreground">
-              Utilizamos cookies para melhorar sua experiência, analisar o
-              tráfego e personalizar o conteúdo. Ao continuar, você concorda com
-              nossa{" "}
+              Utilizamos cookies analíticos (PostHog) para entender como a
+              plataforma é usada e melhorar nossos serviços. Para mais detalhes,
+              consulte nossa{" "}
               <Link
                 href="/politica-de-privacidade"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-accent-brand underline underline-offset-4 hover:text-accent-brand-hover"
               >
-                política de privacidade
+                Política de Privacidade
               </Link>
               .
             </p>
