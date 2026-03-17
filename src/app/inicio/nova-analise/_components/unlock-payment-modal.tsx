@@ -3,16 +3,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { CheckoutProvider } from "@stripe/react-stripe-js/checkout";
-import type { Appearance } from "@stripe/stripe-js";
-import { Loader2 } from "lucide-react";
 
-import { unlockAnalysis } from "@/app/actions/document-preview";
-import { cn } from "@/utils/style";
 import { createCheckoutSession } from "@/app/inicio/checkout/_actions/checkout";
 import { createPixCharge } from "@/app/inicio/checkout/_actions/create-pix-charge";
+import { CHECKOUT_STRIPE_APPEARANCE } from "@/app/inicio/checkout/_constants/checkout";
 import { CheckoutPaymentForm } from "@/app/inicio/checkout/_components/checkout-payment-form";
 import { CheckoutPixForm } from "@/app/inicio/checkout/_components/checkout-pix-form";
-import { UnlockPaymentMethodStep } from "./unlock-payment-method-step";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -25,41 +21,22 @@ import {
   getPackagePriceCentavos,
 } from "@/constants/checkout-packages";
 import {
-  QUERY_KEY_ANALYSES,
-  QUERY_KEY_CURRENT_USER_DISPLAY,
-} from "@/constants/query-keys";
-import {
   trackCheckoutCompletedEvent,
   trackCheckoutStartedEvent,
 } from "@/lib/analytics/posthog-events";
 import { stripeCheckoutPromise } from "@/lib/stripe/checkout-client";
-import { useQueryClient } from "@tanstack/react-query";
+import { cn } from "@/utils/style";
+import { formatCentavosToBrl } from "@/utils/currency";
 
-const UNLOCK_RETRY_DELAY_MS = 3000;
-const UNLOCK_MAX_RETRIES = 5;
-const PACKAGE_AVULSO = "avulso" as const;
+import { UNLOCK_PACKAGE_ID } from "../_constants/unlock";
+import { useUnlockProcessing } from "../_hooks/use-unlock-processing";
+import { UnlockErrorView } from "./unlock-error-view";
+import { UnlockLoadingView } from "./unlock-loading-view";
+import { UnlockPaymentMethodStep } from "./unlock-payment-method-step";
+import { UnlockProcessingView } from "./unlock-processing-view";
 
-const checkoutAppearance: Appearance = {
-  theme: "stripe",
-  inputs: "spaced",
-  labels: "above",
-};
-
-const brlFormat = new Intl.NumberFormat("pt-BR", {
-  style: "currency",
-  currency: "BRL",
-});
-function formatCentavosToBrl(c: number): string {
-  return brlFormat.format(c / 100);
-}
-
-interface UnlockPaymentModalProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  analysisId: string;
-  onUnlockSuccess: () => void;
-  initialProcessingFromRedirect?: { sessionId: string };
-}
+const CHECKOUT_ERROR = "Erro ao iniciar checkout. Tente novamente.";
+const PIX_ERROR = "Erro ao iniciar checkout PIX. Tente novamente.";
 
 type ModalState =
   | "method"
@@ -70,6 +47,14 @@ type ModalState =
   | "success"
   | "error";
 
+interface UnlockPaymentModalProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  analysisId: string;
+  onUnlockSuccess: () => void;
+  initialProcessingFromRedirect?: { sessionId: string };
+}
+
 export function UnlockPaymentModal({
   open,
   onOpenChange,
@@ -77,8 +62,6 @@ export function UnlockPaymentModal({
   onUnlockSuccess,
   initialProcessingFromRedirect,
 }: UnlockPaymentModalProps) {
-  const queryClient = useQueryClient();
-
   const [state, setState] = useState<ModalState>("method");
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [sessionId, setSessionId] = useState<string | null>(null);
@@ -94,7 +77,6 @@ export function UnlockPaymentModal({
     null
   );
 
-  const attemptRef = useRef(0);
   const hasTrackedRedirectRef = useRef(false);
   const onUnlockSuccessRef = useRef(onUnlockSuccess);
   const onOpenChangeRef = useRef(onOpenChange);
@@ -117,7 +99,6 @@ export function UnlockPaymentModal({
     setIsPaymentSubmitting(false);
     setPixPayment(null);
     setLoadingMethod(null);
-    attemptRef.current = 0;
     hasTrackedRedirectRef.current = false;
   }, []);
 
@@ -132,14 +113,30 @@ export function UnlockPaymentModal({
     }
   }, [open, initialProcessingFromRedirect, state, resetState]);
 
+  const handleUnlockSuccess = useCallback(() => {
+    setState("success");
+    onUnlockSuccessRef.current();
+    onOpenChangeRef.current(false);
+  }, []);
+
+  const handleUnlockError = useCallback((message: string) => {
+    setErrorMessage(message);
+    setState("error");
+  }, []);
+
+  useUnlockProcessing(analysisId, effectiveState === "processing", {
+    onSuccess: handleUnlockSuccess,
+    onError: handleUnlockError,
+  });
+
   const handleSelectCard = useCallback(async () => {
     setLoadingMethod("stripe");
     setState("loading");
-    const priceCentavos = getPackagePriceCentavos(PACKAGE_AVULSO);
-    trackCheckoutStartedEvent(PACKAGE_AVULSO, priceCentavos, "stripe");
+    const priceCentavos = getPackagePriceCentavos(UNLOCK_PACKAGE_ID);
+    trackCheckoutStartedEvent(UNLOCK_PACKAGE_ID, priceCentavos, "stripe");
 
     const result = await createCheckoutSession({
-      packageId: PACKAGE_AVULSO,
+      packageId: UNLOCK_PACKAGE_ID,
       analysisId,
       returnToModal: true,
     });
@@ -151,9 +148,7 @@ export function UnlockPaymentModal({
       if (result.sessionId) setSessionId(result.sessionId);
       setState("form");
     } else {
-      setErrorMessage(
-        result.error ?? "Erro ao iniciar checkout. Tente novamente."
-      );
+      setErrorMessage(result.error ?? CHECKOUT_ERROR);
       setState("error");
     }
   }, [analysisId]);
@@ -161,11 +156,11 @@ export function UnlockPaymentModal({
   const handleSelectPix = useCallback(async () => {
     setLoadingMethod("pix");
     setState("loading");
-    const priceCentavos = getPackagePriceCentavos(PACKAGE_AVULSO);
-    trackCheckoutStartedEvent(PACKAGE_AVULSO, priceCentavos, "pix");
+    const priceCentavos = getPackagePriceCentavos(UNLOCK_PACKAGE_ID);
+    trackCheckoutStartedEvent(UNLOCK_PACKAGE_ID, priceCentavos, "pix");
 
     const result = await createPixCharge({
-      packageId: PACKAGE_AVULSO,
+      packageId: UNLOCK_PACKAGE_ID,
       analysisId,
     });
 
@@ -185,9 +180,7 @@ export function UnlockPaymentModal({
       });
       setState("pix");
     } else {
-      setErrorMessage(
-        result.error ?? "Erro ao iniciar checkout PIX. Tente novamente."
-      );
+      setErrorMessage(result.error ?? PIX_ERROR);
       setState("error");
     }
   }, [analysisId]);
@@ -210,47 +203,6 @@ export function UnlockPaymentModal({
     }
   }, [initialProcessingFromRedirect]);
 
-  useEffect(() => {
-    if (effectiveState !== "processing") return;
-
-    let cancelled = false;
-
-    const runUnlock = async () => {
-      const result = await unlockAnalysis(analysisId);
-
-      if (cancelled) return;
-
-      if (result.success) {
-        void queryClient.invalidateQueries({ queryKey: QUERY_KEY_ANALYSES });
-        void queryClient.invalidateQueries({
-          queryKey: QUERY_KEY_CURRENT_USER_DISPLAY,
-        });
-        setState("success");
-        onUnlockSuccessRef.current();
-        onOpenChangeRef.current(false);
-        return;
-      }
-
-      attemptRef.current += 1;
-      if (attemptRef.current < UNLOCK_MAX_RETRIES) {
-        setTimeout(() => {
-          if (!cancelled) void runUnlock();
-        }, UNLOCK_RETRY_DELAY_MS);
-      } else {
-        setErrorMessage(
-          "Não foi possível desbloquear automaticamente. Recarregue a página e tente novamente."
-        );
-        setState("error");
-      }
-    };
-
-    void runUnlock();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [effectiveState, analysisId, queryClient]);
-
   const handleOpenChange = useCallback(
     (newOpen: boolean) => {
       const cannotClose =
@@ -266,6 +218,12 @@ export function UnlockPaymentModal({
   const handleRetry = useCallback(() => {
     resetState();
   }, [resetState]);
+
+  const isCompactContent =
+    effectiveState === "loading" ||
+    effectiveState === "processing" ||
+    effectiveState === "error" ||
+    effectiveState === "method";
 
   if (!stripeCheckoutPromise && effectiveState === "form") {
     return (
@@ -292,14 +250,7 @@ export function UnlockPaymentModal({
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent
-        className={cn(
-          effectiveState === "loading" ||
-            effectiveState === "processing" ||
-            effectiveState === "error" ||
-            effectiveState === "method"
-            ? "max-w-lg"
-            : "max-w-3xl"
-        )}
+        className={cn(isCompactContent ? "max-w-lg" : "max-w-3xl")}
       >
         <DialogHeader>
           <DialogTitle>Desbloquear currículo</DialogTitle>
@@ -310,21 +261,14 @@ export function UnlockPaymentModal({
             loadingMethod={loadingMethod}
             onSelectPix={handleSelectPix}
             onSelectCard={handleSelectCard}
-            packageName={getPackageName(PACKAGE_AVULSO)}
+            packageName={getPackageName(UNLOCK_PACKAGE_ID)}
             priceFormatted={formatCentavosToBrl(
-              getPackagePriceCentavos(PACKAGE_AVULSO)
+              getPackagePriceCentavos(UNLOCK_PACKAGE_ID)
             )}
           />
         )}
 
-        {effectiveState === "loading" && (
-          <div className="flex flex-col items-center justify-center gap-4 py-8">
-            <Loader2 className="size-10 animate-spin text-muted-foreground" />
-            <p className="text-small text-muted-foreground">
-              Preparando pagamento...
-            </p>
-          </div>
-        )}
+        {effectiveState === "loading" && <UnlockLoadingView />}
 
         {effectiveState === "form" && clientSecret && stripeCheckoutPromise && (
           <CheckoutProvider
@@ -332,12 +276,12 @@ export function UnlockPaymentModal({
             options={{
               clientSecret,
               elementsOptions: {
-                appearance: checkoutAppearance,
+                appearance: CHECKOUT_STRIPE_APPEARANCE,
               },
             }}
           >
             <CheckoutPaymentForm
-              packageId={PACKAGE_AVULSO}
+              packageId={UNLOCK_PACKAGE_ID}
               onChooseAnotherPackage={() => onOpenChange(false)}
               chooseAnotherLabel="Cancelar"
               onPaymentSuccess={handlePaymentSuccess}
@@ -352,42 +296,22 @@ export function UnlockPaymentModal({
             brCode={pixPayment.brCode}
             brCodeBase64={pixPayment.brCodeBase64}
             expiresAt={pixPayment.expiresAt}
-            packageName={getPackageName(PACKAGE_AVULSO)}
+            packageName={getPackageName(UNLOCK_PACKAGE_ID)}
             priceFormatted={formatCentavosToBrl(
-              getPackagePriceCentavos(PACKAGE_AVULSO)
+              getPackagePriceCentavos(UNLOCK_PACKAGE_ID)
             )}
             unlockAnalysisId={analysisId}
           />
         )}
 
-        {effectiveState === "processing" && (
-          <div className="flex flex-col items-center justify-center gap-4 py-8">
-            <Loader2 className="size-10 animate-spin text-accent-success" />
-            <p className="text-center text-section-header text-foreground">
-              Pagamento processado
-            </p>
-            <p className="text-center text-small text-muted-foreground">
-              Desbloqueando seu currículo...
-            </p>
-          </div>
-        )}
+        {effectiveState === "processing" && <UnlockProcessingView />}
 
         {effectiveState === "error" && (
-          <div className="flex flex-col gap-4">
-            <p className="text-small text-destructive">{errorMessage}</p>
-            <div className="flex justify-end gap-3">
-              <Button
-                variant="outline"
-                size="brand"
-                onClick={() => onOpenChange(false)}
-              >
-                Fechar
-              </Button>
-              <Button variant="brand" size="brand" onClick={handleRetry}>
-                Tentar novamente
-              </Button>
-            </div>
-          </div>
+          <UnlockErrorView
+            errorMessage={errorMessage}
+            onClose={() => onOpenChange(false)}
+            onRetry={handleRetry}
+          />
         )}
       </DialogContent>
     </Dialog>

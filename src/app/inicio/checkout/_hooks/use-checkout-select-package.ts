@@ -17,24 +17,95 @@ import { createPixCharge } from "../_actions/create-pix-charge";
 
 export type CheckoutPaymentMethod = "stripe" | "pix";
 
+export interface StripeCheckoutSuccessData {
+  paymentMethod: "stripe";
+  clientSecret: string;
+  packageId: CheckoutPackageId;
+}
+
+export interface PixCheckoutSuccessData {
+  paymentMethod: "pix";
+  packageId: CheckoutPackageId;
+  paymentId: string;
+  brCode: string;
+  brCodeBase64: string;
+  expiresAt?: string;
+}
+
+export type CheckoutSuccessData =
+  | StripeCheckoutSuccessData
+  | PixCheckoutSuccessData;
+
 export interface UseCheckoutSelectPackageCallbacks {
-  onSuccess: (
-    data:
-      | {
-          paymentMethod: "stripe";
-          clientSecret: string;
-          packageId: CheckoutPackageId;
-        }
-      | {
-          paymentMethod: "pix";
-          packageId: CheckoutPackageId;
-          paymentId: string;
-          brCode: string;
-          brCodeBase64: string;
-          expiresAt?: string;
-        }
-  ) => void;
+  onSuccess: (data: CheckoutSuccessData) => void;
   onError: (message: string) => void;
+}
+
+const PIX_ERROR_MESSAGE = "Erro ao iniciar checkout PIX. Tente novamente.";
+const CHECKOUT_ERROR_MESSAGE = "Erro ao iniciar checkout. Tente novamente.";
+
+type CheckoutResult =
+  | { ok: true; data: CheckoutSuccessData }
+  | { ok: false; error: string };
+
+async function runPixCheckout(
+  packageId: CheckoutPackageId,
+  analysisId: string | undefined
+): Promise<CheckoutResult> {
+  const result = await createPixCharge({
+    packageId,
+    ...(analysisId && { analysisId }),
+  });
+
+  if (
+    result.success &&
+    result.paymentId &&
+    result.brCode &&
+    result.brCodeBase64
+  ) {
+    return {
+      ok: true,
+      data: {
+        paymentMethod: "pix",
+        packageId,
+        paymentId: result.paymentId,
+        brCode: result.brCode,
+        brCodeBase64: result.brCodeBase64,
+        expiresAt: result.expiresAt,
+      },
+    };
+  }
+
+  return {
+    ok: false,
+    error: result.error ?? PIX_ERROR_MESSAGE,
+  };
+}
+
+async function runStripeCheckout(
+  packageId: CheckoutPackageId,
+  analysisId: string | undefined
+): Promise<CheckoutResult> {
+  const result = await createCheckoutSession({
+    packageId,
+    ...(analysisId && { analysisId }),
+  });
+
+  if (result.success && result.clientSecret) {
+    return {
+      ok: true,
+      data: {
+        paymentMethod: "stripe",
+        clientSecret: result.clientSecret,
+        packageId,
+      },
+    };
+  }
+
+  return {
+    ok: false,
+    error: result.error ?? CHECKOUT_ERROR_MESSAGE,
+  };
 }
 
 export function useCheckoutSelectPackage({
@@ -59,61 +130,24 @@ export function useCheckoutSelectPackage({
       setLoadingPackageId(id);
 
       try {
-        if (paymentMethod === "pix") {
-          const result = await createPixCharge({
-            packageId: id,
-            ...(analysisId && { analysisId }),
-          });
+        const result =
+          paymentMethod === "pix"
+            ? await runPixCheckout(id, analysisId)
+            : await runStripeCheckout(id, analysisId);
 
-          if (
-            result.success &&
-            result.paymentId &&
-            result.brCode &&
-            result.brCodeBase64
-          ) {
-            onSuccess({
-              paymentMethod: "pix",
-              packageId: id,
-              paymentId: result.paymentId,
-              brCode: result.brCode,
-              brCodeBase64: result.brCodeBase64,
-              expiresAt: result.expiresAt,
-            });
-            setLoadingPackageId(null);
-            return;
-          }
-
-          setLoadingPackageId(null);
-          onError(
-            result.error ?? "Erro ao iniciar checkout PIX. Tente novamente."
-          );
-          return;
+        if (result.ok) {
+          onSuccess(result.data);
+        } else {
+          onError(result.error);
         }
-
-        const result = await createCheckoutSession({
-          packageId: id,
-          ...(analysisId && { analysisId }),
-        });
-
-        if (result.success && result.clientSecret) {
-          onSuccess({
-            paymentMethod: "stripe",
-            clientSecret: result.clientSecret,
-            packageId: id,
-          });
-          setLoadingPackageId(null);
-          return;
-        }
-
-        setLoadingPackageId(null);
-        onError(result.error ?? "Erro ao iniciar checkout. Tente novamente.");
       } catch (error) {
         console.error(
           "[useCheckoutSelectPackage] Unexpected error creating checkout session:",
           error
         );
+        onError(CHECKOUT_ERROR_MESSAGE);
+      } finally {
         setLoadingPackageId(null);
-        onError("Erro ao iniciar checkout. Tente novamente.");
       }
     },
     [onSuccess, onError]
