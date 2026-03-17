@@ -301,6 +301,7 @@ export function UnlockPaymentModal({
               getPackagePriceCentavos(UNLOCK_PACKAGE_ID)
             )}
             unlockAnalysisId={analysisId}
+            onRequestNewPayment={handleSelectPix}
           />
         )}
 

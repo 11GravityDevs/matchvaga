@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Copy, QrCode } from "lucide-react";
 
 import { getPixPaymentStatus } from "@/app/inicio/checkout/_actions/get-pix-payment-status";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ROUTE_HOME_CHECKOUT_SUCCESS } from "@/constants/routes";
 
@@ -21,6 +22,7 @@ interface CheckoutPixFormProps {
   packageName: string;
   priceFormatted: string;
   unlockAnalysisId?: string;
+  onRequestNewPayment?: () => void;
 }
 
 const PIX_STATUS_POLLING_MS = 5000;
@@ -33,11 +35,13 @@ export function CheckoutPixForm({
   packageName,
   priceFormatted,
   unlockAnalysisId,
+  onRequestNewPayment,
 }: CheckoutPixFormProps) {
   const [statusMessage, setStatusMessage] = useState<string>(
     "Aguardando confirmação do pagamento..."
   );
   const [copyButtonLabel, setCopyButtonLabel] = useState("Copiar código");
+  const [canRequestNewPayment, setCanRequestNewPayment] = useState(false);
   const { showErrorToastNotification, showSuccessToastNotification } =
     useToastNotification();
   const router = useRouter();
@@ -51,6 +55,7 @@ export function CheckoutPixForm({
 
   useEffect(() => {
     let cancelled = false;
+    let failureCount = 0;
 
     const checkStatus = async () => {
       const result = await getPixPaymentStatus({ paymentId });
@@ -58,6 +63,12 @@ export function CheckoutPixForm({
       if (cancelled) return;
 
       if (!result.success || !result.status) {
+        failureCount += 1;
+        if (failureCount === 1) {
+          setStatusMessage(
+            "Não foi possível verificar o status do pagamento. Vamos tentar novamente em alguns instantes."
+          );
+        }
         return;
       }
 
@@ -77,6 +88,7 @@ export function CheckoutPixForm({
         setStatusMessage(
           "PIX expirado. Gere um novo pagamento para continuar."
         );
+        setCanRequestNewPayment(true);
         return;
       }
 
@@ -84,6 +96,7 @@ export function CheckoutPixForm({
         setStatusMessage(
           "Pagamento cancelado. Gere um novo PIX para continuar."
         );
+        setCanRequestNewPayment(true);
         return;
       }
     };
@@ -170,15 +183,30 @@ export function CheckoutPixForm({
       </Card>
 
       {/* Status — positive, visible */}
-      <div className="flex flex-col gap-1.5 rounded-xl border border-border bg-muted/60 tip-banner-padding">
-        <span className="inline-flex items-center gap-2 text-small font-medium text-foreground">
-          <QrCode className="size-4 shrink-0 text-muted-foreground" />
-          {statusMessage}
-        </span>
-        {expiresAtLabel ? (
-          <span className="text-caption-leading text-muted-foreground">
-            Expira às {expiresAtLabel}
+      <div className="flex flex-col gap-3 rounded-xl border border-border bg-muted/60 tip-banner-padding">
+        <div className="flex flex-col gap-1.5">
+          <span className="inline-flex items-center gap-2 text-small font-medium text-foreground">
+            <QrCode className="size-4 shrink-0 text-muted-foreground" />
+            {statusMessage}
           </span>
+          {expiresAtLabel ? (
+            <span className="text-caption-leading text-muted-foreground">
+              Expira às {expiresAtLabel}
+            </span>
+          ) : null}
+        </div>
+
+        {canRequestNewPayment && onRequestNewPayment ? (
+          <div className="flex justify-end">
+            <Button
+              type="button"
+              variant="outline"
+              size="brand"
+              onClick={onRequestNewPayment}
+            >
+              Gerar novo PIX
+            </Button>
+          </div>
         ) : null}
       </div>
     </div>
