@@ -4,27 +4,28 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { CheckoutProvider } from "@stripe/react-stripe-js/checkout";
 import type { Appearance } from "@stripe/stripe-js";
-import { CreditCard, Clock, Loader2, QrCode, Shield } from "lucide-react";
+import { Clock, CreditCard, Loader2, QrCode, Shield } from "lucide-react";
 
+import { CheckoutPackagesGrid } from "@/components/shared/checkout-packages-grid";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
-import { cn } from "@/utils/style";
-import { CheckoutPackagesGrid } from "@/components/shared/checkout-packages-grid";
 import {
   getPackageName,
   getPackagePriceCentavos,
   type CheckoutPackageId,
 } from "@/constants/checkout-packages";
+import { useToastNotification } from "@/hooks/use-toast-notification";
 import { trackPricingViewedEvent } from "@/lib/analytics/posthog-events";
 import { stripeCheckoutPromise } from "@/lib/stripe/checkout-client";
-import { useToastNotification } from "@/hooks/use-toast-notification";
+import { cn } from "@/utils/style";
 
+import { CHECKOUT_PIX_JUST_PAID_KEY } from "../_constants/checkout";
 import {
-  type CheckoutPaymentMethod,
   useCheckoutSelectPackage,
+  type CheckoutPaymentMethod,
 } from "../_hooks/use-checkout-select-package";
-import { CheckoutPixForm } from "./checkout-pix-form";
 import { CheckoutPaymentForm } from "./checkout-payment-form";
+import { CheckoutPixForm } from "./checkout-pix-form";
 
 const checkoutAppearance: Appearance = {
   theme: "stripe",
@@ -136,13 +137,46 @@ export function CheckoutContent({
     }
   }, [unlockAnalysisId, pendingPackageId]);
 
-  const handleChooseAnotherPackage = () => {
+  const handleChooseAnotherPackage = useCallback(() => {
     setPaymentMethod(null);
     setCheckoutClientSecret(null);
     setSelectedPackageId(null);
     setPixPayment(null);
     setPendingPackageId(null);
-  };
+  }, []);
+
+  const resetFromSuccess =
+    typeof window !== "undefined" &&
+    (() => {
+      try {
+        return !!sessionStorage.getItem(CHECKOUT_PIX_JUST_PAID_KEY);
+      } catch {
+        return false;
+      }
+    })();
+
+  useEffect(() => {
+    try {
+      if (
+        typeof window !== "undefined" &&
+        sessionStorage.getItem(CHECKOUT_PIX_JUST_PAID_KEY)
+      ) {
+        sessionStorage.removeItem(CHECKOUT_PIX_JUST_PAID_KEY);
+        queueMicrotask(() => handleChooseAnotherPackage());
+      }
+    } catch {
+      // ignore
+    }
+  }, [handleChooseAnotherPackage]);
+
+  const effectivePixPayment = resetFromSuccess ? null : pixPayment;
+  const effectiveCheckoutClientSecret = resetFromSuccess
+    ? null
+    : checkoutClientSecret;
+  const effectivePendingPackageId = resetFromSuccess ? null : pendingPackageId;
+  const effectiveSelectedPackageId = resetFromSuccess
+    ? null
+    : selectedPackageId;
 
   const handleBackToPackages = () => {
     setPaymentMethod(null);
@@ -159,26 +193,30 @@ export function CheckoutContent({
       </div>
 
       <div className="flex w-content flex-col gap-10">
-        {!checkoutClientSecret && !pixPayment && pendingPackageId === null ? (
+        {!effectiveCheckoutClientSecret &&
+        !effectivePixPayment &&
+        effectivePendingPackageId === null ? (
           <CheckoutPackagesGrid
             loadingPackageId={null}
             onSelectPackage={(id) => setPendingPackageId(id)}
           />
         ) : null}
 
-        {!checkoutClientSecret && !pixPayment && pendingPackageId !== null ? (
+        {!effectiveCheckoutClientSecret &&
+        !effectivePixPayment &&
+        effectivePendingPackageId !== null ? (
           <div className="flex w-full max-w-content flex-col gap-8">
             <Card className="w-full border border-border">
               <CardContent className="flex items-center justify-between">
                 <div className="flex flex-col gap-1">
                   <CardTitle>Finalizar compra do pacote</CardTitle>
                   <span className="text-base font-semibold text-accent-brand">
-                    {getPackageName(pendingPackageId)}
+                    {getPackageName(effectivePendingPackageId)}
                   </span>
                 </div>
                 <span className="text-xl font-bold">
                   {formatCentavosToBrl(
-                    getPackagePriceCentavos(pendingPackageId)
+                    getPackagePriceCentavos(effectivePendingPackageId)
                   )}
                 </span>
               </CardContent>
@@ -204,7 +242,7 @@ export function CheckoutContent({
                   onClick={() => {
                     setPaymentMethod("pix");
                     void handleSelectPackage(
-                      pendingPackageId,
+                      effectivePendingPackageId,
                       unlockAnalysisId,
                       "pix"
                     );
@@ -227,7 +265,7 @@ export function CheckoutContent({
                     )}
                   >
                     {loadingPackageId !== null &&
-                    loadingPackageId === pendingPackageId &&
+                    loadingPackageId === effectivePendingPackageId &&
                     paymentMethod === "pix" ? (
                       <Loader2 className="size-6 animate-spin" />
                     ) : (
@@ -247,7 +285,7 @@ export function CheckoutContent({
                   onClick={() => {
                     setPaymentMethod("stripe");
                     void handleSelectPackage(
-                      pendingPackageId,
+                      effectivePendingPackageId,
                       unlockAnalysisId,
                       "stripe"
                     );
@@ -270,7 +308,7 @@ export function CheckoutContent({
                     )}
                   >
                     {loadingPackageId !== null &&
-                    loadingPackageId === pendingPackageId &&
+                    loadingPackageId === effectivePendingPackageId &&
                     paymentMethod === "stripe" ? (
                       <Loader2 className="size-6 animate-spin" />
                     ) : (
@@ -291,16 +329,17 @@ export function CheckoutContent({
           </div>
         ) : null}
 
-        {pixPayment && selectedPackageId ? (
+        {effectivePixPayment && effectiveSelectedPackageId ? (
           <CheckoutPixForm
-            paymentId={pixPayment.paymentId}
-            brCode={pixPayment.brCode}
-            brCodeBase64={pixPayment.brCodeBase64}
-            expiresAt={pixPayment.expiresAt}
-            packageName={getPackageName(selectedPackageId)}
+            paymentId={effectivePixPayment.paymentId}
+            brCode={effectivePixPayment.brCode}
+            brCodeBase64={effectivePixPayment.brCodeBase64}
+            expiresAt={effectivePixPayment.expiresAt}
+            packageName={getPackageName(effectiveSelectedPackageId)}
             priceFormatted={formatCentavosToBrl(
-              getPackagePriceCentavos(selectedPackageId)
+              getPackagePriceCentavos(effectiveSelectedPackageId)
             )}
+            unlockAnalysisId={unlockAnalysisId}
           />
         ) : !stripeCheckoutPromise ? (
           <Card className="w-full border border-border">
@@ -317,19 +356,20 @@ export function CheckoutContent({
               </p>
             </CardContent>
           </Card>
-        ) : selectedPackageId && checkoutClientSecret ? (
+        ) : effectiveSelectedPackageId && effectiveCheckoutClientSecret ? (
           <CheckoutProvider
             stripe={stripeCheckoutPromise}
             options={{
-              clientSecret: checkoutClientSecret,
+              clientSecret: effectiveCheckoutClientSecret,
               elementsOptions: {
                 appearance: checkoutAppearance,
               },
             }}
           >
             <CheckoutPaymentForm
-              packageId={selectedPackageId}
+              packageId={effectiveSelectedPackageId}
               onChooseAnotherPackage={handleChooseAnotherPackage}
+              onPaymentSuccess={handleChooseAnotherPackage}
             />
           </CheckoutProvider>
         ) : null}

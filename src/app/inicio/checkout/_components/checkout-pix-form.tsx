@@ -1,15 +1,17 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 
 import { Copy, QrCode } from "lucide-react";
 
 import { getPixPaymentStatus } from "@/app/inicio/checkout/_actions/get-pix-payment-status";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ROUTE_HOME_CHECKOUT_SUCCESS } from "@/constants/routes";
+
 import { useToastNotification } from "@/hooks/use-toast-notification";
+import { CHECKOUT_PIX_JUST_PAID_KEY } from "../_constants/checkout";
 
 interface CheckoutPixFormProps {
   paymentId: string;
@@ -61,6 +63,9 @@ export function CheckoutPixForm({
 
       if (result.status === "paid") {
         setStatusMessage("Pagamento confirmado. Redirecionando...");
+        try {
+          sessionStorage.setItem(CHECKOUT_PIX_JUST_PAID_KEY, "1");
+        } catch {}
         const successUrl = unlockAnalysisId
           ? `${ROUTE_HOME_CHECKOUT_SUCCESS}?payment_id=${paymentId}&unlock=${unlockAnalysisId}`
           : `${ROUTE_HOME_CHECKOUT_SUCCESS}?payment_id=${paymentId}`;
