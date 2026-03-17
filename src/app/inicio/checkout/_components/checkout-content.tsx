@@ -3,12 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { CheckoutProvider } from "@stripe/react-stripe-js/checkout";
-import type { Appearance } from "@stripe/stripe-js";
-import { Clock, CreditCard, Loader2, QrCode, Shield } from "lucide-react";
-
 import { CheckoutPackagesGrid } from "@/components/shared/checkout-packages-grid";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   getPackageName,
   getPackagePriceCentavos,
@@ -17,30 +13,20 @@ import {
 import { useToastNotification } from "@/hooks/use-toast-notification";
 import { trackPricingViewedEvent } from "@/lib/analytics/posthog-events";
 import { stripeCheckoutPromise } from "@/lib/stripe/checkout-client";
-import { cn } from "@/utils/style";
+import { formatCentavosToBrl } from "@/utils/currency";
 
-import { CHECKOUT_PIX_JUST_PAID_KEY } from "../_constants/checkout";
+import { CHECKOUT_STRIPE_APPEARANCE } from "../_constants/checkout";
+import { useCheckoutEffectiveState } from "../_hooks/use-checkout-effective-state";
 import {
   useCheckoutSelectPackage,
   type CheckoutPaymentMethod,
 } from "../_hooks/use-checkout-select-package";
+import { CheckoutPackageSummaryCard } from "./checkout-package-summary-card";
+import { CheckoutPageHeader } from "./checkout-page-header";
 import { CheckoutPaymentForm } from "./checkout-payment-form";
+import { CheckoutPaymentMethodSelector } from "./checkout-payment-method-selector";
 import { CheckoutPixForm } from "./checkout-pix-form";
-
-const checkoutAppearance: Appearance = {
-  theme: "stripe",
-  inputs: "spaced",
-  labels: "above",
-};
-
-const brlFormatter = new Intl.NumberFormat("pt-BR", {
-  style: "currency",
-  currency: "BRL",
-});
-
-function formatCentavosToBrl(amountCentavos: number): string {
-  return brlFormatter.format(amountCentavos / 100);
-}
+import { CheckoutTrustBadges } from "./checkout-trust-badges";
 
 interface CheckoutContentProps {
   unlockAnalysisId?: string;
@@ -122,6 +108,27 @@ export function CheckoutContent({
     onError,
   });
 
+  const handleChooseAnotherPackage = useCallback(() => {
+    setPaymentMethod(null);
+    setCheckoutClientSecret(null);
+    setSelectedPackageId(null);
+    setPixPayment(null);
+    setPendingPackageId(null);
+  }, []);
+
+  const {
+    effectivePixPayment,
+    effectiveCheckoutClientSecret,
+    effectivePendingPackageId,
+    effectiveSelectedPackageId,
+  } = useCheckoutEffectiveState({
+    pixPayment,
+    checkoutClientSecret,
+    pendingPackageId,
+    selectedPackageId,
+    onChooseAnotherPackage: handleChooseAnotherPackage,
+  });
+
   useEffect(() => {
     trackPricingViewedEvent();
   }, []);
@@ -137,199 +144,77 @@ export function CheckoutContent({
     }
   }, [unlockAnalysisId, pendingPackageId]);
 
-  const handleChooseAnotherPackage = useCallback(() => {
+  const handleBackToPackages = useCallback(() => {
     setPaymentMethod(null);
-    setCheckoutClientSecret(null);
-    setSelectedPackageId(null);
-    setPixPayment(null);
     setPendingPackageId(null);
   }, []);
 
-  const resetFromSuccess =
-    typeof window !== "undefined" &&
-    (() => {
-      try {
-        return !!sessionStorage.getItem(CHECKOUT_PIX_JUST_PAID_KEY);
-      } catch {
-        return false;
-      }
-    })();
+  const showPackages =
+    !effectiveCheckoutClientSecret &&
+    !effectivePixPayment &&
+    effectivePendingPackageId === null;
 
-  useEffect(() => {
-    try {
-      if (
-        typeof window !== "undefined" &&
-        sessionStorage.getItem(CHECKOUT_PIX_JUST_PAID_KEY)
-      ) {
-        sessionStorage.removeItem(CHECKOUT_PIX_JUST_PAID_KEY);
-        queueMicrotask(() => handleChooseAnotherPackage());
-      }
-    } catch {
-      // ignore
-    }
-  }, [handleChooseAnotherPackage]);
+  const showPaymentChoice =
+    !effectiveCheckoutClientSecret &&
+    !effectivePixPayment &&
+    effectivePendingPackageId !== null;
 
-  const effectivePixPayment = resetFromSuccess ? null : pixPayment;
-  const effectiveCheckoutClientSecret = resetFromSuccess
-    ? null
-    : checkoutClientSecret;
-  const effectivePendingPackageId = resetFromSuccess ? null : pendingPackageId;
-  const effectiveSelectedPackageId = resetFromSuccess
-    ? null
-    : selectedPackageId;
+  const showPixForm =
+    !!effectivePixPayment && effectiveSelectedPackageId !== null;
 
-  const handleBackToPackages = () => {
-    setPaymentMethod(null);
-    setPendingPackageId(null);
-  };
+  const showStripeForm =
+    !!stripeCheckoutPromise &&
+    !!effectiveSelectedPackageId &&
+    !!effectiveCheckoutClientSecret;
+
+  const showUnavailableMessage = !showPixForm && !stripeCheckoutPromise;
 
   return (
     <main className="flex w-full flex-col items-center section-gap page-padding">
-      <div className="flex w-content flex-col gap-1">
-        <h1 className="text-page-title">Comprar Análises</h1>
-        <p className="text-page-subtitle">
-          Escolha o pacote ideal para seu momento.
-        </p>
-      </div>
+      <CheckoutPageHeader />
 
       <div className="flex w-content flex-col gap-10">
-        {!effectiveCheckoutClientSecret &&
-        !effectivePixPayment &&
-        effectivePendingPackageId === null ? (
+        {showPackages ? (
           <CheckoutPackagesGrid
             loadingPackageId={null}
             onSelectPackage={(id) => setPendingPackageId(id)}
           />
         ) : null}
 
-        {!effectiveCheckoutClientSecret &&
-        !effectivePixPayment &&
-        effectivePendingPackageId !== null ? (
+        {showPaymentChoice && effectivePendingPackageId !== null ? (
           <div className="flex w-full max-w-content flex-col gap-8">
-            <Card className="w-full border border-border">
-              <CardContent className="flex items-center justify-between">
-                <div className="flex flex-col gap-1">
-                  <CardTitle>Finalizar compra do pacote</CardTitle>
-                  <span className="text-base font-semibold text-accent-brand">
-                    {getPackageName(effectivePendingPackageId)}
-                  </span>
-                </div>
-                <span className="text-xl font-bold">
-                  {formatCentavosToBrl(
-                    getPackagePriceCentavos(effectivePendingPackageId)
-                  )}
-                </span>
-              </CardContent>
-              <CardFooter className="justify-end border-t border-border pt-4">
-                <Button
-                  variant="outline"
-                  size="brand"
-                  type="button"
-                  onClick={handleBackToPackages}
-                >
-                  Escolher outro pacote
-                </Button>
-              </CardFooter>
-            </Card>
-
-            <div className="flex flex-col gap-4">
-              <h2 className="text-section-header text-foreground">
-                Como deseja pagar?
-              </h2>
-              <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setPaymentMethod("pix");
-                    void handleSelectPackage(
-                      effectivePendingPackageId,
-                      unlockAnalysisId,
-                      "pix"
-                    );
-                  }}
-                  disabled={loadingPackageId !== null}
-                  className={cn(
-                    "flex flex-col items-start gap-3 rounded-xl border-2 p-6 text-left transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60",
-                    paymentMethod === "pix"
-                      ? "border-accent-brand bg-accent-brand-light/50 shadow-sm"
-                      : "border-border bg-card hover:border-muted-foreground/40 hover:bg-muted/30"
-                  )}
-                  aria-pressed={paymentMethod === "pix"}
-                >
-                  <span
-                    className={cn(
-                      "flex size-12 items-center justify-center rounded-lg",
-                      paymentMethod === "pix"
-                        ? "bg-accent-brand text-on-accent-brand"
-                        : "bg-muted text-muted-foreground"
-                    )}
-                  >
-                    {loadingPackageId !== null &&
-                    loadingPackageId === effectivePendingPackageId &&
-                    paymentMethod === "pix" ? (
-                      <Loader2 className="size-6 animate-spin" />
-                    ) : (
-                      <QrCode className="size-6" />
-                    )}
-                  </span>
-                  <div className="flex flex-col gap-0.5">
-                    <span className="text-card-title text-foreground">PIX</span>
-                    <span className="text-small text-muted-foreground">
-                      Pagamento instantâneo via QR Code ou copia e cola
-                    </span>
-                  </div>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setPaymentMethod("stripe");
-                    void handleSelectPackage(
-                      effectivePendingPackageId,
-                      unlockAnalysisId,
-                      "stripe"
-                    );
-                  }}
-                  disabled={loadingPackageId !== null}
-                  className={cn(
-                    "flex flex-col items-start gap-3 rounded-xl border-2 p-6 text-left transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60",
-                    paymentMethod === "stripe"
-                      ? "border-accent-brand bg-accent-brand-light/50 shadow-sm"
-                      : "border-border bg-card hover:border-muted-foreground/40 hover:bg-muted/30"
-                  )}
-                  aria-pressed={paymentMethod === "stripe"}
-                >
-                  <span
-                    className={cn(
-                      "flex size-12 items-center justify-center rounded-lg",
-                      paymentMethod === "stripe"
-                        ? "bg-accent-brand text-on-accent-brand"
-                        : "bg-muted text-muted-foreground"
-                    )}
-                  >
-                    {loadingPackageId !== null &&
-                    loadingPackageId === effectivePendingPackageId &&
-                    paymentMethod === "stripe" ? (
-                      <Loader2 className="size-6 animate-spin" />
-                    ) : (
-                      <CreditCard className="size-6" />
-                    )}
-                  </span>
-                  <div className="flex flex-col gap-0.5">
-                    <span className="text-card-title text-foreground">
-                      Cartão de crédito
-                    </span>
-                    <span className="text-small text-muted-foreground">
-                      Parcelamento em até 12x no cartão
-                    </span>
-                  </div>
-                </button>
-              </div>
-            </div>
+            <CheckoutPackageSummaryCard
+              packageName={getPackageName(effectivePendingPackageId)}
+              priceFormatted={formatCentavosToBrl(
+                getPackagePriceCentavos(effectivePendingPackageId)
+              )}
+              onBack={handleBackToPackages}
+            />
+            <CheckoutPaymentMethodSelector
+              paymentMethod={paymentMethod}
+              loadingPackageId={loadingPackageId}
+              pendingPackageId={effectivePendingPackageId}
+              onSelectPix={() => {
+                setPaymentMethod("pix");
+                void handleSelectPackage(
+                  effectivePendingPackageId,
+                  unlockAnalysisId,
+                  "pix"
+                );
+              }}
+              onSelectStripe={() => {
+                setPaymentMethod("stripe");
+                void handleSelectPackage(
+                  effectivePendingPackageId,
+                  unlockAnalysisId,
+                  "stripe"
+                );
+              }}
+            />
           </div>
         ) : null}
 
-        {effectivePixPayment && effectiveSelectedPackageId ? (
+        {showPixForm && effectivePixPayment && effectiveSelectedPackageId ? (
           <CheckoutPixForm
             paymentId={effectivePixPayment.paymentId}
             brCode={effectivePixPayment.brCode}
@@ -341,7 +226,7 @@ export function CheckoutContent({
             )}
             unlockAnalysisId={unlockAnalysisId}
           />
-        ) : !stripeCheckoutPromise ? (
+        ) : showUnavailableMessage ? (
           <Card className="w-full border border-border">
             <CardContent className="pt-6">
               <p className="text-small text-muted-foreground">
@@ -356,13 +241,15 @@ export function CheckoutContent({
               </p>
             </CardContent>
           </Card>
-        ) : effectiveSelectedPackageId && effectiveCheckoutClientSecret ? (
+        ) : showStripeForm &&
+          effectiveCheckoutClientSecret &&
+          effectiveSelectedPackageId ? (
           <CheckoutProvider
             stripe={stripeCheckoutPromise}
             options={{
               clientSecret: effectiveCheckoutClientSecret,
               elementsOptions: {
-                appearance: checkoutAppearance,
+                appearance: CHECKOUT_STRIPE_APPEARANCE,
               },
             }}
           >
@@ -374,20 +261,7 @@ export function CheckoutContent({
           </CheckoutProvider>
         ) : null}
 
-        <div className="flex flex-wrap items-center justify-center gap-6 text-small text-muted-foreground">
-          <span className="inline-flex items-center gap-1.5">
-            <Clock className="size-3.5" />
-            Análises sem validade
-          </span>
-          <span className="inline-flex items-center gap-1.5">
-            <Shield className="size-3.5" />
-            Pagamento seguro
-          </span>
-          <span className="inline-flex items-center gap-1.5">
-            <CreditCard className="size-3.5" />
-            Cartão ou PIX
-          </span>
-        </div>
+        <CheckoutTrustBadges />
       </div>
     </main>
   );
