@@ -102,8 +102,6 @@ const styles = StyleSheet.create({
     marginLeft: 18,
   },
   skillItem: {
-    flexDirection: "row",
-    flexWrap: "wrap",
     marginBottom: space.sm,
     fontSize: 10,
   },
@@ -116,11 +114,6 @@ const styles = StyleSheet.create({
   skillCategoryLabel: {
     fontWeight: "bold",
     color: colors.foreground,
-  },
-  skillCategoryItemsWrap: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    flex: 1,
   },
   skillCategoryItems: {
     color: colors.foreground,
@@ -266,21 +259,15 @@ export function ResumeDocument({ data }: ResumeDocumentProps) {
                         : []),
                     ]}
                   >
-                    <Text style={styles.skillBullet}>• </Text>
-                    <Text style={styles.skillCategoryLabel}>
-                      {cat.category}:{" "}
+                    <Text>
+                      <Text style={styles.skillBullet}>• </Text>
+                      <Text style={styles.skillCategoryLabel}>
+                        {cat.category}:{" "}
+                      </Text>
+                      <Text style={styles.skillCategoryItems}>
+                        {cat.items.join(", ")}
+                      </Text>
                     </Text>
-                    <View style={styles.skillCategoryItemsWrap}>
-                      {cat.items.map((item, j) => (
-                        <Text
-                          key={`${cat.category}-${j}`}
-                          style={styles.skillCategoryItems}
-                        >
-                          {item}
-                          {j < cat.items.length - 1 ? ", " : ""}
-                        </Text>
-                      ))}
-                    </View>
                   </View>
                 ))}
               </View>

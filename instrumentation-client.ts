@@ -10,4 +10,5 @@ posthog.init(POSTHOG_TOKEN, {
   api_host: "/ph",
   ui_host: "https://us.posthog.com",
   defaults: "2026-01-30",
+  opt_out_capturing_by_default: true,
 });

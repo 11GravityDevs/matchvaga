@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 
-import { Analytics } from "@vercel/analytics/next";
-
 import { CookieConsent } from "@/components/shared/cookie-consent";
 import { QueryProvider } from "@/components/providers/query-provider";
 import { ToastProvider } from "@/components/providers/toast-provider";
@@ -83,7 +81,6 @@ export default function RootLayout({
               <UnsavedChangesProvider>
                 {children}
                 <CookieConsent />
-                <Analytics />
               </UnsavedChangesProvider>
             </ToastProvider>
           </AuthProvider>

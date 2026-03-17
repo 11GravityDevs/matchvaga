@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Logo } from "@/components/shared/logo";
+import { SUPPORT_EMAIL } from "@/constants/contact";
 
 const LEGAL_LINKS = [
   { label: "Termos de Serviço", href: "/termos-de-servico" },
@@ -30,6 +31,12 @@ export function LandingFooter() {
         </nav>
 
         <div className="flex flex-col items-center gap-6">
+          <a
+            href={`mailto:${SUPPORT_EMAIL}`}
+            className="text-small text-footer-muted transition-colors hover:text-white focus-visible:rounded-md focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-footer-bg focus-visible:outline-none"
+          >
+            {SUPPORT_EMAIL}
+          </a>
           <span className="text-center text-small text-footer-muted-subtle">
             © 2026 MatchVaga. Todos os direitos reservados.
           </span>
