@@ -13,15 +13,15 @@ export function FinalCTASection() {
           </h2>
 
           <p className="max-w-cta-desc text-center text-base leading-normal text-white/80 md:text-lg">
-            Junte-se a mais de 12.000 candidatos que já transformaram sua busca
-            por emprego.
+            Faça agora a análise do seu currículo agora e veja o que está
+            segurando suas chances de conseguir um emprego.
           </p>
 
           <FinalCtaButton />
 
           <p className="text-center text-small text-white/60">
-            Sem cartão de crédito &nbsp;&bull;&nbsp; Cancele quando quiser
-            &nbsp;&bull;&nbsp; Setup em 30 segundos
+            Sem assinaturas &nbsp;&bull;&nbsp; Análises não expiram
+            &nbsp;&bull;&nbsp; Aceitamos PIX e cartão
           </p>
         </div>
       </AnimateOnScroll>

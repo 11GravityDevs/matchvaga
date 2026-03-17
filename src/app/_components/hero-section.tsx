@@ -29,8 +29,8 @@ export function HeroSection() {
           className="animate-fade-up max-w-hero-desc text-center text-base leading-relaxed text-muted-foreground md:text-lg"
           style={{ animationDelay: "160ms" }}
         >
-          O MatchVaga adapta seu currículo automaticamente para cada vaga,
-          otimiza para ATS e gera mensagens de apresentação —{" "}
+          O MatchVaga adapta seu currículo automaticamente para cada vaga e
+          otimiza para os robôs de triagem —{" "}
           <span className="font-semibold text-accent-brand">
             tudo em segundos
           </span>

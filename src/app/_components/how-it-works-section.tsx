@@ -11,19 +11,19 @@ const STEPS: Step[] = [
     number: "1",
     title: "Suba seu currículo",
     description:
-      "Faça upload do seu currículo ou perfil LinkedIn. Nossa IA analisa suas competências, experiências e formação.",
+      "Faça upload do seu currículo ou preencha as informações manualmente. Nossa IA analisa suas competências, experiências e formação.",
   },
   {
     number: "2",
     title: "Cole a vaga desejada",
     description:
-      "Cole o link ou descrição da vaga. A IA identifica palavras-chave, requisitos e competências que o ATS procura.",
+      "Copie e cole a descrição da vaga. A IA identifica palavras-chave, requisitos e competências que os robôs procuram.",
   },
   {
     number: "3",
     title: "Receba tudo pronto",
     description:
-      "Em segundos, receba currículo adaptado, carta de apresentação e mensagem de abordagem — tudo otimizado para ATS.",
+      "Em segundos, receba currículo adaptado — tudo otimizado para aumentar suas chances de passar pelo ATS.",
   },
 ];
 

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 
@@ -25,6 +26,10 @@ export function FAQSection() {
           <h2 className="text-center text-section-header-large">
             Perguntas frequentes
           </h2>
+          <p className="max-w-section-desc text-center text-base leading-normal text-muted-foreground">
+            Tudo o que você precisa saber sobre funcionamento, análises,
+            segurança e resultados antes de começar.
+          </p>
         </div>
       </AnimateOnScroll>
 
@@ -75,8 +80,22 @@ export function FAQSection() {
                   style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}
                 >
                   <div className="overflow-hidden">
-                    <p className="pt-2 pb-6 text-sm leading-relaxed text-muted-foreground">
+                    <p className="pb-6 text-sm leading-relaxed text-muted-foreground">
                       {item.answer}
+                      {item.linkHref && item.linkLabel ? (
+                        <>
+                          {" "}
+                          <Link
+                            href={item.linkHref}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="font-medium text-accent-brand underline underline-offset-4 transition-colors hover:text-accent-brand-hover"
+                          >
+                            {item.linkLabel}
+                          </Link>
+                          .
+                        </>
+                      ) : null}
                     </p>
                   </div>
                 </div>

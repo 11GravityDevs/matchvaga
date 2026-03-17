@@ -1,6 +1,6 @@
 import {
+  Gauge,
   History,
-  Languages,
   LayoutTemplate,
   Lock,
   ShieldCheck,
@@ -33,24 +33,24 @@ const FEATURES_COL_1: SecondaryFeature[] = [
     iconBg: "bg-accent-purple-light",
     title: "Múltiplos Formatos",
     description:
-      "Exporte em PDF, DOCX ou copie direto para plataformas de candidatura.",
+      "Exporte em PDF e DOCX, facilitando sua candidatura ao máximo.",
   },
 ];
 
 const FEATURES_COL_2: SecondaryFeature[] = [
   {
-    icon: <Languages className="size-5.5 text-accent-success" />,
+    icon: <Gauge className="size-5.5 text-accent-success" />,
     iconBg: "bg-accent-success-light",
-    title: "Multilíngue",
+    title: "Score de Compatibilidade",
     description:
-      "Gere currículos e mensagens em português, inglês, espanhol e outros idiomas.",
+      "Veja rapidamente o quanto seu currículo está alinhado com a vaga antes de gerar a versão otimizada.",
   },
   {
     icon: <History className="size-5.5 text-accent-pink" />,
     iconBg: "bg-accent-pink-light",
     title: "Histórico Completo",
     description:
-      "Acompanhe todas suas candidaturas, versões de currículo e análises em um só lugar.",
+      "Acompanhe todas suas análises e currículos adaptados em um só lugar.",
   },
 ];
 
@@ -60,7 +60,7 @@ const FEATURES_COL_3: SecondaryFeature[] = [
     iconBg: "bg-accent-warning-light",
     title: "Economia de Tempo",
     description:
-      "Reduza horas de trabalho manual para menos de 2 minutos por candidatura.",
+      "Reduza drasticamente seu trabalho manual para menos de 2 minutos por candidatura.",
   },
   {
     icon: <Lock className="size-5.5 text-destructive" />,
@@ -97,7 +97,7 @@ export function SecondaryFeaturesSection() {
             RECURSOS EXTRAS
           </span>
           <h2 className="text-center text-section-header-large">
-            E muito mais para acelerar sua busca
+            Muito mais para acelerar sua busca
           </h2>
           <p className="text-center text-base leading-normal text-muted-foreground">
             Cada detalhe pensado para maximizar suas chances de conseguir a

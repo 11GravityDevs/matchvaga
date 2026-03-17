@@ -76,7 +76,8 @@ export function PricingSection() {
               Preços que cabem no seu bolso
             </h2>
             <p className="text-center text-base leading-normal text-muted-foreground">
-              Comece grátis. Faça upgrade quando estiver pronto.
+              Pague apenas pelo que usar, sem assinatura. Aceitamos PIX e cartão
+              de crédito.
             </p>
           </div>
         </AnimateOnScroll>

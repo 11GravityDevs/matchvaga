@@ -1,6 +1,7 @@
 import { Star } from "lucide-react";
 
 import { AnimateOnScroll } from "./animate-on-scroll";
+import { BrandName } from "@/components/shared/brand-name";
 
 interface Testimonial {
   quote: string;
@@ -64,8 +65,8 @@ export function SocialProofSection() {
             O que nossos usuários dizem
           </h2>
           <p className="max-w-section-desc text-center text-base leading-normal text-muted-foreground">
-            Junte-se a milhares de candidatos que já transformaram sua busca por
-            emprego.
+            Junte-se aos candidatos que já transformaram sua busca por emprego e
+            sairam na frente com o <BrandName />.
           </p>
         </div>
       </AnimateOnScroll>

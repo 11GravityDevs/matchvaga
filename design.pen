@@ -37,7 +37,9 @@
               "y": 8
             },
             "sZhEB/C6wBE": {
-              "fill": "$--primary"
+              "fill": "$--primary",
+              "x": 8,
+              "y": 12
             },
             "sZhEB/4gWgK": {
               "fill": "$--primary-foreground",
@@ -45,7 +47,9 @@
               "y": 8
             },
             "sZhEB/S3ueh": {
-              "fill": "$--sidebar-foreground"
+              "fill": "$--sidebar-foreground",
+              "x": 48,
+              "y": 18.5
             },
             "4X3cr": {
               "width": "fill_container",
@@ -53,53 +57,185 @@
               "x": 8,
               "y": 80
             },
+            "LvXSP": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 0
+            },
             "LvXSP/aGSN7": {
-              "fill": "$--muted-foreground"
+              "fill": "$--muted-foreground",
+              "width": "fill_container",
+              "x": 8,
+              "y": 8
+            },
+            "Stfyo": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 36
+            },
+            "Stfyo/TXtrD": {
+              "width": "fit_content",
+              "height": "fit_content",
+              "x": 8,
+              "y": 6
+            },
+            "Stfyo/OEX0N": {
+              "y": 2
             },
             "Stfyo/YnGDl": {
               "fill": "#2563EB"
             },
             "Stfyo/rDCJ6": {
-              "fill": "#2563EB"
+              "fill": "#2563EB",
+              "x": 24
+            },
+            "Stfyo/9XzSB": {
+              "x": 232,
+              "y": 16
             },
             "Stfyo/ZqFUP": {
               "fill": "#2563EB"
+            },
+            "fv3SQ": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 72
+            },
+            "fv3SQ/OOsGF": {
+              "width": "fit_content",
+              "height": "fit_content",
+              "x": 8,
+              "y": 6
+            },
+            "fv3SQ/7hQtA": {
+              "y": 2
             },
             "fv3SQ/UySoK": {
               "fill": "$--muted-foreground"
             },
             "fv3SQ/aRd6z": {
-              "fill": "$--sidebar-foreground"
+              "fill": "$--sidebar-foreground",
+              "x": 24
+            },
+            "fv3SQ/unGe6": {
+              "x": 232,
+              "y": 16
             },
             "fv3SQ/i9cB2": {
               "fill": "$--muted-foreground"
+            },
+            "HDqYS": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 108
+            },
+            "HDqYS/OOsGF": {
+              "width": "fit_content",
+              "height": "fit_content",
+              "x": 8,
+              "y": 6
+            },
+            "HDqYS/7hQtA": {
+              "y": 2
             },
             "HDqYS/UySoK": {
               "fill": "$--muted-foreground"
             },
             "HDqYS/aRd6z": {
-              "fill": "$--sidebar-foreground"
+              "fill": "$--sidebar-foreground",
+              "x": 24
+            },
+            "HDqYS/unGe6": {
+              "x": 232,
+              "y": 16
             },
             "HDqYS/i9cB2": {
               "fill": "$--muted-foreground"
             },
+            "j64BN": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 144
+            },
+            "j64BN/cMzGl": {
+              "width": "fill_container",
+              "height": "fit_content",
+              "x": 12,
+              "y": 12
+            },
+            "j64BN/IrzWW": {
+              "width": "fit_content",
+              "height": "fit_content"
+            },
+            "j64BN/mXSmJ": {
+              "y": 0
+            },
+            "j64BN/0a69y": {
+              "x": 22
+            },
+            "j64BN/YEwUo": {
+              "x": 165,
+              "y": 0.5
+            },
+            "j64BN/ti2bA": {
+              "width": "fill_container",
+              "x": 12,
+              "y": 38
+            },
+            "6ulUc": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 202
+            },
+            "6ulUc/pg2jQ": {
+              "x": 16,
+              "y": 16
+            },
+            "6ulUc/67QZI": {
+              "x": 16,
+              "y": 52
+            },
+            "6ulUc/34Spk": {
+              "width": "fill_container",
+              "x": 16,
+              "y": 81
+            },
+            "6ulUc/hQ2ug": {
+              "width": "fill_container",
+              "height": "fit_content",
+              "x": 16,
+              "y": 123
+            },
+            "6ulUc/Ol2oE": {
+              "x": 69.5,
+              "y": 6
+            },
             "sYIjn": {
               "fill": "$--sidebar",
               "x": 8,
-              "y": 836
+              "y": 836,
+              "height": "fit_content"
             },
             "sYIjn/UFe2G": {
               "x": 8,
-              "y": 8
+              "y": 8,
+              "width": "fit_content",
+              "height": "fit_content"
             },
             "sYIjn/I3H6n": {
               "fill": "$--foreground"
+            },
+            "sYIjn/35q36": {
+              "width": "fit_content",
+              "height": "fit_content",
+              "x": 48
             },
             "sYIjn/EJG3d": {
               "fill": "$--sidebar-foreground"
             },
             "sYIjn/1Np6g": {
-              "fill": "$--sidebar-foreground"
+              "fill": "$--sidebar-foreground",
+              "y": 20
             },
             "sYIjn/nx1S6": {
               "fill": "$--muted-foreground",
@@ -1551,7 +1687,9 @@
               "y": 8
             },
             "sZhEB/C6wBE": {
-              "fill": "$--primary"
+              "fill": "$--primary",
+              "x": 8,
+              "y": 12
             },
             "sZhEB/4gWgK": {
               "fill": "$--primary-foreground",
@@ -1559,7 +1697,9 @@
               "y": 8
             },
             "sZhEB/S3ueh": {
-              "fill": "$--sidebar-foreground"
+              "fill": "$--sidebar-foreground",
+              "x": 48,
+              "y": 18.5
             },
             "4X3cr": {
               "width": "fill_container",
@@ -1567,53 +1707,185 @@
               "x": 8,
               "y": 80
             },
+            "LvXSP": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 0
+            },
             "LvXSP/aGSN7": {
-              "fill": "$--muted-foreground"
+              "fill": "$--muted-foreground",
+              "width": "fill_container",
+              "x": 8,
+              "y": 8
+            },
+            "Stfyo": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 36
+            },
+            "Stfyo/TXtrD": {
+              "width": "fit_content",
+              "height": "fit_content",
+              "x": 8,
+              "y": 6
+            },
+            "Stfyo/OEX0N": {
+              "y": 2
             },
             "Stfyo/YnGDl": {
               "fill": "#2563EB"
             },
             "Stfyo/rDCJ6": {
-              "fill": "#2563EB"
+              "fill": "#2563EB",
+              "x": 24
+            },
+            "Stfyo/9XzSB": {
+              "x": 232,
+              "y": 16
             },
             "Stfyo/ZqFUP": {
               "fill": "#2563EB"
+            },
+            "fv3SQ": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 72
+            },
+            "fv3SQ/OOsGF": {
+              "width": "fit_content",
+              "height": "fit_content",
+              "x": 8,
+              "y": 6
+            },
+            "fv3SQ/7hQtA": {
+              "y": 2
             },
             "fv3SQ/UySoK": {
               "fill": "$--muted-foreground"
             },
             "fv3SQ/aRd6z": {
-              "fill": "$--sidebar-foreground"
+              "fill": "$--sidebar-foreground",
+              "x": 24
+            },
+            "fv3SQ/unGe6": {
+              "x": 232,
+              "y": 16
             },
             "fv3SQ/i9cB2": {
               "fill": "$--muted-foreground"
+            },
+            "HDqYS": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 108
+            },
+            "HDqYS/OOsGF": {
+              "width": "fit_content",
+              "height": "fit_content",
+              "x": 8,
+              "y": 6
+            },
+            "HDqYS/7hQtA": {
+              "y": 2
             },
             "HDqYS/UySoK": {
               "fill": "$--muted-foreground"
             },
             "HDqYS/aRd6z": {
-              "fill": "$--sidebar-foreground"
+              "fill": "$--sidebar-foreground",
+              "x": 24
+            },
+            "HDqYS/unGe6": {
+              "x": 232,
+              "y": 16
             },
             "HDqYS/i9cB2": {
               "fill": "$--muted-foreground"
             },
+            "j64BN": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 144
+            },
+            "j64BN/cMzGl": {
+              "width": "fill_container",
+              "height": "fit_content",
+              "x": 12,
+              "y": 12
+            },
+            "j64BN/IrzWW": {
+              "width": "fit_content",
+              "height": "fit_content"
+            },
+            "j64BN/mXSmJ": {
+              "y": 0
+            },
+            "j64BN/0a69y": {
+              "x": 22
+            },
+            "j64BN/YEwUo": {
+              "x": 165,
+              "y": 0.5
+            },
+            "j64BN/ti2bA": {
+              "width": "fill_container",
+              "x": 12,
+              "y": 38
+            },
+            "6ulUc": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 202
+            },
+            "6ulUc/pg2jQ": {
+              "x": 16,
+              "y": 16
+            },
+            "6ulUc/67QZI": {
+              "x": 16,
+              "y": 52
+            },
+            "6ulUc/34Spk": {
+              "width": "fill_container",
+              "x": 16,
+              "y": 81
+            },
+            "6ulUc/hQ2ug": {
+              "width": "fill_container",
+              "height": "fit_content",
+              "x": 16,
+              "y": 123
+            },
+            "6ulUc/Ol2oE": {
+              "x": 69.5,
+              "y": 6
+            },
             "sYIjn": {
               "fill": "$--sidebar",
               "x": 8,
-              "y": 836
+              "y": 836,
+              "height": "fit_content"
             },
             "sYIjn/UFe2G": {
               "x": 8,
-              "y": 8
+              "y": 8,
+              "width": "fit_content",
+              "height": "fit_content"
             },
             "sYIjn/I3H6n": {
               "fill": "$--foreground"
+            },
+            "sYIjn/35q36": {
+              "width": "fit_content",
+              "height": "fit_content",
+              "x": 48
             },
             "sYIjn/EJG3d": {
               "fill": "$--sidebar-foreground"
             },
             "sYIjn/1Np6g": {
-              "fill": "$--sidebar-foreground"
+              "fill": "$--sidebar-foreground",
+              "y": 20
             },
             "sYIjn/nx1S6": {
               "fill": "$--muted-foreground",
@@ -4606,7 +4878,9 @@
               "y": 8
             },
             "sZhEB/C6wBE": {
-              "fill": "$--primary"
+              "fill": "$--primary",
+              "x": 8,
+              "y": 12
             },
             "sZhEB/4gWgK": {
               "fill": "$--primary-foreground",
@@ -4614,7 +4888,9 @@
               "y": 8
             },
             "sZhEB/S3ueh": {
-              "fill": "$--sidebar-foreground"
+              "fill": "$--sidebar-foreground",
+              "x": 48,
+              "y": 18.5
             },
             "4X3cr": {
               "width": "fill_container",
@@ -4622,15 +4898,35 @@
               "x": 8,
               "y": 80
             },
+            "LvXSP": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 0
+            },
             "LvXSP/aGSN7": {
-              "fill": "$--muted-foreground"
+              "fill": "$--muted-foreground",
+              "width": "fill_container",
+              "x": 8,
+              "y": 8
             },
             "Stfyo": {
               "fill": "transparent",
               "stroke": {
                 "align": "inside",
                 "thickness": 0
-              }
+              },
+              "height": "fit_content",
+              "x": 4,
+              "y": 36
+            },
+            "Stfyo/TXtrD": {
+              "width": "fit_content",
+              "height": "fit_content",
+              "x": 8,
+              "y": 6
+            },
+            "Stfyo/OEX0N": {
+              "y": 2
             },
             "Stfyo/YnGDl": {
               "iconFontName": "search",
@@ -4639,7 +4935,12 @@
             "Stfyo/rDCJ6": {
               "content": "Nova Análise",
               "fill": "$--sidebar-foreground",
-              "fontWeight": "normal"
+              "fontWeight": "normal",
+              "x": 24
+            },
+            "Stfyo/9XzSB": {
+              "x": 232,
+              "y": 16
             },
             "Stfyo/ZqFUP": {
               "fill": "#2563EB"
@@ -4652,11 +4953,19 @@
                   "left": 2
                 },
                 "fill": "#2563EB"
-              }
+              },
+              "height": "fit_content",
+              "x": 4,
+              "y": 72
             },
             "fv3SQ/OOsGF": {
               "x": 8,
-              "y": 6
+              "y": 6,
+              "width": "fit_content",
+              "height": "fit_content"
+            },
+            "fv3SQ/7hQtA": {
+              "y": 2
             },
             "fv3SQ/UySoK": {
               "iconFontName": "layout-dashboard",
@@ -4665,7 +4974,8 @@
             "fv3SQ/aRd6z": {
               "content": "Dashboard",
               "fill": "#2563EB",
-              "fontWeight": "600"
+              "fontWeight": "600",
+              "x": 24
             },
             "fv3SQ/unGe6": {
               "x": 232,
@@ -4674,32 +4984,118 @@
             "fv3SQ/i9cB2": {
               "fill": "$--muted-foreground"
             },
+            "HDqYS": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 108
+            },
+            "HDqYS/OOsGF": {
+              "width": "fit_content",
+              "height": "fit_content",
+              "x": 8,
+              "y": 6
+            },
+            "HDqYS/7hQtA": {
+              "y": 2
+            },
             "HDqYS/UySoK": {
               "fill": "$--muted-foreground"
             },
             "HDqYS/aRd6z": {
-              "fill": "$--sidebar-foreground"
+              "fill": "$--sidebar-foreground",
+              "x": 24
+            },
+            "HDqYS/unGe6": {
+              "x": 232,
+              "y": 16
             },
             "HDqYS/i9cB2": {
               "fill": "$--muted-foreground"
             },
+            "j64BN": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 144
+            },
+            "j64BN/cMzGl": {
+              "width": "fill_container",
+              "height": "fit_content",
+              "x": 12,
+              "y": 12
+            },
+            "j64BN/IrzWW": {
+              "width": "fit_content",
+              "height": "fit_content"
+            },
+            "j64BN/mXSmJ": {
+              "y": 0
+            },
+            "j64BN/0a69y": {
+              "x": 22
+            },
+            "j64BN/YEwUo": {
+              "x": 165,
+              "y": 0.5
+            },
+            "j64BN/ti2bA": {
+              "width": "fill_container",
+              "x": 12,
+              "y": 38
+            },
+            "6ulUc": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 202
+            },
+            "6ulUc/pg2jQ": {
+              "x": 16,
+              "y": 16
+            },
+            "6ulUc/67QZI": {
+              "x": 16,
+              "y": 52
+            },
+            "6ulUc/34Spk": {
+              "width": "fill_container",
+              "x": 16,
+              "y": 81
+            },
+            "6ulUc/hQ2ug": {
+              "width": "fill_container",
+              "height": "fit_content",
+              "x": 16,
+              "y": 123
+            },
+            "6ulUc/Ol2oE": {
+              "x": 69.5,
+              "y": 6
+            },
             "sYIjn": {
               "fill": "$--sidebar",
               "x": 8,
-              "y": 836
+              "y": 836,
+              "height": "fit_content"
             },
             "sYIjn/UFe2G": {
               "x": 8,
-              "y": 8
+              "y": 8,
+              "width": "fit_content",
+              "height": "fit_content"
             },
             "sYIjn/I3H6n": {
               "fill": "$--foreground"
+            },
+            "sYIjn/35q36": {
+              "width": "fit_content",
+              "height": "fit_content",
+              "x": 48
             },
             "sYIjn/EJG3d": {
               "fill": "$--sidebar-foreground"
             },
             "sYIjn/1Np6g": {
-              "fill": "$--sidebar-foreground"
+              "fill": "$--sidebar-foreground",
+              "y": 20
             },
             "sYIjn/nx1S6": {
               "fill": "$--muted-foreground",
@@ -6510,7 +6906,9 @@
               "y": 8
             },
             "sZhEB/C6wBE": {
-              "fill": "$--primary"
+              "fill": "$--primary",
+              "x": 8,
+              "y": 12
             },
             "sZhEB/4gWgK": {
               "fill": "$--primary-foreground",
@@ -6518,7 +6916,9 @@
               "y": 8
             },
             "sZhEB/S3ueh": {
-              "fill": "$--sidebar-foreground"
+              "fill": "$--sidebar-foreground",
+              "x": 48,
+              "y": 18.5
             },
             "4X3cr": {
               "width": "fill_container",
@@ -6526,15 +6926,35 @@
               "x": 8,
               "y": 80
             },
+            "LvXSP": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 0
+            },
             "LvXSP/aGSN7": {
-              "fill": "$--muted-foreground"
+              "fill": "$--muted-foreground",
+              "width": "fill_container",
+              "x": 8,
+              "y": 8
             },
             "Stfyo": {
               "fill": "transparent",
               "stroke": {
                 "align": "inside",
                 "thickness": 0
-              }
+              },
+              "height": "fit_content",
+              "x": 4,
+              "y": 36
+            },
+            "Stfyo/TXtrD": {
+              "width": "fit_content",
+              "height": "fit_content",
+              "x": 8,
+              "y": 6
+            },
+            "Stfyo/OEX0N": {
+              "y": 2
             },
             "Stfyo/YnGDl": {
               "iconFontName": "search",
@@ -6543,10 +6963,29 @@
             "Stfyo/rDCJ6": {
               "content": "Nova Análise",
               "fill": "$--sidebar-foreground",
-              "fontWeight": "normal"
+              "fontWeight": "normal",
+              "x": 24
+            },
+            "Stfyo/9XzSB": {
+              "x": 232,
+              "y": 16
             },
             "Stfyo/ZqFUP": {
               "fill": "#2563EB"
+            },
+            "fv3SQ": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 72
+            },
+            "fv3SQ/OOsGF": {
+              "width": "fit_content",
+              "height": "fit_content",
+              "x": 8,
+              "y": 6
+            },
+            "fv3SQ/7hQtA": {
+              "y": 2
             },
             "fv3SQ/UySoK": {
               "iconFontName": "layout-dashboard",
@@ -6554,10 +6993,29 @@
             },
             "fv3SQ/aRd6z": {
               "content": "Dashboard",
-              "fill": "$--sidebar-foreground"
+              "fill": "$--sidebar-foreground",
+              "x": 24
+            },
+            "fv3SQ/unGe6": {
+              "x": 232,
+              "y": 16
             },
             "fv3SQ/i9cB2": {
               "fill": "$--muted-foreground"
+            },
+            "HDqYS": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 108
+            },
+            "HDqYS/OOsGF": {
+              "width": "fit_content",
+              "height": "fit_content",
+              "x": 8,
+              "y": 6
+            },
+            "HDqYS/7hQtA": {
+              "y": 2
             },
             "HDqYS/UySoK": {
               "iconFontName": "file-text",
@@ -6566,28 +7024,100 @@
             "HDqYS/aRd6z": {
               "content": "Meu Curriculo",
               "fill": "#2563EB",
-              "fontWeight": "600"
+              "fontWeight": "600",
+              "x": 24
+            },
+            "HDqYS/unGe6": {
+              "x": 232,
+              "y": 16
             },
             "HDqYS/i9cB2": {
               "fill": "$--muted-foreground"
             },
+            "j64BN": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 144
+            },
+            "j64BN/cMzGl": {
+              "width": "fill_container",
+              "height": "fit_content",
+              "x": 12,
+              "y": 12
+            },
+            "j64BN/IrzWW": {
+              "width": "fit_content",
+              "height": "fit_content"
+            },
+            "j64BN/mXSmJ": {
+              "y": 0
+            },
+            "j64BN/0a69y": {
+              "x": 22
+            },
+            "j64BN/YEwUo": {
+              "x": 165,
+              "y": 0.5
+            },
+            "j64BN/ti2bA": {
+              "width": "fill_container",
+              "x": 12,
+              "y": 38
+            },
+            "6ulUc": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 202
+            },
+            "6ulUc/pg2jQ": {
+              "x": 16,
+              "y": 16
+            },
+            "6ulUc/67QZI": {
+              "x": 16,
+              "y": 52
+            },
+            "6ulUc/34Spk": {
+              "width": "fill_container",
+              "x": 16,
+              "y": 81
+            },
+            "6ulUc/hQ2ug": {
+              "width": "fill_container",
+              "height": "fit_content",
+              "x": 16,
+              "y": 123
+            },
+            "6ulUc/Ol2oE": {
+              "x": 69.5,
+              "y": 6
+            },
             "sYIjn": {
               "fill": "$--sidebar",
               "x": 8,
-              "y": 1416
+              "y": 1416,
+              "height": "fit_content"
             },
             "sYIjn/UFe2G": {
               "x": 8,
-              "y": 8
+              "y": 8,
+              "width": "fit_content",
+              "height": "fit_content"
             },
             "sYIjn/I3H6n": {
               "fill": "$--foreground"
+            },
+            "sYIjn/35q36": {
+              "width": "fit_content",
+              "height": "fit_content",
+              "x": 48
             },
             "sYIjn/EJG3d": {
               "fill": "$--sidebar-foreground"
             },
             "sYIjn/1Np6g": {
-              "fill": "$--sidebar-foreground"
+              "fill": "$--sidebar-foreground",
+              "y": 20
             },
             "sYIjn/nx1S6": {
               "fill": "$--muted-foreground",
@@ -7983,7 +8513,9 @@
               "y": 8
             },
             "sZhEB/C6wBE": {
-              "fill": "$--primary"
+              "fill": "$--primary",
+              "x": 8,
+              "y": 12
             },
             "sZhEB/4gWgK": {
               "fill": "$--primary-foreground",
@@ -7991,7 +8523,9 @@
               "y": 8
             },
             "sZhEB/S3ueh": {
-              "fill": "$--sidebar-foreground"
+              "fill": "$--sidebar-foreground",
+              "x": 48,
+              "y": 18.5
             },
             "4X3cr": {
               "width": "fill_container",
@@ -7999,53 +8533,185 @@
               "x": 8,
               "y": 80
             },
+            "LvXSP": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 0
+            },
             "LvXSP/aGSN7": {
-              "fill": "$--muted-foreground"
+              "fill": "$--muted-foreground",
+              "width": "fill_container",
+              "x": 8,
+              "y": 8
+            },
+            "Stfyo": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 36
+            },
+            "Stfyo/TXtrD": {
+              "width": "fit_content",
+              "height": "fit_content",
+              "x": 8,
+              "y": 6
+            },
+            "Stfyo/OEX0N": {
+              "y": 2
             },
             "Stfyo/YnGDl": {
               "fill": "#2563EB"
             },
             "Stfyo/rDCJ6": {
-              "fill": "#2563EB"
+              "fill": "#2563EB",
+              "x": 24
+            },
+            "Stfyo/9XzSB": {
+              "x": 232,
+              "y": 16
             },
             "Stfyo/ZqFUP": {
               "fill": "#2563EB"
+            },
+            "fv3SQ": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 72
+            },
+            "fv3SQ/OOsGF": {
+              "width": "fit_content",
+              "height": "fit_content",
+              "x": 8,
+              "y": 6
+            },
+            "fv3SQ/7hQtA": {
+              "y": 2
             },
             "fv3SQ/UySoK": {
               "fill": "$--muted-foreground"
             },
             "fv3SQ/aRd6z": {
-              "fill": "$--sidebar-foreground"
+              "fill": "$--sidebar-foreground",
+              "x": 24
+            },
+            "fv3SQ/unGe6": {
+              "x": 232,
+              "y": 16
             },
             "fv3SQ/i9cB2": {
               "fill": "$--muted-foreground"
+            },
+            "HDqYS": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 108
+            },
+            "HDqYS/OOsGF": {
+              "width": "fit_content",
+              "height": "fit_content",
+              "x": 8,
+              "y": 6
+            },
+            "HDqYS/7hQtA": {
+              "y": 2
             },
             "HDqYS/UySoK": {
               "fill": "$--muted-foreground"
             },
             "HDqYS/aRd6z": {
-              "fill": "$--sidebar-foreground"
+              "fill": "$--sidebar-foreground",
+              "x": 24
+            },
+            "HDqYS/unGe6": {
+              "x": 232,
+              "y": 16
             },
             "HDqYS/i9cB2": {
               "fill": "$--muted-foreground"
             },
+            "j64BN": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 144
+            },
+            "j64BN/cMzGl": {
+              "width": "fill_container",
+              "height": "fit_content",
+              "x": 12,
+              "y": 12
+            },
+            "j64BN/IrzWW": {
+              "width": "fit_content",
+              "height": "fit_content"
+            },
+            "j64BN/mXSmJ": {
+              "y": 0
+            },
+            "j64BN/0a69y": {
+              "x": 22
+            },
+            "j64BN/YEwUo": {
+              "x": 165,
+              "y": 0.5
+            },
+            "j64BN/ti2bA": {
+              "width": "fill_container",
+              "x": 12,
+              "y": 38
+            },
+            "6ulUc": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 202
+            },
+            "6ulUc/pg2jQ": {
+              "x": 16,
+              "y": 16
+            },
+            "6ulUc/67QZI": {
+              "x": 16,
+              "y": 52
+            },
+            "6ulUc/34Spk": {
+              "width": "fill_container",
+              "x": 16,
+              "y": 81
+            },
+            "6ulUc/hQ2ug": {
+              "width": "fill_container",
+              "height": "fit_content",
+              "x": 16,
+              "y": 123
+            },
+            "6ulUc/Ol2oE": {
+              "x": 69.5,
+              "y": 6
+            },
             "sYIjn": {
               "fill": "$--sidebar",
               "x": 8,
-              "y": 836
+              "y": 836,
+              "height": "fit_content"
             },
             "sYIjn/UFe2G": {
               "x": 8,
-              "y": 8
+              "y": 8,
+              "width": "fit_content",
+              "height": "fit_content"
             },
             "sYIjn/I3H6n": {
               "fill": "$--foreground"
+            },
+            "sYIjn/35q36": {
+              "width": "fit_content",
+              "height": "fit_content",
+              "x": 48
             },
             "sYIjn/EJG3d": {
               "fill": "$--sidebar-foreground"
             },
             "sYIjn/1Np6g": {
-              "fill": "$--sidebar-foreground"
+              "fill": "$--sidebar-foreground",
+              "y": 20
             },
             "sYIjn/nx1S6": {
               "fill": "$--muted-foreground",
@@ -9876,7 +10542,20 @@
           "id": "sZhEB",
           "type": "ref",
           "ref": "KDjAJ",
-          "name": "sBrand"
+          "name": "sBrand",
+          "height": "fit_content",
+          "x": 8,
+          "y": 8,
+          "descendants": {
+            "C6wBE": {
+              "x": 8,
+              "y": 12
+            },
+            "S3ueh": {
+              "x": 48,
+              "y": 18.5
+            }
+          }
         },
         {
           "type": "frame",
@@ -9905,19 +10584,46 @@
               "id": "LvXSP",
               "type": "ref",
               "ref": "qUrQP",
-              "name": "sSecTitle"
+              "name": "sSecTitle",
+              "height": "fit_content",
+              "x": 4,
+              "y": 0,
+              "descendants": {
+                "aGSN7": {
+                  "width": "fill_container",
+                  "x": 8,
+                  "y": 8
+                }
+              }
             },
             {
               "id": "Stfyo",
               "type": "ref",
               "ref": "i5M0C",
               "name": "sNavActive",
+              "height": "fit_content",
+              "x": 4,
+              "y": 36,
               "descendants": {
+                "TXtrD": {
+                  "width": "fit_content",
+                  "height": "fit_content",
+                  "x": 8,
+                  "y": 6
+                },
+                "OEX0N": {
+                  "y": 2
+                },
                 "YnGDl": {
                   "iconFontName": "search"
                 },
                 "rDCJ6": {
-                  "content": "Nova Análise"
+                  "content": "Nova Análise",
+                  "x": 24
+                },
+                "9XzSB": {
+                  "x": 232,
+                  "y": 16
                 }
               }
             },
@@ -9926,12 +10632,29 @@
               "type": "ref",
               "ref": "oCTl8",
               "name": "sNavDash",
+              "height": "fit_content",
+              "x": 4,
+              "y": 72,
               "descendants": {
+                "OOsGF": {
+                  "width": "fit_content",
+                  "height": "fit_content",
+                  "x": 8,
+                  "y": 6
+                },
+                "7hQtA": {
+                  "y": 2
+                },
                 "UySoK": {
                   "iconFontName": "layout-dashboard"
                 },
                 "aRd6z": {
-                  "content": "Dashboard"
+                  "content": "Dashboard",
+                  "x": 24
+                },
+                "unGe6": {
+                  "x": 232,
+                  "y": 16
                 }
               }
             },
@@ -9940,12 +10663,29 @@
               "type": "ref",
               "ref": "oCTl8",
               "name": "sNavResume",
+              "height": "fit_content",
+              "x": 4,
+              "y": 108,
               "descendants": {
+                "OOsGF": {
+                  "width": "fit_content",
+                  "height": "fit_content",
+                  "x": 8,
+                  "y": 6
+                },
+                "7hQtA": {
+                  "y": 2
+                },
                 "UySoK": {
                   "iconFontName": "file-text"
                 },
                 "aRd6z": {
-                  "content": "Meu Curriculo"
+                  "content": "Meu Curriculo",
+                  "x": 24
+                },
+                "unGe6": {
+                  "x": 232,
+                  "y": 16
                 }
               }
             },
@@ -9953,13 +10693,71 @@
               "id": "j64BN",
               "type": "ref",
               "ref": "0sll9",
-              "name": "sCredits"
+              "name": "sCredits",
+              "height": "fit_content",
+              "x": 4,
+              "y": 144,
+              "descendants": {
+                "cMzGl": {
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "x": 12,
+                  "y": 12
+                },
+                "IrzWW": {
+                  "width": "fit_content",
+                  "height": "fit_content"
+                },
+                "mXSmJ": {
+                  "y": 0
+                },
+                "0a69y": {
+                  "x": 22
+                },
+                "YEwUo": {
+                  "x": 165,
+                  "y": 0.5
+                },
+                "ti2bA": {
+                  "width": "fill_container",
+                  "x": 12,
+                  "y": 38
+                }
+              }
             },
             {
               "id": "6ulUc",
               "type": "ref",
               "ref": "wZ7oe",
-              "name": "sProUpgrade"
+              "name": "sProUpgrade",
+              "height": "fit_content",
+              "x": 4,
+              "y": 202,
+              "descendants": {
+                "pg2jQ": {
+                  "x": 16,
+                  "y": 16
+                },
+                "67QZI": {
+                  "x": 16,
+                  "y": 52
+                },
+                "34Spk": {
+                  "width": "fill_container",
+                  "x": 16,
+                  "y": 81
+                },
+                "hQ2ug": {
+                  "width": "fill_container",
+                  "height": "fit_content",
+                  "x": 16,
+                  "y": 123
+                },
+                "Ol2oE": {
+                  "x": 69.5,
+                  "y": 6
+                }
+              }
             }
           ]
         },
@@ -9967,7 +10765,30 @@
           "id": "sYIjn",
           "type": "ref",
           "ref": "kcJbU",
-          "name": "sFooter"
+          "name": "sFooter",
+          "height": "fit_content",
+          "x": 8,
+          "y": 836,
+          "descendants": {
+            "UFe2G": {
+              "width": "fit_content",
+              "height": "fit_content",
+              "x": 8,
+              "y": 8
+            },
+            "35q36": {
+              "width": "fit_content",
+              "height": "fit_content",
+              "x": 48
+            },
+            "1Np6g": {
+              "y": 20
+            },
+            "nx1S6": {
+              "x": 216,
+              "y": 20
+            }
+          }
         }
       ]
     },
@@ -11430,8 +12251,8 @@
     {
       "type": "frame",
       "id": "oxaoQ",
-      "x": -596,
-      "y": 4126,
+      "x": -2693,
+      "y": 2257,
       "name": "Landing Page",
       "clip": true,
       "width": 1440,
@@ -11555,10 +12376,16 @@
                   "type": "ref",
                   "ref": "LNxFY",
                   "name": "loginBtn",
+                  "width": "fit_content",
+                  "height": "fit_content",
+                  "x": 0,
+                  "y": 0,
                   "descendants": {
                     "IOGuB": {
                       "content": "Entrar",
-                      "fill": "$--foreground"
+                      "fill": "$--foreground",
+                      "x": 16,
+                      "y": 12
                     }
                   }
                 },
@@ -11567,9 +12394,15 @@
                   "type": "ref",
                   "ref": "o9PMm",
                   "name": "ctaBtn",
+                  "width": "fit_content",
+                  "height": "fit_content",
+                  "x": 86,
+                  "y": 0,
                   "descendants": {
                     "rtgD8": {
-                      "content": "Começar Grátis"
+                      "content": "Começar Grátis",
+                      "x": 16,
+                      "y": 12
                     }
                   }
                 }
@@ -11684,16 +12517,24 @@
                     28
                   ],
                   "name": "primaryCta",
+                  "width": "fit_content",
+                  "height": "fit_content",
+                  "x": 0,
+                  "y": 0,
                   "descendants": {
                     "vynbS": {
-                      "enabled": true
+                      "enabled": true,
+                      "x": 28,
+                      "y": 17.5
                     },
                     "rWBfg": {
                       "iconFontName": "zap"
                     },
                     "rtgD8": {
                       "content": "Começar Grátis — Sem Cartão",
-                      "fontSize": 16
+                      "fontSize": 16,
+                      "x": 50,
+                      "y": 14
                     }
                   }
                 },
@@ -11706,16 +12547,24 @@
                     28
                   ],
                   "name": "secondaryCta",
+                  "width": "fit_content",
+                  "height": "fit_content",
+                  "x": 330,
+                  "y": 0,
                   "descendants": {
                     "Xswnw": {
-                      "enabled": true
+                      "enabled": true,
+                      "x": 28,
+                      "y": 17.5
                     },
                     "sv6Rn": {
                       "iconFontName": "play"
                     },
                     "XYKjR": {
                       "content": "Ver Como Funciona",
-                      "fontSize": 16
+                      "fontSize": 16,
+                      "x": 50,
+                      "y": 14
                     }
                   }
                 }
@@ -11782,410 +12631,1076 @@
                   ]
                 }
               ]
-            },
-            {
-              "type": "frame",
-              "id": "XJiiK",
-              "name": "TrustRow",
-              "width": "fill_container",
-              "layout": "vertical",
-              "gap": 20,
-              "padding": [
-                24,
-                0,
-                0,
-                0
-              ],
-              "alignItems": "center",
-              "children": [
-                {
-                  "type": "text",
-                  "id": "MPn3i",
-                  "name": "trustLabel",
-                  "fill": "$--muted-foreground",
-                  "content": "Mais de 12.000 candidatos já usam o MatchVaga",
-                  "fontFamily": "Inter",
-                  "fontSize": 14,
-                  "fontWeight": "500"
-                },
-                {
-                  "type": "frame",
-                  "id": "MUWEq",
-                  "name": "TrustLogos",
-                  "width": "fill_container",
-                  "gap": 40,
-                  "justifyContent": "center",
-                  "alignItems": "center",
-                  "children": [
-                    {
-                      "type": "text",
-                      "id": "gohRu",
-                      "name": "tl1",
-                      "fill": "#D0D0D0",
-                      "content": "LinkedIn",
-                      "fontFamily": "Inter",
-                      "fontSize": 18,
-                      "fontWeight": "700"
-                    },
-                    {
-                      "type": "text",
-                      "id": "FhOIH",
-                      "name": "tl2",
-                      "fill": "#D0D0D0",
-                      "content": "Gupy",
-                      "fontFamily": "Inter",
-                      "fontSize": 18,
-                      "fontWeight": "700"
-                    },
-                    {
-                      "type": "text",
-                      "id": "IEYmm",
-                      "name": "tl3",
-                      "fill": "#D0D0D0",
-                      "content": "Catho",
-                      "fontFamily": "Inter",
-                      "fontSize": 18,
-                      "fontWeight": "700"
-                    },
-                    {
-                      "type": "text",
-                      "id": "IofB1",
-                      "name": "tl4",
-                      "fill": "#D0D0D0",
-                      "content": "Indeed",
-                      "fontFamily": "Inter",
-                      "fontSize": 18,
-                      "fontWeight": "700"
-                    },
-                    {
-                      "type": "text",
-                      "id": "d4jDj",
-                      "name": "tl5",
-                      "fill": "#D0D0D0",
-                      "content": "Vagas.com",
-                      "fontFamily": "Inter",
-                      "fontSize": 18,
-                      "fontWeight": "700"
-                    }
-                  ]
-                }
-              ]
             }
           ]
         },
         {
           "type": "frame",
-          "id": "19sC9",
-          "name": "How It Works",
+          "id": "Iartk",
+          "name": "ATS Education",
           "width": "fill_container",
-          "fill": "#F8FAFC",
           "layout": "vertical",
-          "gap": 56,
-          "padding": [
-            80,
-            64
-          ],
-          "alignItems": "center",
           "children": [
             {
               "type": "frame",
-              "id": "98VMZ",
-              "name": "SectionHeader",
-              "width": 600,
+              "id": "R6Mw5",
+              "name": "ATS Problem",
+              "width": "fill_container",
+              "fill": "#0F172A",
               "layout": "vertical",
-              "gap": 16,
+              "gap": 56,
+              "padding": [
+                80,
+                64
+              ],
               "alignItems": "center",
               "children": [
                 {
                   "type": "frame",
-                  "id": "PzKgW",
-                  "name": "howBadge",
-                  "cornerRadius": 100,
-                  "stroke": {
-                    "align": "inside",
-                    "thickness": 1,
-                    "fill": "$--border"
-                  },
-                  "gap": 6,
-                  "padding": [
-                    6,
-                    14
-                  ],
+                  "id": "D1P95",
+                  "name": "Section Header",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 24,
                   "alignItems": "center",
                   "children": [
                     {
+                      "type": "frame",
+                      "id": "FfKik",
+                      "name": "Badge",
+                      "fill": "#EF444420",
+                      "cornerRadius": 100,
+                      "gap": 8,
+                      "padding": [
+                        8,
+                        16
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "40yPk",
+                          "name": "badgeIcon",
+                          "width": 16,
+                          "height": 16,
+                          "iconFontName": "shield-alert",
+                          "iconFontFamily": "lucide",
+                          "fill": "#EF4444"
+                        },
+                        {
+                          "type": "text",
+                          "id": "YsljK",
+                          "name": "badgeText",
+                          "fill": "#EF4444",
+                          "content": "O VILÃO INVISÍVEL",
+                          "fontFamily": "Inter",
+                          "fontSize": 12,
+                          "fontWeight": "600",
+                          "letterSpacing": 2
+                        }
+                      ]
+                    },
+                    {
                       "type": "text",
-                      "id": "y66gb",
-                      "name": "howBadgeText",
-                      "fill": "$--accent-brand",
-                      "content": "COMO FUNCIONA",
+                      "id": "JaonH",
+                      "name": "headline",
+                      "fill": "#FFFFFF",
+                      "textGrowth": "fixed-width",
+                      "width": 900,
+                      "content": "Robôs estão rejeitando seu currículo antes de qualquer humano ler",
+                      "lineHeight": 1.1,
+                      "textAlign": "center",
                       "fontFamily": "Inter",
-                      "fontSize": 12,
-                      "fontWeight": "600",
-                      "letterSpacing": 1
+                      "fontSize": 48,
+                      "fontWeight": "800",
+                      "letterSpacing": -1
+                    },
+                    {
+                      "type": "text",
+                      "id": "piJVs",
+                      "name": "subtitle",
+                      "fill": "#94A3B8",
+                      "textGrowth": "fixed-width",
+                      "width": 750,
+                      "content": "Mais de 75% dos currículos são eliminados automaticamente por robôs de triagem (ATS) — sem que nenhum recrutador sequer veja seu nome.",
+                      "lineHeight": 1.6,
+                      "textAlign": "center",
+                      "fontFamily": "Inter",
+                      "fontSize": 18
                     }
                   ]
                 },
                 {
-                  "type": "text",
-                  "id": "szUjl",
-                  "name": "howTitle",
-                  "fill": "$--foreground",
-                  "textGrowth": "fixed-width",
-                  "width": 600,
-                  "content": "Três passos para a vaga dos seus sonhos",
-                  "lineHeight": 1.2,
-                  "textAlign": "center",
-                  "fontFamily": "Inter",
-                  "fontSize": 36,
-                  "fontWeight": "700",
-                  "letterSpacing": -0.8
-                },
-                {
-                  "type": "text",
-                  "id": "Wz5tm",
-                  "name": "howDesc",
-                  "fill": "$--muted-foreground",
-                  "textGrowth": "fixed-width",
-                  "width": 500,
-                  "content": "De upload do currículo até candidatura otimizada em menos de 2 minutos.",
-                  "lineHeight": 1.5,
-                  "textAlign": "center",
-                  "fontFamily": "Inter",
-                  "fontSize": 16,
-                  "fontWeight": "normal"
+                  "type": "frame",
+                  "id": "1DROE",
+                  "name": "ATS Process Cards",
+                  "width": "fill_container",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "ZtChv",
+                      "name": "Step 1 - Envio",
+                      "width": "fill_container",
+                      "fill": "#1E293B",
+                      "cornerRadius": 12,
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 1,
+                        "fill": "#334155"
+                      },
+                      "layout": "vertical",
+                      "gap": 20,
+                      "padding": 32,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "qd6bz",
+                          "name": "card1Step",
+                          "fill": "#2563EB20",
+                          "cornerRadius": 100,
+                          "stroke": {
+                            "align": "inside",
+                            "thickness": 1,
+                            "fill": "#2563EB60"
+                          },
+                          "padding": [
+                            6,
+                            14
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "1E4Zi",
+                              "name": "card1StepText",
+                              "fill": "#60A5FA",
+                              "content": "ETAPA 01",
+                              "fontFamily": "Inter",
+                              "fontSize": 10,
+                              "fontWeight": "600",
+                              "letterSpacing": 2
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "lcojF",
+                          "name": "card1IconWrap",
+                          "width": 72,
+                          "height": 72,
+                          "fill": "#2563EB15",
+                          "cornerRadius": 12,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "KwxjW",
+                              "name": "card1Icon",
+                              "width": 36,
+                              "height": 36,
+                              "iconFontName": "file-text",
+                              "iconFontFamily": "lucide",
+                              "fill": "#60A5FA"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "HaVEc",
+                          "name": "card1Title",
+                          "fill": "#FFFFFF",
+                          "content": "Você envia seu currículo",
+                          "textAlign": "center",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "ypoLi",
+                          "name": "card1Desc",
+                          "fill": "#94A3B8",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Candidato envia o currículo com esperança e dedicação para a vaga dos sonhos.",
+                          "lineHeight": 1.5,
+                          "textAlign": "center",
+                          "fontFamily": "Inter",
+                          "fontSize": 14
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "8M5dt",
+                      "name": "Step 2 - ATS Scan",
+                      "width": "fill_container",
+                      "fill": "#1E293B",
+                      "cornerRadius": 12,
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 1,
+                        "fill": "#334155"
+                      },
+                      "layout": "vertical",
+                      "gap": 20,
+                      "padding": 32,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "RsVyG",
+                          "name": "card2Step",
+                          "fill": "#EF444420",
+                          "cornerRadius": 100,
+                          "stroke": {
+                            "align": "inside",
+                            "thickness": 1,
+                            "fill": "#EF444460"
+                          },
+                          "padding": [
+                            6,
+                            14
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "Layyf",
+                              "name": "card2StepText",
+                              "fill": "#F87171",
+                              "content": "ETAPA 02",
+                              "fontFamily": "Inter",
+                              "fontSize": 10,
+                              "fontWeight": "600",
+                              "letterSpacing": 2
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "XPhar",
+                          "name": "card2IconWrap",
+                          "width": 72,
+                          "height": 72,
+                          "fill": "#EF444415",
+                          "cornerRadius": 12,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "yiOfb",
+                              "name": "card2Icon",
+                              "width": 36,
+                              "height": 36,
+                              "iconFontName": "scan-search",
+                              "iconFontFamily": "lucide",
+                              "fill": "#F87171"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "PXNLu",
+                          "name": "card2Title",
+                          "fill": "#FFFFFF",
+                          "content": "O robô ATS analisa",
+                          "textAlign": "center",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "7Uqn5",
+                          "name": "card2Desc",
+                          "fill": "#94A3B8",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Um software frio e impessoal escaneia palavras-chave, formatação e estrutura em segundos.",
+                          "lineHeight": 1.5,
+                          "textAlign": "center",
+                          "fontFamily": "Inter",
+                          "fontSize": 14
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "K7ykN",
+                      "name": "Step 3 - Rejeição",
+                      "width": "fill_container",
+                      "fill": "#1E293B",
+                      "cornerRadius": 12,
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 1,
+                        "fill": "#334155"
+                      },
+                      "layout": "vertical",
+                      "gap": 20,
+                      "padding": 32,
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "Vi8H6",
+                          "name": "card3Step",
+                          "fill": "#EF444420",
+                          "cornerRadius": 100,
+                          "stroke": {
+                            "align": "inside",
+                            "thickness": 1,
+                            "fill": "#EF444460"
+                          },
+                          "padding": [
+                            6,
+                            14
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "BuVGY",
+                              "name": "card3StepText",
+                              "fill": "#F87171",
+                              "content": "ETAPA 03",
+                              "fontFamily": "Inter",
+                              "fontSize": 10,
+                              "fontWeight": "600",
+                              "letterSpacing": 2
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "mDpbW",
+                          "name": "card3IconWrap",
+                          "width": 72,
+                          "height": 72,
+                          "fill": "#EF444415",
+                          "cornerRadius": 12,
+                          "justifyContent": "center",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "5Uzjl",
+                              "name": "card3Icon",
+                              "width": 36,
+                              "height": 36,
+                              "iconFontName": "user-x",
+                              "iconFontFamily": "lucide",
+                              "fill": "#F87171"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "4IVVZ",
+                          "name": "card3Title",
+                          "fill": "#FFFFFF",
+                          "content": "Seu currículo é descartado",
+                          "textAlign": "center",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "text",
+                          "id": "KIAKU",
+                          "name": "card3Desc",
+                          "fill": "#94A3B8",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Sem as palavras-chave certas, você é eliminado automaticamente. Nenhum humano jamais leu seu currículo.",
+                          "lineHeight": 1.5,
+                          "textAlign": "center",
+                          "fontFamily": "Inter",
+                          "fontSize": 14
+                        }
+                      ]
+                    }
+                  ]
                 }
               ]
             },
             {
               "type": "frame",
-              "id": "4x3Ri",
-              "name": "StepsRow",
+              "id": "rRYvQ",
+              "name": "ATS Solution",
               "width": "fill_container",
-              "gap": 32,
+              "fill": "#F8FAFC",
+              "layout": "vertical",
+              "gap": 56,
+              "padding": [
+                80,
+                64
+              ],
+              "alignItems": "center",
               "children": [
                 {
                   "type": "frame",
-                  "id": "slEzr",
-                  "name": "Step1",
-                  "width": "fill_container",
-                  "fill": "$--card",
-                  "cornerRadius": 12,
-                  "stroke": {
-                    "align": "inside",
-                    "thickness": 1,
-                    "fill": "$--border"
-                  },
+                  "id": "ilYQC",
+                  "name": "SolutionHeader",
+                  "width": 640,
                   "layout": "vertical",
-                  "gap": 20,
-                  "padding": 32,
+                  "gap": 16,
+                  "alignItems": "center",
                   "children": [
                     {
                       "type": "frame",
-                      "id": "itlOc",
-                      "name": "step1Num",
-                      "width": 44,
-                      "height": 44,
-                      "fill": "$--accent-brand-light",
-                      "cornerRadius": 10,
-                      "layout": "vertical",
-                      "justifyContent": "center",
+                      "id": "ZDgpu",
+                      "name": "solutionBadge",
+                      "cornerRadius": 100,
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 1,
+                        "fill": "#E2E8F0"
+                      },
+                      "gap": 6,
+                      "padding": [
+                        6,
+                        14
+                      ],
                       "alignItems": "center",
                       "children": [
                         {
                           "type": "text",
-                          "id": "L6flG",
-                          "name": "step1NumText",
-                          "fill": "$--accent-brand",
-                          "content": "1",
+                          "id": "bklgM",
+                          "name": "badgeText",
+                          "fill": "#2563EB",
+                          "content": "A SOLUÇÃO",
                           "fontFamily": "Inter",
-                          "fontSize": 18,
-                          "fontWeight": "700"
+                          "fontSize": 12,
+                          "fontWeight": "600",
+                          "letterSpacing": 1
                         }
                       ]
                     },
                     {
-                      "type": "icon_font",
-                      "id": "rZCZZ",
-                      "name": "step1Icon",
-                      "width": 28,
-                      "height": 28,
-                      "iconFontName": "upload",
-                      "iconFontFamily": "lucide",
-                      "fill": "$--accent-brand"
-                    },
-                    {
                       "type": "text",
-                      "id": "YN3Ye",
-                      "name": "step1Title",
-                      "fill": "$--foreground",
-                      "content": "Suba seu currículo",
-                      "fontFamily": "Inter",
-                      "fontSize": 20,
-                      "fontWeight": "600"
-                    },
-                    {
-                      "type": "text",
-                      "id": "qr7zR",
-                      "name": "step1Desc",
-                      "fill": "$--muted-foreground",
+                      "id": "RUn2E",
+                      "name": "solutionTitle",
+                      "fill": "#1E293B",
                       "textGrowth": "fixed-width",
-                      "width": "fill_container",
-                      "content": "Faça upload do seu currículo ou perfil LinkedIn. Nossa IA analisa suas competências, experiências e formação.",
-                      "lineHeight": 1.6,
+                      "width": 640,
+                      "content": "Seu currículo otimizado para\nvencer qualquer robô",
+                      "lineHeight": 1.2,
+                      "textAlign": "center",
                       "fontFamily": "Inter",
-                      "fontSize": 14,
+                      "fontSize": 36,
+                      "fontWeight": "700",
+                      "letterSpacing": -0.8
+                    },
+                    {
+                      "type": "text",
+                      "id": "6GYgh",
+                      "name": "solutionSubtitle",
+                      "fill": "#64748B",
+                      "textGrowth": "fixed-width",
+                      "width": 540,
+                      "content": "O MatchVaga analisa cada vaga e reescreve seu currículo com as palavras-chave certas, no formato ideal para passar pela triagem automática.",
+                      "lineHeight": 1.5,
+                      "textAlign": "center",
+                      "fontFamily": "Inter",
+                      "fontSize": 16,
                       "fontWeight": "normal"
                     }
                   ]
                 },
                 {
                   "type": "frame",
-                  "id": "WTDWs",
-                  "name": "Step2",
+                  "id": "WDTBO",
+                  "name": "ComparisonRow",
                   "width": "fill_container",
-                  "fill": "$--card",
-                  "cornerRadius": 12,
-                  "stroke": {
-                    "align": "inside",
-                    "thickness": 1,
-                    "fill": "$--border"
-                  },
-                  "layout": "vertical",
-                  "gap": 20,
-                  "padding": 32,
+                  "gap": 32,
+                  "alignItems": "center",
                   "children": [
                     {
                       "type": "frame",
-                      "id": "3kCD9",
-                      "name": "step2Num",
-                      "width": 44,
-                      "height": 44,
-                      "fill": "$--accent-brand-light",
-                      "cornerRadius": 10,
+                      "id": "0QOuz",
+                      "name": "BeforeCard",
+                      "width": "fill_container",
+                      "fill": "#FFFFFF",
+                      "cornerRadius": 12,
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 1,
+                        "fill": "#E2E8F0"
+                      },
+                      "layout": "vertical",
+                      "gap": 24,
+                      "padding": 32,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "fjJOb",
+                          "name": "beforeBadge",
+                          "fill": "#FEF2F2",
+                          "cornerRadius": 100,
+                          "gap": 8,
+                          "padding": [
+                            6,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "iJlRp",
+                              "name": "beforeIcon",
+                              "width": 14,
+                              "height": 14,
+                              "iconFontName": "circle-x",
+                              "iconFontFamily": "lucide",
+                              "fill": "#EF4444"
+                            },
+                            {
+                              "type": "text",
+                              "id": "bSe3W",
+                              "name": "beforeLabel",
+                              "fill": "#EF4444",
+                              "content": "Sem otimização",
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "600"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "oteN6",
+                          "name": "beforeTitle",
+                          "fill": "#1E293B",
+                          "content": "Currículo genérico",
+                          "fontFamily": "Inter",
+                          "fontSize": 22,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "W9ik6",
+                          "name": "beforeList",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 16,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "82I4r",
+                              "name": "bi1",
+                              "width": "fill_container",
+                              "gap": 12,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon_font",
+                                  "id": "ZinqG",
+                                  "name": "bi1ic",
+                                  "width": 16,
+                                  "height": 16,
+                                  "iconFontName": "x",
+                                  "iconFontFamily": "lucide",
+                                  "fill": "#EF4444"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "p0J8K",
+                                  "name": "bi1tx",
+                                  "fill": "#64748B",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "Palavras-chave genéricas que não combinam com a vaga",
+                                  "lineHeight": 1.5,
+                                  "fontFamily": "Inter",
+                                  "fontSize": 14,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "LlNYU",
+                              "name": "bi2",
+                              "width": "fill_container",
+                              "gap": 12,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon_font",
+                                  "id": "GL37n",
+                                  "name": "bi2ic",
+                                  "width": 16,
+                                  "height": 16,
+                                  "iconFontName": "x",
+                                  "iconFontFamily": "lucide",
+                                  "fill": "#EF4444"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "QXkj2",
+                                  "name": "bi2tx",
+                                  "fill": "#64748B",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "Formato incompatível com leitores automáticos",
+                                  "lineHeight": 1.5,
+                                  "fontFamily": "Inter",
+                                  "fontSize": 14,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "29XwA",
+                              "name": "bi3",
+                              "width": "fill_container",
+                              "gap": 12,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon_font",
+                                  "id": "HOnAi",
+                                  "name": "bi3ic",
+                                  "width": 16,
+                                  "height": 16,
+                                  "iconFontName": "x",
+                                  "iconFontFamily": "lucide",
+                                  "fill": "#EF4444"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "uaE3y",
+                                  "name": "bi3tx",
+                                  "fill": "#64748B",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "Experiências listadas sem relevância para o cargo",
+                                  "lineHeight": 1.5,
+                                  "fontFamily": "Inter",
+                                  "fontSize": 14,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "yzlUr",
+                              "name": "bi4",
+                              "width": "fill_container",
+                              "gap": 12,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon_font",
+                                  "id": "VjR6v",
+                                  "name": "bi4ic",
+                                  "width": 16,
+                                  "height": 16,
+                                  "iconFontName": "x",
+                                  "iconFontFamily": "lucide",
+                                  "fill": "#EF4444"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "4Ymnb",
+                                  "name": "bi4tx",
+                                  "fill": "#64748B",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "Zero personalização por candidatura",
+                                  "lineHeight": 1.5,
+                                  "fontFamily": "Inter",
+                                  "fontSize": 14,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "5WTFE",
+                          "name": "beforeScore",
+                          "width": "fill_container",
+                          "fill": "#FEF2F2",
+                          "cornerRadius": 8,
+                          "stroke": {
+                            "align": "inside",
+                            "thickness": 1,
+                            "fill": "#FECACA"
+                          },
+                          "padding": [
+                            16,
+                            20
+                          ],
+                          "justifyContent": "space_between",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "iJZKj",
+                              "name": "scoreLbl",
+                              "fill": "#991B1B",
+                              "content": "Score ATS estimado",
+                              "fontFamily": "Inter",
+                              "fontSize": 13,
+                              "fontWeight": "500"
+                            },
+                            {
+                              "type": "text",
+                              "id": "gDWkb",
+                              "name": "scoreVal",
+                              "fill": "#EF4444",
+                              "content": "23%",
+                              "fontFamily": "Inter",
+                              "fontSize": 24,
+                              "fontWeight": "800"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "GZePy",
+                      "name": "ArrowCenter",
+                      "width": 64,
+                      "height": 64,
+                      "fill": "#2563EB",
+                      "cornerRadius": 100,
+                      "effect": {
+                        "type": "shadow",
+                        "shadowType": "outer",
+                        "color": "#2563EB40",
+                        "offset": {
+                          "x": 0,
+                          "y": 8
+                        },
+                        "blur": 24
+                      },
                       "layout": "vertical",
                       "justifyContent": "center",
                       "alignItems": "center",
                       "children": [
                         {
-                          "type": "text",
-                          "id": "wFjbG",
-                          "name": "step2NumText",
-                          "fill": "$--accent-brand",
-                          "content": "2",
-                          "fontFamily": "Inter",
-                          "fontSize": 18,
-                          "fontWeight": "700"
+                          "type": "icon_font",
+                          "id": "o3f0d",
+                          "name": "arrowIc",
+                          "width": 28,
+                          "height": 28,
+                          "iconFontName": "arrow-right",
+                          "iconFontFamily": "lucide",
+                          "fill": "#FFFFFF"
                         }
                       ]
                     },
                     {
-                      "type": "icon_font",
-                      "id": "e3fEb",
-                      "name": "step2Icon",
-                      "width": 28,
-                      "height": 28,
-                      "iconFontName": "scan-search",
-                      "iconFontFamily": "lucide",
-                      "fill": "$--accent-brand"
-                    },
-                    {
-                      "type": "text",
-                      "id": "SAAvj",
-                      "name": "step2Title",
-                      "fill": "$--foreground",
-                      "content": "Cole a vaga desejada",
-                      "fontFamily": "Inter",
-                      "fontSize": 20,
-                      "fontWeight": "600"
-                    },
-                    {
-                      "type": "text",
-                      "id": "Ggroh",
-                      "name": "step2Desc",
-                      "fill": "$--muted-foreground",
-                      "textGrowth": "fixed-width",
+                      "type": "frame",
+                      "id": "UqJMi",
+                      "name": "AfterCard",
                       "width": "fill_container",
-                      "content": "Cole o link ou descrição da vaga. A IA identifica palavras-chave, requisitos e competências que o ATS procura.",
-                      "lineHeight": 1.6,
-                      "fontFamily": "Inter",
-                      "fontSize": 14,
-                      "fontWeight": "normal"
+                      "fill": "#FFFFFF",
+                      "cornerRadius": 12,
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 2,
+                        "fill": "#2563EB"
+                      },
+                      "effect": {
+                        "type": "shadow",
+                        "shadowType": "outer",
+                        "color": "#2563EB1A",
+                        "offset": {
+                          "x": 0,
+                          "y": 12
+                        },
+                        "blur": 32,
+                        "spread": -4
+                      },
+                      "layout": "vertical",
+                      "gap": 24,
+                      "padding": 32,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "PKYpG",
+                          "name": "afterBadge",
+                          "fill": "#DBEAFE",
+                          "cornerRadius": 100,
+                          "gap": 8,
+                          "padding": [
+                            6,
+                            12
+                          ],
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "7it6y",
+                              "name": "afterIcon",
+                              "width": 14,
+                              "height": 14,
+                              "iconFontName": "circle-check",
+                              "iconFontFamily": "lucide",
+                              "fill": "#2563EB"
+                            },
+                            {
+                              "type": "text",
+                              "id": "cZzdW",
+                              "name": "afterLabel",
+                              "fill": "#2563EB",
+                              "content": "Com MatchVaga",
+                              "fontFamily": "Inter",
+                              "fontSize": 12,
+                              "fontWeight": "600"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "text",
+                          "id": "OmtAH",
+                          "name": "afterTitle",
+                          "fill": "#1E293B",
+                          "content": "Currículo sob medida",
+                          "fontFamily": "Inter",
+                          "fontSize": 22,
+                          "fontWeight": "700"
+                        },
+                        {
+                          "type": "frame",
+                          "id": "qqlcE",
+                          "name": "afterList",
+                          "width": "fill_container",
+                          "layout": "vertical",
+                          "gap": 16,
+                          "children": [
+                            {
+                              "type": "frame",
+                              "id": "cFXzE",
+                              "name": "ai1",
+                              "width": "fill_container",
+                              "gap": 12,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon_font",
+                                  "id": "ZKn4r",
+                                  "name": "ai1ic",
+                                  "width": 16,
+                                  "height": 16,
+                                  "iconFontName": "check",
+                                  "iconFontFamily": "lucide",
+                                  "fill": "#10B981"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "8Hyzv",
+                                  "name": "ai1tx",
+                                  "fill": "#64748B",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "Palavras-chave extraídas diretamente da descrição da vaga",
+                                  "lineHeight": 1.5,
+                                  "fontFamily": "Inter",
+                                  "fontSize": 14,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "0S1Zn",
+                              "name": "ai2",
+                              "width": "fill_container",
+                              "gap": 12,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon_font",
+                                  "id": "f7q83",
+                                  "name": "ai2ic",
+                                  "width": 16,
+                                  "height": 16,
+                                  "iconFontName": "check",
+                                  "iconFontFamily": "lucide",
+                                  "fill": "#10B981"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "iar7Q",
+                                  "name": "ai2tx",
+                                  "fill": "#64748B",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "Formatação limpa e compatível com todos os ATS",
+                                  "lineHeight": 1.5,
+                                  "fontFamily": "Inter",
+                                  "fontSize": 14,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "jpvl4",
+                              "name": "ai3",
+                              "width": "fill_container",
+                              "gap": 12,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon_font",
+                                  "id": "Lhciw",
+                                  "name": "ai3ic",
+                                  "width": 16,
+                                  "height": 16,
+                                  "iconFontName": "check",
+                                  "iconFontFamily": "lucide",
+                                  "fill": "#10B981"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "01XPU",
+                                  "name": "ai3tx",
+                                  "fill": "#64748B",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "Experiências reordenadas por relevância ao cargo",
+                                  "lineHeight": 1.5,
+                                  "fontFamily": "Inter",
+                                  "fontSize": 14,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "JcpE3",
+                              "name": "ai4",
+                              "width": "fill_container",
+                              "gap": 12,
+                              "alignItems": "center",
+                              "children": [
+                                {
+                                  "type": "icon_font",
+                                  "id": "Vpb5f",
+                                  "name": "ai4ic",
+                                  "width": 16,
+                                  "height": 16,
+                                  "iconFontName": "check",
+                                  "iconFontFamily": "lucide",
+                                  "fill": "#10B981"
+                                },
+                                {
+                                  "type": "text",
+                                  "id": "0XxWr",
+                                  "name": "ai4tx",
+                                  "fill": "#64748B",
+                                  "textGrowth": "fixed-width",
+                                  "width": "fill_container",
+                                  "content": "Adaptação automática para cada candidatura",
+                                  "lineHeight": 1.5,
+                                  "fontFamily": "Inter",
+                                  "fontSize": 14,
+                                  "fontWeight": "normal"
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "u7X2E",
+                          "name": "afterScore",
+                          "width": "fill_container",
+                          "fill": "#EFF6FF",
+                          "cornerRadius": 8,
+                          "stroke": {
+                            "align": "inside",
+                            "thickness": 1,
+                            "fill": "#BFDBFE"
+                          },
+                          "padding": [
+                            16,
+                            20
+                          ],
+                          "justifyContent": "space_between",
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "eTR2h",
+                              "name": "scoreLbl2",
+                              "fill": "#1E40AF",
+                              "content": "Score ATS estimado",
+                              "fontFamily": "Inter",
+                              "fontSize": 13,
+                              "fontWeight": "500"
+                            },
+                            {
+                              "type": "text",
+                              "id": "M7Svy",
+                              "name": "scoreVal2",
+                              "fill": "#2563EB",
+                              "content": "94%",
+                              "fontFamily": "Inter",
+                              "fontSize": 24,
+                              "fontWeight": "800"
+                            }
+                          ]
+                        }
+                      ]
                     }
                   ]
                 },
                 {
                   "type": "frame",
-                  "id": "KgvhG",
-                  "name": "Step3",
-                  "width": "fill_container",
-                  "fill": "$--card",
-                  "cornerRadius": 12,
-                  "stroke": {
-                    "align": "inside",
-                    "thickness": 1,
-                    "fill": "$--border"
-                  },
+                  "id": "Unfrq",
+                  "name": "SolutionCTA",
+                  "height": 82,
                   "layout": "vertical",
-                  "gap": 20,
-                  "padding": 32,
+                  "gap": 16,
+                  "alignItems": "center",
                   "children": [
                     {
                       "type": "frame",
-                      "id": "xqfJg",
-                      "name": "step3Num",
-                      "width": 44,
-                      "height": 44,
-                      "fill": "$--accent-brand-light",
-                      "cornerRadius": 10,
-                      "layout": "vertical",
+                      "id": "C1ymn",
+                      "name": "ctaButton",
+                      "fill": "#2563EB",
+                      "cornerRadius": 8,
+                      "gap": 8,
+                      "padding": [
+                        14,
+                        28
+                      ],
                       "justifyContent": "center",
                       "alignItems": "center",
                       "children": [
                         {
+                          "type": "icon_font",
+                          "id": "fzUoh",
+                          "name": "ctaIc",
+                          "width": 16,
+                          "height": 16,
+                          "iconFontName": "sparkles",
+                          "iconFontFamily": "lucide",
+                          "fill": "#FFFFFF"
+                        },
+                        {
                           "type": "text",
-                          "id": "KtfHn",
-                          "name": "step3NumText",
-                          "fill": "$--accent-brand",
-                          "content": "3",
+                          "id": "hpLHC",
+                          "name": "ctaTx",
+                          "fill": "#FFFFFF",
+                          "content": "Otimizar Meu Currículo Agora",
                           "fontFamily": "Inter",
-                          "fontSize": 18,
-                          "fontWeight": "700"
+                          "fontSize": 16,
+                          "fontWeight": "600"
                         }
                       ]
-                    },
-                    {
-                      "type": "icon_font",
-                      "id": "62eve",
-                      "name": "step3Icon",
-                      "width": 28,
-                      "height": 28,
-                      "iconFontName": "file-check",
-                      "iconFontFamily": "lucide",
-                      "fill": "$--accent-brand"
-                    },
-                    {
-                      "type": "text",
-                      "id": "BlVuK",
-                      "name": "step3Title",
-                      "fill": "$--foreground",
-                      "content": "Receba tudo pronto",
-                      "fontFamily": "Inter",
-                      "fontSize": 20,
-                      "fontWeight": "600"
-                    },
-                    {
-                      "type": "text",
-                      "id": "kwwzR",
-                      "name": "step3Desc",
-                      "fill": "$--muted-foreground",
-                      "textGrowth": "fixed-width",
-                      "width": "fill_container",
-                      "content": "Em segundos, receba currículo adaptado, carta de apresentação e mensagem de abordagem — tudo otimizado para ATS.",
-                      "lineHeight": 1.6,
-                      "fontFamily": "Inter",
-                      "fontSize": 14,
-                      "fontWeight": "normal"
                     }
                   ]
                 }
@@ -14057,10 +15572,15 @@
                         28
                       ],
                       "name": "freeBtn",
+                      "height": "fit_content",
+                      "x": 32,
+                      "y": 330,
                       "descendants": {
                         "XYKjR": {
                           "content": "Começar Grátis",
-                          "fontSize": 15
+                          "fontSize": 15,
+                          "x": 233.5,
+                          "y": 14
                         }
                       }
                     }
@@ -14370,10 +15890,15 @@
                         28
                       ],
                       "name": "proBtn",
+                      "height": "fit_content",
+                      "x": 32,
+                      "y": 437,
                       "descendants": {
                         "rtgD8": {
                           "content": "Começar Agora",
-                          "fontSize": 15
+                          "fontSize": 15,
+                          "x": 233,
+                          "y": 14
                         }
                       }
                     }
@@ -15149,7 +16674,9 @@
               "y": 8
             },
             "sZhEB/C6wBE": {
-              "fill": "$--primary"
+              "fill": "$--primary",
+              "x": 8,
+              "y": 12
             },
             "sZhEB/4gWgK": {
               "fill": "$--primary-foreground",
@@ -15157,7 +16684,9 @@
               "y": 8
             },
             "sZhEB/S3ueh": {
-              "fill": "$--sidebar-foreground"
+              "fill": "$--sidebar-foreground",
+              "x": 48,
+              "y": 18.5
             },
             "4X3cr": {
               "width": "fill_container",
@@ -15165,15 +16694,35 @@
               "x": 8,
               "y": 80
             },
+            "LvXSP": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 0
+            },
             "LvXSP/aGSN7": {
-              "fill": "$--muted-foreground"
+              "fill": "$--muted-foreground",
+              "width": "fill_container",
+              "x": 8,
+              "y": 8
             },
             "Stfyo": {
               "fill": "transparent",
               "stroke": {
                 "align": "inside",
                 "thickness": 0
-              }
+              },
+              "height": "fit_content",
+              "x": 4,
+              "y": 36
+            },
+            "Stfyo/TXtrD": {
+              "width": "fit_content",
+              "height": "fit_content",
+              "x": 8,
+              "y": 6
+            },
+            "Stfyo/OEX0N": {
+              "y": 2
             },
             "Stfyo/YnGDl": {
               "iconFontName": "search",
@@ -15182,7 +16731,12 @@
             "Stfyo/rDCJ6": {
               "content": "Nova Análise",
               "fill": "$--sidebar-foreground",
-              "fontWeight": "normal"
+              "fontWeight": "normal",
+              "x": 24
+            },
+            "Stfyo/9XzSB": {
+              "x": 232,
+              "y": 16
             },
             "Stfyo/ZqFUP": {
               "fill": "#2563EB"
@@ -15195,11 +16749,19 @@
                   "left": 2
                 },
                 "fill": "#2563EB"
-              }
+              },
+              "height": "fit_content",
+              "x": 4,
+              "y": 72
             },
             "fv3SQ/OOsGF": {
               "x": 8,
-              "y": 6
+              "y": 6,
+              "width": "fit_content",
+              "height": "fit_content"
+            },
+            "fv3SQ/7hQtA": {
+              "y": 2
             },
             "fv3SQ/UySoK": {
               "iconFontName": "layout-dashboard",
@@ -15208,7 +16770,8 @@
             "fv3SQ/aRd6z": {
               "content": "Dashboard",
               "fill": "#2563EB",
-              "fontWeight": "600"
+              "fontWeight": "600",
+              "x": 24
             },
             "fv3SQ/unGe6": {
               "x": 232,
@@ -15217,32 +16780,118 @@
             "fv3SQ/i9cB2": {
               "fill": "$--muted-foreground"
             },
+            "HDqYS": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 108
+            },
+            "HDqYS/OOsGF": {
+              "width": "fit_content",
+              "height": "fit_content",
+              "x": 8,
+              "y": 6
+            },
+            "HDqYS/7hQtA": {
+              "y": 2
+            },
             "HDqYS/UySoK": {
               "fill": "$--muted-foreground"
             },
             "HDqYS/aRd6z": {
-              "fill": "$--sidebar-foreground"
+              "fill": "$--sidebar-foreground",
+              "x": 24
+            },
+            "HDqYS/unGe6": {
+              "x": 232,
+              "y": 16
             },
             "HDqYS/i9cB2": {
               "fill": "$--muted-foreground"
             },
+            "j64BN": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 144
+            },
+            "j64BN/cMzGl": {
+              "width": "fill_container",
+              "height": "fit_content",
+              "x": 12,
+              "y": 12
+            },
+            "j64BN/IrzWW": {
+              "width": "fit_content",
+              "height": "fit_content"
+            },
+            "j64BN/mXSmJ": {
+              "y": 0
+            },
+            "j64BN/0a69y": {
+              "x": 22
+            },
+            "j64BN/YEwUo": {
+              "x": 165,
+              "y": 0.5
+            },
+            "j64BN/ti2bA": {
+              "width": "fill_container",
+              "x": 12,
+              "y": 38
+            },
+            "6ulUc": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 202
+            },
+            "6ulUc/pg2jQ": {
+              "x": 16,
+              "y": 16
+            },
+            "6ulUc/67QZI": {
+              "x": 16,
+              "y": 52
+            },
+            "6ulUc/34Spk": {
+              "width": "fill_container",
+              "x": 16,
+              "y": 81
+            },
+            "6ulUc/hQ2ug": {
+              "width": "fill_container",
+              "height": "fit_content",
+              "x": 16,
+              "y": 123
+            },
+            "6ulUc/Ol2oE": {
+              "x": 69.5,
+              "y": 6
+            },
             "sYIjn": {
               "fill": "$--sidebar",
               "x": 8,
-              "y": 836
+              "y": 836,
+              "height": "fit_content"
             },
             "sYIjn/UFe2G": {
               "x": 8,
-              "y": 8
+              "y": 8,
+              "width": "fit_content",
+              "height": "fit_content"
             },
             "sYIjn/I3H6n": {
               "fill": "$--foreground"
+            },
+            "sYIjn/35q36": {
+              "width": "fit_content",
+              "height": "fit_content",
+              "x": 48
             },
             "sYIjn/EJG3d": {
               "fill": "$--sidebar-foreground"
             },
             "sYIjn/1Np6g": {
-              "fill": "$--sidebar-foreground"
+              "fill": "$--sidebar-foreground",
+              "y": 20
             },
             "sYIjn/nx1S6": {
               "fill": "$--muted-foreground",
@@ -17331,7 +18980,184 @@
           "type": "ref",
           "ref": "xlPb4",
           "height": "fill_container",
-          "name": "pricingSidebar"
+          "name": "pricingSidebar",
+          "x": 0,
+          "y": 0,
+          "descendants": {
+            "sZhEB": {
+              "height": "fit_content",
+              "x": 8,
+              "y": 8
+            },
+            "sZhEB/C6wBE": {
+              "x": 8,
+              "y": 12
+            },
+            "sZhEB/S3ueh": {
+              "x": 48,
+              "y": 18.5
+            },
+            "4X3cr": {
+              "width": "fill_container",
+              "height": "fill_container",
+              "x": 8,
+              "y": 80
+            },
+            "LvXSP": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 0
+            },
+            "LvXSP/aGSN7": {
+              "width": "fill_container",
+              "x": 8,
+              "y": 8
+            },
+            "Stfyo": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 36
+            },
+            "Stfyo/TXtrD": {
+              "width": "fit_content",
+              "height": "fit_content",
+              "x": 8,
+              "y": 6
+            },
+            "Stfyo/OEX0N": {
+              "y": 2
+            },
+            "Stfyo/rDCJ6": {
+              "x": 24
+            },
+            "Stfyo/9XzSB": {
+              "x": 232,
+              "y": 16
+            },
+            "fv3SQ": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 72
+            },
+            "fv3SQ/OOsGF": {
+              "width": "fit_content",
+              "height": "fit_content",
+              "x": 8,
+              "y": 6
+            },
+            "fv3SQ/7hQtA": {
+              "y": 2
+            },
+            "fv3SQ/aRd6z": {
+              "x": 24
+            },
+            "fv3SQ/unGe6": {
+              "x": 232,
+              "y": 16
+            },
+            "HDqYS": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 108
+            },
+            "HDqYS/OOsGF": {
+              "width": "fit_content",
+              "height": "fit_content",
+              "x": 8,
+              "y": 6
+            },
+            "HDqYS/7hQtA": {
+              "y": 2
+            },
+            "HDqYS/aRd6z": {
+              "x": 24
+            },
+            "HDqYS/unGe6": {
+              "x": 232,
+              "y": 16
+            },
+            "j64BN": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 144
+            },
+            "j64BN/cMzGl": {
+              "width": "fill_container",
+              "height": "fit_content",
+              "x": 12,
+              "y": 12
+            },
+            "j64BN/IrzWW": {
+              "width": "fit_content",
+              "height": "fit_content"
+            },
+            "j64BN/mXSmJ": {
+              "y": 0
+            },
+            "j64BN/0a69y": {
+              "x": 22
+            },
+            "j64BN/YEwUo": {
+              "x": 165,
+              "y": 0.5
+            },
+            "j64BN/ti2bA": {
+              "width": "fill_container",
+              "x": 12,
+              "y": 38
+            },
+            "6ulUc": {
+              "height": "fit_content",
+              "x": 4,
+              "y": 202
+            },
+            "6ulUc/pg2jQ": {
+              "x": 16,
+              "y": 16
+            },
+            "6ulUc/67QZI": {
+              "x": 16,
+              "y": 52
+            },
+            "6ulUc/34Spk": {
+              "width": "fill_container",
+              "x": 16,
+              "y": 81
+            },
+            "6ulUc/hQ2ug": {
+              "width": "fill_container",
+              "height": "fit_content",
+              "x": 16,
+              "y": 123
+            },
+            "6ulUc/Ol2oE": {
+              "x": 69.5,
+              "y": 6
+            },
+            "sYIjn": {
+              "height": "fit_content",
+              "x": 8,
+              "y": 938
+            },
+            "sYIjn/UFe2G": {
+              "width": "fit_content",
+              "height": "fit_content",
+              "x": 8,
+              "y": 8
+            },
+            "sYIjn/35q36": {
+              "width": "fit_content",
+              "height": "fit_content",
+              "x": 48
+            },
+            "sYIjn/1Np6g": {
+              "y": 20
+            },
+            "sYIjn/nx1S6": {
+              "x": 216,
+              "y": 20
+            }
+          }
         },
         {
           "type": "frame",
@@ -17500,12 +19326,17 @@
                           "ref": "k0bhb",
                           "width": "fill_container",
                           "name": "c1btn",
+                          "height": "fit_content",
+                          "x": 28,
+                          "y": 259,
                           "descendants": {
                             "sv6Rn": {
                               "enabled": false
                             },
                             "XYKjR": {
-                              "content": "Selecionar"
+                              "content": "Selecionar",
+                              "x": 64.5,
+                              "y": 12
                             }
                           }
                         }
@@ -17619,12 +19450,17 @@
                           "ref": "k0bhb",
                           "width": "fill_container",
                           "name": "c2btn",
+                          "height": "fit_content",
+                          "x": 28,
+                          "y": 259,
                           "descendants": {
                             "sv6Rn": {
                               "enabled": false
                             },
                             "XYKjR": {
-                              "content": "Selecionar"
+                              "content": "Selecionar",
+                              "x": 64.5,
+                              "y": 12
                             }
                           }
                         }
@@ -17785,12 +19621,17 @@
                           "ref": "o9PMm",
                           "width": "fill_container",
                           "name": "btn3",
+                          "height": "fit_content",
+                          "x": 28,
+                          "y": 343,
                           "descendants": {
                             "vynbS": {
                               "enabled": false
                             },
                             "rtgD8": {
-                              "content": "Selecionar"
+                              "content": "Selecionar",
+                              "x": 64.5,
+                              "y": 12
                             }
                           }
                         }
@@ -17904,12 +19745,17 @@
                           "ref": "k0bhb",
                           "width": "fill_container",
                           "name": "btn4",
+                          "height": "fit_content",
+                          "x": 28,
+                          "y": 259,
                           "descendants": {
                             "sv6Rn": {
                               "enabled": false
                             },
                             "XYKjR": {
-                              "content": "Selecionar"
+                              "content": "Selecionar",
+                              "x": 64.5,
+                              "y": 12
                             }
                           }
                         }
@@ -19643,6 +21489,991 @@
               "fontFamily": "Inter",
               "fontSize": 18,
               "fontWeight": "700"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "W8R5V",
+      "x": -5843,
+      "y": 3883,
+      "name": "ATS Education v2",
+      "width": "fill_container(1440)",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "rIGCP",
+          "name": "ATS Problem",
+          "width": "fill_container",
+          "fill": "#F8FAFC",
+          "layout": "vertical",
+          "gap": 56,
+          "padding": [
+            80,
+            64
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "rX6gF",
+              "name": "Section Header",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 24,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "oIe66",
+                  "name": "Badge",
+                  "fill": "#00000000",
+                  "cornerRadius": 100,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "#E2E8F0"
+                  },
+                  "gap": 8,
+                  "padding": [
+                    8,
+                    16
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "pRc4u",
+                      "name": "badgeIcon",
+                      "width": 16,
+                      "height": 16,
+                      "iconFontName": "shield-alert",
+                      "iconFontFamily": "lucide",
+                      "fill": "#2563EB"
+                    },
+                    {
+                      "type": "text",
+                      "id": "JdzhJ",
+                      "name": "badgeText",
+                      "fill": "#2563EB",
+                      "content": "O VILÃO INVISÍVEL",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "600",
+                      "letterSpacing": 1.2
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "K3ptL",
+                  "name": "headline",
+                  "fill": "#1E293B",
+                  "textGrowth": "fixed-width",
+                  "width": 900,
+                  "content": "Robôs estão rejeitando seu currículo antes de qualquer humano ler",
+                  "lineHeight": 1.1,
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 36,
+                  "fontWeight": "700",
+                  "letterSpacing": -0.8
+                },
+                {
+                  "type": "text",
+                  "id": "GIQas",
+                  "name": "subtitle",
+                  "fill": "#64748B",
+                  "textGrowth": "fixed-width",
+                  "width": 750,
+                  "content": "Mais de 75% dos currículos são eliminados automaticamente por softwares de triagem (ATS) — sem que nenhum recrutador sequer veja seu nome.",
+                  "lineHeight": 1.6,
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 16
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Fo0OT",
+              "name": "ATS Process Cards",
+              "width": "fill_container",
+              "gap": 24,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "mHusN",
+                  "name": "Step 1 - Envio",
+                  "width": "fill_container",
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 12,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "#E2E8F0"
+                  },
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 32,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "u1Uy4",
+                      "name": "card1IconWrap",
+                      "width": 44,
+                      "height": 44,
+                      "fill": "#DBEAFE",
+                      "cornerRadius": 8,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "I9e7b",
+                          "name": "card1Icon",
+                          "width": 22,
+                          "height": 22,
+                          "iconFontName": "file-text",
+                          "iconFontFamily": "lucide",
+                          "fill": "#60A5FA"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "qrVuI",
+                      "name": "card1Title",
+                      "fill": "#1E293B",
+                      "content": "Você envia seu currículo",
+                      "textAlign": "center",
+                      "fontFamily": "Inter",
+                      "fontSize": 20,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "3Pj3O",
+                      "name": "card1Desc",
+                      "fill": "#64748B",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Candidato envia o currículo com esperança e dedicação para a vaga dos sonhos.",
+                      "lineHeight": 1.5,
+                      "textAlign": "center",
+                      "fontFamily": "Inter",
+                      "fontSize": 14
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "DckBR",
+                  "name": "Step 2 - ATS Scan",
+                  "width": "fill_container",
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 12,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "#E2E8F0"
+                  },
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 32,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "XE1v1",
+                      "name": "card2IconWrap",
+                      "width": 44,
+                      "height": 44,
+                      "fill": "#FEE2E2",
+                      "cornerRadius": 8,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "Wxt8d",
+                          "name": "card2Icon",
+                          "width": 22,
+                          "height": 22,
+                          "iconFontName": "scan-search",
+                          "iconFontFamily": "lucide",
+                          "fill": "#F87171"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "xdBME",
+                      "name": "card2Title",
+                      "fill": "#1E293B",
+                      "content": "O robô ATS analisa",
+                      "textAlign": "center",
+                      "fontFamily": "Inter",
+                      "fontSize": 20,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "sKzmn",
+                      "name": "card2Desc",
+                      "fill": "#64748B",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Um software frio e impessoal escaneia palavras-chave, formatação e estrutura em segundos.",
+                      "lineHeight": 1.5,
+                      "textAlign": "center",
+                      "fontFamily": "Inter",
+                      "fontSize": 14
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "tJWYd",
+                  "name": "Step 3 - Rejeição",
+                  "width": "fill_container",
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 12,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "#E2E8F0"
+                  },
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 32,
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "ttcPz",
+                      "name": "card3IconWrap",
+                      "width": 44,
+                      "height": 44,
+                      "fill": "#FEE2E2",
+                      "cornerRadius": 8,
+                      "justifyContent": "center",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "Y7cmJ",
+                          "name": "card3Icon",
+                          "width": 22,
+                          "height": 22,
+                          "iconFontName": "user-x",
+                          "iconFontFamily": "lucide",
+                          "fill": "#F87171"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "xr42f",
+                      "name": "card3Title",
+                      "fill": "#1E293B",
+                      "content": "Seu currículo é descartado",
+                      "textAlign": "center",
+                      "fontFamily": "Inter",
+                      "fontSize": 20,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "BOL0W",
+                      "name": "card3Desc",
+                      "fill": "#64748B",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Sem as palavras-chave certas, você é eliminado automaticamente. Nenhum humano jamais leu seu currículo.",
+                      "lineHeight": 1.5,
+                      "textAlign": "center",
+                      "fontFamily": "Inter",
+                      "fontSize": 14
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "yw5cN",
+          "name": "ATS Solution",
+          "width": "fill_container",
+          "fill": "#F8FAFC",
+          "layout": "vertical",
+          "gap": 56,
+          "padding": [
+            80,
+            64
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "DnZaz",
+              "name": "SolutionHeader",
+              "width": 640,
+              "layout": "vertical",
+              "gap": 16,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "ph0H4",
+                  "name": "solutionBadge",
+                  "cornerRadius": 100,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "#E2E8F0"
+                  },
+                  "gap": 6,
+                  "padding": [
+                    6,
+                    14
+                  ],
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "LRZbK",
+                      "name": "badgeText",
+                      "fill": "#2563EB",
+                      "content": "A SOLUÇÃO",
+                      "fontFamily": "Inter",
+                      "fontSize": 12,
+                      "fontWeight": "600",
+                      "letterSpacing": 2
+                    }
+                  ]
+                },
+                {
+                  "type": "text",
+                  "id": "JRbyG",
+                  "name": "solutionTitle",
+                  "fill": "#1E293B",
+                  "textGrowth": "fixed-width",
+                  "width": 640,
+                  "content": "Seu currículo otimizado para\nvencer qualquer robô",
+                  "lineHeight": 1.2,
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 36,
+                  "fontWeight": "700",
+                  "letterSpacing": -0.8
+                },
+                {
+                  "type": "text",
+                  "id": "u6zIm",
+                  "name": "solutionSubtitle",
+                  "fill": "#64748B",
+                  "textGrowth": "fixed-width",
+                  "width": 540,
+                  "content": "O MatchVaga analisa cada vaga e reescreve seu currículo com as palavras-chave certas, no formato ideal para passar pela triagem automática.",
+                  "lineHeight": 1.5,
+                  "textAlign": "center",
+                  "fontFamily": "Inter",
+                  "fontSize": 16,
+                  "fontWeight": "normal"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "pzI4H",
+              "name": "ComparisonRow",
+              "width": "fill_container",
+              "gap": 24,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "qpSNj",
+                  "name": "BeforeCard",
+                  "width": "fill_container",
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 12,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "#E2E8F0"
+                  },
+                  "layout": "vertical",
+                  "gap": 20,
+                  "padding": 28,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "PUs5J",
+                      "name": "beforeBadge",
+                      "fill": "#FEF2F2",
+                      "cornerRadius": 6,
+                      "gap": 8,
+                      "padding": [
+                        4,
+                        10
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "kHZjv",
+                          "name": "beforeIcon",
+                          "width": 14,
+                          "height": 14,
+                          "iconFontName": "circle-x",
+                          "iconFontFamily": "lucide",
+                          "fill": "#EF4444"
+                        },
+                        {
+                          "type": "text",
+                          "id": "6jhtS",
+                          "name": "beforeLabel",
+                          "fill": "#EF4444",
+                          "content": "Sem otimização",
+                          "fontFamily": "Inter",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "PcxVR",
+                      "name": "beforeTitle",
+                      "fill": "#1E293B",
+                      "content": "Currículo genérico",
+                      "fontFamily": "Inter",
+                      "fontSize": 20,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "97zl6",
+                      "name": "beforeList",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 16,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "SzSqp",
+                          "name": "bi1",
+                          "width": "fill_container",
+                          "gap": 12,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "FAdFD",
+                              "name": "bi1ic",
+                              "width": 16,
+                              "height": 16,
+                              "iconFontName": "x",
+                              "iconFontFamily": "lucide",
+                              "fill": "#EF4444"
+                            },
+                            {
+                              "type": "text",
+                              "id": "KdANH",
+                              "name": "bi1tx",
+                              "fill": "#64748B",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Palavras-chave genéricas que não combinam com a vaga",
+                              "lineHeight": 1.5,
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "fLpjj",
+                          "name": "bi2",
+                          "width": "fill_container",
+                          "gap": 12,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "Us0AJ",
+                              "name": "bi2ic",
+                              "width": 16,
+                              "height": 16,
+                              "iconFontName": "x",
+                              "iconFontFamily": "lucide",
+                              "fill": "#EF4444"
+                            },
+                            {
+                              "type": "text",
+                              "id": "sfl24",
+                              "name": "bi2tx",
+                              "fill": "#64748B",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Formato incompatível com leitores automáticos",
+                              "lineHeight": 1.5,
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "tcw8G",
+                          "name": "bi3",
+                          "width": "fill_container",
+                          "gap": 12,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "44RjW",
+                              "name": "bi3ic",
+                              "width": 16,
+                              "height": 16,
+                              "iconFontName": "x",
+                              "iconFontFamily": "lucide",
+                              "fill": "#EF4444"
+                            },
+                            {
+                              "type": "text",
+                              "id": "FNfpb",
+                              "name": "bi3tx",
+                              "fill": "#64748B",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Experiências listadas sem relevância para o cargo",
+                              "lineHeight": 1.5,
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "BaCK8",
+                          "name": "bi4",
+                          "width": "fill_container",
+                          "gap": 12,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "aCfbg",
+                              "name": "bi4ic",
+                              "width": 16,
+                              "height": 16,
+                              "iconFontName": "x",
+                              "iconFontFamily": "lucide",
+                              "fill": "#EF4444"
+                            },
+                            {
+                              "type": "text",
+                              "id": "FwSQi",
+                              "name": "bi4tx",
+                              "fill": "#64748B",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Zero personalização por candidatura",
+                              "lineHeight": 1.5,
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "zIMUH",
+                      "name": "beforeScore",
+                      "width": "fill_container",
+                      "fill": "#FEF2F2",
+                      "cornerRadius": 8,
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 1,
+                        "fill": "#FECACA"
+                      },
+                      "padding": [
+                        12,
+                        16
+                      ],
+                      "justifyContent": "space_between",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "fHTYd",
+                          "name": "scoreLbl",
+                          "fill": "#991B1B",
+                          "content": "Score ATS estimado",
+                          "fontFamily": "Inter",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "54nk2",
+                          "name": "scoreVal",
+                          "fill": "#EF4444",
+                          "content": "23%",
+                          "fontFamily": "Inter",
+                          "fontSize": 20,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "qsHJR",
+                  "name": "ArrowCenter",
+                  "width": 48,
+                  "height": 48,
+                  "fill": "#2563EB",
+                  "cornerRadius": 100,
+                  "effect": {
+                    "type": "shadow",
+                    "shadowType": "outer",
+                    "enabled": false,
+                    "color": "#000000"
+                  },
+                  "layout": "vertical",
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "EAxFi",
+                      "name": "arrowIc",
+                      "width": 20,
+                      "height": 20,
+                      "iconFontName": "arrow-right",
+                      "iconFontFamily": "lucide",
+                      "fill": "#FFFFFF"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "2VPop",
+                  "name": "AfterCard",
+                  "width": "fill_container",
+                  "fill": "#FFFFFF",
+                  "cornerRadius": 12,
+                  "stroke": {
+                    "align": "inside",
+                    "thickness": 1,
+                    "fill": "#E2E8F0"
+                  },
+                  "effect": {
+                    "type": "shadow",
+                    "shadowType": "outer",
+                    "enabled": false,
+                    "color": "#000000"
+                  },
+                  "layout": "vertical",
+                  "gap": 20,
+                  "padding": 28,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "3aCpo",
+                      "name": "afterBadge",
+                      "fill": "#DBEAFE",
+                      "cornerRadius": 6,
+                      "gap": 8,
+                      "padding": [
+                        4,
+                        10
+                      ],
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "icon_font",
+                          "id": "QoMCN",
+                          "name": "afterIcon",
+                          "width": 14,
+                          "height": 14,
+                          "iconFontName": "circle-check",
+                          "iconFontFamily": "lucide",
+                          "fill": "#2563EB"
+                        },
+                        {
+                          "type": "text",
+                          "id": "vYSh7",
+                          "name": "afterLabel",
+                          "fill": "#2563EB",
+                          "content": "Com MatchVaga",
+                          "fontFamily": "Inter",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text",
+                      "id": "Oa1AC",
+                      "name": "afterTitle",
+                      "fill": "#1E293B",
+                      "content": "Currículo sob medida",
+                      "fontFamily": "Inter",
+                      "fontSize": 20,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "yMhD5",
+                      "name": "afterList",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 16,
+                      "children": [
+                        {
+                          "type": "frame",
+                          "id": "28Ssu",
+                          "name": "ai1",
+                          "width": "fill_container",
+                          "gap": 12,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "3JIpu",
+                              "name": "ai1ic",
+                              "width": 16,
+                              "height": 16,
+                              "iconFontName": "check",
+                              "iconFontFamily": "lucide",
+                              "fill": "#10B981"
+                            },
+                            {
+                              "type": "text",
+                              "id": "xztlV",
+                              "name": "ai1tx",
+                              "fill": "#64748B",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Palavras-chave extraídas diretamente da descrição da vaga",
+                              "lineHeight": 1.5,
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "DhiOL",
+                          "name": "ai2",
+                          "width": "fill_container",
+                          "gap": 12,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "OdXpd",
+                              "name": "ai2ic",
+                              "width": 16,
+                              "height": 16,
+                              "iconFontName": "check",
+                              "iconFontFamily": "lucide",
+                              "fill": "#10B981"
+                            },
+                            {
+                              "type": "text",
+                              "id": "ug6yu",
+                              "name": "ai2tx",
+                              "fill": "#64748B",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Formatação limpa e compatível com todos os ATS",
+                              "lineHeight": 1.5,
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "jyrGW",
+                          "name": "ai3",
+                          "width": "fill_container",
+                          "gap": 12,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "DZ4z4",
+                              "name": "ai3ic",
+                              "width": 16,
+                              "height": 16,
+                              "iconFontName": "check",
+                              "iconFontFamily": "lucide",
+                              "fill": "#10B981"
+                            },
+                            {
+                              "type": "text",
+                              "id": "hySIJ",
+                              "name": "ai3tx",
+                              "fill": "#64748B",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Experiências reordenadas por relevância ao cargo",
+                              "lineHeight": 1.5,
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "3Zl4H",
+                          "name": "ai4",
+                          "width": "fill_container",
+                          "gap": 12,
+                          "alignItems": "center",
+                          "children": [
+                            {
+                              "type": "icon_font",
+                              "id": "tFi2h",
+                              "name": "ai4ic",
+                              "width": 16,
+                              "height": 16,
+                              "iconFontName": "check",
+                              "iconFontFamily": "lucide",
+                              "fill": "#10B981"
+                            },
+                            {
+                              "type": "text",
+                              "id": "EzSXJ",
+                              "name": "ai4tx",
+                              "fill": "#64748B",
+                              "textGrowth": "fixed-width",
+                              "width": "fill_container",
+                              "content": "Adaptação automática para cada candidatura",
+                              "lineHeight": 1.5,
+                              "fontFamily": "Inter",
+                              "fontSize": 14,
+                              "fontWeight": "normal"
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "Yl6kd",
+                      "name": "afterScore",
+                      "width": "fill_container",
+                      "fill": "#EFF6FF",
+                      "cornerRadius": 8,
+                      "stroke": {
+                        "align": "inside",
+                        "thickness": 1,
+                        "fill": "#BFDBFE"
+                      },
+                      "padding": [
+                        12,
+                        16
+                      ],
+                      "justifyContent": "space_between",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "QRGHS",
+                          "name": "scoreLbl2",
+                          "fill": "#1E40AF",
+                          "content": "Score ATS estimado",
+                          "fontFamily": "Inter",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "GUeyl",
+                          "name": "scoreVal2",
+                          "fill": "#2563EB",
+                          "content": "94%",
+                          "fontFamily": "Inter",
+                          "fontSize": 20,
+                          "fontWeight": "700"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "kaZQ7",
+              "name": "SolutionCTA",
+              "layout": "vertical",
+              "gap": 16,
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "Zy5lo",
+                  "name": "ctaButton",
+                  "fill": "#2563EB",
+                  "cornerRadius": 8,
+                  "gap": 8,
+                  "padding": [
+                    14,
+                    24
+                  ],
+                  "justifyContent": "center",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "icon_font",
+                      "id": "khLOA",
+                      "name": "ctaIc",
+                      "width": 16,
+                      "height": 16,
+                      "iconFontName": "sparkles",
+                      "iconFontFamily": "lucide",
+                      "fill": "#FFFFFF"
+                    },
+                    {
+                      "type": "text",
+                      "id": "KRvhV",
+                      "name": "ctaTx",
+                      "fill": "#FFFFFF",
+                      "content": "Otimizar Meu Currículo Agora",
+                      "lineHeight": 1.4,
+                      "fontFamily": "Inter",
+                      "fontSize": 15,
+                      "fontWeight": "600"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

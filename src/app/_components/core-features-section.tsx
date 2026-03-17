@@ -1,4 +1,4 @@
-import { ChartBar, FileText, Mail } from "lucide-react";
+import { ChartBar, FileText, LayoutDashboard } from "lucide-react";
 
 import { cn } from "@/utils/style";
 
@@ -16,32 +16,34 @@ interface Feature {
 
 const FEATURES: Feature[] = [
   {
-    tagIcon: <FileText className="size-3.5 text-accent-brand" />,
-    tagText: "Currículo Inteligente",
+    tagIcon: <ChartBar className="size-3.5 text-accent-brand" />,
+    tagText: "Análise de Gap",
     tagBg: "bg-accent-brand-light",
     tagColor: "text-accent-brand",
-    title: "Currículo adaptado automaticamente para cada vaga",
-    description:
-      "Nossa IA reorganiza, reescreve e otimiza seu currículo com as palavras-chave certas para cada vaga. Aumente suas chances de passar pelo ATS e impressionar recrutadores.",
-  },
-  {
-    tagIcon: <ChartBar className="size-3.5 text-accent-success" />,
-    tagText: "Análise de Gap",
-    tagBg: "bg-accent-success-light",
-    tagColor: "text-accent-success",
     title: "Saiba exatamente o que falta no seu perfil",
     description:
-      "Comparamos seu currículo com a vaga e mostramos gaps de competências, experiência e formação — com sugestões práticas de como preenchê-los.",
+      "Comparamos seu currículo com a vaga e mostramos gaps de competências, experiência e formação — com alguns cliques você já pode adicioná-los ao seu currículo.",
     reversed: true,
   },
   {
-    tagIcon: <Mail className="size-3.5 text-accent-warning" />,
-    tagText: "Mensagens de Abordagem",
+    tagIcon: <FileText className="size-3.5 text-accent-success" />,
+    tagBg: "bg-accent-success-light",
+    tagColor: "text-accent-success",
+    tagText: "Currículo Inteligente",
+
+    title: "Seu currículo adaptado automaticamente para cada vaga",
+    description:
+      "Nossa IA reorganiza, reescreve e otimiza seu currículo com as palavras-chave certas para cada vaga. Aumentando suas chances de passar pelo ATS e impressionar recrutadores.",
+  },
+  {
+    tagIcon: <LayoutDashboard className="size-3.5 text-accent-warning" />,
+    tagText: "Visão em Dashboard",
     tagBg: "bg-accent-warning-light",
     tagColor: "text-accent-warning",
-    title: "Mensagens que abrem portas e geram respostas",
+    title: "Acompanhe todas suas análises em um só lugar",
     description:
-      "Gere mensagens personalizadas para recrutadores no LinkedIn, e-mails de apresentação e follow-ups que demonstram seu valor único para a posição.",
+      "Visualize todas suas análises, média de score e seus currículos anteriores em um dashboard claro e acionável, com dados que vão fazer total diferença na sua jornada.",
+    reversed: true,
   },
 ];
 

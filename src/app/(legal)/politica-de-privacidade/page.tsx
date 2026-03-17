@@ -68,7 +68,7 @@ export default async function PoliticaDePrivacidadePage() {
             </li>
             <li>
               <strong className="text-foreground">Dados de pagamento:</strong>{" "}
-              histórico de transações e saldo de créditos. Não armazenamos os
+              histórico de transações e saldo de análises. Não armazenamos os
               dados do seu cartão de crédito (processamento pelo Stripe).
             </li>
             <li>
