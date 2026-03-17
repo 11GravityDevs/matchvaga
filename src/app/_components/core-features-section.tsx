@@ -60,14 +60,14 @@ function ScreenshotPlaceholder() {
 export function CoreFeaturesSection() {
   return (
     <section
-      id="recursos"
+      id="funcionalidades"
       className="flex w-full flex-col items-center gap-10 bg-background py-12 md:scroll-mt-12 md:gap-16 md:py-20"
     >
       {/* Section Header */}
       <AnimateOnScroll>
         <div className="flex max-w-section-header flex-col items-center gap-4 px-4 md:px-0">
           <span className="rounded-full border border-border px-3.5 py-1.5 text-xs font-semibold tracking-widest text-accent-brand">
-            RECURSOS
+            FUNCIONALIDADES
           </span>
           <h2 className="text-center text-section-header-large">
             Tudo que você precisa para se destacar

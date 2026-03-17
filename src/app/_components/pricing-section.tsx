@@ -66,29 +66,27 @@ export function PricingSection() {
       id="precos"
       className="flex w-full flex-col items-center gap-8 bg-surface-subtle py-12 md:scroll-mt-12 md:gap-12 md:py-20"
     >
-      <div className="mx-auto flex w-full max-w-landing-content flex-col items-center gap-8 px-4 md:gap-12 md:px-0">
-        <AnimateOnScroll>
-          <div className="flex max-w-section-header flex-col items-center gap-4">
-            <span className="rounded-full border border-border px-3.5 py-1.5 text-xs font-semibold tracking-widest text-accent-brand">
-              PREÇOS
-            </span>
-            <h2 className="text-center text-section-header-large">
-              Preços que cabem no seu bolso
-            </h2>
-            <p className="text-center text-base leading-normal text-muted-foreground">
-              Pague apenas pelo que usar, sem assinatura. Aceitamos PIX e cartão
-              de crédito.
-            </p>
-          </div>
-        </AnimateOnScroll>
+      <AnimateOnScroll>
+        <div className="flex max-w-section-header flex-col items-center gap-4">
+          <span className="rounded-full border border-border px-3.5 py-1.5 text-xs font-semibold tracking-widest text-accent-brand">
+            PREÇOS
+          </span>
+          <h2 className="text-center text-section-header-large">
+            Preços que cabem no seu bolso
+          </h2>
+          <p className="text-center text-base leading-normal text-muted-foreground">
+            Pague apenas pelo que usar, sem assinatura. Aceitamos PIX e cartão
+            de crédito.
+          </p>
+        </div>
+      </AnimateOnScroll>
 
-        <AnimateOnScroll delay={80} className="flex w-full flex-col gap-5">
-          <CheckoutPackagesGrid
-            loadingPackageId={loadingPackageId}
-            onSelectPackage={handleSelectPackage}
-          />
-        </AnimateOnScroll>
-      </div>
+      <AnimateOnScroll delay={80} className="flex w-full flex-col gap-5">
+        <CheckoutPackagesGrid
+          loadingPackageId={loadingPackageId}
+          onSelectPackage={handleSelectPackage}
+        />
+      </AnimateOnScroll>
     </section>
   );
 }

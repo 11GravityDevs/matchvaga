@@ -1,3 +1,5 @@
+import type { MouseEventHandler } from "react";
+
 import Link from "next/link";
 import { FileSearch } from "lucide-react";
 
@@ -11,6 +13,7 @@ interface LogoProps {
   textClassName?: string;
   variant?: "default" | "light";
   href?: string;
+  onClick?: MouseEventHandler<HTMLAnchorElement>;
 }
 
 const logoContent = (
@@ -52,6 +55,7 @@ export function Logo({
   textClassName,
   variant = "default",
   href,
+  onClick,
 }: LogoProps) {
   const isLight = variant === "light";
   const content = logoContent(
@@ -70,6 +74,7 @@ export function Logo({
           className
         )}
         aria-label="MatchVaga - início"
+        onClick={onClick}
       >
         {content}
       </Link>
