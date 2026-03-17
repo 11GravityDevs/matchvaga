@@ -89,7 +89,11 @@ CREATE POLICY "optimized_documents_delete_via_analysis" ON optimized_documents F
   USING (EXISTS (SELECT 1 FROM analyses a WHERE a.id = analysis_id AND a.user_id = auth.uid()));
 CREATE POLICY "purchases_select_own" ON purchases FOR SELECT
   USING (auth.uid() = user_id);
+CREATE POLICY "purchases_insert_own" ON purchases FOR INSERT
+  WITH CHECK (auth.uid() = user_id);
 CREATE POLICY "pix_pending_charges_insert_own" ON pix_pending_charges FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 CREATE POLICY "pix_pending_charges_select_own" ON pix_pending_charges FOR SELECT
+  USING (auth.uid() = user_id);
+CREATE POLICY "pix_pending_charges_delete_own" ON pix_pending_charges FOR DELETE
   USING (auth.uid() = user_id);

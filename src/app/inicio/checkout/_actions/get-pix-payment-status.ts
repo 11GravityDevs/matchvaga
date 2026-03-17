@@ -6,6 +6,8 @@ import { getAbacatePixChargeStatus } from "@/lib/abacatepay/client";
 import { logServerError } from "@/lib/logger";
 import { getAuthenticatedUser } from "@/lib/supabase/server";
 
+import { applyPixPayment } from "../_utils/apply-pix-payment";
+
 const getPixPaymentStatusSchema = z.object({
   paymentId: z.string().min(1, "Pagamento inválido."),
 });
@@ -79,7 +81,7 @@ export async function getPixPaymentStatus(input: {
 
   const { data: pendingCharge, error: pendingSelectError } = await auth.supabase
     .from("pix_pending_charges")
-    .select("charge_id")
+    .select("charge_id, user_id, package_id")
     .eq("charge_id", paymentId)
     .maybeSingle();
 
@@ -110,6 +112,26 @@ export async function getPixPaymentStatus(input: {
 
     if (!normalizedStatus) {
       return { success: false, error: "Status de pagamento inválido." };
+    }
+
+    if (normalizedStatus === "paid") {
+      const applyResult = await applyPixPayment(auth.supabase, paymentId, {
+        user_id: pendingCharge.user_id,
+        package_id: pendingCharge.package_id,
+      });
+      if (!applyResult.success) {
+        logServerError({
+          context: "server_action",
+          operation: "getPixPaymentStatus",
+          action: "getPixPaymentStatus",
+          message: "Failed to apply pix payment",
+          errorMessage: applyResult.error,
+        });
+        return {
+          success: false,
+          error: "Erro ao processar a confirmação do pagamento.",
+        };
+      }
     }
 
     return {
