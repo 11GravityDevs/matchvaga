@@ -36,7 +36,7 @@ export function PricingSection() {
     const credits = getCreditsForPackage(id);
     const priceCentavos = getPackagePriceCentavos(id);
     trackPricingPackageSelectedEvent(id, credits, priceCentavos);
-    trackCheckoutStartedEvent(id, priceCentavos);
+    trackCheckoutStartedEvent(id, priceCentavos, "stripe");
 
     setLoadingPackageId(id);
 

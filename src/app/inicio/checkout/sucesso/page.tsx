@@ -11,34 +11,56 @@ import {
 } from "@/constants/routes";
 
 import { getCheckoutSessionStatus } from "../_actions/get-checkout-session-status";
+import { getPixPaymentStatus } from "../_actions/get-pix-payment-status";
 import { CheckoutSuccessTracker } from "../_components/checkout-success-tracker";
 import { CheckoutUnlockHandler } from "../_components/checkout-unlock-handler";
 
 interface CheckoutSuccessPageProps {
-  searchParams: Promise<{ session_id?: string; unlock?: string }>;
+  searchParams: Promise<{
+    session_id?: string;
+    payment_id?: string;
+    unlock?: string;
+  }>;
 }
 
 export default async function CheckoutSuccessPage({
   searchParams,
 }: CheckoutSuccessPageProps) {
-  const { session_id: sessionId, unlock } = await searchParams;
+  const {
+    session_id: sessionId,
+    payment_id: paymentId,
+    unlock,
+  } = await searchParams;
 
-  if (!sessionId) {
+  if (!sessionId && !paymentId) {
     redirect(ROUTE_HOME_CHECKOUT_CANCEL);
   }
 
-  const sessionStatusResult = await getCheckoutSessionStatus({ sessionId });
+  if (sessionId) {
+    const sessionStatusResult = await getCheckoutSessionStatus({ sessionId });
 
-  if (
-    !sessionStatusResult.success ||
-    sessionStatusResult.status !== "complete"
-  ) {
-    redirect(ROUTE_HOME_CHECKOUT_CANCEL);
+    if (
+      !sessionStatusResult.success ||
+      sessionStatusResult.status !== "complete"
+    ) {
+      redirect(ROUTE_HOME_CHECKOUT_CANCEL);
+    }
+  }
+
+  if (paymentId) {
+    const pixStatusResult = await getPixPaymentStatus({ paymentId });
+    if (!pixStatusResult.success || pixStatusResult.status !== "paid") {
+      redirect(ROUTE_HOME_CHECKOUT_CANCEL);
+    }
   }
 
   return (
     <main className="flex flex-1 flex-col items-center justify-center section-gap page-padding">
-      <CheckoutSuccessTracker sessionId={sessionId} />
+      <CheckoutSuccessTracker
+        sessionId={sessionId}
+        paymentId={paymentId}
+        paymentProvider={paymentId ? "pix" : "stripe"}
+      />
       {unlock && <CheckoutUnlockHandler analysisId={unlock} />}
       <div className="flex flex-col items-center justify-center gap-6 text-center">
         <div className="flex size-20 items-center justify-center rounded-full bg-accent-success-light">
@@ -49,7 +71,9 @@ export default async function CheckoutSuccessPage({
           <h1 className="text-page-title">Pagamento concluído</h1>
           <p className="max-w-content text-page-subtitle text-muted-foreground">
             Obrigado pela compra. Seu pagamento foi processado com sucesso.
-            {!unlock && sessionId && " Em breve você terá acesso às análises."}
+            {!unlock &&
+              (sessionId || paymentId) &&
+              " Em breve você terá acesso às análises."}
           </p>
         </div>
 

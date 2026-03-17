@@ -44,7 +44,8 @@ export async function handleCheckoutSessionCompleted(
     const supabase = createAdminSupabaseClient();
 
     const { error: purchaseError } = await supabase.from("purchases").insert({
-      stripe_session_id: session.id,
+      payment_provider: "stripe",
+      external_id: session.id,
       user_id: userId,
       package_id: packageId,
       credits_granted: creditsToGrant,
