@@ -22,6 +22,7 @@ interface CheckoutPixFormProps {
   priceFormatted: string;
   unlockAnalysisId?: string;
   onExpiredReturnToPackages?: () => void;
+  onPaymentConfirmed?: () => void;
 }
 
 const PIX_STATUS_POLLING_MS = 5000;
@@ -35,6 +36,7 @@ export function CheckoutPixForm({
   priceFormatted,
   unlockAnalysisId,
   onExpiredReturnToPackages,
+  onPaymentConfirmed,
 }: CheckoutPixFormProps) {
   const [statusMessage, setStatusMessage] = useState<string>(
     "Aguardando confirmação do pagamento..."
@@ -71,6 +73,11 @@ export function CheckoutPixForm({
       }
 
       if (result.status === "paid") {
+        if (onPaymentConfirmed) {
+          onPaymentConfirmed();
+          return;
+        }
+
         setStatusMessage("Pagamento confirmado. Redirecionando...");
         try {
           sessionStorage.setItem(CHECKOUT_PIX_JUST_PAID_KEY, "1");
@@ -115,7 +122,13 @@ export function CheckoutPixForm({
       cancelled = true;
       clearInterval(intervalId);
     };
-  }, [paymentId, router, unlockAnalysisId, onExpiredReturnToPackages]);
+  }, [
+    paymentId,
+    router,
+    unlockAnalysisId,
+    onExpiredReturnToPackages,
+    onPaymentConfirmed,
+  ]);
 
   const handleCopyPixCode = async () => {
     try {

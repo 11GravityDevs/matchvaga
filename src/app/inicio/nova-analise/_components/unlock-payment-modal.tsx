@@ -190,6 +190,13 @@ export function UnlockPaymentModal({
     if (sessionId) trackCheckoutCompletedEvent(sessionId, "stripe");
   }, [sessionId]);
 
+  const handlePixPaymentSuccess = useCallback(() => {
+    setState("processing");
+    if (pixPayment?.paymentId) {
+      trackCheckoutCompletedEvent(pixPayment.paymentId, "pix");
+    }
+  }, [pixPayment]);
+
   useEffect(() => {
     if (
       initialProcessingFromRedirect?.sessionId &&
@@ -302,6 +309,7 @@ export function UnlockPaymentModal({
             )}
             unlockAnalysisId={analysisId}
             onExpiredReturnToPackages={() => onOpenChange(false)}
+            onPaymentConfirmed={handlePixPaymentSuccess}
           />
         )}
 
