@@ -43,6 +43,13 @@ function normalizeStatus(status?: string): PixPaymentStatus | undefined {
   }
 }
 
+function isExpiredByTime(expiresAt?: string, now = new Date()): boolean {
+  if (!expiresAt) return false;
+  const date = new Date(expiresAt);
+  if (Number.isNaN(date.getTime())) return false;
+  return date.getTime() <= now.getTime();
+}
+
 export async function getPixPaymentStatus(input: {
   paymentId: string;
 }): Promise<GetPixPaymentStatusResult> {
@@ -114,7 +121,15 @@ export async function getPixPaymentStatus(input: {
       return { success: false, error: "Status de pagamento inválido." };
     }
 
-    if (normalizedStatus === "paid") {
+    const expiresAt = statusResult.data.expiresAt;
+    const shouldForceExpired =
+      normalizedStatus !== "paid" && isExpiredByTime(expiresAt);
+
+    const finalStatus: PixPaymentStatus = shouldForceExpired
+      ? "expired"
+      : normalizedStatus;
+
+    if (finalStatus === "paid") {
       const applyResult = await applyPixPayment(auth.supabase, paymentId, {
         user_id: pendingCharge.user_id,
         package_id: pendingCharge.package_id,
@@ -136,8 +151,8 @@ export async function getPixPaymentStatus(input: {
 
     return {
       success: true,
-      status: normalizedStatus,
-      expiresAt: statusResult.data.expiresAt,
+      status: finalStatus,
+      expiresAt,
     };
   } catch (err) {
     logServerError(

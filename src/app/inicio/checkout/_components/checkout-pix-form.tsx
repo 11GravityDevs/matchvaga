@@ -7,7 +7,6 @@ import { useEffect, useMemo, useState } from "react";
 import { Copy, QrCode } from "lucide-react";
 
 import { getPixPaymentStatus } from "@/app/inicio/checkout/_actions/get-pix-payment-status";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ROUTE_HOME_CHECKOUT_SUCCESS } from "@/constants/routes";
 
@@ -22,7 +21,7 @@ interface CheckoutPixFormProps {
   packageName: string;
   priceFormatted: string;
   unlockAnalysisId?: string;
-  onRequestNewPayment?: () => void;
+  onExpiredReturnToPackages?: () => void;
 }
 
 const PIX_STATUS_POLLING_MS = 5000;
@@ -35,13 +34,12 @@ export function CheckoutPixForm({
   packageName,
   priceFormatted,
   unlockAnalysisId,
-  onRequestNewPayment,
+  onExpiredReturnToPackages,
 }: CheckoutPixFormProps) {
   const [statusMessage, setStatusMessage] = useState<string>(
     "Aguardando confirmação do pagamento..."
   );
   const [copyButtonLabel, setCopyButtonLabel] = useState("Copiar código");
-  const [canRequestNewPayment, setCanRequestNewPayment] = useState(false);
   const { showErrorToastNotification, showSuccessToastNotification } =
     useToastNotification();
   const router = useRouter();
@@ -85,18 +83,24 @@ export function CheckoutPixForm({
       }
 
       if (result.status === "expired") {
+        if (onExpiredReturnToPackages) {
+          onExpiredReturnToPackages();
+          return;
+        }
         setStatusMessage(
           "PIX expirado. Gere um novo pagamento para continuar."
         );
-        setCanRequestNewPayment(true);
         return;
       }
 
       if (result.status === "cancelled") {
+        if (onExpiredReturnToPackages) {
+          onExpiredReturnToPackages();
+          return;
+        }
         setStatusMessage(
           "Pagamento cancelado. Gere um novo PIX para continuar."
         );
-        setCanRequestNewPayment(true);
         return;
       }
     };
@@ -111,7 +115,7 @@ export function CheckoutPixForm({
       cancelled = true;
       clearInterval(intervalId);
     };
-  }, [paymentId, router, unlockAnalysisId]);
+  }, [paymentId, router, unlockAnalysisId, onExpiredReturnToPackages]);
 
   const handleCopyPixCode = async () => {
     try {
@@ -195,19 +199,6 @@ export function CheckoutPixForm({
             </span>
           ) : null}
         </div>
-
-        {canRequestNewPayment && onRequestNewPayment ? (
-          <div className="flex justify-end">
-            <Button
-              type="button"
-              variant="outline"
-              size="brand"
-              onClick={onRequestNewPayment}
-            >
-              Gerar novo PIX
-            </Button>
-          </div>
-        ) : null}
       </div>
     </div>
   );

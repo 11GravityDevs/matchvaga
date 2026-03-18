@@ -225,11 +225,7 @@ export function CheckoutContent({
               getPackagePriceCentavos(effectiveSelectedPackageId)
             )}
             unlockAnalysisId={unlockAnalysisId}
-            onRequestNewPayment={() => {
-              setPixPayment(null);
-              setPaymentMethod(null);
-              setPendingPackageId(effectiveSelectedPackageId);
-            }}
+            onExpiredReturnToPackages={handleChooseAnotherPackage}
           />
         ) : showUnavailableMessage ? (
           <Card className="w-full border border-border">
