@@ -12,6 +12,75 @@ export interface ApplyPixPaymentPending {
   package_id: string;
 }
 
+const CREDITS_UPDATE_MAX_ATTEMPTS = 2;
+
+async function applyCreditsAtomically(
+  supabase: SupabaseClient,
+  userId: string,
+  creditsToGrant: number
+): Promise<boolean> {
+  for (let attempt = 0; attempt < CREDITS_UPDATE_MAX_ATTEMPTS; attempt++) {
+    const { data: currentRow, error: selectError } = await supabase
+      .from("user_credits")
+      .select("credits")
+      .eq("user_id", userId)
+      .maybeSingle();
+
+    if (selectError) {
+      logServerError({
+        context: "server_action",
+        operation: "applyPixPayment",
+        message: selectError.message,
+      });
+      return false;
+    }
+
+    const currentCredits =
+      (currentRow?.credits as number | null | undefined) ?? 0;
+    const newCreditsTotal = currentCredits + creditsToGrant;
+
+    if (currentRow === null) {
+      const { error: insertError } = await supabase
+        .from("user_credits")
+        .insert({ user_id: userId, credits: creditsToGrant });
+
+      if (!insertError) return true;
+      if (insertError.code === "23505") continue;
+      logServerError({
+        context: "server_action",
+        operation: "applyPixPayment",
+        message: insertError.message,
+      });
+      return false;
+    }
+
+    const { data: updatedRow, error: updateError } = await supabase
+      .from("user_credits")
+      .update({ credits: newCreditsTotal })
+      .eq("user_id", userId)
+      .eq("credits", currentCredits)
+      .select("credits")
+      .maybeSingle();
+
+    if (!updateError && updatedRow != null) return true;
+    if (updateError) {
+      logServerError({
+        context: "server_action",
+        operation: "applyPixPayment",
+        message: updateError.message,
+      });
+      return false;
+    }
+  }
+
+  logServerError({
+    context: "server_action",
+    operation: "applyPixPayment",
+    message: "Credits update failed after optimistic lock retries",
+  });
+  return false;
+}
+
 export async function applyPixPayment(
   supabase: SupabaseClient,
   chargeId: string,
@@ -53,42 +122,12 @@ export async function applyPixPayment(
       return { success: false, error: "Database error" };
     }
 
-    const { data: currentCreditsRow, error: creditsSelectError } =
-      await supabase
-        .from("user_credits")
-        .select("credits")
-        .eq("user_id", pending.user_id)
-        .maybeSingle();
-
-    if (creditsSelectError) {
-      logServerError({
-        context: "server_action",
-        operation: "applyPixPayment",
-        message: creditsSelectError.message,
-      });
-      return { success: false, error: "Database error" };
-    }
-
-    const newCreditsTotal =
-      ((currentCreditsRow?.credits as number | null | undefined) ?? 0) +
-      creditsToGrant;
-
-    const { error: creditsUpsertError } = await supabase
-      .from("user_credits")
-      .upsert(
-        {
-          user_id: pending.user_id,
-          credits: newCreditsTotal,
-        },
-        { onConflict: "user_id" }
-      );
-
-    if (creditsUpsertError) {
-      logServerError({
-        context: "server_action",
-        operation: "applyPixPayment",
-        message: creditsUpsertError.message,
-      });
+    const creditsApplied = await applyCreditsAtomically(
+      supabase,
+      pending.user_id,
+      creditsToGrant
+    );
+    if (!creditsApplied) {
       return { success: false, error: "Database error" };
     }
 

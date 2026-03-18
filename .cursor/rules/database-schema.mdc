@@ -13,11 +13,12 @@ Ref: `supabase/migrations/20250222000000_initial_schema.sql`, `supabase/migratio
 - **resumes** — id, user_id, parsed_data (JSONB → ResumeData), created_at, updated_at.
 - **analyses** — id, user_id, resume_id, job_snapshot (JSONB → jobSnapshotSchema), score (0–100), optimized_score (0–100, opcional), matched_skills_count (≥0), user_hard_skills (JSONB array), user_soft_skills (JSONB array), missing_hard_skills (JSONB array), missing_soft_skills (JSONB array), status (pending|pending_payment|completed|abandoned), optimized_resume_data (JSONB, opcional; preenchido ao concluir o passo de melhorar currículo em generateResumePreview; usado na geração do documento otimizado no download), created_at.
 - **user_credits** — user_id (PK), credits (≥0, default 0), updated_at.
-- **purchases** — id, stripe_session_id (UNIQUE), user_id, package_id, credits_granted (>0), created_at. Sem policies RLS; só service client (webhook).
+- **purchases** — id, payment_provider (TEXT), external_id (TEXT), user_id, package_id, credits_granted (>0), created_at. UNIQUE (payment_provider, external_id). Webhook Stripe e aplicação de PIX (applyPixPayment) escrevem; usuário só lê próprio.
+- **pix_pending_charges** — charge_id (PK), user_id, package_id, analysis_id (opcional), created_at. Contexto para reconciliação de PIX (AbacatePay); usuário insere/select/delete próprio.
 - **optimized_documents** — id, analysis_id, file_path, format (pdf|docx), created_at.
 
 **Mapping:** parsed_data → resumeDataSchema; job_snapshot → jobSnapshotSchema; user_hard_skills/user_soft_skills = skills matched; missing_hard_skills/missing_soft_skills = skills faltantes; status atualizado em runSkillsMatch e generateResumePreview.
 
-**RLS:** resumes, analyses, user_credits = auth.uid()=user_id. user_credits usa WITH CHECK. optimized_documents = SELECT/INSERT/DELETE via análise (EXISTS analysis do user). purchases = RLS ativado mas sem policies (apenas service role).
+**RLS:** resumes, analyses, user_credits = auth.uid()=user_id. user_credits usa WITH CHECK. optimized_documents = SELECT/INSERT/DELETE via análise (EXISTS analysis do user). purchases = purchases_select_own (SELECT), purchases_insert_own (INSERT WITH CHECK auth.uid()=user_id); webhook Stripe usa service role. pix_pending_charges = insert_own, select_own, delete_own.
 
 **Storage:** bucket `documents` para PDF/DOCX; políticas em `20250222000001_storage_documents.sql`: INSERT, SELECT e DELETE quando `(storage.foldername(name))[1] = auth.uid()::text` (path `{user_id}/*`).

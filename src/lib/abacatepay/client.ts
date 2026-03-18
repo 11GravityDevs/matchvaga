@@ -1,5 +1,3 @@
-"use server";
-
 import { logServerError } from "@/lib/logger";
 
 const ABACATEPAY_BASE_URL = "https://api.abacatepay.com/v1";
