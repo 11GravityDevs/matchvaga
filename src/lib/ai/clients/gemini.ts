@@ -1,6 +1,7 @@
 import { type Schema, GoogleGenerativeAI } from "@google/generative-ai";
 
 import { getGeminiClient } from "@/lib/ai/clients/create-client";
+import { logAiCost } from "@/lib/ai/cost";
 import {
   refineResumeTextsResponseSchema,
   refineResumeTextsResponseZodSchema,
@@ -183,6 +184,15 @@ export async function extractResumeFromFile(
         { text: RESUME_USER_PROMPT },
       ]);
 
+      const usage = result.response.usageMetadata;
+      if (usage) {
+        logAiCost(
+          GEMINI_MODEL,
+          usage.promptTokenCount,
+          usage.candidatesTokenCount,
+          "extractResumeFromFile (DOCX)"
+        );
+      }
       return parseAndValidateResult(result);
     }
 
@@ -198,6 +208,15 @@ export async function extractResumeFromFile(
       { text: userPromptWithContext },
     ]);
 
+    const usage = result.response.usageMetadata;
+    if (usage) {
+      logAiCost(
+        GEMINI_MODEL,
+        usage.promptTokenCount,
+        usage.candidatesTokenCount,
+        "extractResumeFromFile (PDF)"
+      );
+    }
     return parseAndValidateResult(result);
   } catch (error) {
     const userMessage = handleAiError(error, {
@@ -294,6 +313,16 @@ export async function refineResumeTexts(data: ResumeData): Promise<ResumeData> {
   try {
     const generateResult = await model.generateContent([{ text: userMessage }]);
     const response = generateResult.response;
+
+    const usage = response.usageMetadata;
+    if (usage) {
+      logAiCost(
+        GEMINI_MODEL,
+        usage.promptTokenCount,
+        usage.candidatesTokenCount,
+        "refineResumeTexts"
+      );
+    }
 
     const candidates = (response as { candidates?: unknown[] }).candidates;
     if (!candidates?.length) {

@@ -10,6 +10,7 @@ import {
   RESUME_SYNTHESIS_HARD_SKILLS_SYSTEM_PROMPT,
   RESUME_SYNTHESIS_SUMMARY_SYSTEM_PROMPT,
 } from "@/lib/ai/prompts/resume-synthesis";
+import { logAiCost } from "@/lib/ai/cost";
 import { handleAiError } from "@/lib/ai/errors";
 import { isLanguageSkill } from "@/lib/ai/utils/job-skills";
 import { logServerError } from "@/lib/logger";
@@ -60,6 +61,16 @@ export async function synthesizeSummary(params: {
       },
       temperature: 0.25,
     });
+
+    const usage = message.usage;
+    if (usage) {
+      logAiCost(
+        SONNET_MODEL,
+        usage.input_tokens,
+        usage.output_tokens,
+        "synthesizeSummary"
+      );
+    }
 
     const textBlock = message.content.find((b) => b.type === "text");
     const content =
@@ -116,6 +127,16 @@ export async function synthesizeHardSkillsByCategory(params: {
       },
       temperature: 0.4,
     });
+
+    const usage = message.usage;
+    if (usage) {
+      logAiCost(
+        SONNET_MODEL,
+        usage.input_tokens,
+        usage.output_tokens,
+        "synthesizeHardSkillsByCategory"
+      );
+    }
 
     const textBlock = message.content.find((b) => b.type === "text");
     const content =
@@ -203,6 +224,16 @@ export async function extractJobSkills(
       },
       temperature: 0.2,
     });
+
+    const usage = message.usage;
+    if (usage) {
+      logAiCost(
+        HAIKU_MODEL,
+        usage.input_tokens,
+        usage.output_tokens,
+        "extractJobSkills"
+      );
+    }
 
     const textBlock = message.content.find((b) => b.type === "text");
     const content =

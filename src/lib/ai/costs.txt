@@ -1,0 +1,9 @@
+[AI cost] [extractResumeFromFile (PDF)] gemini-2.5-flash-lite | input: 1555 | output: 2279 | USD: $0.001067 | BRL: R$ 0.0055
+
+[AI cost] [refineResumeTexts] gemini-2.5-flash-lite | input: 1185 | output: 995 | USD: $0.000517 | BRL: R$ 0.0027
+
+[AI cost] [extractJobSkills] claude-haiku-4-5 | input: 2926 | output: 1518 | USD: $0.010516 | BRL: R$ 0.0546
+
+[AI cost] [synthesizeHardSkillsByCategory] claude-sonnet-4-6 | input: 848 | output: 545 | USD: $0.010719 | BRL: R$ 0.0556
+
+[AI cost] [synthesizeSummary] claude-sonnet-4-6 | input: 983 | output: 260 | USD: $0.006849 | BRL: R$ 0.0355
