@@ -9,4 +9,4 @@ alwaysApply: false
 
 **Branch:** `<prefixo>/<issue-key-lower>/<slug-curto>` — ex. `feat/mat-40/no-analysis-button`. Prefixo: `feat`|`fix`|`chore`. Slug: um segmento kebab-case do título.
 
-**Passos:** (1) get_issue(id) → prefixo/slug do título. (2) git checkout main && git pull. (3) git checkout -b `<branch>`. (4) create_issue(id, assignee: "me", state: "In Progress"). (5) git push -u origin `<branch>`.
+**Passos:** (1) get_issue(id) → prefixo/slug do título. (2) git checkout develop && git pull. (3) git checkout -b `<branch>`. (4) create_issue(id, assignee: "me", state: "In Progress"). (5) git push -u origin `<branch>`.

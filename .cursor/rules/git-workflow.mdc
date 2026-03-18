@@ -12,4 +12,4 @@ alwaysApply: false
 | Mensagem de commit | `commit-messages.mdc` |
 | Template PR | `pull-request-template.mdc` |
 
-Branch padrão: `main`. Pre-commit: lint-staged.
+Branch padrão: `develop`. Pre-commit: lint-staged.
