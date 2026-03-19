@@ -1,13 +1,27 @@
 import { SITE_URL } from "@/constants/site";
+import {
+  CHECKOUT_PACKAGE_IDS,
+  getPackageName,
+  getPackagePriceCentavos,
+} from "@/constants/checkout-packages";
 
-import { FAQ_ITEMS } from "../_constants/faq";
+import { FAQ_ITEMS, getFaqAnswerText } from "../_constants/faq";
+
+const SOFTWARE_OFFERS_JSON_LD = CHECKOUT_PACKAGE_IDS.map((packageId) => ({
+  "@type": "Offer" as const,
+  price: (getPackagePriceCentavos(packageId) / 100).toFixed(2),
+  priceCurrency: "BRL",
+  name: getPackageName(packageId),
+  availability: "https://schema.org/InStock",
+  url: SITE_URL,
+}));
 
 const ORGANIZATION_JSON_LD = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "MatchVaga",
   url: SITE_URL,
-  logo: `${SITE_URL}/opengraph-image.png`,
+  logo: `${SITE_URL}/favicon.ico`,
   description:
     "MatchVaga é uma plataforma SaaS que adapta currículos automaticamente para cada vaga, otimiza para sistemas ATS e gera mensagens de apresentação com IA. Focada no mercado de candidatos no Brasil.",
   inLanguage: "pt-BR",
@@ -50,20 +64,7 @@ const SOFTWARE_APPLICATION_JSON_LD = {
     "Mensagens de apresentação geradas por IA",
     "Exportação em PDF e DOCX",
   ],
-  offers: [
-    {
-      "@type": "Offer",
-      price: "0",
-      priceCurrency: "BRL",
-      name: "Grátis",
-    },
-    {
-      "@type": "Offer",
-      price: "19.90",
-      priceCurrency: "BRL",
-      name: "Profissional",
-    },
-  ],
+  offers: SOFTWARE_OFFERS_JSON_LD,
 };
 
 const FAQ_PAGE_JSON_LD = {
@@ -74,7 +75,7 @@ const FAQ_PAGE_JSON_LD = {
     name: item.question,
     acceptedAnswer: {
       "@type": "Answer",
-      text: item.answer,
+      text: getFaqAnswerText(item),
     },
   })),
 };

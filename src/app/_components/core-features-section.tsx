@@ -22,7 +22,7 @@ const FEATURES: Feature[] = [
     tagColor: "text-accent-brand",
     title: "Descubra por que seu currículo não está convencendo",
     description:
-      "Veja com clareza quais competências, experiências e palavras-chave estão faltando para cada vaga e saiba onde ajustar antes de se candidatar.",
+      "Veja com clareza quais competências, experiências e palavras-chave estão faltando para cada vaga e selecione as habilidades que fazem sentido antes de se candidatar.",
     reversed: true,
   },
   {

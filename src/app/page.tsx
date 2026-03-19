@@ -18,7 +18,9 @@ import { AtsProblemSection } from "./_components/ats-problem-section";
 import { AtsSolutionSection } from "./_components/ats-solution-section";
 
 export const metadata: Metadata = {
-  title: "MatchVaga",
+  title: {
+    absolute: "MatchVaga - Chega de perder tempo com candidaturas",
+  },
   description:
     "Descubra por que seu currículo é rejeitado, veja os gaps em relação à vaga e gere uma versão otimizada para aumentar suas chances de passar pelos filtros ATS e conquistar mais entrevistas.",
   keywords: [
