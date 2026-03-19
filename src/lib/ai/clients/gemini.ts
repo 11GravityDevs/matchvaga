@@ -42,6 +42,7 @@ export interface ExtractResumeError {
 export type ExtractResumeOutput = ExtractResumeResult | ExtractResumeError;
 
 const GEMINI_MODEL = "gemini-2.5-flash-lite";
+const GEMINI_FALLBACK_MODEL = "gemini-2.5-flash";
 
 function normalizeWhitespace(value: string): string {
   return value.replace(/\s+/g, " ").trim();
@@ -150,22 +151,18 @@ function normalizeExtractedSkills(parsed: unknown): unknown {
   };
 }
 
-export async function extractResumeFromFile(
-  file: File
+interface ExtractResumeWithModelInput {
+  arrayBuffer: ArrayBuffer;
+  mimeType: string;
+}
+
+async function extractResumeWithModel(
+  genAI: GoogleGenerativeAI,
+  modelName: string,
+  { arrayBuffer, mimeType }: ExtractResumeWithModelInput
 ): Promise<ExtractResumeOutput> {
-  const result = getGeminiClient();
-  if (!result.ok) return { success: false, error: result.error };
-  const genAI = result.client;
-
-  const fileValidation = await validateResumeFile(file);
-  if (!fileValidation.valid) {
-    return { success: false, error: fileValidation.error };
-  }
-
-  const { arrayBuffer, mimeType } = fileValidation;
-
   const model = genAI.getGenerativeModel({
-    model: GEMINI_MODEL,
+    model: modelName,
     systemInstruction: RESUME_SYSTEM_INSTRUCTION,
     generationConfig: {
       responseMimeType: "application/json",
@@ -182,8 +179,7 @@ export async function extractResumeFromFile(
         { text: textPrompt },
         { text: RESUME_USER_PROMPT },
       ]);
-
-      return parseAndValidateResult(result);
+      return parseAndValidateResult(result, modelName);
     }
 
     const base64 = Buffer.from(arrayBuffer).toString("base64");
@@ -197,15 +193,53 @@ export async function extractResumeFromFile(
       },
       { text: userPromptWithContext },
     ]);
-
-    return parseAndValidateResult(result);
+    return parseAndValidateResult(result, modelName);
   } catch (error) {
     const userMessage = handleAiError(error, {
       operation: "extractResume",
-      model: GEMINI_MODEL,
+      model: modelName,
     });
     return { success: false, error: userMessage };
   }
+}
+
+export async function extractResumeFromFile(
+  file: File
+): Promise<ExtractResumeOutput> {
+  const geminiResult = getGeminiClient();
+  if (!geminiResult.ok) return { success: false, error: geminiResult.error };
+  const genAI = geminiResult.client;
+
+  const fileValidation = await validateResumeFile(file);
+  if (!fileValidation.valid) {
+    return { success: false, error: fileValidation.error };
+  }
+
+  const { arrayBuffer, mimeType } = fileValidation;
+
+  const extraction = await extractResumeWithModel(genAI, GEMINI_MODEL, {
+    arrayBuffer,
+    mimeType,
+  });
+
+  if (extraction.success) {
+    return extraction;
+  }
+
+  logServerError(
+    {
+      context: "ai",
+      operation: "extractResume",
+      message: "Fallback para Gemini 2.5 Flash após falha do Lite.",
+      model: GEMINI_FALLBACK_MODEL,
+    },
+    new Error(extraction.error)
+  );
+
+  return extractResumeWithModel(genAI, GEMINI_FALLBACK_MODEL, {
+    arrayBuffer,
+    mimeType,
+  });
 }
 
 function parseAndValidateResult(
@@ -213,7 +247,8 @@ function parseAndValidateResult(
     ReturnType<
       ReturnType<GoogleGenerativeAI["getGenerativeModel"]>["generateContent"]
     >
-  >
+  >,
+  modelName: string = GEMINI_MODEL
 ): ExtractResumeOutput {
   const response = result.response;
   const text = response.text();
@@ -230,7 +265,7 @@ function parseAndValidateResult(
     if (!validated.success) {
       const userMessage = handleAiError(validated.error, {
         operation: "extractResume",
-        model: GEMINI_MODEL,
+        model: modelName,
       });
       return { success: false, error: userMessage };
     }
@@ -238,7 +273,7 @@ function parseAndValidateResult(
   } catch (error) {
     const userMessage = handleAiError(error, {
       operation: "extractResume",
-      model: GEMINI_MODEL,
+      model: modelName,
     });
     return { success: false, error: userMessage };
   }
