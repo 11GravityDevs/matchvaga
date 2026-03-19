@@ -1,4 +1,3 @@
-import { SchemaType } from "@google/generative-ai";
 import { z } from "zod";
 
 import { RESUME_LIMITS } from "@/constants/resume";
@@ -38,33 +37,33 @@ export type RefineResumeTextsResponse = z.infer<
 >;
 
 const experienceDescriptionItemGeminiSchema = {
-  type: SchemaType.OBJECT,
+  type: "object",
   properties: {
-    id: { type: SchemaType.STRING },
-    description: { type: SchemaType.STRING },
+    id: { type: "string" },
+    description: { type: "string" },
   },
   required: ["id", "description"],
 };
 
 const educationDescriptionItemGeminiSchema = {
-  type: SchemaType.OBJECT,
+  type: "object",
   properties: {
-    id: { type: SchemaType.STRING },
-    description: { type: SchemaType.STRING },
+    id: { type: "string" },
+    description: { type: "string" },
   },
   required: ["id", "description"],
 };
 
 export const refineResumeTextsResponseSchema = {
-  type: SchemaType.OBJECT,
+  type: "object",
   properties: {
-    summary: { type: SchemaType.STRING },
+    summary: { type: "string" },
     experienceDescriptions: {
-      type: SchemaType.ARRAY,
+      type: "array",
       items: experienceDescriptionItemGeminiSchema,
     },
     educationDescriptions: {
-      type: SchemaType.ARRAY,
+      type: "array",
       items: educationDescriptionItemGeminiSchema,
     },
   },
