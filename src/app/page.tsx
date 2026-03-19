@@ -9,12 +9,13 @@ import { FinalCTASection } from "./_components/final-cta-section";
 import { HeroSection } from "./_components/hero-section";
 import { LandingPageTracker } from "./_components/landing-page-tracker";
 import { LandingStructuredData } from "./_components/landing-structured-data";
-import { HowItWorksSection } from "./_components/how-it-works-section";
 import { LandingFooter } from "./_components/landing-footer";
 import { LandingHeader } from "./_components/landing-header";
 import { PricingSection } from "./_components/pricing-section";
-import { SecondaryFeaturesSection } from "./_components/secondary-features-section";
+import { ResourcesSection } from "./_components/resources-section";
 import { SocialProofSection } from "./_components/social-proof-section";
+import { AtsProblemSection } from "./_components/ats-problem-section";
+import { AtsSolutionSection } from "./_components/ats-solution-section";
 
 export const metadata: Metadata = {
   title: "MatchVaga - Chega de perder tempo com candidaturas",
@@ -41,9 +42,10 @@ export default async function Page() {
       <main className="flex flex-1 flex-col">
         <div className="mx-auto w-full max-w-landing-content px-4 sm:px-8 xl:px-0">
           <HeroSection />
-          <HowItWorksSection />
+          <AtsProblemSection />
+          <AtsSolutionSection />
           <CoreFeaturesSection />
-          <SecondaryFeaturesSection />
+          <ResourcesSection />
           <SocialProofSection />
           <PricingSection />
           <FAQSection />

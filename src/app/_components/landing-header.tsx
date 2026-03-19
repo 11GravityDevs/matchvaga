@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { useAnalyticsEvents } from "@/hooks/use-analytics-events";
 
 import { AuthAwareLink } from "./auth-aware-link";
-import { LandingNav } from "./landing-nav";
 
 export function LandingHeader() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -30,8 +29,6 @@ export function LandingHeader() {
     >
       <div className="mx-4 flex w-full max-w-landing-content items-center justify-between sm:mx-8 xl:mx-auto">
         <Logo href="/" textClassName="text-xl" />
-
-        <LandingNav className="hidden md:flex" />
 
         <div className="hidden items-center gap-3 md:flex">
           <Button

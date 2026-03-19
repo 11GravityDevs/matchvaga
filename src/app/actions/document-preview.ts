@@ -312,7 +312,7 @@ export async function unlockAnalysis(
     }
     return {
       success: false,
-      error: "Sem créditos disponíveis. Aguarde o processamento do pagamento.",
+      error: "Sem análises disponíveis. Aguarde o processamento do pagamento.",
     };
   }
 
@@ -335,7 +335,7 @@ export async function unlockAnalysis(
     }
     return {
       success: false,
-      error: "Sem créditos disponíveis. Aguarde o processamento do pagamento.",
+      error: "Sem análises disponíveis. Aguarde o processamento do pagamento.",
     };
   }
 

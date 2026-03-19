@@ -53,7 +53,10 @@ function Stars() {
 
 export function SocialProofSection() {
   return (
-    <section className="flex w-full flex-col items-center gap-10 bg-background py-12 md:gap-14 md:py-20">
+    <section
+      id="depoimentos"
+      className="flex w-full flex-col items-center gap-10 bg-background py-12 md:scroll-mt-12 md:gap-14 md:py-20"
+    >
       {/* Section Header */}
       <AnimateOnScroll>
         <div className="flex max-w-section-header flex-col items-center gap-4 px-4 md:px-0">
@@ -64,40 +67,44 @@ export function SocialProofSection() {
             O que nossos usuários dizem
           </h2>
           <p className="max-w-section-desc text-center text-base leading-normal text-muted-foreground">
-            Junte-se a milhares de candidatos que já transformaram sua busca por
-            emprego.
+            Junte-se aos candidatos que já transformaram sua busca por emprego e
+            sairam na frente com o MatchVaga.
           </p>
         </div>
       </AnimateOnScroll>
 
       {/* Testimonials */}
-      <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3">
+      <ul className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-3">
         {TESTIMONIALS.map((t, i) => (
-          <AnimateOnScroll key={t.name} delay={i * 80} className="h-full">
-            <div className="flex h-full flex-col gap-5 rounded-xl border border-border bg-card p-5 md:p-7">
-              <Stars />
-              <p className="text-body-15 text-foreground">{t.quote}</p>
-              <div className="flex items-center gap-3">
-                <div
-                  className={`flex size-10 items-center justify-center rounded-full ${t.avatarColor}`}
-                >
-                  <span className="text-sm font-semibold text-primary-foreground">
-                    {t.initials}
-                  </span>
-                </div>
-                <div className="flex flex-col gap-0.5">
-                  <span className="text-sm font-semibold text-foreground">
-                    {t.name}
-                  </span>
-                  <span className="text-small text-muted-foreground">
-                    {t.role}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </AnimateOnScroll>
+          <li key={t.name}>
+            <AnimateOnScroll delay={i * 80} className="h-full">
+              <figure className="flex h-full flex-col gap-5 rounded-xl border border-border bg-card p-5 md:p-7">
+                <Stars />
+                <blockquote className="text-body-15 text-foreground">
+                  {t.quote}
+                </blockquote>
+                <figcaption className="flex items-center gap-3">
+                  <div
+                    className={`flex size-10 items-center justify-center rounded-full ${t.avatarColor}`}
+                  >
+                    <span className="text-sm font-semibold text-primary-foreground">
+                      {t.initials}
+                    </span>
+                  </div>
+                  <div className="flex flex-col gap-0.5">
+                    <span className="text-sm font-semibold text-foreground">
+                      {t.name}
+                    </span>
+                    <span className="text-small text-muted-foreground">
+                      {t.role}
+                    </span>
+                  </div>
+                </figcaption>
+              </figure>
+            </AnimateOnScroll>
+          </li>
         ))}
-      </div>
+      </ul>
     </section>
   );
 }

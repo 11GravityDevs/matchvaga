@@ -1,9 +1,7 @@
-import { SchemaType } from "@google/generative-ai";
-
-const stringSchema = { type: SchemaType.STRING };
+const stringSchema = { type: "string" };
 
 const experienceEntrySchema = {
-  type: SchemaType.OBJECT,
+  type: "object",
   properties: {
     jobTitle: stringSchema,
     company: stringSchema,
@@ -11,7 +9,7 @@ const experienceEntrySchema = {
     endDate: stringSchema,
     location: stringSchema,
     description: stringSchema,
-    isCurrent: { type: SchemaType.BOOLEAN },
+    isCurrent: { type: "boolean" },
   },
   required: [
     "jobTitle",
@@ -24,7 +22,7 @@ const experienceEntrySchema = {
 };
 
 const educationEntrySchema = {
-  type: SchemaType.OBJECT,
+  type: "object",
   properties: {
     institution: stringSchema,
     course: stringSchema,
@@ -32,13 +30,13 @@ const educationEntrySchema = {
     startDate: stringSchema,
     completionDate: stringSchema,
     description: stringSchema,
-    isCurrent: { type: SchemaType.BOOLEAN },
+    isCurrent: { type: "boolean" },
   },
   required: ["institution", "course", "level", "startDate", "completionDate"],
 };
 
 export const resumeExtractionResponseSchema = {
-  type: SchemaType.OBJECT,
+  type: "object",
   properties: {
     fullName: stringSchema,
     email: stringSchema,
@@ -47,11 +45,11 @@ export const resumeExtractionResponseSchema = {
     linkedin: stringSchema,
     github: stringSchema,
     summary: stringSchema,
-    hardSkills: { type: SchemaType.ARRAY, items: stringSchema },
-    softSkills: { type: SchemaType.ARRAY, items: stringSchema },
-    languages: { type: SchemaType.ARRAY, items: stringSchema },
-    experience: { type: SchemaType.ARRAY, items: experienceEntrySchema },
-    education: { type: SchemaType.ARRAY, items: educationEntrySchema },
+    hardSkills: { type: "array", items: stringSchema },
+    softSkills: { type: "array", items: stringSchema },
+    languages: { type: "array", items: stringSchema },
+    experience: { type: "array", items: experienceEntrySchema },
+    education: { type: "array", items: educationEntrySchema },
   },
   required: [
     "fullName",

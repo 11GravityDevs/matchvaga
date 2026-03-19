@@ -1,5 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 
 import { AI_SERVICE_UNAVAILABLE_MESSAGE } from "@/lib/ai/errors";
 import { logServerError } from "@/lib/logger";
@@ -11,7 +11,7 @@ type AnthropicResult =
   | { ok: true; client: InstanceType<typeof Anthropic> }
   | { ok: false; error: string };
 type GeminiResult =
-  | { ok: true; client: GoogleGenerativeAI }
+  | { ok: true; client: GoogleGenAI }
   | { ok: false; error: string };
 
 let anthropicCache: AnthropicResult | undefined;
@@ -45,7 +45,7 @@ export function getGeminiClient(): GeminiResult {
       });
       geminiCache = { ok: false, error: AI_SERVICE_UNAVAILABLE_MESSAGE };
     } else {
-      geminiCache = { ok: true, client: new GoogleGenerativeAI(apiKey) };
+      geminiCache = { ok: true, client: new GoogleGenAI({ apiKey }) };
     }
   }
   return geminiCache;
