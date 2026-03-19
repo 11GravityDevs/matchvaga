@@ -1,4 +1,4 @@
-import { type Schema, GoogleGenerativeAI } from "@google/generative-ai";
+import type { GoogleGenAI } from "@google/genai";
 
 import { getGeminiClient } from "@/lib/ai/clients/create-client";
 import {
@@ -42,6 +42,7 @@ export interface ExtractResumeError {
 export type ExtractResumeOutput = ExtractResumeResult | ExtractResumeError;
 
 const GEMINI_MODEL = "gemini-2.5-flash-lite";
+const GEMINI_FALLBACK_MODEL = "gemini-2.5-flash";
 
 function normalizeWhitespace(value: string): string {
   return value.replace(/\s+/g, " ").trim();
@@ -150,12 +151,80 @@ function normalizeExtractedSkills(parsed: unknown): unknown {
   };
 }
 
+interface ExtractResumeWithModelInput {
+  arrayBuffer: ArrayBuffer;
+  mimeType: string;
+}
+
+async function extractResumeWithModel(
+  genAI: GoogleGenAI,
+  modelName: string,
+  { arrayBuffer, mimeType }: ExtractResumeWithModelInput
+): Promise<ExtractResumeOutput> {
+  const thinkingConfig =
+    modelName === GEMINI_FALLBACK_MODEL ? { thinkingBudget: 512 } : undefined;
+
+  const config = {
+    systemInstruction: RESUME_SYSTEM_INSTRUCTION,
+    temperature: 0,
+    responseMimeType: "application/json",
+    responseJsonSchema: resumeExtractionResponseSchema,
+    ...(thinkingConfig ? { thinkingConfig } : {}),
+  };
+
+  try {
+    if (mimeType === MIME_DOCX) {
+      const documentText = await extractTextFromDocx(arrayBuffer);
+      const textPrompt = `Você está recebendo o currículo como texto.\n\nTexto do documento:\n\n${documentText}`;
+      const combinedUserMessage = `${textPrompt}\n\n${RESUME_USER_PROMPT}`;
+
+      const response = await genAI.models.generateContent({
+        model: modelName,
+        contents: combinedUserMessage,
+        config,
+      });
+
+      return parseAndValidateResult(response.text, modelName);
+    }
+
+    const base64 = Buffer.from(arrayBuffer).toString("base64");
+    const userPromptWithContext = `Você está recebendo o currículo em formato PDF.\n\n${RESUME_USER_PROMPT}`;
+
+    const response = await genAI.models.generateContent({
+      model: modelName,
+      contents: [
+        {
+          role: "user",
+          parts: [
+            {
+              inlineData: {
+                mimeType: MIME_PDF,
+                data: base64,
+              },
+            },
+            { text: userPromptWithContext },
+          ],
+        },
+      ],
+      config,
+    });
+
+    return parseAndValidateResult(response.text, modelName);
+  } catch (error) {
+    const userMessage = handleAiError(error, {
+      operation: "extractResume",
+      model: modelName,
+    });
+    return { success: false, error: userMessage };
+  }
+}
+
 export async function extractResumeFromFile(
   file: File
 ): Promise<ExtractResumeOutput> {
-  const result = getGeminiClient();
-  if (!result.ok) return { success: false, error: result.error };
-  const genAI = result.client;
+  const geminiResult = getGeminiClient();
+  if (!geminiResult.ok) return { success: false, error: geminiResult.error };
+  const genAI = geminiResult.client;
 
   const fileValidation = await validateResumeFile(file);
   if (!fileValidation.valid) {
@@ -164,61 +233,36 @@ export async function extractResumeFromFile(
 
   const { arrayBuffer, mimeType } = fileValidation;
 
-  const model = genAI.getGenerativeModel({
-    model: GEMINI_MODEL,
-    systemInstruction: RESUME_SYSTEM_INSTRUCTION,
-    generationConfig: {
-      responseMimeType: "application/json",
-      responseSchema: resumeExtractionResponseSchema as Schema,
-      temperature: 0,
-    },
+  const extraction = await extractResumeWithModel(genAI, GEMINI_MODEL, {
+    arrayBuffer,
+    mimeType,
   });
 
-  try {
-    if (mimeType === MIME_DOCX) {
-      const documentText = await extractTextFromDocx(arrayBuffer);
-      const textPrompt = `Você está recebendo o currículo como texto.\n\nTexto do documento:\n\n${documentText}`;
-      const result = await model.generateContent([
-        { text: textPrompt },
-        { text: RESUME_USER_PROMPT },
-      ]);
-
-      return parseAndValidateResult(result);
-    }
-
-    const base64 = Buffer.from(arrayBuffer).toString("base64");
-    const userPromptWithContext = `Você está recebendo o currículo em formato PDF.\n\n${RESUME_USER_PROMPT}`;
-    const result = await model.generateContent([
-      {
-        inlineData: {
-          mimeType: MIME_PDF,
-          data: base64,
-        },
-      },
-      { text: userPromptWithContext },
-    ]);
-
-    return parseAndValidateResult(result);
-  } catch (error) {
-    const userMessage = handleAiError(error, {
-      operation: "extractResume",
-      model: GEMINI_MODEL,
-    });
-    return { success: false, error: userMessage };
+  if (extraction.success) {
+    return extraction;
   }
+
+  logServerError(
+    {
+      context: "ai",
+      operation: "extractResume",
+      message: "Fallback para Gemini 2.5 Flash após falha do Lite.",
+      model: GEMINI_FALLBACK_MODEL,
+    },
+    new Error(extraction.error)
+  );
+
+  return extractResumeWithModel(genAI, GEMINI_FALLBACK_MODEL, {
+    arrayBuffer,
+    mimeType,
+  });
 }
 
 function parseAndValidateResult(
-  result: Awaited<
-    ReturnType<
-      ReturnType<GoogleGenerativeAI["getGenerativeModel"]>["generateContent"]
-    >
-  >
+  text: string | undefined,
+  modelName: string = GEMINI_MODEL
 ): ExtractResumeOutput {
-  const response = result.response;
-  const text = response.text();
-
-  if (!text) {
+  if (!text?.trim()) {
     return { success: false, error: "Resposta vazia do modelo." };
   }
 
@@ -230,7 +274,7 @@ function parseAndValidateResult(
     if (!validated.success) {
       const userMessage = handleAiError(validated.error, {
         operation: "extractResume",
-        model: GEMINI_MODEL,
+        model: modelName,
       });
       return { success: false, error: userMessage };
     }
@@ -238,7 +282,7 @@ function parseAndValidateResult(
   } catch (error) {
     const userMessage = handleAiError(error, {
       operation: "extractResume",
-      model: GEMINI_MODEL,
+      model: modelName,
     });
     return { success: false, error: userMessage };
   }
@@ -281,39 +325,20 @@ export async function refineResumeTexts(data: ResumeData): Promise<ResumeData> {
 
   const userMessage = `${REFINE_TEXTS_USER_PROMPT_PREFIX}${JSON.stringify(inputPayload)}`;
 
-  const model = genAI.getGenerativeModel({
-    model: GEMINI_MODEL,
-    systemInstruction: REFINE_TEXTS_SYSTEM_INSTRUCTION,
-    generationConfig: {
-      responseMimeType: "application/json",
-      responseSchema: refineResumeTextsResponseSchema as unknown as Schema,
-      temperature: 0.5,
-    },
-  });
-
   try {
-    const generateResult = await model.generateContent([{ text: userMessage }]);
-    const response = generateResult.response;
+    const response = await genAI.models.generateContent({
+      model: GEMINI_MODEL,
+      contents: userMessage,
+      config: {
+        systemInstruction: REFINE_TEXTS_SYSTEM_INSTRUCTION,
+        temperature: 0.5,
+        responseMimeType: "application/json",
+        responseJsonSchema: refineResumeTextsResponseSchema,
+      },
+    });
 
-    const candidates = (response as { candidates?: unknown[] }).candidates;
-    if (!candidates?.length) {
-      logServerError(
-        {
-          context: "ai",
-          operation: "refineResumeTexts",
-          message:
-            "Resposta do Gemini vazia ou bloqueada; usando dados originais.",
-          model: GEMINI_MODEL,
-        },
-        new Error("No candidates in response")
-      );
-      return data;
-    }
-
-    const text = response.text();
-    if (!text?.trim()) {
-      return data;
-    }
+    const text = response.text;
+    if (!text?.trim()) return data;
 
     const parsed = JSON.parse(text.trim()) as unknown;
     const refinedResult = refineResumeTextsResponseZodSchema.safeParse(parsed);
