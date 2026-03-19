@@ -19,7 +19,7 @@ export function HeroPrimaryCtaButton() {
       onClick={trackLandingHeroPrimaryCtaClicked}
     >
       <AuthAwareLink
-        loggedOutLabel="Começar Grátis"
+        loggedOutLabel="Analisar meu currículo"
         loggedInLabel="Acessar Dashboard"
         icon={<Zap className="size-4" />}
       />

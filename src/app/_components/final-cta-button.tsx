@@ -18,7 +18,7 @@ export function FinalCtaButton() {
       onClick={trackLandingFinalCtaClicked}
     >
       <AuthAwareLink
-        loggedOutLabel="Começar Grátis"
+        loggedOutLabel="Analisar meu currículo"
         loggedInLabel="Acessar Dashboard"
         icon={<Zap className="size-4.5 text-accent-brand" />}
         className="flex items-center gap-2"

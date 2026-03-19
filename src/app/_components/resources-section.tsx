@@ -24,16 +24,16 @@ const FEATURES_COL_1: SecondaryFeature[] = [
   {
     icon: <ShieldCheck className="size-5.5 text-accent-brand" />,
     iconBg: "bg-accent-brand-light",
-    title: "Otimização ATS",
+    title: "Mais chances na triagem ATS",
     description:
-      "Cada currículo é otimizado para passar pelos filtros de Applicant Tracking Systems.",
+      "Cada currículo é ajustado para ficar mais alinhado aos filtros automáticos usados antes da etapa humana.",
   },
   {
     icon: <LayoutTemplate className="size-5.5 text-accent-purple" />,
     iconBg: "bg-accent-purple-light",
-    title: "Múltiplos Formatos",
+    title: "Pronto para enviar no formato certo",
     description:
-      "Exporte em PDF e DOCX, facilitando sua candidatura ao máximo.",
+      "Exporte em PDF ou DOCX e envie seu currículo do jeito que cada processo seletivo pede.",
   },
 ];
 
@@ -41,16 +41,16 @@ const FEATURES_COL_2: SecondaryFeature[] = [
   {
     icon: <Gauge className="size-5.5 text-accent-success" />,
     iconBg: "bg-accent-success-light",
-    title: "Score de Compatibilidade",
+    title: "Saiba se vale a pena aplicar agora",
     description:
-      "Veja rapidamente o quanto seu currículo está alinhado com a vaga antes de gerar a versão otimizada.",
+      "Veja rapidamente o quanto seu perfil está alinhado com a vaga antes de investir tempo em mais uma candidatura.",
   },
   {
     icon: <History className="size-5.5 text-accent-pink" />,
     iconBg: "bg-accent-pink-light",
-    title: "Histórico Completo",
+    title: "Nada de começar do zero",
     description:
-      "Acompanhe todas suas análises e currículos adaptados em um só lugar.",
+      "Guarde análises e versões anteriores para reaproveitar o que funcionou e evoluir a cada vaga.",
   },
 ];
 
@@ -58,16 +58,16 @@ const FEATURES_COL_3: SecondaryFeature[] = [
   {
     icon: <Timer className="size-5.5 text-accent-warning" />,
     iconBg: "bg-accent-warning-light",
-    title: "Economia de Tempo",
+    title: "Menos tempo editando, mais tempo aplicando",
     description:
-      "Reduza drasticamente seu trabalho manual para menos de 2 minutos por candidatura.",
+      "Reduza o trabalho manual de adaptar currículo para cada vaga e candidate-se com muito mais velocidade.",
   },
   {
     icon: <Lock className="size-5.5 text-destructive" />,
     iconBg: "bg-accent-low-light",
-    title: "Privacidade Total",
+    title: "Seus dados protegidos do início ao fim",
     description:
-      "Seus dados são criptografados e nunca compartilhados com terceiros.",
+      "Suas informações são tratadas com segurança e não são compartilhadas com terceiros para outros fins.",
   },
 ];
 
@@ -100,11 +100,11 @@ export function ResourcesSection() {
             RECURSOS
           </span>
           <h2 className="text-center text-section-header-large">
-            Muito mais para acelerar sua busca
+            Tudo para candidatar-se com mais confiança
           </h2>
           <p className="text-center text-base leading-normal text-muted-foreground">
-            Cada detalhe pensado para maximizar suas chances de conseguir a
-            vaga.
+            Do diagnóstico do currículo ao arquivo final, cada detalhe foi
+            pensado para reduzir fricção e aumentar suas chances de avançar.
           </p>
         </div>
       </AnimateOnScroll>

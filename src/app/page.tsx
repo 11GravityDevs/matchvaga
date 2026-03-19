@@ -18,14 +18,32 @@ import { AtsProblemSection } from "./_components/ats-problem-section";
 import { AtsSolutionSection } from "./_components/ats-solution-section";
 
 export const metadata: Metadata = {
-  title: "MatchVaga - Chega de perder tempo com candidaturas",
+  title: "MatchVaga",
   description:
-    "MatchVaga é uma plataforma que adapta seu currículo automaticamente para cada vaga, otimiza para passar em sistemas ATS e gera mensagens de apresentação — tudo em segundos. Plataforma #1 para candidatos no Brasil.",
+    "Descubra por que seu currículo é rejeitado, veja os gaps em relação à vaga e gere uma versão otimizada para aumentar suas chances de passar pelos filtros ATS e conquistar mais entrevistas.",
   keywords: [
     "currículo",
+    "currículo ATS",
+    "otimização de currículo",
     "otimização ATS",
+    "análise de currículo",
+    "análise de currículo para vaga",
+    "currículo para vaga de emprego",
+    "currículo aprovado no ATS",
+    "como passar no ATS",
+    "palavras-chave no currículo",
+    "compatibilidade currículo e vaga",
+    "gaps de habilidades",
+    "habilidades faltantes para vaga",
+    "matching currículo vaga",
+    "gerador de currículo",
+    "currículo profissional",
+    "melhorar currículo",
+    "entrevista de emprego",
     "vaga de emprego",
     "candidatura",
+    "emprego no Brasil",
+    "mercado de trabalho brasileiro",
     "Brasil",
   ],
   alternates: {

@@ -14,14 +14,14 @@ const STEPS: Step[] = [
     icon: <FileText className="size-5.5 text-accent-brand" />,
     title: "Você envia seu currículo",
     description:
-      "Candidato envia o currículo com esperança e dedicação para a vaga dos sonhos, acredita que é sua chance.",
+      "Você encontra uma vaga promissora, envia seu currículo com cuidado e espera finalmente receber um retorno.",
     iconBg: "bg-accent-brand-light",
   },
   {
     icon: <ScanSearch className="size-5.5 text-accent-warning" />,
     title: "O robô ATS analisa",
     description:
-      "Um software frio e impessoal escaneia palavras-chave, formatação e estrutura em segundos.",
+      "Um programa frio e impessoal escaneia palavras-chave, formatação e estrutura em segundos.",
     iconBg: "bg-accent-warning-light",
   },
   {
