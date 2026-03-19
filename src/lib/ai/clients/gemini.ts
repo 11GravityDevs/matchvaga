@@ -1,4 +1,4 @@
-import { type Schema, GoogleGenerativeAI } from "@google/generative-ai";
+import type { GoogleGenAI } from "@google/genai";
 
 import { getGeminiClient } from "@/lib/ai/clients/create-client";
 import {
@@ -157,43 +157,59 @@ interface ExtractResumeWithModelInput {
 }
 
 async function extractResumeWithModel(
-  genAI: GoogleGenerativeAI,
+  genAI: GoogleGenAI,
   modelName: string,
   { arrayBuffer, mimeType }: ExtractResumeWithModelInput
 ): Promise<ExtractResumeOutput> {
-  const model = genAI.getGenerativeModel({
-    model: modelName,
+  const thinkingConfig =
+    modelName === GEMINI_FALLBACK_MODEL ? { thinkingBudget: 512 } : undefined;
+
+  const config = {
     systemInstruction: RESUME_SYSTEM_INSTRUCTION,
-    generationConfig: {
-      responseMimeType: "application/json",
-      responseSchema: resumeExtractionResponseSchema as Schema,
-      temperature: 0,
-    },
-  });
+    temperature: 0,
+    responseMimeType: "application/json",
+    responseJsonSchema: resumeExtractionResponseSchema,
+    ...(thinkingConfig ? { thinkingConfig } : {}),
+  };
 
   try {
     if (mimeType === MIME_DOCX) {
       const documentText = await extractTextFromDocx(arrayBuffer);
       const textPrompt = `Você está recebendo o currículo como texto.\n\nTexto do documento:\n\n${documentText}`;
-      const result = await model.generateContent([
-        { text: textPrompt },
-        { text: RESUME_USER_PROMPT },
-      ]);
-      return parseAndValidateResult(result, modelName);
+      const combinedUserMessage = `${textPrompt}\n\n${RESUME_USER_PROMPT}`;
+
+      const response = await genAI.models.generateContent({
+        model: modelName,
+        contents: combinedUserMessage,
+        config,
+      });
+
+      return parseAndValidateResult(response.text, modelName);
     }
 
     const base64 = Buffer.from(arrayBuffer).toString("base64");
     const userPromptWithContext = `Você está recebendo o currículo em formato PDF.\n\n${RESUME_USER_PROMPT}`;
-    const result = await model.generateContent([
-      {
-        inlineData: {
-          mimeType: MIME_PDF,
-          data: base64,
+
+    const response = await genAI.models.generateContent({
+      model: modelName,
+      contents: [
+        {
+          role: "user",
+          parts: [
+            {
+              inlineData: {
+                mimeType: MIME_PDF,
+                data: base64,
+              },
+            },
+            { text: userPromptWithContext },
+          ],
         },
-      },
-      { text: userPromptWithContext },
-    ]);
-    return parseAndValidateResult(result, modelName);
+      ],
+      config,
+    });
+
+    return parseAndValidateResult(response.text, modelName);
   } catch (error) {
     const userMessage = handleAiError(error, {
       operation: "extractResume",
@@ -243,17 +259,10 @@ export async function extractResumeFromFile(
 }
 
 function parseAndValidateResult(
-  result: Awaited<
-    ReturnType<
-      ReturnType<GoogleGenerativeAI["getGenerativeModel"]>["generateContent"]
-    >
-  >,
+  text: string | undefined,
   modelName: string = GEMINI_MODEL
 ): ExtractResumeOutput {
-  const response = result.response;
-  const text = response.text();
-
-  if (!text) {
+  if (!text?.trim()) {
     return { success: false, error: "Resposta vazia do modelo." };
   }
 
@@ -316,39 +325,20 @@ export async function refineResumeTexts(data: ResumeData): Promise<ResumeData> {
 
   const userMessage = `${REFINE_TEXTS_USER_PROMPT_PREFIX}${JSON.stringify(inputPayload)}`;
 
-  const model = genAI.getGenerativeModel({
-    model: GEMINI_MODEL,
-    systemInstruction: REFINE_TEXTS_SYSTEM_INSTRUCTION,
-    generationConfig: {
-      responseMimeType: "application/json",
-      responseSchema: refineResumeTextsResponseSchema as unknown as Schema,
-      temperature: 0.5,
-    },
-  });
-
   try {
-    const generateResult = await model.generateContent([{ text: userMessage }]);
-    const response = generateResult.response;
+    const response = await genAI.models.generateContent({
+      model: GEMINI_MODEL,
+      contents: userMessage,
+      config: {
+        systemInstruction: REFINE_TEXTS_SYSTEM_INSTRUCTION,
+        temperature: 0.5,
+        responseMimeType: "application/json",
+        responseJsonSchema: refineResumeTextsResponseSchema,
+      },
+    });
 
-    const candidates = (response as { candidates?: unknown[] }).candidates;
-    if (!candidates?.length) {
-      logServerError(
-        {
-          context: "ai",
-          operation: "refineResumeTexts",
-          message:
-            "Resposta do Gemini vazia ou bloqueada; usando dados originais.",
-          model: GEMINI_MODEL,
-        },
-        new Error("No candidates in response")
-      );
-      return data;
-    }
-
-    const text = response.text();
-    if (!text?.trim()) {
-      return data;
-    }
+    const text = response.text;
+    if (!text?.trim()) return data;
 
     const parsed = JSON.parse(text.trim()) as unknown;
     const refinedResult = refineResumeTextsResponseZodSchema.safeParse(parsed);
