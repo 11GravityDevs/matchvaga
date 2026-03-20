@@ -63,7 +63,7 @@ export const trackPricingPackageSelectedEvent = (
 export const trackCheckoutStartedEvent = (
   packageId: string,
   priceCentavos: number,
-  paymentMethod: "stripe" | "pix"
+  paymentMethod: "credit-card" | "pix"
 ): void => {
   trackEvent("checkout_started", {
     package_id: packageId,
@@ -75,7 +75,7 @@ export const trackCheckoutStartedEvent = (
 
 export const trackCheckoutCompletedEvent = (
   paymentId: string,
-  paymentMethod: "stripe" | "pix"
+  paymentMethod: "credit-card" | "pix"
 ): void => {
   trackEvent("checkout_completed", {
     session_id: paymentId,

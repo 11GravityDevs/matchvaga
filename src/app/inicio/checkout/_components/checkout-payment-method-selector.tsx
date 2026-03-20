@@ -26,7 +26,7 @@ export function CheckoutPaymentMethodSelector({
   const isPixLoading =
     loadingPackageId === pendingPackageId && paymentMethod === "pix";
   const isStripeLoading =
-    loadingPackageId === pendingPackageId && paymentMethod === "stripe";
+    loadingPackageId === pendingPackageId && paymentMethod === "credit-card";
 
   return (
     <div className="flex flex-col gap-4">
@@ -47,7 +47,7 @@ export function CheckoutPaymentMethodSelector({
           title="Cartão de crédito"
           description="Parcelamento em até 12x no cartão"
           icon={CreditCard}
-          selected={paymentMethod === "stripe"}
+          selected={paymentMethod === "credit-card"}
           loading={isStripeLoading}
           disabled={isLoading}
           onSelect={onSelectStripe}

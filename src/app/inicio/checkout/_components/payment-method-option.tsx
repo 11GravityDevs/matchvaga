@@ -9,8 +9,8 @@ export interface PaymentMethodOptionProps {
   title: string;
   description: string;
   icon: LucideIcon;
-  selected: boolean;
   loading: boolean;
+  selected?: boolean;
   disabled: boolean;
   onSelect: () => void;
 }
@@ -19,8 +19,8 @@ export function PaymentMethodOption({
   title,
   description,
   icon: Icon,
-  selected,
   loading,
+  selected = loading,
   disabled,
   onSelect,
 }: PaymentMethodOptionProps) {

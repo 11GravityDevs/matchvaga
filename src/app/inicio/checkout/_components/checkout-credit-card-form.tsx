@@ -18,7 +18,7 @@ import {
   type CheckoutPackageId,
 } from "@/constants/checkout-packages";
 
-interface CheckoutPaymentFormProps {
+interface CheckoutCreditCardFormProps {
   packageId: CheckoutPackageId;
   onChooseAnotherPackage: () => void;
   chooseAnotherLabel?: string;
@@ -35,13 +35,13 @@ function formatCentavosToBrl(amountCentavos: number): string {
   return brlFormatter.format(amountCentavos / 100);
 }
 
-export function CheckoutPaymentForm({
+export function CheckoutCreditCardForm({
   packageId,
   onChooseAnotherPackage,
   chooseAnotherLabel = "Escolher outro pacote",
   onPaymentSuccess,
   onSubmittingChange,
-}: CheckoutPaymentFormProps) {
+}: CheckoutCreditCardFormProps) {
   const checkoutState = useCheckout();
   const [isSubmittingPayment, setIsSubmittingPayment] = useState(false);
   const [submitErrorMessage, setSubmitErrorMessage] = useState<string | null>(

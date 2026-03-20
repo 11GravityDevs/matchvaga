@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { Copy, QrCode } from "lucide-react";
 
@@ -12,6 +12,7 @@ import { ROUTE_HOME_CHECKOUT_SUCCESS } from "@/constants/routes";
 
 import { useToastNotification } from "@/hooks/use-toast-notification";
 import { CHECKOUT_PIX_JUST_PAID_KEY } from "../_constants/checkout";
+import { CheckoutPackageSummaryCard } from "./checkout-package-summary-card";
 
 interface CheckoutPixFormProps {
   paymentId: string;
@@ -42,14 +43,18 @@ export function CheckoutPixForm({
     "Aguardando confirmação do pagamento..."
   );
   const [copyButtonLabel, setCopyButtonLabel] = useState("Copiar código");
+  const copyResetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { showErrorToastNotification, showSuccessToastNotification } =
     useToastNotification();
   const router = useRouter();
 
   const expiresAtLabel = useMemo(() => {
     if (!expiresAt) return undefined;
+
     const date = new Date(expiresAt);
+
     if (Number.isNaN(date.getTime())) return undefined;
+
     return date.toLocaleTimeString("pt-BR");
   }, [expiresAt]);
 
@@ -85,7 +90,9 @@ export function CheckoutPixForm({
         const successUrl = unlockAnalysisId
           ? `${ROUTE_HOME_CHECKOUT_SUCCESS}?payment_id=${paymentId}&unlock=${unlockAnalysisId}`
           : `${ROUTE_HOME_CHECKOUT_SUCCESS}?payment_id=${paymentId}`;
+
         router.push(successUrl);
+
         return;
       }
 
@@ -130,30 +137,28 @@ export function CheckoutPixForm({
     onPaymentConfirmed,
   ]);
 
-  const handleCopyPixCode = async () => {
+  const handleCopyPixCode = useCallback(async () => {
     try {
       await navigator.clipboard.writeText(brCode);
       setCopyButtonLabel("Código copiado");
       showSuccessToastNotification("Código PIX copiado.");
+
+      if (copyResetTimerRef.current) clearTimeout(copyResetTimerRef.current);
+      copyResetTimerRef.current = setTimeout(
+        () => setCopyButtonLabel("Copiar código"),
+        2000
+      );
     } catch {
       showErrorToastNotification("Não foi possível copiar o código PIX.");
     }
-  };
+  }, [brCode, showSuccessToastNotification, showErrorToastNotification]);
 
   return (
     <div className="flex w-full flex-col gap-6">
-      {/* Card superior igual ao do cartão */}
-      <Card className="w-full border border-border">
-        <CardContent className="flex items-center justify-between">
-          <div className="flex flex-col gap-1">
-            <CardTitle>Finalizar compra do pacote</CardTitle>
-            <span className="text-base font-semibold text-accent-brand">
-              {packageName}
-            </span>
-          </div>
-          <span className="text-xl font-bold">{priceFormatted}</span>
-        </CardContent>
-      </Card>
+      <CheckoutPackageSummaryCard
+        packageName={packageName}
+        priceFormatted={priceFormatted}
+      />
 
       <Card className="w-full overflow-hidden card-base border border-border">
         <CardHeader>

@@ -4,7 +4,7 @@ import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card";
 interface CheckoutPackageSummaryCardProps {
   packageName: string;
   priceFormatted: string;
-  onBack: () => void;
+  onBack?: () => void;
 }
 
 export function CheckoutPackageSummaryCard({
@@ -23,11 +23,13 @@ export function CheckoutPackageSummaryCard({
         </div>
         <span className="text-xl font-bold">{priceFormatted}</span>
       </CardContent>
-      <CardFooter className="justify-end border-t border-border pt-4">
-        <Button variant="outline" size="brand" type="button" onClick={onBack}>
-          Escolher outro pacote
-        </Button>
-      </CardFooter>
+      {onBack ? (
+        <CardFooter className="justify-end border-t border-border pt-4">
+          <Button variant="outline" size="brand" type="button" onClick={onBack}>
+            Escolher outro pacote
+          </Button>
+        </CardFooter>
+      ) : null}
     </Card>
   );
 }

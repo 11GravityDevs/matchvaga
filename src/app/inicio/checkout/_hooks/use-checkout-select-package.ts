@@ -15,11 +15,12 @@ import {
 import { createCheckoutSession } from "../_actions/checkout";
 import { createPixCharge } from "../_actions/create-pix-charge";
 
-export type CheckoutPaymentMethod = "stripe" | "pix";
+export type CheckoutPaymentMethod = "credit-card" | "pix";
 
 export interface StripeCheckoutSuccessData {
-  paymentMethod: "stripe";
+  paymentMethod: "credit-card";
   clientSecret: string;
+  sessionId?: string;
   packageId: CheckoutPackageId;
 }
 
@@ -95,8 +96,9 @@ async function runStripeCheckout(
     return {
       ok: true,
       data: {
-        paymentMethod: "stripe",
+        paymentMethod: "credit-card",
         clientSecret: result.clientSecret,
+        sessionId: result.sessionId,
         packageId,
       },
     };
@@ -119,7 +121,7 @@ export function useCheckoutSelectPackage({
     async (
       id: CheckoutPackageId,
       analysisId?: string,
-      paymentMethod: CheckoutPaymentMethod = "stripe"
+      paymentMethod: CheckoutPaymentMethod = "credit-card"
     ) => {
       const credits = getCreditsForPackage(id);
       const priceCentavos = getPackagePriceCentavos(id);
