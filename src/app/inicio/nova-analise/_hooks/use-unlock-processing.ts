@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 
 import { unlockAnalysis } from "@/app/actions/document-preview";
+import type { UnlockAnalysisResult } from "@/app/actions/document-preview";
 import {
   QUERY_KEY_ANALYSES,
   QUERY_KEY_CURRENT_USER_DISPLAY,
@@ -16,7 +17,7 @@ import {
 } from "../_constants/unlock";
 
 export interface UseUnlockProcessingCallbacks {
-  onSuccess: () => void;
+  onSuccess: (result: UnlockAnalysisResult) => void;
   onError: (message: string) => void;
 }
 
@@ -51,7 +52,7 @@ export function useUnlockProcessing(
         void queryClient.invalidateQueries({
           queryKey: QUERY_KEY_CURRENT_USER_DISPLAY,
         });
-        onSuccessRef.current();
+        onSuccessRef.current(result);
         return;
       }
 

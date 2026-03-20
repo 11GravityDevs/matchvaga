@@ -53,6 +53,8 @@ export function StepPreviewExport() {
     selectedHardSkills,
     selectedSoftSkills,
     reset,
+    setOptimizedResumeData,
+    setOptimizedScore,
     setNeedsUnlock,
   } = useNewAnalysis();
 
@@ -139,10 +141,12 @@ export function StepPreviewExport() {
 
       return result;
     },
-    onSuccess: () => {
+    onSuccess: (result) => {
       void queryClient.invalidateQueries({
         queryKey: QUERY_KEY_CURRENT_USER_DISPLAY,
       });
+      setOptimizedResumeData(result.data ?? null);
+      setOptimizedScore(result.optimizedScore ?? null);
       setNeedsUnlock(false);
     },
     onError: (error) => {
@@ -290,7 +294,11 @@ export function StepPreviewExport() {
             if (!open) setInitialProcessingFromRedirect(undefined);
           }}
           analysisId={analysisId}
-          onUnlockSuccess={() => setNeedsUnlock(false)}
+          onUnlockSuccess={(result) => {
+            setOptimizedResumeData(result.data ?? null);
+            setOptimizedScore(result.optimizedScore ?? null);
+            setNeedsUnlock(false);
+          }}
           initialProcessingFromRedirect={initialProcessingFromRedirect}
         />
       )}
