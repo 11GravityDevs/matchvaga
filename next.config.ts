@@ -19,7 +19,7 @@ const nextConfig: NextConfig = {
       },
     ];
   },
-  skipTrailingSlashRedirect: true,
+  skipTrailingSlashRedirect: false,
 };
 
 export default nextConfig;

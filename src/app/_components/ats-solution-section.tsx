@@ -22,7 +22,7 @@ const AFTER_ITEMS: ComparisonItem[] = [
 
 function BeforeCard() {
   return (
-    <div className="flex flex-1 flex-col gap-6 rounded-xl border border-border bg-card p-6 md:p-8">
+    <div className="flex flex-1 flex-col gap-6 rounded-xl border border-red-300 bg-card p-6 md:p-8">
       {/* Badge */}
       <div className="flex w-fit items-center gap-2 rounded-full bg-accent-low-light px-3 py-1.5">
         <CircleX className="size-3.5 text-destructive" />
@@ -113,14 +113,13 @@ export function AtsSolutionSection() {
             A SOLUÇÃO
           </span>
           <h2 className="text-center text-2xl leading-tight font-bold tracking-tight md:text-section-header-large">
-            Seu currículo otimizado para
-            <br className="hidden md:block" />
-            vencer qualquer robô
+            Descubra o que está faltando e gere um currículo mais alinhado à
+            vaga
           </h2>
           <p className="max-w-section-desc text-center text-base leading-normal text-muted-foreground">
-            O MatchVaga compara seu currículo com a vaga, mostra o gap e gera um
-            novo com as palavras-chave certas para driblar os sistemas de
-            triagem.
+            O MatchVaga compara seu currículo com a vaga, aponta os principais
+            gaps e gera uma versão otimizada com mais aderência aos critérios
+            usados na triagem.
           </p>
         </div>
       </AnimateOnScroll>

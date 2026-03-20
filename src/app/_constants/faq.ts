@@ -1,4 +1,4 @@
-interface FAQItem {
+export interface FAQItem {
   question: string;
   answer: string;
   linkLabel?: string;
@@ -45,3 +45,11 @@ export const FAQ_ITEMS: readonly FAQItem[] = [
       "Sim. Seus dados são tratados com medidas de segurança, controle de acesso e criptografia. Também não vendemos suas informações e o tratamento segue nossa Política de Privacidade e a LGPD. Os dados enviados para análise e geração dos documentos são usados apenas para prestar o serviço dentro da plataforma, e não para treinar modelos fundacionais de terceiros.",
   },
 ] as const;
+
+export function getFaqAnswerText(item: FAQItem): string {
+  if (!item.linkLabel) {
+    return item.answer;
+  }
+
+  return `${item.answer} ${item.linkLabel}.`;
+}

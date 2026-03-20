@@ -5,12 +5,16 @@ import type { Metadata } from "next";
 import { BrandName } from "@/components/shared/brand-name";
 import { Logo } from "@/components/shared/logo";
 import { SUPPORT_EMAIL } from "@/constants/contact";
+import { SITE_URL } from "@/constants/site";
 
 export const metadata: Metadata = {
   title: "Política de Privacidade",
   description:
     "Política de Privacidade do MatchVaga - como tratamos seus dados pessoais. Conformidade com LGPD.",
   keywords: ["privacidade", "LGPD", "dados pessoais", "MatchVaga"],
+  alternates: {
+    canonical: `${SITE_URL}/politica-de-privacidade`,
+  },
 };
 
 export default async function PoliticaDePrivacidadePage() {
