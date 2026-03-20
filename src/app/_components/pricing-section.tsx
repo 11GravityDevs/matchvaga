@@ -72,11 +72,11 @@ export function PricingSection() {
             PREÇOS
           </span>
           <h2 className="text-center text-section-header-large">
-            Preços que cabem no seu bolso
+            Sem assinatura. Use no seu ritmo.
           </h2>
           <p className="text-center text-base leading-normal text-muted-foreground">
-            Pague apenas pelo que usar, sem assinatura. Aceitamos PIX e cartão
-            de crédito.
+            Compre créditos apenas quando precisar, sem mensalidade e sem
+            expiração. Pagamento por PIX ou cartão de crédito.
           </p>
         </div>
       </AnimateOnScroll>

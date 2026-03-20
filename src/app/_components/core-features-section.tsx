@@ -20,9 +20,9 @@ const FEATURES: Feature[] = [
     tagText: "Análise de Gap",
     tagBg: "bg-accent-brand-light",
     tagColor: "text-accent-brand",
-    title: "Saiba exatamente o que falta no seu perfil",
+    title: "Descubra por que seu currículo não está convencendo",
     description:
-      "Comparamos seu currículo com a vaga e mostramos gaps de competências, experiência e formação — com alguns cliques você já pode adicioná-los ao seu currículo.",
+      "Veja com clareza quais competências, experiências e palavras-chave estão faltando para cada vaga e selecione as habilidades que fazem sentido antes de se candidatar.",
     reversed: true,
   },
   {
@@ -31,18 +31,18 @@ const FEATURES: Feature[] = [
     tagColor: "text-accent-success",
     tagText: "Currículo Inteligente",
 
-    title: "Seu currículo adaptado automaticamente para cada vaga",
+    title: "Gere uma versão do seu currículo mais forte para cada vaga",
     description:
-      "Nossa IA reorganiza, reescreve e otimiza seu currículo com as palavras-chave certas para cada vaga. Aumentando suas chances de passar pelo ATS e impressionar recrutadores.",
+      "Nossa IA reorganiza e reescreve seu currículo com foco no que a vaga pede, para aumentar sua aderência na triagem e facilitar a leitura do recrutador.",
   },
   {
-    tagIcon: <LayoutDashboard className="size-3.5 text-accent-warning" />,
+    tagIcon: <LayoutDashboard className="size-3.5 text-accent-warning-text" />,
     tagText: "Visão em Dashboard",
     tagBg: "bg-accent-warning-light",
-    tagColor: "text-accent-warning",
-    title: "Acompanhe todas suas análises em um só lugar",
+    tagColor: "text-accent-warning-text",
+    title: "Acompanhe suas candidaturas com mais estratégia",
     description:
-      "Visualize todas suas análises, média de score e seus currículos anteriores em um dashboard claro e acionável, com dados que vão fazer total diferença na sua jornada.",
+      "Visualize análises anteriores, compare scores e reaproveite versões otimizadas para aplicar com mais velocidade e menos retrabalho.",
     reversed: true,
   },
 ];
@@ -73,8 +73,9 @@ export function CoreFeaturesSection() {
             Tudo que você precisa para se destacar
           </h2>
           <p className="max-w-section-desc text-center text-base leading-normal text-muted-foreground">
-            Ferramentas inteligentes que transformam sua busca por emprego em um
-            processo eficiente e estratégico.
+            Cada etapa foi pensada para ajudar você a entender o que melhorar,
+            adaptar seu currículo mais rápido e se candidatar com mais
+            confiança.
           </p>
         </div>
       </AnimateOnScroll>

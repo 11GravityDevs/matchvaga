@@ -12,7 +12,7 @@ export function HeroSection() {
       >
         <Sparkles className="size-3.5 text-accent-brand-dark" />
         <span className="text-small-semibold text-accent-brand-dark">
-          Plataforma #1 para candidatos no Brasil
+          Seu currículo pronto em segundos
         </span>
       </div>
 
@@ -22,17 +22,19 @@ export function HeroSection() {
           className="animate-fade-up max-w-hero-title text-center text-3xl font-extrabold md:text-hero-large"
           style={{ animationDelay: "80ms" }}
         >
-          Chega de <span className="text-accent-brand">perder tempo</span> com
-          candidaturas
+          Adapte seu currículo para cada vaga e{" "}
+          <span className="text-accent-brand">aumente suas chances</span> de
+          entrevista
         </h1>
         <p
           className="animate-fade-up max-w-hero-desc text-center text-base leading-relaxed text-muted-foreground md:text-lg"
           style={{ animationDelay: "160ms" }}
         >
-          O MatchVaga adapta seu currículo automaticamente para cada vaga e
-          otimiza para os robôs de triagem —{" "}
+          Envie seu currículo, cole a vaga e receba uma análise clara do que
+          está faltando, um score de compatibilidade e uma versão otimizada para
+          passar pelos filtros ATS —{" "}
           <span className="font-semibold text-accent-brand">
-            tudo em segundos
+            sem reescrever tudo do zero
           </span>
           .
         </p>

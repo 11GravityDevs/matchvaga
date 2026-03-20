@@ -74,12 +74,7 @@ export async function proxy(request: NextRequest) {
   const { data } = await supabase.auth.getClaims();
   const user = data?.claims;
 
-  // TODO(lancamento): remover bloqueio de login/home/onboarding usado apenas na fase de divulgação da landing
-  const isLocalhost =
-    request.nextUrl.hostname === "localhost" ||
-    request.nextUrl.hostname === "127.0.0.1";
-
-  if (!isLocalhost && isLandingOnlyPhasePath(request.nextUrl.pathname)) {
+  if (isLandingOnlyPhasePath(request.nextUrl.pathname)) {
     const url = request.nextUrl.clone();
     url.pathname = "/";
     url.search = "";

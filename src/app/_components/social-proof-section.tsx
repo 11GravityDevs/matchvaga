@@ -1,6 +1,7 @@
 import { Star } from "lucide-react";
 
 import { AnimateOnScroll } from "./animate-on-scroll";
+import { BrandName } from "@/components/shared/brand-name";
 
 interface Testimonial {
   quote: string;
@@ -64,11 +65,11 @@ export function SocialProofSection() {
             DEPOIMENTOS
           </span>
           <h2 className="text-center text-section-header-large">
-            O que nossos usuários dizem
+            Veja como o <BrandName /> ajuda candidatos a aplicar melhor
           </h2>
           <p className="max-w-section-desc text-center text-base leading-normal text-muted-foreground">
-            Junte-se aos candidatos que já transformaram sua busca por emprego e
-            sairam na frente com o MatchVaga.
+            Histórias de candidatos que reduziram o tempo gasto com currículo e
+            ganharam mais clareza para buscar entrevistas com estratégia.
           </p>
         </div>
       </AnimateOnScroll>

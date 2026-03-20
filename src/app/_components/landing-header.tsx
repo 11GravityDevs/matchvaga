@@ -39,7 +39,7 @@ export function LandingHeader() {
             onClick={trackLandingNavbarCtaClicked}
           >
             <AuthAwareLink
-              loggedOutLabel="Começar Grátis"
+              loggedOutLabel="Começar grátis"
               loggedInLabel="Acessar Dashboard"
               icon={<Zap className="size-4" />}
             />

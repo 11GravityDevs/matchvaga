@@ -5,12 +5,16 @@ import type { Metadata } from "next";
 import { BrandName } from "@/components/shared/brand-name";
 import { Logo } from "@/components/shared/logo";
 import { SUPPORT_EMAIL } from "@/constants/contact";
+import { SITE_URL } from "@/constants/site";
 
 export const metadata: Metadata = {
   title: "Termos de Serviço",
   description:
     "Termos de Serviço do MatchVaga - plataforma de análise e otimização de currículos para vagas no Brasil.",
   keywords: ["termos de uso", "MatchVaga", "currículo", "plataforma"],
+  alternates: {
+    canonical: `${SITE_URL}/termos-de-servico`,
+  },
 };
 
 export default async function TermosDeServicoPage() {
@@ -104,7 +108,8 @@ export default async function TermosDeServicoPage() {
           <ul className="mb-8 list-disc space-y-2 pl-6 text-muted-foreground">
             <li>
               <strong className="text-foreground">Faturamento:</strong> Os
-              pagamentos são processados de forma segura via Stripe. Não
+              pagamentos são processados de forma segura via Stripe, com opção
+              de cartão de crédito ou PIX, conforme exibido no checkout. Não
               armazenamos os dados completos do seu cartão de crédito.
             </li>
             <li>
@@ -118,9 +123,9 @@ export default async function TermosDeServicoPage() {
               </strong>{" "}
               Conforme o Art. 49 do Código de Defesa do Consumidor, você tem o
               direito de solicitar reembolso integral em até 7 (sete) dias após
-              a compra, desde que os créditos adquiridos não tenham sido
-              utilizados. Créditos já consumidos na plataforma não são
-              reembolsáveis.
+              a compra, desde que os créditos do pacote adquirido não tenham
+              sido utilizados. Pacotes que já tiveram créditos consumidos na
+              plataforma não são reembolsáveis.
             </li>
           </ul>
         </section>
