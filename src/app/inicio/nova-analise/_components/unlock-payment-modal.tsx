@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { CheckoutProvider } from "@stripe/react-stripe-js/checkout";
 
+import type { UnlockAnalysisResult } from "@/app/actions/document-preview";
 import { createCheckoutSession } from "@/app/inicio/checkout/_actions/checkout";
 import { createPixCharge } from "@/app/inicio/checkout/_actions/create-pix-charge";
 import { CHECKOUT_STRIPE_APPEARANCE } from "@/app/inicio/checkout/_constants/checkout";
@@ -51,7 +52,7 @@ interface UnlockPaymentModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   analysisId: string;
-  onUnlockSuccess: () => void;
+  onUnlockSuccess: (result: UnlockAnalysisResult) => void;
   initialProcessingFromRedirect?: { sessionId: string };
 }
 
@@ -113,9 +114,9 @@ export function UnlockPaymentModal({
     }
   }, [open, initialProcessingFromRedirect, state, resetState]);
 
-  const handleUnlockSuccess = useCallback(() => {
+  const handleUnlockSuccess = useCallback((result: UnlockAnalysisResult) => {
     setState("success");
-    onUnlockSuccessRef.current();
+    onUnlockSuccessRef.current(result);
     onOpenChangeRef.current(false);
   }, []);
 

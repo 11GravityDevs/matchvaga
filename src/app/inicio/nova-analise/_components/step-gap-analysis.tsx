@@ -164,12 +164,8 @@ export function StepGapAnalysis() {
       });
       setSelectedHardSkills(selectedHard);
       setSelectedSoftSkills(selectedSoft);
-      if (result.data) {
-        setOptimizedResumeData(result.data);
-      }
-      if (result.optimizedScore != null) {
-        setOptimizedScore(result.optimizedScore);
-      }
+      setOptimizedResumeData(result.data ?? null);
+      setOptimizedScore(result.optimizedScore ?? null);
       setNeedsUnlock(result.needsUnlock ?? false);
       setStep(3);
     },

@@ -64,17 +64,17 @@ export function DashboardContent({
         )
       : 0;
 
-  const completedWithScore = analyses.filter(
+  const optimizedWithScore = analyses.filter(
     (a) =>
-      a.status === "completed" &&
+      (a.status === "completed" || a.status === "pending_payment") &&
       a.optimized_score != null &&
       a.optimized_score !== 0
   );
   const avgScoreFinal =
-    completedWithScore.length > 0
+    optimizedWithScore.length > 0
       ? Math.round(
-          completedWithScore.reduce((sum, a) => sum + a.optimized_score, 0) /
-            completedWithScore.length
+          optimizedWithScore.reduce((sum, a) => sum + a.optimized_score, 0) /
+            optimizedWithScore.length
         )
       : 0;
 
@@ -89,7 +89,10 @@ export function DashboardContent({
       job.company
     );
 
-    const showOptimized = a.status === "completed" && a.optimized_score != 0;
+    const showOptimized =
+      (a.status === "completed" || a.status === "pending_payment") &&
+      a.optimized_score != null &&
+      a.optimized_score !== 0;
 
     return {
       analysisId: a.id,
@@ -103,7 +106,7 @@ export function DashboardContent({
       beforeColor: getScoreColorToken(a.score),
       after: showOptimized ? `${a.optimized_score}%` : "—",
       afterColor: showOptimized
-        ? getScoreColorToken(a.optimized_score!)
+        ? getScoreColorToken(a.optimized_score)
         : "var(--muted-foreground)",
       status: a.status,
     };
