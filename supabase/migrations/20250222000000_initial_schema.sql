@@ -76,21 +76,16 @@ ALTER TABLE pix_pending_charges ENABLE ROW LEVEL SECURITY;
 
 -- Policies: users access only their own rows
 CREATE POLICY "resumes_all_own" ON resumes FOR ALL USING (auth.uid() = user_id);
-CREATE POLICY "analyses_all_own" ON analyses FOR ALL USING (auth.uid() = user_id);
-CREATE POLICY "user_credits_all_own" ON user_credits FOR ALL
-  USING (auth.uid() = user_id)
+CREATE POLICY "analyses_select_own" ON analyses FOR SELECT
+  USING (auth.uid() = user_id);
+CREATE POLICY "analyses_insert_own" ON analyses FOR INSERT
   WITH CHECK (auth.uid() = user_id);
-
+CREATE POLICY "user_credits_select_own" ON user_credits FOR SELECT
+  USING (auth.uid() = user_id);
 CREATE POLICY "optimized_documents_select_via_analysis" ON optimized_documents FOR SELECT
-  USING (EXISTS (SELECT 1 FROM analyses a WHERE a.id = analysis_id AND a.user_id = auth.uid()));
-CREATE POLICY "optimized_documents_insert_via_analysis" ON optimized_documents FOR INSERT
-  WITH CHECK (EXISTS (SELECT 1 FROM analyses a WHERE a.id = analysis_id AND a.user_id = auth.uid()));
-CREATE POLICY "optimized_documents_delete_via_analysis" ON optimized_documents FOR DELETE
   USING (EXISTS (SELECT 1 FROM analyses a WHERE a.id = analysis_id AND a.user_id = auth.uid()));
 CREATE POLICY "purchases_select_own" ON purchases FOR SELECT
   USING (auth.uid() = user_id);
-CREATE POLICY "purchases_insert_own" ON purchases FOR INSERT
-  WITH CHECK (auth.uid() = user_id);
 CREATE POLICY "pix_pending_charges_insert_own" ON pix_pending_charges FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 CREATE POLICY "pix_pending_charges_select_own" ON pix_pending_charges FOR SELECT

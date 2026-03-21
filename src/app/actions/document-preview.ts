@@ -17,6 +17,7 @@ import type { JobSkill } from "@/lib/ai/config/job-skills-schema";
 import { synthesizeResumeContent } from "@/lib/ai/synthesize-resume";
 import { logServerError } from "@/lib/logger";
 import { getAuthenticatedUser } from "@/lib/supabase/server";
+import { createAdminSupabaseClient } from "@/lib/supabase/service";
 import type { ResumeData } from "@/types/resume";
 import { calculateOptimizedScore } from "@/utils/analysis";
 import { revalidatePath } from "next/cache";
@@ -102,7 +103,6 @@ export async function generateResumePreview(
   let creditsDecremented = false;
 
   const creditResult = await tryConsumeCredit(
-    supabase,
     user.id,
     "generateResumePreview_credit_decrement"
   );
@@ -128,13 +128,13 @@ export async function generateResumePreview(
 
       if (creditsDecremented) {
         await rollbackCredit(
-          supabase,
           user.id,
           "generateResumePreview_credit_increment_rollback_synthesis_failed"
         );
       }
 
-      await supabase
+      const adminSupabase = createAdminSupabaseClient();
+      const { error: rollbackAnalysisError } = await adminSupabase
         .from("analyses")
         .update({
           status: "pending_payment",
@@ -146,7 +146,19 @@ export async function generateResumePreview(
         .eq("id", analysisId)
         .eq("user_id", user.id);
 
-      return { success: false, error: synthesis.error };
+      if (rollbackAnalysisError) {
+        logServerError({
+          context: "db",
+          operation:
+            "generateResumePreview_rollback_analysis_after_synthesis_fail",
+          message: rollbackAnalysisError.message,
+        });
+      }
+
+      return {
+        success: false,
+        error: "Não foi possível gerar o currículo otimizado. Tente novamente.",
+      };
     }
 
     mergedResumeData = buildMergedResumeData(resumeData, synthesis.data);
@@ -166,7 +178,8 @@ export async function generateResumePreview(
     user_soft_skills: mergedSoftSkills,
   };
 
-  const { error: updateStatusError } = await supabase
+  const adminSupabase = createAdminSupabaseClient();
+  const { error: updateStatusError } = await adminSupabase
     .from("analyses")
     .update(updatePayload)
     .eq("id", analysisId)
@@ -181,7 +194,6 @@ export async function generateResumePreview(
 
     if (status === "completed" && needsUnlock === false) {
       await rollbackCredit(
-        supabase,
         user.id,
         "generateResumePreview_credit_increment_rollback"
       );
@@ -251,7 +263,6 @@ export async function unlockAnalysis(
   );
 
   const creditResult = await tryConsumeCredit(
-    supabase,
     user.id,
     "unlockAnalysis_credit_decrement"
   );
@@ -274,12 +285,14 @@ export async function unlockAnalysis(
     });
 
     await rollbackCredit(
-      supabase,
       user.id,
       "unlockAnalysis_credit_increment_rollback_synthesis_failed"
     );
 
-    return { success: false, error: synthesis.error };
+    return {
+      success: false,
+      error: "Não foi possível gerar o currículo otimizado. Tente novamente.",
+    };
   }
 
   const mergedResumeData: ResumeData = buildMergedResumeData(
@@ -289,7 +302,8 @@ export async function unlockAnalysis(
 
   const optimizedScore = analysisRow.optimized_score ?? undefined;
 
-  const { error: updateError } = await supabase
+  const adminSupabase = createAdminSupabaseClient();
+  const { error: updateError } = await adminSupabase
     .from("analyses")
     .update({
       status: "completed",
@@ -306,11 +320,7 @@ export async function unlockAnalysis(
       message: updateError.message,
     });
 
-    await rollbackCredit(
-      supabase,
-      user.id,
-      "unlockAnalysis_credit_increment_rollback"
-    );
+    await rollbackCredit(user.id, "unlockAnalysis_credit_increment_rollback");
 
     return {
       success: false,

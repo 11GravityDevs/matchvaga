@@ -7,6 +7,7 @@ import {
   getAuthenticatedUser,
   type GetAuthenticatedUserSuccess,
 } from "@/lib/supabase/server";
+import { createAdminSupabaseClient } from "@/lib/supabase/service";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
 import { renderToBuffer } from "@react-pdf/renderer";
@@ -15,6 +16,7 @@ import { createElement } from "react";
 
 const BUCKET = "documents";
 const SIGNED_URL_EXPIRES_IN = 3600;
+const MAX_OPTIMIZED_DOCUMENT_BYTES = 10 * 1024 * 1024;
 
 export interface GenerateOptimizedDocumentResult {
   success: boolean;
@@ -25,13 +27,13 @@ export interface GenerateOptimizedDocumentResult {
 type SupabaseServer = GetAuthenticatedUserSuccess["supabase"];
 
 async function generateOptimizedDocumentWithContext(
-  supabase: SupabaseServer,
+  readSupabase: SupabaseServer,
   userId: string,
   analysisId: string,
   format: "pdf" | "docx",
   resumeData: ResumeData
 ): Promise<GenerateOptimizedDocumentResult> {
-  const { data: analysisRow, error: analysisError } = await supabase
+  const { data: analysisRow, error: analysisError } = await readSupabase
     .from("analyses")
     .select("id, status")
     .eq("id", analysisId)
@@ -49,7 +51,7 @@ async function generateOptimizedDocumentWithContext(
     };
   }
 
-  const { data: existingDoc, error: docLookupError } = await supabase
+  const { data: existingDoc, error: docLookupError } = await readSupabase
     .from("optimized_documents")
     .select("file_path")
     .eq("analysis_id", analysisId)
@@ -57,7 +59,7 @@ async function generateOptimizedDocumentWithContext(
     .maybeSingle();
 
   if (!docLookupError && existingDoc?.file_path) {
-    const { data: signedData, error: signedError } = await supabase.storage
+    const { data: signedData, error: signedError } = await readSupabase.storage
       .from(BUCKET)
       .createSignedUrl(existingDoc.file_path, SIGNED_URL_EXPIRES_IN);
 
@@ -100,9 +102,17 @@ async function generateOptimizedDocumentWithContext(
     buffer = await buildResumeDocx(validResumeData);
   }
 
-  const filePath = `${userId}/${analysisId}.${format}`;
+  if (buffer.length > MAX_OPTIMIZED_DOCUMENT_BYTES) {
+    return {
+      success: false,
+      error: "Documento gerado excede o tamanho máximo permitido.",
+    };
+  }
 
-  const { error: uploadError } = await supabase.storage
+  const filePath = `${userId}/${analysisId}.${format}`;
+  const adminSupabase = createAdminSupabaseClient();
+
+  const { error: uploadError } = await adminSupabase.storage
     .from(BUCKET)
     .upload(filePath, buffer, {
       contentType:
@@ -124,7 +134,7 @@ async function generateOptimizedDocumentWithContext(
     };
   }
 
-  const { error: insertError } = await supabase
+  const { error: insertError } = await adminSupabase
     .from("optimized_documents")
     .insert({
       analysis_id: analysisId,
@@ -138,9 +148,23 @@ async function generateOptimizedDocumentWithContext(
       operation: "generateOptimizedDocument_insert",
       message: insertError.message,
     });
+    const { error: rollbackRemoveError } = await adminSupabase.storage
+      .from(BUCKET)
+      .remove([filePath]);
+    if (rollbackRemoveError) {
+      logServerError({
+        context: "db",
+        operation: "generateOptimizedDocument_insert_rollback_upload",
+        message: rollbackRemoveError.message,
+      });
+    }
+    return {
+      success: false,
+      error: "Erro ao registrar documento. Tente novamente.",
+    };
   }
 
-  const { data: signedData, error: signedError } = await supabase.storage
+  const { data: signedData, error: signedError } = await readSupabase.storage
     .from(BUCKET)
     .createSignedUrl(filePath, SIGNED_URL_EXPIRES_IN);
 
@@ -211,25 +235,5 @@ export async function downloadOptimizedDocument(
     analysisId,
     format,
     optimizedParsed.data as ResumeData
-  );
-}
-
-export async function generateOptimizedDocument(
-  analysisId: string,
-  format: "pdf" | "docx",
-  resumeData: ResumeData
-): Promise<GenerateOptimizedDocumentResult> {
-  const auth = await getAuthenticatedUser();
-  if (!auth.success) {
-    return { success: false, error: auth.error };
-  }
-  const { user, supabase } = auth;
-
-  return generateOptimizedDocumentWithContext(
-    supabase,
-    user.id,
-    analysisId,
-    format,
-    resumeData
   );
 }

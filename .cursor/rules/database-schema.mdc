@@ -19,6 +19,6 @@ Ref: `supabase/migrations/20250222000000_initial_schema.sql`, `supabase/migratio
 
 **Mapping:** parsed_data → resumeDataSchema; job_snapshot → jobSnapshotSchema; user_hard_skills/user_soft_skills = skills matched; missing_hard_skills/missing_soft_skills = skills faltantes; status atualizado em runSkillsMatch e generateResumePreview.
 
-**RLS:** resumes, analyses, user_credits = auth.uid()=user_id. user_credits usa WITH CHECK. optimized_documents = SELECT/INSERT/DELETE via análise (EXISTS analysis do user). purchases = purchases_select_own (SELECT), purchases_insert_own (INSERT WITH CHECK auth.uid()=user_id); webhook Stripe usa service role. pix_pending_charges = insert_own, select_own, delete_own.
+**RLS:** resumes = FOR ALL próprio. **analyses** = SELECT e INSERT próprio; UPDATE só service role (document-preview). user_credits = apenas SELECT próprio; escritas só service role. purchases = apenas SELECT próprio; INSERT só service role. **optimized_documents** = SELECT via análise do user; INSERT só service role (document-export). pix_pending_charges = insert_own, select_own, delete_own.
 
-**Storage:** bucket `documents` para PDF/DOCX; políticas em `20250222000001_storage_documents.sql`: INSERT, SELECT e DELETE quando `(storage.foldername(name))[1] = auth.uid()::text` (path `{user_id}/*`).
+**Storage:** bucket `documents` (INSERT em `storage.buckets` na migration `20250222000001_storage_documents.sql`); política **SELECT** própria (`documents_select_own`, path `{user_id}/*`). Upload/delete só service role no servidor.

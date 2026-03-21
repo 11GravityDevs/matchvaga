@@ -1,5 +1,6 @@
 import { logServerError } from "@/lib/logger";
 import { getAuthenticatedUser } from "@/lib/supabase/server";
+import { createAdminSupabaseClient } from "@/lib/supabase/service";
 import { resumeDataSchema } from "@/schemas/resume";
 import type { ResumeData } from "@/types/resume";
 
@@ -151,10 +152,10 @@ export async function getUnlockAnalysisData(
 }
 
 export async function tryConsumeCredit(
-  supabase: SupabaseClient,
   userId: string,
   operationPrefix: string
 ): Promise<{ consumed: boolean }> {
+  const supabase = createAdminSupabaseClient();
   const { data: userCreditsRow, error: userCreditsError } = await supabase
     .from("user_credits")
     .select("credits")
@@ -198,10 +199,10 @@ export async function tryConsumeCredit(
 }
 
 export async function rollbackCredit(
-  supabase: SupabaseClient,
   userId: string,
   operationPrefix: string
 ): Promise<void> {
+  const supabase = createAdminSupabaseClient();
   const { data: rollbackCreditsRow, error: rollbackSelectError } =
     await supabase
       .from("user_credits")
