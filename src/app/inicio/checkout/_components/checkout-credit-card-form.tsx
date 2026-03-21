@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 
+import { Lock, ShieldCheck } from "lucide-react";
 import { PaymentElement, useCheckout } from "@stripe/react-stripe-js/checkout";
 
 import { Button } from "@/components/ui/button";
@@ -17,31 +18,25 @@ import {
   getPackagePriceCentavos,
   type CheckoutPackageId,
 } from "@/constants/checkout-packages";
+import { formatCentavosToBrl } from "@/utils/currency";
 
-interface CheckoutPaymentFormProps {
+interface CheckoutCreditCardFormProps {
   packageId: CheckoutPackageId;
   onChooseAnotherPackage: () => void;
   chooseAnotherLabel?: string;
   onPaymentSuccess?: () => void;
   onSubmittingChange?: (isSubmitting: boolean) => void;
+  compact?: boolean;
 }
 
-const brlFormatter = new Intl.NumberFormat("pt-BR", {
-  style: "currency",
-  currency: "BRL",
-});
-
-function formatCentavosToBrl(amountCentavos: number): string {
-  return brlFormatter.format(amountCentavos / 100);
-}
-
-export function CheckoutPaymentForm({
+export function CheckoutCreditCardForm({
   packageId,
   onChooseAnotherPackage,
   chooseAnotherLabel = "Escolher outro pacote",
   onPaymentSuccess,
   onSubmittingChange,
-}: CheckoutPaymentFormProps) {
+  compact = false,
+}: CheckoutCreditCardFormProps) {
   const checkoutState = useCheckout();
   const [isSubmittingPayment, setIsSubmittingPayment] = useState(false);
   const [submitErrorMessage, setSubmitErrorMessage] = useState<string | null>(
@@ -56,6 +51,14 @@ export function CheckoutPaymentForm({
   }, [isSubmittingPayment, onSubmittingChange]);
 
   if (checkoutState.type === "error") {
+    if (compact) {
+      return (
+        <p className="text-sm text-destructive">
+          {checkoutState.error.message}
+        </p>
+      );
+    }
+
     return (
       <Card className="w-full border border-border">
         <CardHeader>
@@ -101,6 +104,50 @@ export function CheckoutPaymentForm({
 
     setIsSubmittingPayment(false);
   };
+
+  if (compact) {
+    return (
+      <div className="flex flex-col gap-4">
+        <PaymentElement options={{ layout: "accordion" }} />
+
+        {submitErrorMessage && (
+          <p className="text-sm text-destructive" role="alert">
+            {submitErrorMessage}
+          </p>
+        )}
+
+        <div className="flex gap-3">
+          <Button
+            variant="outline"
+            size="brand"
+            type="button"
+            onClick={onChooseAnotherPackage}
+            disabled={isSubmittingPayment}
+          >
+            {chooseAnotherLabel}
+          </Button>
+          <Button
+            variant="brand"
+            size="brand"
+            type="button"
+            loading={isSubmittingPayment}
+            onClick={handleSubmitPayment}
+            className="flex-1 gap-1.5"
+          >
+            <Lock className="size-4" />
+            Pagar {formatCentavosToBrl(packagePriceCentavos)}
+          </Button>
+        </div>
+
+        <div className="flex items-center justify-center gap-1.5">
+          <ShieldCheck className="size-3.5 text-muted-foreground" />
+          <span className="text-xs text-muted-foreground">
+            Pagamento seguro via Stripe
+          </span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex w-full flex-col gap-6">

@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Lock } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import { generateOptimizedDocument } from "@/app/actions/document-export";
+import { downloadOptimizedDocument } from "@/app/actions/document-export";
 import { unlockAnalysis } from "@/app/actions/document-preview";
 import { Button } from "@/components/ui/button";
 import { StepIndicator } from "@/components/shared/step-indicator";
@@ -53,6 +53,8 @@ export function StepPreviewExport() {
     selectedHardSkills,
     selectedSoftSkills,
     reset,
+    setOptimizedResumeData,
+    setOptimizedScore,
     setNeedsUnlock,
   } = useNewAnalysis();
 
@@ -84,17 +86,13 @@ export function StepPreviewExport() {
   const [downloadError, setDownloadError] = useState<string | null>(null);
 
   async function handleDownload(format: "pdf" | "docx") {
-    if (!analysisId || !displayResumeData || downloadingFormat) return;
+    if (!analysisId || downloadingFormat) return;
 
     setDownloadingFormat(format);
     setDownloadError(null);
 
     try {
-      const result = await generateOptimizedDocument(
-        analysisId,
-        format,
-        displayResumeData
-      );
+      const result = await downloadOptimizedDocument(analysisId, format);
 
       if (result.success && result.url) {
         window.open(result.url, "_blank");
@@ -139,10 +137,12 @@ export function StepPreviewExport() {
 
       return result;
     },
-    onSuccess: () => {
+    onSuccess: (result) => {
       void queryClient.invalidateQueries({
         queryKey: QUERY_KEY_CURRENT_USER_DISPLAY,
       });
+      setOptimizedResumeData(result.data ?? null);
+      setOptimizedScore(result.optimizedScore ?? null);
       setNeedsUnlock(false);
     },
     onError: (error) => {
@@ -290,7 +290,11 @@ export function StepPreviewExport() {
             if (!open) setInitialProcessingFromRedirect(undefined);
           }}
           analysisId={analysisId}
-          onUnlockSuccess={() => setNeedsUnlock(false)}
+          onUnlockSuccess={(result) => {
+            setOptimizedResumeData(result.data ?? null);
+            setOptimizedScore(result.optimizedScore ?? null);
+            setNeedsUnlock(false);
+          }}
           initialProcessingFromRedirect={initialProcessingFromRedirect}
         />
       )}

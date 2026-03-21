@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { CheckoutPackagesGrid } from "@/components/shared/checkout-packages-grid";
@@ -9,25 +8,17 @@ import {
   getCreditsForPackage,
   getPackagePriceCentavos,
 } from "@/constants/checkout-packages";
-import { ROUTE_LOGIN } from "@/constants/routes";
+import { ROUTE_LOGIN, ROUTE_HOME_CHECKOUT } from "@/constants/routes";
 import { useAuthContext } from "@/contexts/auth-context";
-import {
-  trackCheckoutStartedEvent,
-  trackPricingPackageSelectedEvent,
-} from "@/lib/analytics/posthog-events";
-import { useToastNotification } from "@/hooks/use-toast-notification";
+import { trackPricingPackageSelectedEvent } from "@/lib/analytics/posthog-events";
 
 import { AnimateOnScroll } from "./animate-on-scroll";
-import { createCheckoutSession } from "../inicio/checkout/_actions/checkout";
 
 export function PricingSection() {
-  const [loadingPackageId, setLoadingPackageId] =
-    useState<CheckoutPackageId | null>(null);
   const { isLoggedIn } = useAuthContext();
   const router = useRouter();
-  const { showErrorToastNotification } = useToastNotification();
 
-  const handleSelectPackage = async (id: CheckoutPackageId) => {
+  const handleSelectPackage = (id: CheckoutPackageId) => {
     if (!isLoggedIn) {
       router.push(ROUTE_LOGIN);
       return;
@@ -36,29 +27,8 @@ export function PricingSection() {
     const credits = getCreditsForPackage(id);
     const priceCentavos = getPackagePriceCentavos(id);
     trackPricingPackageSelectedEvent(id, credits, priceCentavos);
-    trackCheckoutStartedEvent(id, priceCentavos);
 
-    setLoadingPackageId(id);
-
-    try {
-      const result = await createCheckoutSession({ packageId: id });
-
-      if (result.success && result.clientSecret) {
-        return;
-      }
-
-      setLoadingPackageId(null);
-      showErrorToastNotification(
-        result.error ?? "Erro ao iniciar checkout. Tente novamente."
-      );
-    } catch (error) {
-      console.error(
-        "[PricingSection] Unexpected error creating checkout session:",
-        error
-      );
-      setLoadingPackageId(null);
-      showErrorToastNotification("Erro ao iniciar checkout. Tente novamente.");
-    }
+    router.push(`${ROUTE_HOME_CHECKOUT}?package=${id}`);
   };
 
   return (
@@ -68,7 +38,7 @@ export function PricingSection() {
     >
       <AnimateOnScroll>
         <div className="flex max-w-section-header flex-col items-center gap-4">
-          <span className="rounded-full border border-border px-3.5 py-1.5 text-xs font-semibold tracking-widest text-accent-brand">
+          <span className="rounded-full border border-accent-brand px-3.5 py-1.5 text-xs font-semibold tracking-widest text-accent-brand">
             PREÇOS
           </span>
           <h2 className="text-center text-section-header-large">
@@ -83,7 +53,7 @@ export function PricingSection() {
 
       <AnimateOnScroll delay={80} className="flex w-full flex-col gap-5">
         <CheckoutPackagesGrid
-          loadingPackageId={loadingPackageId}
+          loadingPackageId={null}
           onSelectPackage={handleSelectPackage}
         />
       </AnimateOnScroll>

@@ -1,10 +1,23 @@
 "use server";
 
-import { synthesizeResumeContent } from "@/lib/ai/synthesize-resume";
+import {
+  buildMergedResumeData,
+  createSynthesisParams,
+  type JobSnapshot,
+  mergeUniqueSkills,
+  selectedLabelsToOriginalTerms,
+} from "@/app/actions/_utils/document-preview";
+import {
+  getPreviewAnalysisData,
+  getUnlockAnalysisData,
+  rollbackCredit,
+  tryConsumeCredit,
+} from "@/app/actions/_utils/document-preview-db";
 import type { JobSkill } from "@/lib/ai/config/job-skills-schema";
+import { synthesizeResumeContent } from "@/lib/ai/synthesize-resume";
 import { logServerError } from "@/lib/logger";
 import { getAuthenticatedUser } from "@/lib/supabase/server";
-import { resumeDataSchema } from "@/schemas/resume";
+import { createAdminSupabaseClient } from "@/lib/supabase/service";
 import type { ResumeData } from "@/types/resume";
 import { calculateOptimizedScore } from "@/utils/analysis";
 import { revalidatePath } from "next/cache";
@@ -28,51 +41,22 @@ export async function generateResumePreview(
   }
   const { user, supabase } = auth;
 
-  const { data: analysisRow, error: analysisError } = await supabase
-    .from("analyses")
-    .select(
-      "id, resume_id, job_snapshot, score, user_hard_skills, user_soft_skills, missing_hard_skills, missing_soft_skills"
-    )
-    .eq("id", analysisId)
-    .eq("user_id", user.id)
-    .single();
-
-  if (analysisError || !analysisRow) {
-    return { success: false, error: "Análise não encontrada." };
+  const previewDataResult = await getPreviewAnalysisData(
+    supabase,
+    user.id,
+    analysisId
+  );
+  if (!previewDataResult.success) {
+    return previewDataResult;
   }
 
-  const { data: resumeRow, error: resumeError } = await supabase
-    .from("resumes")
-    .select("parsed_data")
-    .eq("id", analysisRow.resume_id)
-    .eq("user_id", user.id)
-    .single();
-
-  if (resumeError || !resumeRow) {
-    return { success: false, error: "Currículo não encontrado." };
-  }
-
-  const resumeParsed = resumeDataSchema.safeParse(resumeRow.parsed_data);
-  if (!resumeParsed.success) {
-    return { success: false, error: "Dados do currículo inválidos." };
-  }
-
-  const resumeData = resumeParsed.data as ResumeData;
+  const analysisRow = previewDataResult.data;
+  const resumeData = analysisRow.resumeData;
 
   const userHardSkills = (analysisRow.user_hard_skills ?? []) as string[];
   const userSoftSkills = (analysisRow.user_soft_skills ?? []) as string[];
   const missingHard = (analysisRow.missing_hard_skills ?? []) as JobSkill[];
   const missingSoft = (analysisRow.missing_soft_skills ?? []) as JobSkill[];
-
-  function selectedLabelsToOriginalTerms(
-    selectedLabels: string[],
-    skills: JobSkill[]
-  ): string[] {
-    const byName = new Map(skills.map((s) => [s.name, s.original_term]));
-    return selectedLabels
-      .map((label) => byName.get(label) ?? label)
-      .filter(Boolean);
-  }
 
   const selectedHardOriginalTerms = selectedLabelsToOriginalTerms(
     selectedHardSkills ?? [],
@@ -83,40 +67,23 @@ export async function generateResumePreview(
     missingSoft
   );
 
-  const mergedHardSkills = [
-    ...userHardSkills,
-    ...selectedHardOriginalTerms.filter((t) => !userHardSkills.includes(t)),
-  ];
+  const mergedHardSkills = mergeUniqueSkills(
+    userHardSkills,
+    selectedHardOriginalTerms
+  );
 
-  const mergedSoftSkills = [
-    ...userSoftSkills,
-    ...selectedSoftOriginalTerms.filter((t) => !userSoftSkills.includes(t)),
-  ];
+  const mergedSoftSkills = mergeUniqueSkills(
+    userSoftSkills,
+    selectedSoftOriginalTerms
+  );
 
-  const jobSnapshot = analysisRow.job_snapshot as
-    | { title?: string; company?: string }
-    | null
-    | undefined;
-  const synthesisParams = {
-    summary: resumeData.summary,
-    hardSkills: mergedHardSkills,
-    softSkills: mergedSoftSkills,
-    jobTitle: jobSnapshot?.title ?? undefined,
-  };
-
-  const synthesis = await synthesizeResumeContent(synthesisParams);
-
-  if (!synthesis.success) {
-    logServerError({
-      context: "server_action",
-      operation: "generateResumePreview",
-      action: "generateResumePreview",
-      message: "Síntese de currículo otimizado retornou erro.",
-      errorMessage: synthesis.error,
-    });
-    return { success: false, error: synthesis.error };
-  }
-
+  const jobSnapshot = analysisRow.job_snapshot as JobSnapshot;
+  const synthesisParams = createSynthesisParams(
+    resumeData,
+    mergedHardSkills,
+    mergedSoftSkills,
+    jobSnapshot
+  );
   const analysisScore = (analysisRow.score ?? 0) as number;
 
   let optimizedScore = calculateOptimizedScore(
@@ -131,57 +98,88 @@ export async function generateResumePreview(
     optimizedScore = analysisScore;
   }
 
-  const mergedResumeData: ResumeData = {
-    ...resumeData,
-    summary: synthesis.data.summary,
-    hardSkillsByCategory: synthesis.data.hardSkillsByCategory,
-  };
-
   let status: "completed" | "pending_payment" = "pending_payment";
   let needsUnlock = true;
+  let creditsDecremented = false;
 
-  const { data: userCreditsRow, error: userCreditsError } = await supabase
-    .from("user_credits")
-    .select("credits")
-    .eq("user_id", user.id)
-    .maybeSingle();
-
-  if (!userCreditsError && userCreditsRow && userCreditsRow.credits >= 1) {
-    const { data: updatedCreditsRow, error: updateCreditsError } =
-      await supabase
-        .from("user_credits")
-        .update({
-          credits: userCreditsRow.credits - 1,
-        })
-        .eq("user_id", user.id)
-        .select("credits")
-        .maybeSingle();
-
-    if (!updateCreditsError && updatedCreditsRow) {
-      status = "completed";
-      needsUnlock = false;
-    }
+  const creditResult = await tryConsumeCredit(
+    user.id,
+    "generateResumePreview_credit_decrement"
+  );
+  if (creditResult.consumed) {
+    status = "completed";
+    needsUnlock = false;
+    creditsDecremented = true;
   }
 
-  if (userCreditsError) {
-    logServerError({
-      context: "db",
-      operation: "generateResumePreview_credit_decrement",
-      message: userCreditsError.message,
-    });
+  let mergedResumeData: ResumeData | null = null;
+
+  if (status === "completed") {
+    const synthesis = await synthesizeResumeContent(synthesisParams);
+
+    if (!synthesis.success) {
+      logServerError({
+        context: "server_action",
+        operation: "generateResumePreview",
+        action: "generateResumePreview",
+        message: "Síntese de currículo otimizado retornou erro.",
+        errorMessage: synthesis.error,
+      });
+
+      if (creditsDecremented) {
+        await rollbackCredit(
+          user.id,
+          "generateResumePreview_credit_increment_rollback_synthesis_failed"
+        );
+      }
+
+      const adminSupabase = createAdminSupabaseClient();
+      const { error: rollbackAnalysisError } = await adminSupabase
+        .from("analyses")
+        .update({
+          status: "pending_payment",
+          optimized_score: optimizedScore,
+          optimized_resume_data: null,
+          user_hard_skills: mergedHardSkills,
+          user_soft_skills: mergedSoftSkills,
+        })
+        .eq("id", analysisId)
+        .eq("user_id", user.id);
+
+      if (rollbackAnalysisError) {
+        logServerError({
+          context: "db",
+          operation:
+            "generateResumePreview_rollback_analysis_after_synthesis_fail",
+          message: rollbackAnalysisError.message,
+        });
+      }
+
+      return {
+        success: false,
+        error: "Não foi possível gerar o currículo otimizado. Tente novamente.",
+      };
+    }
+
+    mergedResumeData = buildMergedResumeData(resumeData, synthesis.data);
   }
 
   const updatePayload: {
     status: string;
     optimized_score?: number;
-    optimized_resume_data?: ResumeData;
+    optimized_resume_data?: ResumeData | null;
+    user_hard_skills: string[];
+    user_soft_skills: string[];
   } = {
     status,
     optimized_score: optimizedScore,
     optimized_resume_data: mergedResumeData,
+    user_hard_skills: mergedHardSkills,
+    user_soft_skills: mergedSoftSkills,
   };
 
-  const { error: updateStatusError } = await supabase
+  const adminSupabase = createAdminSupabaseClient();
+  const { error: updateStatusError } = await adminSupabase
     .from("analyses")
     .update(updatePayload)
     .eq("id", analysisId)
@@ -195,42 +193,10 @@ export async function generateResumePreview(
     });
 
     if (status === "completed" && needsUnlock === false) {
-      const { data: rollbackCreditsRow, error: rollbackSelectError } =
-        await supabase
-          .from("user_credits")
-          .select("credits")
-          .eq("user_id", user.id)
-          .maybeSingle();
-
-      if (!rollbackSelectError) {
-        const newRollbackCreditsTotal = (rollbackCreditsRow?.credits ?? 0) + 1;
-
-        const { error: rollbackUpdateError } = await supabase
-          .from("user_credits")
-          .upsert(
-            {
-              user_id: user.id,
-              credits: newRollbackCreditsTotal,
-            },
-            {
-              onConflict: "user_id",
-            }
-          );
-
-        if (rollbackUpdateError) {
-          logServerError({
-            context: "db",
-            operation: "generateResumePreview_credit_increment_rollback",
-            message: rollbackUpdateError.message,
-          });
-        }
-      } else {
-        logServerError({
-          context: "db",
-          operation: "generateResumePreview_credit_increment_rollback_select",
-          message: rollbackSelectError.message,
-        });
-      }
+      await rollbackCredit(
+        user.id,
+        "generateResumePreview_credit_increment_rollback"
+      );
     }
 
     return {
@@ -243,7 +209,7 @@ export async function generateResumePreview(
 
   return {
     success: true,
-    data: mergedResumeData,
+    data: status === "completed" ? (mergedResumeData ?? undefined) : undefined,
     optimizedScore,
     needsUnlock,
   };
@@ -265,16 +231,15 @@ export async function unlockAnalysis(
   }
   const { user, supabase } = auth;
 
-  const { data: analysisRow, error: analysisError } = await supabase
-    .from("analyses")
-    .select("id, status, optimized_resume_data, optimized_score")
-    .eq("id", analysisId)
-    .eq("user_id", user.id)
-    .single();
-
-  if (analysisError || !analysisRow) {
-    return { success: false, error: "Análise não encontrada." };
+  const unlockDataResult = await getUnlockAnalysisData(
+    supabase,
+    user.id,
+    analysisId
+  );
+  if (!unlockDataResult.success) {
+    return unlockDataResult;
   }
+  const analysisRow = unlockDataResult.data;
 
   if (analysisRow.status !== "pending_payment") {
     return {
@@ -284,64 +249,67 @@ export async function unlockAnalysis(
     };
   }
 
-  const optimizedParsed =
-    analysisRow.optimized_resume_data != null
-      ? resumeDataSchema.safeParse(analysisRow.optimized_resume_data)
-      : null;
+  const resumeData = analysisRow.resumeData;
 
-  if (!optimizedParsed?.success) {
-    return {
-      success: false,
-      error: "Dados do currículo inválidos.",
-    };
-  }
+  const userHardSkills = (analysisRow.user_hard_skills ?? []) as string[];
+  const userSoftSkills = (analysisRow.user_soft_skills ?? []) as string[];
 
-  const { data: userCreditsRow, error: userCreditsError } = await supabase
-    .from("user_credits")
-    .select("credits")
-    .eq("user_id", user.id)
-    .maybeSingle();
+  const jobSnapshot = analysisRow.job_snapshot as JobSnapshot;
+  const synthesisParams = createSynthesisParams(
+    resumeData,
+    userHardSkills,
+    userSoftSkills,
+    jobSnapshot
+  );
 
-  if (userCreditsError || !userCreditsRow || userCreditsRow.credits < 1) {
-    if (userCreditsError) {
-      logServerError({
-        context: "db",
-        operation: "unlockAnalysis_credit_decrement",
-        message: userCreditsError.message,
-      });
-    }
+  const creditResult = await tryConsumeCredit(
+    user.id,
+    "unlockAnalysis_credit_decrement"
+  );
+  if (!creditResult.consumed) {
     return {
       success: false,
       error: "Sem análises disponíveis. Aguarde o processamento do pagamento.",
     };
   }
 
-  const { data: updatedCreditsRow, error: updateCreditsError } = await supabase
-    .from("user_credits")
-    .update({
-      credits: userCreditsRow.credits - 1,
-    })
-    .eq("user_id", user.id)
-    .select("credits")
-    .maybeSingle();
+  const synthesis = await synthesizeResumeContent(synthesisParams);
 
-  if (updateCreditsError || !updatedCreditsRow) {
-    if (updateCreditsError) {
-      logServerError({
-        context: "db",
-        operation: "unlockAnalysis_credit_decrement_update",
-        message: updateCreditsError.message,
-      });
-    }
+  if (!synthesis.success) {
+    logServerError({
+      context: "server_action",
+      operation: "unlockAnalysis",
+      action: "unlockAnalysis",
+      message: "Síntese de currículo otimizado retornou erro.",
+      errorMessage: synthesis.error,
+    });
+
+    await rollbackCredit(
+      user.id,
+      "unlockAnalysis_credit_increment_rollback_synthesis_failed"
+    );
+
     return {
       success: false,
-      error: "Sem análises disponíveis. Aguarde o processamento do pagamento.",
+      error: "Não foi possível gerar o currículo otimizado. Tente novamente.",
     };
   }
 
-  const { error: updateError } = await supabase
+  const mergedResumeData: ResumeData = buildMergedResumeData(
+    resumeData,
+    synthesis.data
+  );
+
+  const optimizedScore = analysisRow.optimized_score ?? undefined;
+
+  const adminSupabase = createAdminSupabaseClient();
+  const { error: updateError } = await adminSupabase
     .from("analyses")
-    .update({ status: "completed" })
+    .update({
+      status: "completed",
+      optimized_resume_data: mergedResumeData,
+      optimized_score: optimizedScore,
+    })
     .eq("id", analysisId)
     .eq("user_id", user.id);
 
@@ -351,42 +319,9 @@ export async function unlockAnalysis(
       operation: "unlockAnalysis_status_update",
       message: updateError.message,
     });
-    const { data: rollbackCreditsRow, error: rollbackSelectError } =
-      await supabase
-        .from("user_credits")
-        .select("credits")
-        .eq("user_id", user.id)
-        .maybeSingle();
 
-    if (!rollbackSelectError) {
-      const newRollbackCreditsTotal = (rollbackCreditsRow?.credits ?? 0) + 1;
+    await rollbackCredit(user.id, "unlockAnalysis_credit_increment_rollback");
 
-      const { error: rollbackUpdateError } = await supabase
-        .from("user_credits")
-        .upsert(
-          {
-            user_id: user.id,
-            credits: newRollbackCreditsTotal,
-          },
-          {
-            onConflict: "user_id",
-          }
-        );
-
-      if (rollbackUpdateError) {
-        logServerError({
-          context: "db",
-          operation: "unlockAnalysis_credit_increment_rollback",
-          message: rollbackUpdateError.message,
-        });
-      }
-    } else {
-      logServerError({
-        context: "db",
-        operation: "unlockAnalysis_credit_increment_rollback_select",
-        message: rollbackSelectError.message,
-      });
-    }
     return {
       success: false,
       error: "Erro ao desbloquear. Tente novamente.",
@@ -397,7 +332,7 @@ export async function unlockAnalysis(
 
   return {
     success: true,
-    data: optimizedParsed.data as ResumeData,
-    optimizedScore: analysisRow.optimized_score ?? undefined,
+    data: mergedResumeData,
+    optimizedScore,
   };
 }

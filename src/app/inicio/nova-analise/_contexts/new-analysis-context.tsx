@@ -282,11 +282,8 @@ export function NewAnalysisProvider({
 
       setOptimizedScore(analysis.optimized_score ?? null);
 
-      if (
-        (status === "completed" || status === "pending_payment") &&
-        analysis.optimized_resume_data
-      ) {
-        setOptimizedResumeData(analysis.optimized_resume_data);
+      if (status === "completed" || status === "pending_payment") {
+        setOptimizedResumeData(analysis.optimized_resume_data ?? null);
         setNeedsUnlock(status === "pending_payment");
         setStep(3);
       } else {

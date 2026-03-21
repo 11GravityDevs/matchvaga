@@ -3,49 +3,84 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { CheckoutProvider } from "@stripe/react-stripe-js/checkout";
-import type { Appearance } from "@stripe/stripe-js";
-import { CreditCard, Clock, Shield } from "lucide-react";
-
-import { Card, CardContent } from "@/components/ui/card";
 import { CheckoutPackagesGrid } from "@/components/shared/checkout-packages-grid";
-import type { CheckoutPackageId } from "@/constants/checkout-packages";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  getPackageName,
+  getPackagePriceCentavos,
+  type CheckoutPackageId,
+} from "@/constants/checkout-packages";
+import { useToastNotification } from "@/hooks/use-toast-notification";
 import { trackPricingViewedEvent } from "@/lib/analytics/posthog-events";
 import { stripeCheckoutPromise } from "@/lib/stripe/checkout-client";
-import { useToastNotification } from "@/hooks/use-toast-notification";
+import { formatCentavosToBrl } from "@/utils/currency";
 
-import { useCheckoutSelectPackage } from "../_hooks/use-checkout-select-package";
-import { CheckoutPaymentForm } from "./checkout-payment-form";
-
-const checkoutAppearance: Appearance = {
-  theme: "stripe",
-  inputs: "spaced",
-  labels: "above",
-};
+import { CHECKOUT_STRIPE_APPEARANCE } from "../_constants/checkout";
+import { useCheckoutEffectiveState } from "../_hooks/use-checkout-effective-state";
+import {
+  PixCheckoutSuccessData,
+  useCheckoutSelectPackage,
+  type CheckoutPaymentMethod,
+  type CheckoutSuccessData,
+} from "../_hooks/use-checkout-select-package";
+import { CheckoutPackageSummaryCard } from "./checkout-package-summary-card";
+import { CheckoutPageHeader } from "./checkout-page-header";
+import { CheckoutCreditCardForm } from "./checkout-credit-card-form";
+import { CheckoutPaymentMethodSelector } from "./checkout-payment-method-selector";
+import { CheckoutPixForm } from "./checkout-pix-form";
+import { CheckoutTrustBadges } from "./checkout-trust-badges";
 
 interface CheckoutContentProps {
   unlockAnalysisId?: string;
+  initialPackageId?: CheckoutPackageId;
 }
 
 export function CheckoutContent({
   unlockAnalysisId,
+  initialPackageId,
 }: CheckoutContentProps = {}) {
+  const [paymentMethod, setPaymentMethod] =
+    useState<CheckoutPaymentMethod | null>(null);
+  const [pendingPackageId, setPendingPackageId] =
+    useState<CheckoutPackageId | null>(initialPackageId ?? null);
   const [selectedPackageId, setSelectedPackageId] =
     useState<CheckoutPackageId | null>(null);
   const [checkoutClientSecret, setCheckoutClientSecret] = useState<
     string | null
   >(null);
+  const [pixPayment, setPixPayment] = useState<PixCheckoutSuccessData | null>(
+    null
+  );
   const unlockTriggeredRef = useRef(false);
   const { showErrorToastNotification } = useToastNotification();
 
   const onSuccess = useCallback(
-    (data: { clientSecret: string; packageId: CheckoutPackageId }) => {
+    (data: CheckoutSuccessData) => {
+      setPendingPackageId(null);
+      setSelectedPackageId(data.packageId);
+
+      if (data.paymentMethod === "pix") {
+        setPixPayment({
+          paymentMethod: "pix",
+          packageId: data.packageId,
+          paymentId: data.paymentId,
+          brCode: data.brCode,
+          brCodeBase64: data.brCodeBase64,
+          expiresAt: data.expiresAt,
+        });
+
+        setCheckoutClientSecret(null);
+        return;
+      }
+
       if (!stripeCheckoutPromise) {
         showErrorToastNotification(
           "Configuração de pagamento indisponível no cliente."
         );
         return;
       }
-      setSelectedPackageId(data.packageId);
+
+      setPixPayment(null);
       setCheckoutClientSecret(data.clientSecret);
     },
     [showErrorToastNotification]
@@ -63,6 +98,27 @@ export function CheckoutContent({
     onError,
   });
 
+  const handleChooseAnotherPackage = useCallback(() => {
+    setPaymentMethod(null);
+    setCheckoutClientSecret(null);
+    setSelectedPackageId(null);
+    setPixPayment(null);
+    setPendingPackageId(null);
+  }, []);
+
+  const {
+    effectivePixPayment,
+    effectiveCheckoutClientSecret,
+    effectivePendingPackageId,
+    effectiveSelectedPackageId,
+  } = useCheckoutEffectiveState({
+    pixPayment,
+    checkoutClientSecret,
+    pendingPackageId,
+    selectedPackageId,
+    onChooseAnotherPackage: handleChooseAnotherPackage,
+  });
+
   useEffect(() => {
     trackPricingViewedEvent();
   }, []);
@@ -71,29 +127,97 @@ export function CheckoutContent({
     if (
       unlockAnalysisId &&
       !unlockTriggeredRef.current &&
-      !checkoutClientSecret
+      pendingPackageId === null
     ) {
       unlockTriggeredRef.current = true;
-      void handleSelectPackage("avulso", unlockAnalysisId);
+      queueMicrotask(() => setPendingPackageId("avulso"));
     }
-  }, [unlockAnalysisId, checkoutClientSecret, handleSelectPackage]);
+  }, [unlockAnalysisId, pendingPackageId]);
+
+  const handleBackToPackages = useCallback(() => {
+    setPaymentMethod(null);
+    setPendingPackageId(null);
+  }, []);
+
+  const showPackages =
+    !effectiveCheckoutClientSecret &&
+    !effectivePixPayment &&
+    effectivePendingPackageId === null;
+
+  const showPaymentChoice =
+    !effectiveCheckoutClientSecret &&
+    !effectivePixPayment &&
+    effectivePendingPackageId !== null;
+
+  const showPixForm =
+    !!effectivePixPayment && effectiveSelectedPackageId !== null;
+
+  const showStripeForm =
+    !!stripeCheckoutPromise &&
+    !!effectiveSelectedPackageId &&
+    !!effectiveCheckoutClientSecret;
+
+  const showUnavailableMessage = !showPixForm && !stripeCheckoutPromise;
 
   return (
     <main className="flex w-full flex-col items-center section-gap page-padding">
-      <div className="flex w-content flex-col gap-1">
-        <h1 className="text-page-title">Comprar Análises</h1>
-        <p className="text-page-subtitle">
-          Escolha o pacote ideal para seu momento.
-        </p>
-      </div>
+      <CheckoutPageHeader />
 
       <div className="flex w-content flex-col gap-10">
-        {!checkoutClientSecret ? (
+        {showPackages ? (
           <CheckoutPackagesGrid
-            loadingPackageId={loadingPackageId}
-            onSelectPackage={handleSelectPackage}
+            loadingPackageId={null}
+            onSelectPackage={(id) => setPendingPackageId(id)}
           />
-        ) : !stripeCheckoutPromise ? (
+        ) : null}
+
+        {showPaymentChoice && effectivePendingPackageId !== null ? (
+          <div className="flex w-full max-w-content flex-col gap-8">
+            <CheckoutPackageSummaryCard
+              packageName={getPackageName(effectivePendingPackageId)}
+              priceFormatted={formatCentavosToBrl(
+                getPackagePriceCentavos(effectivePendingPackageId)
+              )}
+              onBack={handleBackToPackages}
+            />
+            <CheckoutPaymentMethodSelector
+              paymentMethod={paymentMethod}
+              loadingPackageId={loadingPackageId}
+              pendingPackageId={effectivePendingPackageId}
+              onSelectPix={() => {
+                setPaymentMethod("pix");
+                void handleSelectPackage(
+                  effectivePendingPackageId,
+                  unlockAnalysisId,
+                  "pix"
+                );
+              }}
+              onSelectStripe={() => {
+                setPaymentMethod("credit-card");
+                void handleSelectPackage(
+                  effectivePendingPackageId,
+                  unlockAnalysisId,
+                  "credit-card"
+                );
+              }}
+            />
+          </div>
+        ) : null}
+
+        {showPixForm && effectivePixPayment && effectiveSelectedPackageId ? (
+          <CheckoutPixForm
+            paymentId={effectivePixPayment.paymentId}
+            brCode={effectivePixPayment.brCode}
+            brCodeBase64={effectivePixPayment.brCodeBase64}
+            expiresAt={effectivePixPayment.expiresAt}
+            packageName={getPackageName(effectiveSelectedPackageId)}
+            priceFormatted={formatCentavosToBrl(
+              getPackagePriceCentavos(effectiveSelectedPackageId)
+            )}
+            unlockAnalysisId={unlockAnalysisId}
+            onExpiredReturnToPackages={handleChooseAnotherPackage}
+          />
+        ) : showUnavailableMessage ? (
           <Card className="w-full border border-border">
             <CardContent className="pt-6">
               <p className="text-small text-muted-foreground">
@@ -101,50 +225,34 @@ export function CheckoutContent({
                 <button
                   type="button"
                   className="text-primary underline underline-offset-2 hover:no-underline"
-                  onClick={() => {
-                    setCheckoutClientSecret(null);
-                    setSelectedPackageId(null);
-                  }}
+                  onClick={handleChooseAnotherPackage}
                 >
                   Escolher outro pacote
                 </button>
               </p>
             </CardContent>
           </Card>
-        ) : selectedPackageId ? (
+        ) : showStripeForm &&
+          effectiveCheckoutClientSecret &&
+          effectiveSelectedPackageId ? (
           <CheckoutProvider
             stripe={stripeCheckoutPromise}
             options={{
-              clientSecret: checkoutClientSecret,
+              clientSecret: effectiveCheckoutClientSecret,
               elementsOptions: {
-                appearance: checkoutAppearance,
+                appearance: CHECKOUT_STRIPE_APPEARANCE,
               },
             }}
           >
-            <CheckoutPaymentForm
-              packageId={selectedPackageId}
-              onChooseAnotherPackage={() => {
-                setCheckoutClientSecret(null);
-                setSelectedPackageId(null);
-              }}
+            <CheckoutCreditCardForm
+              packageId={effectiveSelectedPackageId}
+              onChooseAnotherPackage={handleChooseAnotherPackage}
+              onPaymentSuccess={handleChooseAnotherPackage}
             />
           </CheckoutProvider>
         ) : null}
 
-        <div className="flex flex-wrap items-center justify-center gap-6 text-small text-muted-foreground">
-          <span className="inline-flex items-center gap-1.5">
-            <Clock className="size-3.5" />
-            Análises sem validade
-          </span>
-          <span className="inline-flex items-center gap-1.5">
-            <Shield className="size-3.5" />
-            Pagamento seguro via Stripe
-          </span>
-          <span className="inline-flex items-center gap-1.5">
-            <CreditCard className="size-3.5" />
-            Cartão ou PIX
-          </span>
-        </div>
+        <CheckoutTrustBadges />
       </div>
     </main>
   );

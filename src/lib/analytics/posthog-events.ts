@@ -62,15 +62,23 @@ export const trackPricingPackageSelectedEvent = (
 
 export const trackCheckoutStartedEvent = (
   packageId: string,
-  priceCentavos: number
+  priceCentavos: number,
+  paymentMethod: "credit-card" | "pix"
 ): void => {
   trackEvent("checkout_started", {
     package_id: packageId,
     price_centavos: priceCentavos,
     currency: "BRL",
+    provider: paymentMethod,
   });
 };
 
-export const trackCheckoutCompletedEvent = (sessionId: string): void => {
-  trackEvent("checkout_completed", { session_id: sessionId });
+export const trackCheckoutCompletedEvent = (
+  paymentId: string,
+  paymentMethod: "credit-card" | "pix"
+): void => {
+  trackEvent("checkout_completed", {
+    session_id: paymentId,
+    provider: paymentMethod,
+  });
 };

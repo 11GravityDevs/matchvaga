@@ -45,13 +45,24 @@ CREATE TABLE optimized_documents (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- purchases (Stripe checkout idempotency and audit; written by webhook via secret-key client only; no RLS policies)
+-- purchases (payment idempotency and audit; webhook writes via service role; users can read own rows)
 CREATE TABLE purchases (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  stripe_session_id TEXT NOT NULL UNIQUE,
+  payment_provider TEXT NOT NULL,
+  external_id TEXT NOT NULL,
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   package_id TEXT NOT NULL,
   credits_granted INTEGER NOT NULL CHECK (credits_granted > 0),
+  UNIQUE (payment_provider, external_id),
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- pending PIX charges context for webhook reconciliation
+CREATE TABLE pix_pending_charges (
+  charge_id TEXT PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  package_id TEXT NOT NULL,
+  analysis_id UUID REFERENCES analyses(id) ON DELETE SET NULL,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
@@ -61,17 +72,23 @@ ALTER TABLE analyses ENABLE ROW LEVEL SECURITY;
 ALTER TABLE user_credits ENABLE ROW LEVEL SECURITY;
 ALTER TABLE optimized_documents ENABLE ROW LEVEL SECURITY;
 ALTER TABLE purchases ENABLE ROW LEVEL SECURITY;
+ALTER TABLE pix_pending_charges ENABLE ROW LEVEL SECURITY;
 
 -- Policies: users access only their own rows
 CREATE POLICY "resumes_all_own" ON resumes FOR ALL USING (auth.uid() = user_id);
-CREATE POLICY "analyses_all_own" ON analyses FOR ALL USING (auth.uid() = user_id);
-CREATE POLICY "user_credits_all_own" ON user_credits FOR ALL
-  USING (auth.uid() = user_id)
+CREATE POLICY "analyses_select_own" ON analyses FOR SELECT
+  USING (auth.uid() = user_id);
+CREATE POLICY "analyses_insert_own" ON analyses FOR INSERT
   WITH CHECK (auth.uid() = user_id);
-
+CREATE POLICY "user_credits_select_own" ON user_credits FOR SELECT
+  USING (auth.uid() = user_id);
 CREATE POLICY "optimized_documents_select_via_analysis" ON optimized_documents FOR SELECT
   USING (EXISTS (SELECT 1 FROM analyses a WHERE a.id = analysis_id AND a.user_id = auth.uid()));
-CREATE POLICY "optimized_documents_insert_via_analysis" ON optimized_documents FOR INSERT
-  WITH CHECK (EXISTS (SELECT 1 FROM analyses a WHERE a.id = analysis_id AND a.user_id = auth.uid()));
-CREATE POLICY "optimized_documents_delete_via_analysis" ON optimized_documents FOR DELETE
-  USING (EXISTS (SELECT 1 FROM analyses a WHERE a.id = analysis_id AND a.user_id = auth.uid()));
+CREATE POLICY "purchases_select_own" ON purchases FOR SELECT
+  USING (auth.uid() = user_id);
+CREATE POLICY "pix_pending_charges_insert_own" ON pix_pending_charges FOR INSERT
+  WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "pix_pending_charges_select_own" ON pix_pending_charges FOR SELECT
+  USING (auth.uid() = user_id);
+CREATE POLICY "pix_pending_charges_delete_own" ON pix_pending_charges FOR DELETE
+  USING (auth.uid() = user_id);

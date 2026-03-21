@@ -50,9 +50,11 @@ export interface AnalyticsEventProperties {
     package_id: string;
     price_centavos: number;
     currency: "BRL";
+    provider?: "credit-card" | "pix";
   };
   checkout_completed: {
     session_id: string;
+    provider?: "credit-card" | "pix";
   };
   cookie_consent_accepted: Record<string, never>;
   cookie_consent_declined: Record<string, never>;

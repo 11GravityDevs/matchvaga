@@ -13,18 +13,23 @@ const CHECKOUT_SUCCESS_INVALIDATE_DELAY_MS = 2000;
 
 interface CheckoutSuccessTrackerProps {
   sessionId: string | undefined;
+  paymentProvider?: "credit-card" | "pix";
+  paymentId?: string;
 }
 
 export function CheckoutSuccessTracker({
   sessionId,
+  paymentProvider = "credit-card",
+  paymentId,
 }: CheckoutSuccessTrackerProps) {
   const queryClient = useQueryClient();
   const hasTrackedRef = useRef(false);
 
   useEffect(() => {
-    if (!sessionId || hasTrackedRef.current) return;
+    const eventId = paymentProvider === "pix" ? paymentId : sessionId;
+    if (!eventId || hasTrackedRef.current) return;
     hasTrackedRef.current = true;
-    trackCheckoutCompletedEvent(sessionId);
+    trackCheckoutCompletedEvent(eventId, paymentProvider);
 
     const timeoutId = setTimeout(() => {
       void queryClient.invalidateQueries({
@@ -34,7 +39,7 @@ export function CheckoutSuccessTracker({
     }, CHECKOUT_SUCCESS_INVALIDATE_DELAY_MS);
 
     return () => clearTimeout(timeoutId);
-  }, [sessionId, queryClient]);
+  }, [sessionId, paymentId, paymentProvider, queryClient]);
 
   return null;
 }
