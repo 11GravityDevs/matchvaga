@@ -46,12 +46,14 @@ async function applyCreditsAtomically(
         .insert({ user_id: userId, credits: creditsToGrant });
 
       if (!insertError) return true;
+
       if (insertError.code === "23505") continue;
       logServerError({
         context: "server_action",
         operation: "applyPixPayment",
         message: insertError.message,
       });
+
       return false;
     }
 

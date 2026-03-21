@@ -59,7 +59,7 @@ export default async function CheckoutSuccessPage({
       <CheckoutSuccessTracker
         sessionId={sessionId}
         paymentId={paymentId}
-        paymentProvider={paymentId ? "pix" : "stripe"}
+        paymentProvider={paymentId ? "pix" : "credit-card"}
       />
       {unlock && <CheckoutUnlockHandler analysisId={unlock} />}
       <div className="flex flex-col items-center justify-center gap-6 text-center">

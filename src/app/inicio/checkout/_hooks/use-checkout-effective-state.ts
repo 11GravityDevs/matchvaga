@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import type { CheckoutPackageId } from "@/constants/checkout-packages";
 
@@ -37,7 +37,7 @@ export function useCheckoutEffectiveState({
   selectedPackageId,
   onChooseAnotherPackage,
 }: UseCheckoutEffectiveStateParams) {
-  const resetFromSuccess = getResetFromPixJustPaid();
+  const [resetFromSuccess] = useState(() => getResetFromPixJustPaid());
 
   useEffect(() => {
     try {

@@ -13,13 +13,13 @@ const CHECKOUT_SUCCESS_INVALIDATE_DELAY_MS = 2000;
 
 interface CheckoutSuccessTrackerProps {
   sessionId: string | undefined;
-  paymentProvider?: "stripe" | "pix";
+  paymentProvider?: "credit-card" | "pix";
   paymentId?: string;
 }
 
 export function CheckoutSuccessTracker({
   sessionId,
-  paymentProvider = "stripe",
+  paymentProvider = "credit-card",
   paymentId,
 }: CheckoutSuccessTrackerProps) {
   const queryClient = useQueryClient();

@@ -8,7 +8,7 @@ import type { UnlockAnalysisResult } from "@/app/actions/document-preview";
 import { createCheckoutSession } from "@/app/inicio/checkout/_actions/checkout";
 import { createPixCharge } from "@/app/inicio/checkout/_actions/create-pix-charge";
 import { CHECKOUT_STRIPE_APPEARANCE } from "@/app/inicio/checkout/_constants/checkout";
-import { CheckoutPaymentForm } from "@/app/inicio/checkout/_components/checkout-payment-form";
+import { CheckoutCreditCardForm } from "@/app/inicio/checkout/_components/checkout-credit-card-form";
 import { CheckoutPixForm } from "@/app/inicio/checkout/_components/checkout-pix-form";
 import { Button } from "@/components/ui/button";
 import {
@@ -74,9 +74,9 @@ export function UnlockPaymentModal({
     brCodeBase64: string;
     expiresAt?: string;
   } | null>(null);
-  const [loadingMethod, setLoadingMethod] = useState<"stripe" | "pix" | null>(
-    null
-  );
+  const [loadingMethod, setLoadingMethod] = useState<
+    "credit-card" | "pix" | null
+  >(null);
 
   const hasTrackedRedirectRef = useRef(false);
   const onUnlockSuccessRef = useRef(onUnlockSuccess);
@@ -131,10 +131,10 @@ export function UnlockPaymentModal({
   });
 
   const handleSelectCard = useCallback(async () => {
-    setLoadingMethod("stripe");
+    setLoadingMethod("credit-card");
     setState("loading");
     const priceCentavos = getPackagePriceCentavos(UNLOCK_PACKAGE_ID);
-    trackCheckoutStartedEvent(UNLOCK_PACKAGE_ID, priceCentavos, "stripe");
+    trackCheckoutStartedEvent(UNLOCK_PACKAGE_ID, priceCentavos, "credit-card");
 
     const result = await createCheckoutSession({
       packageId: UNLOCK_PACKAGE_ID,
@@ -188,7 +188,7 @@ export function UnlockPaymentModal({
 
   const handlePaymentSuccess = useCallback(() => {
     setState("processing");
-    if (sessionId) trackCheckoutCompletedEvent(sessionId, "stripe");
+    if (sessionId) trackCheckoutCompletedEvent(sessionId, "credit-card");
   }, [sessionId]);
 
   const handlePixPaymentSuccess = useCallback(() => {
@@ -206,7 +206,7 @@ export function UnlockPaymentModal({
       hasTrackedRedirectRef.current = true;
       trackCheckoutCompletedEvent(
         initialProcessingFromRedirect.sessionId,
-        "stripe"
+        "credit-card"
       );
     }
   }, [initialProcessingFromRedirect]);
@@ -288,7 +288,7 @@ export function UnlockPaymentModal({
               },
             }}
           >
-            <CheckoutPaymentForm
+            <CheckoutCreditCardForm
               packageId={UNLOCK_PACKAGE_ID}
               onChooseAnotherPackage={() => onOpenChange(false)}
               chooseAnotherLabel="Cancelar"

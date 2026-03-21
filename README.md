@@ -12,19 +12,19 @@ MatchVaga helps job seekers:
 
 ## Tech Stack
 
-| Layer                  | Technology                                                                                                                                      |
-| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| Framework              | Next.js 16 (App Router)                                                                                                                         |
-| React                  | React 19                                                                                                                                        |
-| Auth                   | Supabase Auth (email OTP, Google OAuth)                                                                                                         |
-| Backend                | Server Actions, Supabase (Postgres + Storage)                                                                                                   |
-| AI/LLM                 | Gemini 2.5 Flash Lite (resume extraction), Claude Haiku 4.5 (job skills extraction), GPT-4o-mini (skills match), Claude Sonnet 4.6 (synthesis). |
-| Validation             | Zod                                                                                                                                             |
-| Data fetching (client) | TanStack Query v5                                                                                                                               |
-| Styling                | Tailwind CSS v4                                                                                                                                 |
-| UI Components          | shadcn/ui (radix-vega style), Base UI, Radix UI                                                                                                 |
-| Icons                  | lucide-react                                                                                                                                    |
-| Utils                  | clsx, tailwind-merge, class-variance-authority                                                                                                  |
+| Layer                  | Technology                                                                                                          |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| Framework              | Next.js 16 (App Router)                                                                                             |
+| React                  | React 19                                                                                                            |
+| Auth                   | Supabase Auth (email OTP, Google OAuth)                                                                             |
+| Backend                | Server Actions, Supabase (Postgres + Storage)                                                                       |
+| AI/LLM                 | Gemini 2.5 Flash Lite (resume extraction), Claude Haiku 4.5 (job skills extraction), Claude Sonnet 4.6 (synthesis). |
+| Validation             | Zod                                                                                                                 |
+| Data fetching (client) | TanStack Query v5                                                                                                   |
+| Styling                | Tailwind CSS v4                                                                                                     |
+| UI Components          | shadcn/ui (radix-vega style), Base UI, Radix UI                                                                     |
+| Icons                  | lucide-react                                                                                                        |
+| Utils                  | clsx, tailwind-merge, class-variance-authority                                                                      |
 
 ## Getting Started
 

@@ -18,12 +18,14 @@ import { formatCentavosToBrl } from "@/utils/currency";
 import { CHECKOUT_STRIPE_APPEARANCE } from "../_constants/checkout";
 import { useCheckoutEffectiveState } from "../_hooks/use-checkout-effective-state";
 import {
+  PixCheckoutSuccessData,
   useCheckoutSelectPackage,
   type CheckoutPaymentMethod,
+  type CheckoutSuccessData,
 } from "../_hooks/use-checkout-select-package";
 import { CheckoutPackageSummaryCard } from "./checkout-package-summary-card";
 import { CheckoutPageHeader } from "./checkout-page-header";
-import { CheckoutPaymentForm } from "./checkout-payment-form";
+import { CheckoutCreditCardForm } from "./checkout-credit-card-form";
 import { CheckoutPaymentMethodSelector } from "./checkout-payment-method-selector";
 import { CheckoutPixForm } from "./checkout-pix-form";
 import { CheckoutTrustBadges } from "./checkout-trust-badges";
@@ -44,41 +46,27 @@ export function CheckoutContent({
   const [checkoutClientSecret, setCheckoutClientSecret] = useState<
     string | null
   >(null);
-  const [pixPayment, setPixPayment] = useState<{
-    paymentId: string;
-    brCode: string;
-    brCodeBase64: string;
-    expiresAt?: string;
-  } | null>(null);
+  const [pixPayment, setPixPayment] = useState<PixCheckoutSuccessData | null>(
+    null
+  );
   const unlockTriggeredRef = useRef(false);
   const { showErrorToastNotification } = useToastNotification();
 
   const onSuccess = useCallback(
-    (
-      data:
-        | {
-            paymentMethod: "stripe";
-            clientSecret: string;
-            packageId: CheckoutPackageId;
-          }
-        | {
-            paymentMethod: "pix";
-            packageId: CheckoutPackageId;
-            paymentId: string;
-            brCode: string;
-            brCodeBase64: string;
-            expiresAt?: string;
-          }
-    ) => {
+    (data: CheckoutSuccessData) => {
       setPendingPackageId(null);
       setSelectedPackageId(data.packageId);
+
       if (data.paymentMethod === "pix") {
         setPixPayment({
+          paymentMethod: "pix",
+          packageId: data.packageId,
           paymentId: data.paymentId,
           brCode: data.brCode,
           brCodeBase64: data.brCodeBase64,
           expiresAt: data.expiresAt,
         });
+
         setCheckoutClientSecret(null);
         return;
       }
@@ -203,11 +191,11 @@ export function CheckoutContent({
                 );
               }}
               onSelectStripe={() => {
-                setPaymentMethod("stripe");
+                setPaymentMethod("credit-card");
                 void handleSelectPackage(
                   effectivePendingPackageId,
                   unlockAnalysisId,
-                  "stripe"
+                  "credit-card"
                 );
               }}
             />
@@ -254,7 +242,7 @@ export function CheckoutContent({
               },
             }}
           >
-            <CheckoutPaymentForm
+            <CheckoutCreditCardForm
               packageId={effectiveSelectedPackageId}
               onChooseAnotherPackage={handleChooseAnotherPackage}
               onPaymentSuccess={handleChooseAnotherPackage}
