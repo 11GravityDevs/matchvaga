@@ -22,7 +22,7 @@ const AFTER_ITEMS: ComparisonItem[] = [
 
 function BeforeCard() {
   return (
-    <div className="flex flex-1 flex-col gap-6 rounded-xl border border-red-300 bg-card p-6 md:p-8">
+    <div className="flex flex-1 flex-col gap-6 rounded-xl border-2 border-red-300 bg-card p-6 md:p-8">
       {/* Badge */}
       <div className="flex w-fit items-center gap-2 rounded-full bg-accent-low-light px-3 py-1.5">
         <CircleX className="size-3.5 text-destructive" />

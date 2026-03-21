@@ -84,11 +84,12 @@ export function CheckoutPackagesGrid({
             <Card
               key={packageId}
               className={cn(
-                "relative flex flex-col overflow-visible transition-all",
+                "relative flex cursor-pointer flex-col overflow-visible transition-all",
                 isRecommended
                   ? "border-2 border-accent-brand"
-                  : "border border-border hover:border-accent-brand/80"
+                  : "border-2 border-border hover:border-accent-brand/60"
               )}
+              onClick={() => onSelectPackage(packageId)}
             >
               {isRecommended && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-accent-brand px-3 py-1 text-xs font-bold tracking-wider whitespace-nowrap text-on-accent-brand uppercase">

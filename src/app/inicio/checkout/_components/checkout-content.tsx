@@ -32,15 +32,17 @@ import { CheckoutTrustBadges } from "./checkout-trust-badges";
 
 interface CheckoutContentProps {
   unlockAnalysisId?: string;
+  initialPackageId?: CheckoutPackageId;
 }
 
 export function CheckoutContent({
   unlockAnalysisId,
+  initialPackageId,
 }: CheckoutContentProps = {}) {
   const [paymentMethod, setPaymentMethod] =
     useState<CheckoutPaymentMethod | null>(null);
   const [pendingPackageId, setPendingPackageId] =
-    useState<CheckoutPackageId | null>(null);
+    useState<CheckoutPackageId | null>(initialPackageId ?? null);
   const [selectedPackageId, setSelectedPackageId] =
     useState<CheckoutPackageId | null>(null);
   const [checkoutClientSecret, setCheckoutClientSecret] = useState<

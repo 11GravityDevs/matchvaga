@@ -1,53 +1,63 @@
 "use client";
 
-import { CreditCard, QrCode } from "lucide-react";
+import type { ReactNode } from "react";
 
-import { PaymentMethodOption } from "@/app/inicio/checkout/_components/payment-method-option";
+import { ShieldCheck, X } from "lucide-react";
+
+import { DialogClose } from "@/components/ui/dialog";
 
 interface UnlockPaymentMethodStepProps {
-  loadingMethod: "credit-card" | "pix" | null;
-  onSelectPix: () => void;
-  onSelectCard: () => void;
   packageName: string;
   priceFormatted: string;
+  onClose: () => void;
+  paymentMethods: ReactNode;
 }
 
 export function UnlockPaymentMethodStep({
-  loadingMethod,
-  onSelectPix,
-  onSelectCard,
   packageName,
   priceFormatted,
+  onClose,
+  paymentMethods,
 }: UnlockPaymentMethodStepProps) {
-  const isLoading = loadingMethod !== null;
-
   return (
-    <div className="flex flex-col gap-6 py-2">
-      <p className="text-small text-muted-foreground">
-        Compre 1 análise para desbloquear o currículo otimizado. Como deseja
-        pagar?
-      </p>
-      <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2">
-        <PaymentMethodOption
-          title="PIX"
-          description="Pagamento instantâneo via QR Code ou copia e cola"
-          icon={QrCode}
-          loading={loadingMethod === "pix"}
-          disabled={isLoading}
-          onSelect={onSelectPix}
-        />
-        <PaymentMethodOption
-          title="Cartão"
-          description="Parcelamento em até 12x no cartão"
-          icon={CreditCard}
-          loading={loadingMethod === "credit-card"}
-          disabled={isLoading}
-          onSelect={onSelectCard}
-        />
+    <div className="flex flex-col gap-5 p-6">
+      {/* Header */}
+      <div className="flex items-start justify-between">
+        <div className="space-y-4">
+          <h2 className="text-xl font-bold text-foreground">
+            Desbloquear currículo
+          </h2>
+          <p className="max-w-[360px] text-sm text-muted-foreground">
+            Escolha a forma de pagamento para desbloquear seu currículo
+            otimizado.
+          </p>
+        </div>
+        <DialogClose asChild onClick={onClose}>
+          <button
+            type="button"
+            className="flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+          >
+            <X className="size-4" />
+          </button>
+        </DialogClose>
       </div>
-      <p className="text-small text-muted-foreground">
-        {packageName} — {priceFormatted}
-      </p>
+
+      {/* Price badge */}
+      <div className="flex items-center justify-center rounded-lg bg-secondary px-4 py-2.5">
+        <span className="text-sm font-semibold text-foreground">
+          {packageName} — {priceFormatted}
+        </span>
+      </div>
+
+      {paymentMethods}
+
+      {/* Footer */}
+      <div className="flex items-center justify-center gap-1.5">
+        <ShieldCheck className="size-4 text-muted-foreground" />
+        <span className="text-xs text-muted-foreground">
+          Pagamento seguro e criptografado
+        </span>
+      </div>
     </div>
   );
 }

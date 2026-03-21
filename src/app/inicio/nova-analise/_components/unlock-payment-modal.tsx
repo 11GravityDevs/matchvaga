@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { ArrowLeft, CreditCard, QrCode, X } from "lucide-react";
 import { CheckoutProvider } from "@stripe/react-stripe-js/checkout";
 
 import type { UnlockAnalysisResult } from "@/app/actions/document-preview";
@@ -10,13 +11,13 @@ import { createPixCharge } from "@/app/inicio/checkout/_actions/create-pix-charg
 import { CHECKOUT_STRIPE_APPEARANCE } from "@/app/inicio/checkout/_constants/checkout";
 import { CheckoutCreditCardForm } from "@/app/inicio/checkout/_components/checkout-credit-card-form";
 import { CheckoutPixForm } from "@/app/inicio/checkout/_components/checkout-pix-form";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
-  DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import {
   getPackageName,
   getPackagePriceCentavos,
@@ -33,8 +34,10 @@ import { UNLOCK_PACKAGE_ID } from "../_constants/unlock";
 import { useUnlockProcessing } from "../_hooks/use-unlock-processing";
 import { UnlockErrorView } from "./unlock-error-view";
 import { UnlockLoadingView } from "./unlock-loading-view";
+import { UnlockPaymentMethodCard } from "./unlock-payment-method-card";
 import { UnlockPaymentMethodStep } from "./unlock-payment-method-step";
 import { UnlockProcessingView } from "./unlock-processing-view";
+import { SharedModalHeader } from "./unlock-shared-modal-header";
 
 const CHECKOUT_ERROR = "Erro ao iniciar checkout. Tente novamente.";
 const PIX_ERROR = "Erro ao iniciar checkout PIX. Tente novamente.";
@@ -211,72 +214,69 @@ export function UnlockPaymentModal({
     }
   }, [initialProcessingFromRedirect]);
 
+  const cannotClose =
+    effectiveState === "loading" ||
+    effectiveState === "processing" ||
+    isPaymentSubmitting;
+
   const handleOpenChange = useCallback(
     (newOpen: boolean) => {
-      const cannotClose =
-        effectiveState === "loading" ||
-        effectiveState === "processing" ||
-        isPaymentSubmitting;
       if (!newOpen && cannotClose) return;
       onOpenChange(newOpen);
     },
-    [effectiveState, isPaymentSubmitting, onOpenChange]
+    [cannotClose, onOpenChange]
   );
 
   const handleRetry = useCallback(() => {
     resetState();
   }, [resetState]);
 
-  const isCompactContent =
-    effectiveState === "loading" ||
-    effectiveState === "processing" ||
-    effectiveState === "error" ||
-    effectiveState === "method";
-
-  if (!stripeCheckoutPromise && effectiveState === "form") {
-    return (
-      <Dialog open={open} onOpenChange={handleOpenChange}>
-        <DialogContent className="max-w-xl">
-          <DialogHeader>
-            <DialogTitle>Desbloquear currículo</DialogTitle>
-          </DialogHeader>
-          <p className="text-small text-muted-foreground">
-            Configuração de pagamento indisponível no cliente.
-          </p>
-          <Button
-            variant="outline"
-            size="brand"
-            onClick={() => onOpenChange(false)}
-          >
-            Fechar
-          </Button>
-        </DialogContent>
-      </Dialog>
-    );
-  }
+  const packageName = getPackageName(UNLOCK_PACKAGE_ID);
+  const priceCentavos = getPackagePriceCentavos(UNLOCK_PACKAGE_ID);
+  const priceFormatted = formatCentavosToBrl(priceCentavos);
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent
-        className={cn(isCompactContent ? "max-w-lg" : "max-w-3xl")}
-      >
-        <DialogHeader>
+      <DialogContent className="max-w-[520px] gap-0! overflow-hidden p-0!">
+        <VisuallyHidden>
           <DialogTitle>Desbloquear currículo</DialogTitle>
-        </DialogHeader>
-
+        </VisuallyHidden>
         {effectiveState === "method" && (
           <UnlockPaymentMethodStep
-            loadingMethod={loadingMethod}
-            onSelectPix={handleSelectPix}
-            onSelectCard={handleSelectCard}
-            packageName={getPackageName(UNLOCK_PACKAGE_ID)}
-            priceFormatted={formatCentavosToBrl(
-              getPackagePriceCentavos(UNLOCK_PACKAGE_ID)
-            )}
+            packageName={packageName}
+            priceFormatted={priceFormatted}
+            onClose={() => onOpenChange(false)}
+            paymentMethods={
+              <div className="flex gap-3">
+                <UnlockPaymentMethodCard
+                  variant="pix"
+                  title="PIX"
+                  description="Pagamento instantâneo via QR Code"
+                  icon={<QrCode className="size-6 text-accent-success" />}
+                  isLoading={loadingMethod === "pix"}
+                  disabled={loadingMethod !== null}
+                  onClick={handleSelectPix}
+                />
+                <UnlockPaymentMethodCard
+                  variant="credit-card"
+                  title="Cartão"
+                  description="Crédito ou débito via Stripe"
+                  icon={<CreditCard className="size-6 text-foreground" />}
+                  isLoading={loadingMethod === "credit-card"}
+                  disabled={loadingMethod !== null}
+                  onClick={handleSelectCard}
+                />
+              </div>
+            }
           />
         )}
 
-        {effectiveState === "loading" && <UnlockLoadingView />}
+        {effectiveState === "loading" && (
+          <>
+            <SharedModalHeader title="Desbloquear currículo" canClose={false} />
+            <UnlockLoadingView />
+          </>
+        )}
 
         {effectiveState === "form" && clientSecret && stripeCheckoutPromise && (
           <CheckoutProvider
@@ -288,40 +288,119 @@ export function UnlockPaymentModal({
               },
             }}
           >
-            <CheckoutCreditCardForm
-              packageId={UNLOCK_PACKAGE_ID}
-              onChooseAnotherPackage={() => onOpenChange(false)}
-              chooseAnotherLabel="Cancelar"
-              onPaymentSuccess={handlePaymentSuccess}
-              onSubmittingChange={setIsPaymentSubmitting}
-            />
+            <div className="flex items-center justify-between px-5 py-4">
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setState("method")}
+                  className="flex size-8 cursor-pointer items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                >
+                  <ArrowLeft className="size-4" />
+                </button>
+                <h2 className="text-lg font-bold text-foreground">
+                  Pagamento com Cartão
+                </h2>
+              </div>
+              <DialogClose asChild>
+                <button
+                  type="button"
+                  className={cn(
+                    "flex size-8 cursor-pointer items-center justify-center rounded-md transition-colors",
+                    "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  )}
+                >
+                  <X className="size-4" />
+                </button>
+              </DialogClose>
+            </div>
+
+            <div className="h-px bg-border" />
+
+            <div className="flex flex-col gap-5 p-6">
+              <div className="flex items-center justify-center gap-2 rounded-lg bg-secondary px-4 py-3">
+                <span className="text-sm font-medium text-muted-foreground">
+                  {packageName}
+                </span>
+                <span className="text-sm font-bold text-muted-foreground">
+                  ·
+                </span>
+                <span className="text-base font-bold text-foreground">
+                  {priceFormatted}
+                </span>
+              </div>
+
+              <CheckoutCreditCardForm
+                packageId={UNLOCK_PACKAGE_ID}
+                onChooseAnotherPackage={() => onOpenChange(false)}
+                chooseAnotherLabel="Cancelar"
+                onPaymentSuccess={handlePaymentSuccess}
+                onSubmittingChange={setIsPaymentSubmitting}
+                compact
+              />
+            </div>
           </CheckoutProvider>
         )}
 
         {effectiveState === "pix" && pixPayment && (
-          <CheckoutPixForm
-            paymentId={pixPayment.paymentId}
-            brCode={pixPayment.brCode}
-            brCodeBase64={pixPayment.brCodeBase64}
-            expiresAt={pixPayment.expiresAt}
-            packageName={getPackageName(UNLOCK_PACKAGE_ID)}
-            priceFormatted={formatCentavosToBrl(
-              getPackagePriceCentavos(UNLOCK_PACKAGE_ID)
-            )}
-            unlockAnalysisId={analysisId}
-            onExpiredReturnToPackages={() => onOpenChange(false)}
-            onPaymentConfirmed={handlePixPaymentSuccess}
-          />
+          <>
+            <div className="flex items-center justify-between px-5 py-4">
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setState("method")}
+                  className="flex size-8 cursor-pointer items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                >
+                  <ArrowLeft className="size-4" />
+                </button>
+                <h2 className="text-lg font-bold text-foreground">
+                  Pagamento via PIX
+                </h2>
+              </div>
+              <DialogClose asChild>
+                <button
+                  type="button"
+                  className="flex size-8 cursor-pointer items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                >
+                  <X className="size-4" />
+                </button>
+              </DialogClose>
+            </div>
+
+            <div className="h-px bg-border" />
+
+            <CheckoutPixForm
+              paymentId={pixPayment.paymentId}
+              brCode={pixPayment.brCode}
+              brCodeBase64={pixPayment.brCodeBase64}
+              expiresAt={pixPayment.expiresAt}
+              packageName={packageName}
+              priceFormatted={priceFormatted}
+              unlockAnalysisId={analysisId}
+              onExpiredReturnToPackages={() => onOpenChange(false)}
+              onPaymentConfirmed={handlePixPaymentSuccess}
+              compact
+            />
+          </>
         )}
 
-        {effectiveState === "processing" && <UnlockProcessingView />}
+        {effectiveState === "processing" && (
+          <>
+            <SharedModalHeader title="Desbloquear currículo" canClose={false} />
+            <UnlockProcessingView />
+          </>
+        )}
 
         {effectiveState === "error" && (
-          <UnlockErrorView
-            errorMessage={errorMessage}
-            onClose={() => onOpenChange(false)}
-            onRetry={handleRetry}
-          />
+          <>
+            <SharedModalHeader title="Desbloquear currículo" canClose={true} />
+            <div className="p-6">
+              <UnlockErrorView
+                errorMessage={errorMessage}
+                onClose={() => onOpenChange(false)}
+                onRetry={handleRetry}
+              />
+            </div>
+          </>
         )}
       </DialogContent>
     </Dialog>
