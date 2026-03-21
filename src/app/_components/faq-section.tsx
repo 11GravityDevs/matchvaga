@@ -20,7 +20,7 @@ export function FAQSection() {
       {/* Section Header */}
       <AnimateOnScroll>
         <div className="flex max-w-section-header flex-col items-center gap-4 px-4 md:px-0">
-          <span className="rounded-full border border-border px-3.5 py-1.5 text-xs font-semibold tracking-widest text-accent-brand">
+          <span className="rounded-full border border-accent-brand px-3.5 py-1.5 text-xs font-semibold tracking-widest text-accent-brand">
             FAQ
           </span>
           <h2 className="text-center text-section-header-large">

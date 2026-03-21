@@ -109,7 +109,7 @@ export function AtsSolutionSection() {
       {/* Section Header */}
       <AnimateOnScroll>
         <div className="flex max-w-section-header flex-col items-center gap-4 px-4 md:px-0">
-          <span className="rounded-full border border-border px-3.5 py-1.5 text-xs font-semibold tracking-widest text-accent-brand">
+          <span className="rounded-full border border-accent-brand px-3.5 py-1.5 text-xs font-semibold tracking-widest text-accent-brand">
             A SOLUÇÃO
           </span>
           <h2 className="text-center text-2xl leading-tight font-bold tracking-tight md:text-section-header-large">

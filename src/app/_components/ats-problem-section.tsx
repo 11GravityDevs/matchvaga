@@ -68,13 +68,15 @@ export function AtsProblemSection() {
       {/* Section Header */}
       <AnimateOnScroll>
         <div className="flex max-w-section-header flex-col items-center gap-6 px-4 md:px-0">
-          <span className="rounded-full border border-border px-3.5 py-1.5 text-xs font-semibold tracking-widest text-accent-brand">
+          <span className="rounded-full border border-destructive px-3.5 py-1.5 text-xs font-semibold tracking-widest text-destructive">
             O VILÃO
           </span>
 
           {/* Headline */}
           <h2 className="max-w-faq text-center text-2xl leading-tight font-bold tracking-tight md:text-section-header-large">
-            Robôs estão rejeitando seu currículo antes de qualquer humano ler
+            Robôs estão{" "}
+            <span className="text-destructive">rejeitando seu currículo</span>{" "}
+            antes de qualquer humano ler
           </h2>
 
           {/* Subtitle */}
