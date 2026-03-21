@@ -130,7 +130,7 @@ export async function getPixPaymentStatus(input: {
       : normalizedStatus;
 
     if (finalStatus === "paid") {
-      const applyResult = await applyPixPayment(auth.supabase, paymentId, {
+      const applyResult = await applyPixPayment(paymentId, {
         user_id: pendingCharge.user_id,
         package_id: pendingCharge.package_id,
       });

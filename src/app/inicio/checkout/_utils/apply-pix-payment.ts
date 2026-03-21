@@ -6,6 +6,7 @@ import {
   isCheckoutPackageId,
 } from "@/constants/checkout-packages";
 import { logServerError } from "@/lib/logger";
+import { createAdminSupabaseClient } from "@/lib/supabase/service";
 
 export interface ApplyPixPaymentPending {
   user_id: string;
@@ -84,7 +85,6 @@ async function applyCreditsAtomically(
 }
 
 export async function applyPixPayment(
-  supabase: SupabaseClient,
   chargeId: string,
   pending: ApplyPixPaymentPending
 ): Promise<{ success: boolean; error?: string }> {
@@ -97,10 +97,14 @@ export async function applyPixPayment(
         message: "Invalid package id in pending PIX charge",
         errorMessage: packageId,
       });
-      return { success: false, error: "Invalid package id" };
+      return {
+        success: false,
+        error: "Não foi possível processar o pagamento.",
+      };
     }
 
     const creditsToGrant = getCreditsForPackage(packageId as CheckoutPackageId);
+    const supabase = createAdminSupabaseClient();
 
     const { error: purchaseInsertError } = await supabase
       .from("purchases")
@@ -121,7 +125,10 @@ export async function applyPixPayment(
         operation: "applyPixPayment",
         message: purchaseInsertError.message,
       });
-      return { success: false, error: "Database error" };
+      return {
+        success: false,
+        error: "Não foi possível confirmar o pagamento. Tente novamente.",
+      };
     }
 
     const creditsApplied = await applyCreditsAtomically(
@@ -130,7 +137,10 @@ export async function applyPixPayment(
       creditsToGrant
     );
     if (!creditsApplied) {
-      return { success: false, error: "Database error" };
+      return {
+        success: false,
+        error: "Não foi possível confirmar o pagamento. Tente novamente.",
+      };
     }
 
     const { error: pendingDeleteError } = await supabase
@@ -144,7 +154,10 @@ export async function applyPixPayment(
         operation: "applyPixPayment",
         message: pendingDeleteError.message,
       });
-      return { success: false, error: "Database error" };
+      return {
+        success: false,
+        error: "Não foi possível confirmar o pagamento. Tente novamente.",
+      };
     }
 
     return { success: true };
@@ -157,6 +170,9 @@ export async function applyPixPayment(
       },
       err
     );
-    return { success: false, error: "Server error" };
+    return {
+      success: false,
+      error: "Erro interno. Tente novamente.",
+    };
   }
 }
