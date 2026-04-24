@@ -1,4 +1,5 @@
 import { ChartBar, FileText, LayoutDashboard } from "lucide-react";
+import Image from "next/image";
 
 import { cn } from "@/utils/style";
 
@@ -11,6 +12,7 @@ interface Feature {
   tagColor: string;
   title: string;
   description: string;
+  image: { src: string; alt: string };
   reversed?: boolean;
 }
 
@@ -23,6 +25,10 @@ const FEATURES: Feature[] = [
     title: "Descubra por que seu currículo não está convencendo",
     description:
       "Veja com clareza quais competências, experiências e palavras-chave estão faltando para cada vaga e selecione as habilidades que fazem sentido antes de se candidatar.",
+    image: {
+      src: "/analise-compatibilidade.png",
+      alt: "Tela de análise de compatibilidade entre currículo e vaga",
+    },
     reversed: true,
   },
   {
@@ -34,6 +40,10 @@ const FEATURES: Feature[] = [
     title: "Gere uma versão do seu currículo mais forte para cada vaga",
     description:
       "Nossa IA reorganiza e reescreve seu currículo com foco no que a vaga pede, para aumentar sua aderência na triagem e facilitar a leitura do recrutador.",
+    image: {
+      src: "/curriculo-otimizado.png",
+      alt: "Tela com o currículo otimizado pela IA",
+    },
   },
   {
     tagIcon: <LayoutDashboard className="size-3.5 text-accent-warning-text" />,
@@ -43,17 +53,29 @@ const FEATURES: Feature[] = [
     title: "Acompanhe suas candidaturas com mais estratégia",
     description:
       "Visualize análises anteriores, compare scores e reaproveite versões otimizadas para aplicar com mais velocidade e menos retrabalho.",
+    image: {
+      src: "/dashboard.png",
+      alt: "Dashboard com histórico de análises e scores",
+    },
     reversed: true,
   },
 ];
 
-function ScreenshotPlaceholder() {
+interface FeatureScreenshotProps {
+  image: Feature["image"];
+}
+
+function FeatureScreenshot({ image }: FeatureScreenshotProps) {
   return (
-    <div className="flex min-h-48 flex-1 items-center justify-center rounded-xl border border-border bg-surface-subtle md:min-h-80">
-      <span className="text-sm font-medium text-muted-foreground">
-        Screenshot placeholder
-      </span>
-    </div>
+    <Image
+      src={image.src}
+      alt={image.alt}
+      width={1920}
+      height={911}
+      unoptimized
+      sizes="(min-width: 768px) 576px, 100vw"
+      className="h-auto w-full flex-1 rounded-xl border border-border md:max-w-xl"
+    />
   );
 }
 
@@ -61,7 +83,7 @@ export function CoreFeaturesSection() {
   return (
     <section
       id="funcionalidades"
-      className="flex w-full flex-col items-center gap-10 bg-background py-12 md:scroll-mt-12 md:gap-16 md:py-20"
+      className="flex w-full flex-col items-center gap-10 bg-background py-12 md:scroll-mt-12 md:gap-20 md:py-20"
     >
       {/* Section Header */}
       <AnimateOnScroll>
@@ -109,13 +131,13 @@ export function CoreFeaturesSection() {
             >
               {feature.reversed ? (
                 <>
-                  <ScreenshotPlaceholder />
+                  <FeatureScreenshot image={feature.image} />
                   {textContent}
                 </>
               ) : (
                 <>
                   {textContent}
-                  <ScreenshotPlaceholder />
+                  <FeatureScreenshot image={feature.image} />
                 </>
               )}
             </div>

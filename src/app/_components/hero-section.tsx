@@ -1,4 +1,5 @@
 import { Sparkles } from "lucide-react";
+import Image from "next/image";
 
 import { HeroPrimaryCtaButton } from "./hero-primary-cta-button";
 
@@ -48,16 +49,20 @@ export function HeroSection() {
         <HeroPrimaryCtaButton />
       </div>
 
-      {/* Product Screenshot Placeholder */}
       <div
         className="animate-fade-up w-full max-w-landing-content"
         style={{ animationDelay: "320ms" }}
       >
-        <div className="flex min-h-64 w-full items-center justify-center rounded-xl border border-border bg-card md:min-h-screenshot-hero">
-          <span className="text-base font-medium text-muted-foreground">
-            Screenshot placeholder
-          </span>
-        </div>
+        <Image
+          src="/dashboard.png"
+          alt="Visão geral do dashboard do MatchVaga"
+          width={1920}
+          height={911}
+          priority
+          unoptimized
+          sizes="(min-width: 1140px) 1140px, 100vw"
+          className="h-auto w-full rounded-md border border-border shadow-md shadow-accent-brand/10"
+        />
       </div>
     </section>
   );
