@@ -11,7 +11,6 @@
   <img src="https://img.shields.io/badge/Supabase-Postgres%20%2B%20Auth-3FCF8E?logo=supabase&logoColor=white" alt="Supabase" />
   <img src="https://img.shields.io/badge/Tailwind_CSS-v4-06B6D4?logo=tailwindcss&logoColor=white" alt="Tailwind CSS v4" />
   <img src="https://img.shields.io/badge/Stripe-payments-635BFF?logo=stripe&logoColor=white" alt="Stripe" />
-  <img src="https://img.shields.io/badge/license-all%20rights%20reserved-lightgrey" alt="All rights reserved" />
 </p>
 
 ---
