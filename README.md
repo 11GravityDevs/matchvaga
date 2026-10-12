@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="public/logo.svg" alt="MatchVaga" width="96" />
+</p>
+
 <h1 align="center">MatchVaga</h1>
 
 <p align="center">
